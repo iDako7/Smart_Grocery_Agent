@@ -1,0 +1,22 @@
+[
+  {"ingredient": "gochujang", "substitute": "miso paste + chili flakes + sugar", "match_quality": "good", "reason": "unavailable", "notes": "Less sweet than gochujang, add a pinch of sugar to compensate"},
+  {"ingredient": "gochugaru", "substitute": "red pepper flakes", "match_quality": "fair", "reason": "unavailable", "notes": "Less fruity, more sharp heat. Use half the amount"},
+  {"ingredient": "fish sauce", "substitute": "soy sauce + lime juice", "match_quality": "fair", "reason": "preference", "notes": "Misses the funky depth but adds salt and acid"},
+  {"ingredient": "mirin", "substitute": "rice vinegar + sugar", "match_quality": "good", "reason": "unavailable", "notes": "1 tbsp mirin = 1 tbsp rice vinegar + 1/2 tsp sugar"},
+  {"ingredient": "oyster sauce", "substitute": "soy sauce + sugar + cornstarch", "match_quality": "fair", "reason": "dietary", "notes": "Thicken soy sauce with cornstarch to mimic consistency"},
+  {"ingredient": "thai basil", "substitute": "regular basil + mint leaves", "match_quality": "fair", "reason": "unavailable", "notes": "Mix 3:1 basil to mint for a closer flavor"},
+  {"ingredient": "bok choy", "substitute": "napa cabbage", "match_quality": "good", "reason": "unavailable", "notes": "Similar texture and mild flavor. Also works: swiss chard"},
+  {"ingredient": "bok choy", "substitute": "broccoli", "match_quality": "fair", "reason": "preference", "notes": "Different texture but same veggie role in stir-fry"},
+  {"ingredient": "pork belly", "substitute": "pork shoulder (sliced thin)", "match_quality": "good", "reason": "unavailable", "notes": "Less fat, still great for grilling. Marinate longer"},
+  {"ingredient": "pork belly", "substitute": "chicken thigh (bone-in)", "match_quality": "fair", "reason": "dietary", "notes": "Different flavor profile but works with same marinades"},
+  {"ingredient": "chicken wings", "substitute": "chicken drumsticks", "match_quality": "good", "reason": "preference", "notes": "More meat per piece, same cooking methods apply"},
+  {"ingredient": "chicken wings", "substitute": "chicken thigh", "match_quality": "good", "reason": "preference", "notes": "Boneless for stir-fry, bone-in for baking/braising"},
+  {"ingredient": "pecorino romano", "substitute": "parmesan", "match_quality": "good", "reason": "unavailable", "notes": "Less sharp, slightly nuttier. Works well in cacio e pepe"},
+  {"ingredient": "spaghetti", "substitute": "linguine", "match_quality": "good", "reason": "unavailable", "notes": "Nearly identical, slightly wider"},
+  {"ingredient": "rice vinegar", "substitute": "white wine vinegar", "match_quality": "good", "reason": "unavailable", "notes": "Slightly sharper, use slightly less"},
+  {"ingredient": "ground beef", "substitute": "ground turkey", "match_quality": "fair", "reason": "dietary", "notes": "Leaner, add a bit of oil for moisture in burgers"},
+  {"ingredient": "ground beef", "substitute": "ground lamb", "match_quality": "good", "reason": "preference", "notes": "Richer flavor, great for burgers and bibimbap"},
+  {"ingredient": "sesame oil", "substitute": "olive oil + toasted sesame seeds", "match_quality": "fair", "reason": "unavailable", "notes": "Add sesame seeds at end for aroma"},
+  {"ingredient": "garam masala", "substitute": "cumin + coriander + cinnamon + cloves (mixed)", "match_quality": "good", "reason": "unavailable", "notes": "Equal parts cumin and coriander, pinch each cinnamon and cloves"},
+  {"ingredient": "corn on the cob", "substitute": "zucchini", "match_quality": "fair", "reason": "dietary", "notes": "Lower carb, grill the same way. Different flavor but good char"}
+]
