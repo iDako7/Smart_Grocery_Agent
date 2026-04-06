@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Grocery Assistant — Wireframe V2</title>
+<style>
+:root{--color-background-primary:#fff;--color-background-secondary:#f5f5f4;--color-background-tertiary:#e7e5e4;--color-background-info:#eff6ff;--color-background-success:#f0fdf4;--color-background-warning:#fffbeb;--color-background-danger:#fef2f2;--color-text-primary:#1c1917;--color-text-secondary:#78716c;--color-text-tertiary:#a8a29e;--color-text-info:#2563eb;--color-text-success:#16a34a;--color-text-warning:#d97706;--color-text-danger:#dc2626;--color-border-tertiary:rgba(0,0,0,0.1);--color-border-secondary:rgba(0,0,0,0.2);--color-border-info:#93c5fd;--border-radius-md:8px;--border-radius-lg:12px;--font-mono:ui-monospace,SFMono-Regular,Menlo,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#e7e5e4;display:flex;justify-content:center;padding:20px;color:var(--color-text-primary)}
+.wrap{max-width:390px;width:100%;position:relative;background:var(--color-background-primary);border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary)}
+.tabs{display:flex;flex-wrap:wrap;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);position:sticky;top:0;background:var(--color-background-primary);z-index:2}
+.tab{flex:1;min-width:0;padding:9px 2px;text-align:center;font-size:11px;color:var(--color-text-secondary);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tab.on{color:var(--color-text-primary);font-weight:500;border-bottom-color:var(--color-text-primary)}
+.screen{display:none}.screen.on{display:block}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin:10px}
+.row{padding:9px 12px;border-top:0.5px solid var(--color-border-tertiary);display:flex;gap:8px;align-items:flex-start}
+.row:first-child{border-top:none}
+.hdr{padding:10px 12px 6px}
+.hdr h3{font-size:14px;font-weight:500}
+.hdr p{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.lbl{font-size:13px;font-weight:500}
+.sub{font-size:11px;color:var(--color-text-secondary);margin-top:1px}
+.pill{font-size:10px;padding:1px 6px;border-radius:99px;display:inline-block;margin-top:3px;margin-right:2px}
+.pill-g{background:var(--color-background-success);color:var(--color-text-success)}
+.pill-w{background:var(--color-background-warning);color:var(--color-text-warning)}
+.ibtn{font-size:9px;width:14px;height:14px;border-radius:50%;border:0.5px solid var(--color-border-secondary);display:inline-flex;align-items:center;justify-content:center;color:var(--color-text-secondary);vertical-align:middle;margin-left:3px;flex-shrink:0}
+.swap{font-size:11px;color:var(--color-text-info);flex-shrink:0;cursor:pointer}
+.chatbar{border-top:0.5px solid var(--color-border-tertiary);padding:7px 12px;display:flex;gap:6px}
+.chatbar input{flex:1;font-size:12px;height:28px;padding:0 8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md)}
+.actions{padding:8px 12px;display:flex;gap:6px;border-top:0.5px solid var(--color-border-tertiary)}
+.actions button{flex:1;font-size:12px;padding:6px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;cursor:pointer}
+.btn-p{background:var(--color-text-primary)!important;color:var(--color-background-primary);border-color:var(--color-text-primary)!important}
+.chip{display:inline-block;font-size:11px;padding:5px 12px;border:0.5px solid var(--color-border-secondary);border-radius:99px;margin:0 4px 4px 0;color:var(--color-text-primary);cursor:pointer}
+.sec-hdr{padding:8px 12px 4px;font-size:11px;font-weight:500;color:var(--color-text-secondary);background:var(--color-background-secondary)}
+.check-row{display:flex;gap:8px;align-items:center;padding:7px 12px;border-top:0.5px solid var(--color-border-tertiary)}
+.check-box{width:16px;height:16px;border:1.5px solid var(--color-border-secondary);border-radius:3px;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px}
+.dim{opacity:0.4}
+.swap-zone{background:var(--color-background-secondary);padding:6px 12px 8px}
+.swap-card{padding:6px 8px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);margin-bottom:4px;display:flex;gap:6px;align-items:flex-start}
+.highlight{border-left:3px solid var(--color-border-info);background:var(--color-background-info);border-radius:0}
+.recall{margin:10px;padding:8px 12px;background:var(--color-background-info);border-radius:var(--border-radius-md)}
+.recall p{font-size:12px;color:var(--color-text-info)}
+.sidebar-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.15);z-index:5}
+.sidebar-overlay.on{display:flex}
+.sidebar{width:260px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);height:100vh;overflow-y:auto}
+.sb-hdr{padding:10px 12px;font-size:13px;font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;justify-content:space-between;align-items:center}
+.sb-section{padding:8px 0}
+.sb-section-title{padding:4px 12px;font-size:11px;font-weight:500;color:var(--color-text-secondary)}
+.sb-item{padding:7px 12px;font-size:12px;cursor:pointer}
+.sb-item:hover{background:var(--color-background-secondary)}
+.sb-item-sub{font-size:10px;color:var(--color-text-secondary);margin-top:1px}
+.cat-row{display:flex;align-items:center;gap:6px;padding:6px 12px}
+.cat-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.cat-ok{background:var(--color-background-success);color:var(--color-text-success)}
+.cat-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.cat-bad{background:var(--color-background-danger);color:var(--color-text-danger)}
+.cat-items{font-size:11px;color:var(--color-text-secondary);flex:1}
+.cat-label{font-size:12px;font-weight:500;width:48px}
+.recipe-block{padding:8px 12px;font-size:12px;line-height:1.6;color:var(--color-text-primary);font-family:var(--font-mono);white-space:pre-line}
+.toolbar{display:flex;gap:6px;padding:8px 12px;border-top:0.5px solid var(--color-border-tertiary);flex-wrap:wrap}
+.tool-btn{font-size:11px;padding:4px 10px;border:0.5px solid var(--color-border-secondary);border-radius:99px;cursor:pointer;color:var(--color-text-secondary);background:transparent}
+.add-row{display:flex;gap:6px;padding:6px 12px;border-top:0.5px solid var(--color-border-tertiary);align-items:center}
+.add-row input{flex:1;font-size:12px;height:26px;padding:0 8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md)}
+.add-row button{font-size:11px;padding:4px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;cursor:pointer}
+.hamburger{font-size:16px;cursor:pointer;padding:4px 8px;color:var(--color-text-secondary)}
+.expand-card{cursor:pointer}
+.expand-card:hover{background:var(--color-background-secondary)}
+.detail-block{display:none;border-top:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.detail-block.open{display:block}
+.remove-x{font-size:11px;color:var(--color-text-danger);cursor:pointer;flex-shrink:0}
+.edit-area{width:100%;min-height:120px;font-size:12px;line-height:1.6;font-family:var(--font-mono);padding:8px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);resize:vertical}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="tabs">
+<div class="tab on" onclick="show(0)">Home</div>
+<div class="tab" onclick="show(1)">Clarify</div>
+<div class="tab" onclick="show(2)">Recipes</div>
+<div class="tab" onclick="show(3)">Grocery</div>
+<div class="tab" onclick="show(4)">Saved plan</div>
+<div class="tab" onclick="show(5)">Saved recipe</div>
+<div class="tab" onclick="show(6)">Saved list</div>
+</div>
+
+<!-- S0: HOME -->
+<div class="screen on" id="s0">
+<div style="padding:8px 12px;display:flex;align-items:center;gap:8px">
+<span class="hamburger" onclick="toggleSB()">&#9776;</span>
+<span style="font-size:14px;font-weight:500">Smart Grocery</span>
+</div>
+<div class="card">
+<div class="hdr"><h3>What are you planning?</h3></div>
+<div style="padding:0 12px 8px"><input type="text" placeholder="e.g. BBQ for 8 people, or I have leftover chicken..." style="width:100%;font-size:12px;height:34px;padding:0 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md)"></div>
+</div>
+<div class="recall"><p>You bought chicken wings at Costco on Tuesday. Still have some?</p></div>
+<div style="padding:6px 12px 2px"><span style="font-size:12px;font-weight:500">Quick start</span></div>
+<div style="padding:4px 12px">
+<span class="chip">Weekend BBQ</span>
+<span class="chip">Weeknight meals</span>
+<span class="chip">Use my leftovers</span>
+</div>
+
+<!-- Sidebar -->
+<div class="sidebar-overlay" id="sb" onclick="closeSB(event)">
+<div class="sidebar">
+<div class="sb-hdr"><span>Menu</span><span style="cursor:pointer;color:var(--color-text-secondary)" onclick="toggleSB()">&#10005;</span></div>
+<div class="sb-section">
+<div class="sb-section-title">Meal plans</div>
+<div class="sb-item"><span style="font-weight:500">BBQ weekend</span><p class="sb-item-sub">Mar 29 · 3 recipes</p></div>
+<div class="sb-item"><span style="font-weight:500">Weeknight chicken</span><p class="sb-item-sub">Mar 25 · 3 recipes</p></div>
+</div>
+<div class="sb-section" style="border-top:0.5px solid var(--color-border-tertiary)">
+<div class="sb-section-title">Saved recipes</div>
+<div class="sb-item"><span style="font-weight:500">Salt & pepper wings</span><p class="sb-item-sub">Chinese · 45 min</p></div>
+<div class="sb-item"><span style="font-weight:500">Kenji's smash burger</span><p class="sb-item-sub">Western · 15 min</p></div>
+</div>
+<div class="sb-section" style="border-top:0.5px solid var(--color-border-tertiary)">
+<div class="sb-section-title">Grocery lists</div>
+<div class="sb-item"><span style="font-weight:500">BBQ weekend list</span><p class="sb-item-sub">Mar 29 · 8 items</p></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- S1: CLARIFY -->
+<div class="screen" id="s1">
+<div class="card">
+<div class="hdr"><h3>Here's what I understand</h3>
+<p>BBQ for 8 people · outdoor grill · this Saturday</p></div>
+<div style="padding:6px 12px 2px"><span style="font-size:12px;font-weight:500">Your ingredients</span></div>
+<div class="cat-row"><div class="cat-icon cat-ok">&#10003;</div><span class="cat-label">Protein</span><span class="cat-items">pork belly, burger patties — plenty</span></div>
+<div class="cat-row"><div class="cat-icon cat-warn">~</div><span class="cat-label">Carb</span><span class="cat-items">buns, rice — may need more sides</span></div>
+<div class="cat-row" style="margin-bottom:6px"><div class="cat-icon cat-bad">!</div><span class="cat-label">Veggie</span><span class="cat-items">almost none — need fresh options</span></div>
+<div style="padding:8px 12px 4px;border-top:0.5px solid var(--color-border-tertiary)"><span style="font-size:12px;font-weight:500">Any dietary restrictions?</span></div>
+<div style="padding:4px 12px 8px"><span class="chip">None</span><span class="chip">Halal</span><span class="chip">Vegetarian</span></div>
+<div class="actions"><button onclick="show(2)" class="btn-p">Looks good, show recipes</button></div>
+<div class="chatbar"><input type="text" placeholder="I also have kimchi, forgot to mention..."></div>
+</div>
+</div>
+
+<!-- S2: RECIPES -->
+<div class="screen" id="s2">
+<div class="card">
+<div class="hdr"><h3>Your meal plan</h3><p>3 meals for BBQ weekend · fills your veggie gap</p></div>
+<div class="row"><div style="flex:1"><span class="lbl">Korean BBQ pork belly</span><span class="ibtn">i</span><p class="sub">Gochujang · grill · 30 min</p><div><span class="pill pill-g">have: pork belly</span><span class="pill pill-w">buy: gochujang</span></div></div><span class="swap">swap</span></div>
+<div class="row highlight dim"><div style="flex:1"><span class="lbl">Grilled corn + cucumber salad</span><span class="ibtn">i</span><p class="sub">Classic BBQ side · 15 min</p></div><span style="font-size:11px;color:var(--color-text-secondary)">swapping...</span></div>
+<div class="swap-zone">
+<p style="font-size:10px;color:var(--color-text-secondary);margin-bottom:5px">Try instead:</p>
+<div class="swap-card"><div style="flex:1"><span style="font-size:12px;font-weight:500">Asian slaw</span><span class="ibtn">i</span><p style="font-size:10px;color:var(--color-text-secondary);margin-top:1px">Crunchy, tangy · 10 min</p></div><span style="font-size:11px;color:var(--color-text-info)">pick</span></div>
+<div class="swap-card"><div style="flex:1"><span style="font-size:12px;font-weight:500">Grilled veggie skewers</span><span class="ibtn">i</span><p style="font-size:10px;color:var(--color-text-secondary);margin-top:1px">Zucchini, pepper · 20 min</p></div><span style="font-size:11px;color:var(--color-text-info)">pick</span></div>
+<div style="display:flex;align-items:center;gap:6px;padding:3px 0"><div style="width:12px;height:12px;border:1px solid var(--color-border-secondary);border-radius:50%"></div><span style="font-size:11px;color:var(--color-text-secondary)">Keep original</span></div>
+</div>
+<div class="row"><div style="flex:1"><span class="lbl">Classic smash burgers</span><span class="ibtn">i</span><p class="sub">With cheese · 15 min</p><div><span class="pill pill-g">have: patties, buns</span><span class="pill pill-w">buy: cheese, lettuce</span></div></div><span class="swap">swap</span></div>
+<div style="border-top:0.5px solid var(--color-border-tertiary);padding:8px 12px;text-align:center"><span style="font-size:11px;color:var(--color-text-info)">Browse all recipes &#8594;</span></div>
+<div class="actions"><button>Save plan</button><button onclick="show(3)" class="btn-p">Build shopping list</button></div>
+<div class="chatbar"><input type="text" value="Suggest a different side (replacing corn + cucumber)" style="border-color:var(--color-border-info)"></div>
+<div style="padding:0 12px 6px"><span style="font-size:10px;color:var(--color-text-secondary)">Edit to add detail, or send as-is</span></div>
+</div>
+</div>
+
+<!-- S3: GROCERY -->
+<div class="screen" id="s3">
+<div class="card">
+<div class="hdr"><h3>Shopping list</h3><p>8 items · 2 stores</p></div>
+<div class="sec-hdr">Costco</div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Corn on the cob</span><p class="sub">12-pack · produce</p></div></div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Cheese slices</span><p class="sub">For burgers · dairy</p></div></div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Cucumber 3-pack</span><p class="sub">For salad · produce</p></div></div>
+<div class="sec-hdr">Community market</div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Gochujang</span><p class="sub">For Korean BBQ</p></div></div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Lettuce</span><p class="sub">For burgers</p></div></div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Green onion</span><p class="sub">For salad</p></div></div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Sesame oil</span><p class="sub">For Korean BBQ</p></div></div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Rice vinegar</span><p class="sub">For salad dressing</p></div></div>
+<div class="actions"><button class="btn-p">Save list</button></div>
+</div>
+</div>
+
+<!-- S4: SAVED MEAL PLAN -->
+<div class="screen" id="s4">
+<div class="card">
+<div class="hdr"><h3>BBQ weekend plan</h3><p>Saved Mar 29 · 3 recipes</p></div>
+<div class="toolbar"><span class="tool-btn">+ Add recipe via chat</span></div>
+
+<div class="row expand-card" onclick="toggleDetail('d1')">
+<div style="flex:1"><span class="lbl">Korean BBQ pork belly</span><p class="sub">Gochujang · grill · 30 min</p></div>
+<span class="remove-x">&#10005;</span>
+</div>
+<div class="detail-block open" id="d1">
+<div class="recipe-block">Slice pork belly 3-4mm thick
+
+Marinade (30 min):
+  2 tbsp gochujang
+  1 tbsp soy sauce
+  1 tbsp sesame oil
+  2 cloves garlic, minced
+
+Grill high heat, 2-3 min per side
+Char marks = done
+
+Serve with rice, lettuce wraps</div>
+</div>
+
+<div class="row expand-card" onclick="toggleDetail('d2')">
+<div style="flex:1"><span class="lbl">Grilled corn + cucumber salad</span><p class="sub">Classic BBQ side · 15 min</p></div>
+<span class="remove-x">&#10005;</span>
+</div>
+<div class="detail-block" id="d2">
+<div class="recipe-block">Corn: grill 10 min, turning often
+Brush with butter + chili flakes
+
+Cucumber salad:
+  Smash cucumbers, tear into chunks
+  2 tbsp rice vinegar
+  1 tbsp sesame oil
+  Pinch sugar, salt
+  Top with sesame seeds</div>
+</div>
+
+<div class="row expand-card" onclick="toggleDetail('d3')">
+<div style="flex:1"><span class="lbl">Classic smash burgers</span><p class="sub">With cheese · 15 min</p></div>
+<span class="remove-x">&#10005;</span>
+</div>
+<div class="detail-block" id="d3">
+<div class="recipe-block">Form loose balls ~2 oz each
+Cast iron or flat griddle, max heat
+
+Smash flat with spatula, season
+2 min until edges crisp
+Flip, add cheese, 1 min
+
+Bun: toast cut-side on griddle
+Stack: bun, patty, lettuce, sauce</div>
+</div>
+
+<div class="chatbar"><input type="text" placeholder="Add a dessert to this plan..."></div>
+</div>
+</div>
+
+<!-- S5: SAVED RECIPE (editable) -->
+<div class="screen" id="s5">
+<div class="card">
+<div class="hdr" style="display:flex;justify-content:space-between;align-items:flex-start">
+<div><h3>Salt & pepper chicken wings</h3><p>Chinese · 45 min · serves 4</p></div>
+<span class="remove-x" style="padding-top:2px">&#10005;</span>
+</div>
+<div style="padding:4px 12px;display:flex;gap:4px;flex-wrap:wrap">
+<span class="pill pill-g">air fryer or oven</span>
+<span class="pill" style="background:var(--color-background-secondary);color:var(--color-text-secondary)">Kenji / The Wok</span>
+</div>
+<div class="toolbar"><span class="tool-btn" id="editBtn" onclick="toggleEdit()">Edit</span></div>
+<div id="viewMode">
+<div class="recipe-block" style="border-top:0.5px solid var(--color-border-tertiary)">Baking powder : starch : salt = 1 : 1 : 0.5
+(~1 tsp per 1 lb of wings)
+
+Toss wings in mixture, shake off excess
+
+Air-dry mode (pick one):
+  Convection 150-170°F, 30-60 min
+  Or refrigerator overnight, uncovered
+
+Bake 450°F, ~15 min per side
+Until skin is crispy and golden
+
+Toss with:
+  Fried garlic, sliced chili, salt
+  White pepper to taste</div>
+</div>
+<div id="editMode" style="display:none">
+<div style="border-top:0.5px solid var(--color-border-tertiary);padding:8px 12px">
+<textarea class="edit-area" id="editArea">Baking powder : starch : salt = 1 : 1 : 0.5
+(~1 tsp per 1 lb of wings)
+
+Toss wings in mixture, shake off excess
+
+Air-dry mode (pick one):
+  Convection 150-170°F, 30-60 min
+  Or refrigerator overnight, uncovered
+
+Bake 450°F, ~15 min per side
+Until skin is crispy and golden
+
+Toss with:
+  Fried garlic, sliced chili, salt
+  White pepper to taste</textarea>
+</div>
+<div class="actions"><button onclick="toggleEdit()">Cancel</button><button class="btn-p" onclick="saveEdit()">Save</button></div>
+</div>
+<div class="chatbar"><input type="text" placeholder="Adjust this recipe for 8 people..."></div>
+</div>
+</div>
+
+<!-- S6: SAVED GROCERY LIST -->
+<div class="screen" id="s6">
+<div class="card">
+<div class="hdr"><h3>BBQ weekend list</h3><p>Saved Mar 29 · 8 items</p></div>
+<div class="toolbar">
+<span class="tool-btn" onclick="alert('Copied as checklist')">Copy to Notes</span>
+<span class="tool-btn">+ Add item</span>
+</div>
+<div class="sec-hdr">Costco</div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Corn on the cob</span><p class="sub">12-pack · produce</p></div><span class="remove-x">&#10005;</span></div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Cheese slices</span><p class="sub">For burgers · dairy</p></div><span class="remove-x">&#10005;</span></div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Cucumber 3-pack</span><p class="sub">For salad · produce</p></div><span class="remove-x">&#10005;</span></div>
+<div class="sec-hdr">Community market</div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Gochujang</span><p class="sub">For Korean BBQ</p></div><span class="remove-x">&#10005;</span></div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Lettuce</span><p class="sub">For burgers</p></div><span class="remove-x">&#10005;</span></div>
+<div class="check-row"><div class="check-box" onclick="tog(this)"></div><div style="flex:1"><span class="lbl">Green onion</span><p class="sub">For salad</p></div><span class="remove-x">&#10005;</span></div>
+<div class="add-row"><input type="text" placeholder="Add an item..."><button>Add</button></div>
+</div>
+</div>
+</div>
+
+<script>
+function show(n){document.querySelectorAll('.screen').forEach(function(s,i){s.classList.toggle('on',i===n)});document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('on',i===n)});var sb=document.getElementById('sb');if(sb)sb.classList.remove('on')}
+function toggleSB(){document.getElementById('sb').classList.toggle('on')}
+function closeSB(e){if(e.target===document.getElementById('sb'))toggleSB()}
+function tog(el){if(el.dataset.on){el.dataset.on='';el.innerHTML='';el.style.background=''}else{el.dataset.on='1';el.innerHTML='&#10003;';el.style.background='var(--color-text-success)';el.style.color='#fff'}}
+function toggleDetail(id){document.getElementById(id).classList.toggle('open')}
+function toggleEdit(){var v=document.getElementById('viewMode');var e=document.getElementById('editMode');var b=document.getElementById('editBtn');if(e.style.display==='none'){e.style.display='block';v.style.display='none';b.textContent='Editing...'}else{e.style.display='none';v.style.display='block';b.textContent='Edit'}}
+function saveEdit(){var t=document.getElementById('editArea').value;document.querySelector('#viewMode .recipe-block').textContent=t;toggleEdit()}
+</script>
+</body>
+</html>
