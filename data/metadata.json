@@ -1,0 +1,35 @@
+{
+  "scrape_date": "2026-03-28",
+  "method": "graphql_api",
+  "store": {
+    "shopId": "8470",
+    "postalCode": "V5S3A8",
+    "zoneId": "750"
+  },
+  "duration_seconds": 28.0,
+  "departments": {
+    "meat_seafood": {
+      "id_count": 58
+    },
+    "produce": {
+      "id_count": 69
+    },
+    "pantry": {
+      "id_count": 69
+    },
+    "deli_dairy": {
+      "id_count": 56
+    },
+    "frozen": {
+      "id_count": 51
+    },
+    "snacks_candy": {
+      "id_count": 76
+    },
+    "beverages": {
+      "id_count": 64
+    }
+  },
+  "total_ids_discovered": 443,
+  "total_products_fetched": 443
+}

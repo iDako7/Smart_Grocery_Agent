@@ -1,0 +1,573 @@
+{
+  "department": "deli_dairy",
+  "scrape_date": "2026-03-28",
+  "store": {
+    "shopId": "8470",
+    "postalCode": "V5S3A8",
+    "zoneId": "750",
+    "name": "Costco Canada"
+  },
+  "product_count": 56,
+  "products": [
+    {
+      "productId": "21114375",
+      "name": "Extra Large Eggs",
+      "size": "30 ct",
+      "brandName": null,
+      "category": "Whole Eggs",
+      "retailerRef": "430",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_160ca3cf-fac9-4db3-9e08-add6d524cdab.jpeg",
+      "available": false
+    },
+    {
+      "productId": "21138085",
+      "name": "Philadelphia Cream Cheese",
+      "size": "500 g",
+      "brandName": "philadelphia",
+      "category": "Cream Cheese",
+      "retailerRef": "427367",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3b90cac7-5ded-4772-8b01-898070692928.jpeg",
+      "available": true
+    },
+    {
+      "productId": "29795237",
+      "name": "Reser\u2019s Main St. Bistro Baked Scalloped Potatoes",
+      "size": "1.13 kg",
+      "brandName": "reser\u2019s",
+      "category": "Other Deli Meals and Sides",
+      "retailerRef": "1670109",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_36b49588-009e-42b2-9245-1ad39ccff817.jpeg",
+      "available": true
+    },
+    {
+      "productId": "39122057",
+      "name": "Activia Lactose Free Active Probiotics Yogurt",
+      "size": "1 each",
+      "brandName": "activia",
+      "category": "Traditional Yogurt",
+      "retailerRef": "1195239",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c8720dcb-d898-40ab-a152-afb9312a14e2.jpeg",
+      "available": true
+    },
+    {
+      "productId": "28836976",
+      "name": "Creamy Dill Pickle Salad",
+      "size": "2 ct",
+      "brandName": null,
+      "category": "Prepared Green Salad Kits",
+      "retailerRef": "1647794",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c47c29d8-75d8-41a0-a5bc-73f7f17bc46e.png",
+      "available": true
+    },
+    {
+      "productId": "102169707",
+      "name": "Chicken Penne Alfredo",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Prepared Pasta Meals",
+      "retailerRef": "15206",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_815bd00f-0268-4ad5-9314-e58acc69b306.jpg",
+      "available": true
+    },
+    {
+      "productId": "63547295",
+      "name": "Gino Bambino Pizza Starter Kit",
+      "size": "290 g",
+      "brandName": "gino bambino",
+      "category": "Prepared Pizza",
+      "retailerRef": "1083313",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_2cb3144c-4248-4b55-b448-ac8923a638b5.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19461863",
+      "name": "2% Milk",
+      "size": "4 l",
+      "brandName": null,
+      "category": "Plain Milk",
+      "retailerRef": "458",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fd5dbc7a-ebea-450d-a7d6-dd76b64939d2.jpeg",
+      "available": false
+    },
+    {
+      "productId": "19339358",
+      "name": "10% Half & Half Cream",
+      "size": "1 l",
+      "brandName": null,
+      "category": "Half & Half",
+      "retailerRef": "1019",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7dbe5ca0-f484-450c-94a7-f36b42b4d0dc.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19461851",
+      "name": "3.25% Homogenized Milk",
+      "size": "4 l",
+      "brandName": null,
+      "category": "Plain Milk",
+      "retailerRef": "457",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8fc63956-452a-40d1-854d-c2c0a332226e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "27835221",
+      "name": "International Delight French Vanilla Supreme Coffee Creamer",
+      "size": "1.89 L",
+      "brandName": "international delight",
+      "category": "Dairy-Free Creamers",
+      "retailerRef": "1614519",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_37306336-a0da-4a06-bf6a-b3fa5a0228f7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "47941651",
+      "name": "Kirkland Signature Organic Greek Yogurt",
+      "size": "1.36 kg",
+      "brandName": "kirkland signature",
+      "category": "Greek & Icelandic Yogurt",
+      "retailerRef": "1794181",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_dcd7c10d-6c35-4a2b-b95f-1146a6d92578.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18110868",
+      "name": "Iogo Assorted 1.5% Nano Drinkable Yogurt",
+      "size": "93 ml",
+      "brandName": "iogo",
+      "category": "Yogurt Drinks",
+      "retailerRef": "401150",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_65ed3dbc-7af3-435e-9b20-6922d02dc8ba.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21138379",
+      "name": "Epoca Cool Plus Cultured Dairy Beverage",
+      "size": "62 ml",
+      "brandName": "epoca cool plus",
+      "category": "Yogurt Drinks",
+      "retailerRef": "729442",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f0217af8-ed26-415d-980e-71f47b73820a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114747",
+      "name": "Kirkland Signature Organic Large Free Range Eggs",
+      "size": "24 ct",
+      "brandName": "kirkland signature",
+      "category": "Whole Eggs",
+      "retailerRef": "313963",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8e9dc3ac-70bd-493c-8d31-ba18a66d431f.jpeg",
+      "available": false
+    },
+    {
+      "productId": "63993483",
+      "name": "Kirkland Signature Free Run Large Eggs",
+      "size": "24 ct",
+      "brandName": "kirkland signature",
+      "category": "Whole Eggs",
+      "retailerRef": "1706959",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_78f591b7-b2ed-4d49-86c5-4315b486df80.jpg",
+      "available": false
+    },
+    {
+      "productId": "21112350",
+      "name": "Large Eggs",
+      "size": "60 ct",
+      "brandName": null,
+      "category": "Whole Eggs",
+      "retailerRef": "669",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4aaf5ea8-7696-4a2a-ac01-eaa2d357e0d7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "29659895",
+      "name": "Royal Hollandia Cheese Mild Gouda",
+      "size": "20 g",
+      "brandName": "royal hollandia",
+      "category": "Gouda",
+      "retailerRef": "5058010",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e0da50eb-11b6-4d45-9d68-04c0a4003dcd.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021361",
+      "name": "Kirkland Signature Goat Cheese Log",
+      "size": "300 g",
+      "brandName": "kirkland signature",
+      "category": "Goat Cheese",
+      "retailerRef": "432063",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f336272f-8a19-4c8c-baac-4934fcaeabbb.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17969761",
+      "name": "Saputo Pizza Mozzarella Cheese",
+      "size": "1000 g",
+      "brandName": "saputo",
+      "category": "Mozzarella",
+      "retailerRef": "83013",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b396a5ef-669d-48a2-bcf5-c162ea8fcbbd.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114980",
+      "name": "Kirkland Signature Sliced Meat Variety Pack",
+      "size": "300 g",
+      "brandName": "kirkland signature",
+      "category": "Mixed Deli Meats",
+      "retailerRef": "1274215",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_9517e51d-5d05-480f-9a65-ce50c64ad58d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "69948016",
+      "name": "McSweeney\u2019s Pep'N Cheddies Cheese Sticks",
+      "size": "25 g",
+      "brandName": "mcsweeney\u2019s",
+      "category": "Meat Cheese Combos and Trays",
+      "retailerRef": "1921232",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8f6eeccc-78c6-4537-b318-615985ab84b9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021100",
+      "name": "Lilydale Sliced Turkey",
+      "size": "400 g",
+      "brandName": "lilydale",
+      "category": "Deli Turkey",
+      "retailerRef": "356026",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_778e8c48-8e1c-4100-8c9e-cf03add4f8c7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "30067825",
+      "name": "Maple Leaf Natural Selections Sliced Oven Roasted Turkey Breast",
+      "size": "300 g",
+      "brandName": "maple leaf natural selections",
+      "category": "Deli Turkey",
+      "retailerRef": "1370704",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ef075676-518b-4858-9a92-90611e8d836c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18603775",
+      "name": "Natrel Butter Salted 454g",
+      "size": "454 g",
+      "brandName": "natrel",
+      "category": "Salted Butter",
+      "retailerRef": "118219",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d9c2536a-bd78-4c12-95a7-035bc8467dd9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115125",
+      "name": "Becel Original Margarine",
+      "size": "1.22 kg",
+      "brandName": "becel",
+      "category": "Margerine",
+      "retailerRef": "1412017",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3d7ea4a3-b47a-4c2c-ac13-f9efa774f896.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18602528",
+      "name": "Natrel Unsalted Butter",
+      "size": "454 g",
+      "brandName": "natrel",
+      "category": "Unsalted Butter",
+      "retailerRef": "373323",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ba582a13-ce0f-4efc-846e-84eb6d28a35e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114493",
+      "name": "Kirkland Signature Organic Salted Butter",
+      "size": "454 g",
+      "brandName": "kirkland signature",
+      "category": "Salted Butter",
+      "retailerRef": "1109458",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_61842ff6-0630-4744-baf9-5335b0e57b7f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114703",
+      "name": "Seasoned Rotisserie Chicken (Avg. 1.2kg)",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Rotisserie Chicken",
+      "retailerRef": "347937",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8277ad11-e09b-498c-bad4-d12f897979ea.jpeg",
+      "available": true
+    },
+    {
+      "productId": "79576920",
+      "name": "Fresh Addition Fully Cooked Steak Bites",
+      "size": "91 g",
+      "brandName": "fresh addition",
+      "category": "Prepared Beef",
+      "retailerRef": "5051555",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_61a1de88-6863-4af3-84e7-109091b2fee3.jpg",
+      "available": true
+    },
+    {
+      "productId": "100792377",
+      "name": "Stoney Creek Market Fully Cooked Steak Bites",
+      "size": "400 g",
+      "brandName": "stoney creek market",
+      "category": "Prepared Beef",
+      "retailerRef": "1999279",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_097b5e81-ed36-42c3-9e94-d7428d0b83f7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21020558",
+      "name": "44th Street Beef Roast",
+      "size": "1.15 kg",
+      "brandName": "44th street",
+      "category": "Prepared Beef",
+      "retailerRef": "27956",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_19786fa6-7361-4a9b-8c4b-f54e50fb0ac7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021294",
+      "name": "La Terra Fina Mild Cheddar Queso Dip",
+      "size": "879 g",
+      "brandName": "la terra fina",
+      "category": "Cheese Dips",
+      "retailerRef": "5055002",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_258f550a-821c-4487-bed8-cff73eb7c249.jpeg",
+      "available": true
+    },
+    {
+      "productId": "64704384",
+      "name": "The Laughing Cow Original, Cheese Snacks",
+      "size": "800 g",
+      "brandName": "the laughing cow",
+      "category": "Cheese Dips",
+      "retailerRef": "2215670",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a00cf506-375d-4e61-becf-383d11e0d23b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021324",
+      "name": "Wholly Guacamole Organic Guacamole",
+      "size": "57 g",
+      "brandName": "wholly guacamole",
+      "category": "Guacamole",
+      "retailerRef": "438342",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a081e37d-6157-4605-a816-a067c64da783.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21017481",
+      "name": "Fontaine Sant\u00e9 Roasted Garlic Hummus",
+      "size": "565 g",
+      "brandName": "fontaine sant\u00e9",
+      "category": "Hummus",
+      "retailerRef": "435164",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ee36e7cd-85b4-4cb8-b5b1-1f16f81f1a5d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "24107673",
+      "name": "Kirkland Signature Shredded Parmigiano Reggiano",
+      "size": "454 g",
+      "brandName": "kirkland signature",
+      "category": "Parmesan",
+      "retailerRef": "1349687",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_db667137-0aea-4297-b0ff-cc70930ed4a2.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19454620",
+      "name": "Nanak's 100% Vegetarian Malai Paneer Fresh Cheese",
+      "size": "1.6 kg",
+      "brandName": "nanak's",
+      "category": "Paneer",
+      "retailerRef": "319376",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3d327b86-fda7-4cdc-801b-fd14883d9b66.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21017924",
+      "name": "Kirkland Signature Organic Original Almond Beverage",
+      "size": "946 ml",
+      "brandName": "kirkland signature",
+      "category": "Almond Milk",
+      "retailerRef": "1002374",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5431f9b4-6e69-429e-9512-efb836ba0f54.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17973713",
+      "name": "Bari Ricotta",
+      "size": "1000 g",
+      "brandName": "bari",
+      "category": "Ricotta",
+      "retailerRef": "10426",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8426f770-294b-43d5-bf4d-75fa2ce0d017.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19070542",
+      "name": "GoldEgg Omega-3 Large White Eggs",
+      "size": "18 ct",
+      "brandName": "goldegg",
+      "category": "Whole Eggs",
+      "retailerRef": "1721742",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1201d4e4-13aa-4c7c-84aa-5744ec12a0c4.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19339349",
+      "name": "35% M.F. Whipping Cream",
+      "size": "1 l",
+      "brandName": null,
+      "category": "Heavy Whipping Cream",
+      "retailerRef": "1436",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_64060176-9035-4932-8a7d-f79dd25c748b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21112819",
+      "name": "Black Diamond Marble Cheese Strings",
+      "size": "21 g",
+      "brandName": "black diamond",
+      "category": "String and Stick Cheese",
+      "retailerRef": "5086",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d2ed09a3-7cd7-4db5-9219-de9c833da77c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "25557095",
+      "name": "Kirkland Signature 18% Milk Fat Sour Cream",
+      "size": "500 ml",
+      "brandName": "kirkland signature",
+      "category": "Sour Cream",
+      "retailerRef": "1346914",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f16bf0ae-9993-42b6-b1d9-d8dfa9a34a40.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115064",
+      "name": "Kirkland Signature Marble Cheddar Cheese",
+      "size": "1.15 kg",
+      "brandName": "kirkland signature",
+      "category": "Cheddar",
+      "retailerRef": "1154953",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6e190306-a6b0-48bc-8ae1-cf7299a501e8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114574",
+      "name": "Kirkland Signature Sliced Marble Cheddar Cheese",
+      "size": "1 kg",
+      "brandName": "kirkland signature",
+      "category": "Cheddar",
+      "retailerRef": "1001002",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_dc88f655-2924-49b1-92b1-940480513cc8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17819549",
+      "name": "Natrel Lactose Free 2%",
+      "size": "2 L",
+      "brandName": "natrel",
+      "category": "Lactose-Free Milk",
+      "retailerRef": "4788",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_781c5de2-a1ef-44b5-830a-414f20c63057.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115412",
+      "name": "Kirkland Signature Quinoa Salad",
+      "size": "per lb",
+      "brandName": "kirkland signature",
+      "category": "Other Prepared Deli Salads",
+      "retailerRef": "11521",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_119be962-81d8-433b-bb31-37c8b75e4775.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19466178",
+      "name": "1% Milk",
+      "size": "4 l",
+      "brandName": null,
+      "category": "Plain Milk",
+      "retailerRef": "1281",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_74378a18-bae1-45eb-9379-80150cab2962.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114606",
+      "name": "Kirkland Signature Caesar Salad",
+      "size": "per lb",
+      "brandName": "kirkland signature",
+      "category": "Prepared Green Salad Kits",
+      "retailerRef": "11515",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4dcb877f-c5e5-4003-906b-37103642c211.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21138824",
+      "name": "Kirkland Signature Meat Lasagna",
+      "size": "per lb",
+      "brandName": "kirkland signature",
+      "category": "Prepared Pasta Meals",
+      "retailerRef": "13175",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ed01e51b-31a0-47a5-b98e-ecbfc7c6be8f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19411985",
+      "name": "Natrel Organic 3.25% Milk",
+      "size": "4 L",
+      "brandName": "natrel",
+      "category": "Plain Milk",
+      "retailerRef": "695035",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_df40c265-11c3-4beb-86b5-834c8fb8467c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114781",
+      "name": "Oikos 2% Vanilla Greek Yogurt With 25% Less Sugar",
+      "size": "850 g",
+      "brandName": "oikos",
+      "category": "Greek & Icelandic Yogurt",
+      "retailerRef": "1303489",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7e281a2e-11f9-4610-9be9-cdf44e26f8bb.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18454818",
+      "name": "1% Chocolate Milk",
+      "size": "4 l",
+      "brandName": null,
+      "category": "Chocolate Milk",
+      "retailerRef": "1782",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fda7e7b5-c2a4-42e7-b4d7-7fbb8fd76f28.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21137467",
+      "name": "Oikos Greek Yogurt 3% Assorted Flavours Variety Pack",
+      "size": "100 g",
+      "brandName": "oikos",
+      "category": "Greek & Icelandic Yogurt",
+      "retailerRef": "2743612",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8b5de80e-9755-44e5-9650-87dbd7ab18af.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17974527",
+      "name": "Balderson 2 Year Canadian Cheddar Portions",
+      "size": "126 g",
+      "brandName": "balderson",
+      "category": "Cheddar",
+      "retailerRef": "181357",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3fa572b0-0470-4c8a-a903-6b746c88763d.jpeg",
+      "available": true
+    }
+  ]
+}

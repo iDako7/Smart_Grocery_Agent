@@ -1,0 +1,523 @@
+{
+  "department": "frozen",
+  "scrape_date": "2026-03-28",
+  "store": {
+    "shopId": "8470",
+    "postalCode": "V5S3A8",
+    "zoneId": "750",
+    "name": "Costco Canada"
+  },
+  "product_count": 51,
+  "products": [
+    {
+      "productId": "27770152",
+      "name": "Healthy Choice Greek Frozen Yogurt Bars",
+      "size": "8 oz",
+      "brandName": "healthy choice",
+      "category": "Frozen Yogurt",
+      "retailerRef": "4266751",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_14bb136a-95b7-413a-88a9-09ef18712167.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21132126",
+      "name": "Janes Frozen Whole Wheat Chicken Strips",
+      "size": "2 kg",
+      "brandName": "janes",
+      "category": "Frozen Chicken Strips",
+      "retailerRef": "326031",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_488a757e-b660-4095-84ca-9fe800efe648.jpg",
+      "available": true
+    },
+    {
+      "productId": "21019681",
+      "name": "Bibigo Frozen Steamed Pork Dumplings",
+      "size": "1.1 kg",
+      "brandName": "bibigo",
+      "category": "Frozen Dumplings",
+      "retailerRef": "1276212",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ce45f9f5-1e1a-4b8c-b765-39bfc4fe89fe.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18110972",
+      "name": "Nestle Vanilla Ice Cream Drumstick Variety Pack",
+      "size": "18 cones",
+      "brandName": "nestle",
+      "category": "Ice Cream Sundae Cones",
+      "retailerRef": "253230",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d0dece8b-176c-4b0a-a415-8f27f2fa5f88.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018344",
+      "name": "Natrel Organic Frozen Fudge Bar",
+      "size": "1 each",
+      "brandName": "natrel",
+      "category": "Ice Cream Bars",
+      "retailerRef": "425877",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_bc0f7f97-b9a8-4ae0-aefe-d2cbc9cfb243.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18475079",
+      "name": "Kirkland Signature Chocolate Almond Ice Cream Bars",
+      "size": "91 ml",
+      "brandName": "kirkland signature",
+      "category": "Ice Cream Bars",
+      "retailerRef": "1185912",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_dc35ce42-7b22-48ee-8b02-a2201a20a82b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "60366457",
+      "name": "Cheese Pepperoni Pizza Variety",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Frozen Pizzas",
+      "retailerRef": "2392786",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_17a08eb2-91df-42a9-9048-40e06a0e3a48.jpeg",
+      "available": true
+    },
+    {
+      "productId": "41282778",
+      "name": "Olivieri Skillet Gnocchi",
+      "size": "480 g",
+      "brandName": "olivieri",
+      "category": "Frozen Pasta Meals",
+      "retailerRef": "2268256",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_2073c2f6-01e8-4ec9-b788-c88912e0fc61.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019571",
+      "name": "Kirkland Signature Sausage & Beef Lasagna",
+      "size": "1.5 kg",
+      "brandName": "kirkland signature",
+      "category": "Frozen Pasta Meals",
+      "retailerRef": "1295911",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_17e640ed-0488-419e-8412-b6755013445a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "27969698",
+      "name": "Motor City Pizza Co. Double Pepperoni Pizza",
+      "size": "808 g",
+      "brandName": "motor city pizza co.",
+      "category": "Frozen Pizzas",
+      "retailerRef": "1652977",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_de457140-b2ed-4373-a0f0-a9dcb7d42790.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021995",
+      "name": "Kirkland Signature Frozen Vegetable Special Blend Stir Fry",
+      "size": "2.5 kg",
+      "brandName": "kirkland signature",
+      "category": "Frozen Mixed Vegetables",
+      "retailerRef": "1009994",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_787613ed-92a4-4581-b7fe-7a6cae3f4422.jpeg",
+      "available": true
+    },
+    {
+      "productId": "32533159",
+      "name": "Puravida Fire Roasted Vegetable Primavera",
+      "size": "1.5 kg",
+      "brandName": "puravida",
+      "category": "Frozen Mixed Vegetables",
+      "retailerRef": "1727798",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_76de4b56-fa56-45be-af77-175768a472f4.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19645076",
+      "name": "Kirkland Signature Organic Frozen Mixed Vegetables",
+      "size": "2.5 kg",
+      "brandName": "kirkland signature",
+      "category": "Frozen Mixed Vegetables",
+      "retailerRef": "1215098",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_9c81d70d-2cc3-4e0f-b46c-245082f62c35.jpeg",
+      "available": true
+    },
+    {
+      "productId": "63629429",
+      "name": "Puravida  Fire Roasted Root Vegetables",
+      "size": "1.8 kg",
+      "brandName": "puravida ",
+      "category": "Frozen Mixed Vegetables",
+      "retailerRef": "1874356",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_25a9ba04-1af1-4d75-9985-8cc297c40120.jpg",
+      "available": true
+    },
+    {
+      "productId": "21020900",
+      "name": "Kirkland Signature Frozen Three Berry Blend",
+      "size": "2 kg",
+      "brandName": "kirkland signature",
+      "category": "Frozen Mixed Berries",
+      "retailerRef": "410746",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_101d23f0-9d83-428d-a359-3c2f922df42b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021124",
+      "name": "Kirkland Signature Blueberries",
+      "size": "2 kg",
+      "brandName": "kirkland signature",
+      "category": "Frozen Blueberries",
+      "retailerRef": "360704",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_524bf665-27ad-4919-ab63-53bd5e23e1ba.jpeg",
+      "available": true
+    },
+    {
+      "productId": "32867231",
+      "name": "Nature's Touch Organic Berry Cherry Blend",
+      "size": "1.5 kg",
+      "brandName": "nature's touch",
+      "category": "Frozen Mixed Berries",
+      "retailerRef": "1670923",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5fdee9f3-f172-4053-88ed-e5cc098b4007.jpeg",
+      "available": true
+    },
+    {
+      "productId": "96480687",
+      "name": "Fruit Riot Sour Grapes Mix",
+      "size": "567 g",
+      "brandName": "fruit riot",
+      "category": "Frozen Fruit Mixes",
+      "retailerRef": "1930081",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6d6cb4c9-5286-43de-b775-197f7194e343.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018360",
+      "name": "Cavendish Farms Hash Brown Patties",
+      "size": "2.5 kg",
+      "brandName": "cavendish farms",
+      "category": "Frozen Hash Browns",
+      "retailerRef": "558916",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c5606cbd-38a2-4bac-9c1c-3ba9eb48c3a4.png",
+      "available": true
+    },
+    {
+      "productId": "21018746",
+      "name": "El Monterey Breakfast Wraps",
+      "size": "128 g",
+      "brandName": "el monterey",
+      "category": "Frozen Breakfast Burritos",
+      "retailerRef": "1226702",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b2a2003c-366d-48af-8beb-ad420b5d8c94.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021852",
+      "name": "Kellogg\u2019s Eggo Waffles",
+      "size": "72 ct",
+      "brandName": "kellogg\u2019s eggo",
+      "category": "Frozen Waffles",
+      "retailerRef": "391166",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_cb0cb664-a29a-4dd5-bb8d-9f3d190af39a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "32462807",
+      "name": "Spudlers Smoked Bacon Breakfast Hash",
+      "size": "1.5 kg",
+      "brandName": "spudlers",
+      "category": "Other Frozen Breakfast",
+      "retailerRef": "2261112",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6b97ec48-55b6-49bd-bb00-12864be7712e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "63517251",
+      "name": "Kirkland Signature Breaded Chicken Chunks",
+      "size": "1.8 kg",
+      "brandName": "kirkland signature",
+      "category": "Frozen Chicken Nuggets",
+      "retailerRef": "1736931",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_06a3b2f6-b1f8-4674-9e55-4159663f485a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018791",
+      "name": "Cavendish Flavour Crisp Straight Cut Fries",
+      "size": "4.25 kg",
+      "brandName": "cavendish",
+      "category": "Frozen Fries",
+      "retailerRef": "274563",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5c22b949-6f56-48a7-83af-2f49d46ce9b8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "33223267",
+      "name": "High Liner English Style Battered Blue Cod Fillets",
+      "size": "2 kg",
+      "brandName": "high liner",
+      "category": "Frozen Cod",
+      "retailerRef": "2264172",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_21845723-103e-40ed-82e3-3be93cd62ef8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021973",
+      "name": "Kirkland Signature Frozen Tail-Off Shrimp",
+      "size": "907 g",
+      "brandName": "kirkland signature",
+      "category": "Frozen Whole Shrimp",
+      "retailerRef": "1075424",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d7c92fe7-e79c-4410-9136-2fe8b16fdee9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "102272173",
+      "name": "Love Me Sweet Original Flavour Mille Crepe Cake",
+      "size": "735 g",
+      "brandName": "love me sweet",
+      "category": "Frozen Cakes",
+      "retailerRef": "1992120",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_2cd55385-636f-4059-a397-ea6eb9093966.jpg",
+      "available": true
+    },
+    {
+      "productId": "21132507",
+      "name": "Furlani Garlic Texas Toast",
+      "size": "319 g",
+      "brandName": "furlani",
+      "category": "Frozen Toast",
+      "retailerRef": "189577",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b586d381-3a60-4a38-b4bf-f234ed58bbc8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "3116277",
+      "name": "Brazi Bites Brazilian Cheese Bread",
+      "size": "36 oz",
+      "brandName": "brazi bites",
+      "category": "Other Frozen Breads",
+      "retailerRef": "1018790",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_875f4717-5069-4926-aa89-31d8d156965b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21132529",
+      "name": "Sell by Case Unbaked Mini Brioche Bun",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Frozen Buns",
+      "retailerRef": "1329825",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4f9a8921-642c-43d0-b12c-8d60dae16d2b.jpg",
+      "available": true
+    },
+    {
+      "productId": "21138847",
+      "name": "Sell by Case Frozen Unbaked 9-Grain Ciabatta",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Frozen Rolls",
+      "retailerRef": "1321053",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_0e2a169c-119a-458d-961a-935789256fe3.jpg",
+      "available": true
+    },
+    {
+      "productId": "34680716",
+      "name": "Tru Fru Frozen Chocolate Covered Strawberries",
+      "size": "567 g",
+      "brandName": "tru fru",
+      "category": "Frozen Strawberries",
+      "retailerRef": "3517285",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_2b695bde-ffe2-4f24-a14a-f9637cb1219a.jpg",
+      "available": true
+    },
+    {
+      "productId": "21018535",
+      "name": "Hampton House Breaded Chicken Strips",
+      "size": "2 kg",
+      "brandName": "hampton house",
+      "category": "Frozen Chicken Strips",
+      "retailerRef": "181092",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_24a0e9c9-092d-4475-a727-d25c6520d631.jpeg",
+      "available": true
+    },
+    {
+      "productId": "84653852",
+      "name": "Cavendish Farms Restaurant Style Drive-Thru Thin Cut Fries",
+      "size": "2.25 kg",
+      "brandName": "cavendish farms",
+      "category": "Frozen Fries",
+      "retailerRef": "2184440",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ab704d69-241b-4d3e-867c-4cd0697d098e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21134701",
+      "name": "Halal Chicken Breast Strips",
+      "size": "1.6 kg",
+      "brandName": null,
+      "category": "Frozen Chicken Strips",
+      "retailerRef": "3374315",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_96845bb4-20a3-4156-b5a6-706224e6c656.jpeg",
+      "available": true
+    },
+    {
+      "productId": "69351956",
+      "name": "When We Eat Butter Croffle",
+      "size": "880 g",
+      "brandName": "when we eat",
+      "category": "Frozen Breakfast Pastries",
+      "retailerRef": "1743020",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_480e3401-977d-427f-87bc-7f819411496c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "68883498",
+      "name": "Plaisirs Gastronomiques STROMBOLI Triple Meat Pizza",
+      "size": "390 g",
+      "brandName": "plaisirs gastronomiques stromboli",
+      "category": "Frozen Pizzas",
+      "retailerRef": "2260829",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5aec84a9-d589-4db9-9f83-6e274aa874b6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018992",
+      "name": "El Monterey Chicken Taquitos",
+      "size": "1.7 kg",
+      "brandName": "el monterey",
+      "category": "Frozen Taquitos",
+      "retailerRef": "393667",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e59f96d8-0a4d-4a79-97a9-b478868575af.jpeg",
+      "available": true
+    },
+    {
+      "productId": "40919525",
+      "name": "Snowcrest Foods 4 Fruit Blend Organic Sunshine Medley",
+      "size": "2 kg",
+      "brandName": "snowcrest foods",
+      "category": "Frozen Fruit Mixes",
+      "retailerRef": "1757072",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3d7a7399-cf39-416a-9a5c-a4f04c70f9eb.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21138820",
+      "name": "Veggies Made Great Spinach Egg White Frittata",
+      "size": "1.13 kg",
+      "brandName": "veggies made great",
+      "category": "Other Frozen Breakfast",
+      "retailerRef": "1395161",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_bac4cfe1-ba0c-4a0e-90a8-23655e51a1d8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019504",
+      "name": "Kirkland Signature Frozen Cheese Pizza",
+      "size": "418 g",
+      "brandName": "kirkland signature",
+      "category": "Frozen Pizzas",
+      "retailerRef": "1008499",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_27628362-5c0e-40f4-b5da-10e64a7d4a4d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021773",
+      "name": "Cuisine Adventures Adventures Spanakopita Spinach & Feta Phyllo Triangles",
+      "size": "48 oz",
+      "brandName": "cuisine adventures",
+      "category": "Other Frozen Snacks",
+      "retailerRef": "965949",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b6071df5-ba5d-4ba1-96c7-b0fdc6823078.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21017221",
+      "name": "MotzaStix Frozen Breaded Pizza Mozzarella Cheese Sticks",
+      "size": "1.47 kg",
+      "brandName": "motzastix",
+      "category": "Frozen Mozzarella Sticks",
+      "retailerRef": "1027677",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_54cd5763-fe3c-4560-90d9-0ea9b24bfcdc.jpeg",
+      "available": true
+    },
+    {
+      "productId": "61175605",
+      "name": "Partini Jalapeno Poppers",
+      "size": "1 kg",
+      "brandName": null,
+      "category": "Other Frozen Snacks",
+      "retailerRef": "1838746",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_bdf5677b-8d26-4cd3-8d12-61ff1ffd5a46.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21139036",
+      "name": "Bacon & Egg English Muffin",
+      "size": "12 ct",
+      "brandName": null,
+      "category": "Frozen Breakfast Sandwiches",
+      "retailerRef": "1164991",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_746d80fc-22d6-4a72-a556-dbdf0e3c1bbc.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21017511",
+      "name": "Nature's Classic Frozen Organic Edamame",
+      "size": "300 g",
+      "brandName": "nature's classic",
+      "category": "Frozen Edamame",
+      "retailerRef": "379232",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c0c47ac0-0c9b-4081-8193-c2265d8bda05.jpeg",
+      "available": true
+    },
+    {
+      "productId": "83598119",
+      "name": "Dr. Praeger\u2019s Pizza Stars",
+      "size": "1 each",
+      "brandName": "dr. praeger\u2019s",
+      "category": "Frozen Pizza Snacks",
+      "retailerRef": "1940140",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_918212ed-e974-4aa1-b2c9-0ddde8dc8543.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16984125",
+      "name": "Sabatasso's Pizzeria Gluten-Free Thin & Crispy Crust Pizza",
+      "size": "992 g",
+      "brandName": "sabatasso's pizzeria",
+      "category": "Frozen Pizzas",
+      "retailerRef": "301572",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fe99e7b1-2092-46e1-ab44-f60fdd4b0b92.jpeg",
+      "available": true
+    },
+    {
+      "productId": "88651074",
+      "name": "Hampton House Frozen Spicy Crispy Chicken Breast Bites",
+      "size": "1.5 kg",
+      "brandName": "hampton house",
+      "category": "Frozen Chicken Nuggets",
+      "retailerRef": "2661280",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f2197f0d-88c7-4a33-b6c7-b42b1982c1a1.jpeg",
+      "available": true
+    },
+    {
+      "productId": "88651034",
+      "name": "Russet House Straight Cut Sweet Potato Fries",
+      "size": "2.27 kg",
+      "brandName": "russet house",
+      "category": "Frozen Fries",
+      "retailerRef": "3385845",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_762e414d-1b5e-4614-bf65-a994aceaaca8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21020669",
+      "name": "Ajinomoto Frozen Vegetable Yakisoba",
+      "size": "255 g",
+      "brandName": "ajinomoto",
+      "category": "Frozen Asian Meals",
+      "retailerRef": "5464292",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_02acf167-5c67-49e9-8005-325d1ec41a01.jpeg",
+      "available": true
+    }
+  ]
+}

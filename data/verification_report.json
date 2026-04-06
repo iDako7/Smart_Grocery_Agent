@@ -1,0 +1,161 @@
+{
+  "verified_at": "2026-03-27",
+  "method": "chrome_mcp_product_pages",
+  "results": [
+    {
+      "productId": "21018809",
+      "graphql_name": "TREASURE MILLS School Safe Banana Chocolate Chip Mini Cakes",
+      "chrome_name": "TREASURE MILLS School Safe Banana Chocolate Chip Mini Cakes",
+      "match": true,
+      "fields_compared": {
+        "name": true,
+        "size": "40 g",
+        "brandName": "treasure mills school safe",
+        "category": "Other Packaged Treats",
+        "retailerRef": "197055",
+        "available": true
+      },
+      "notes": "All fields present and consistent."
+    },
+    {
+      "productId": "21138842",
+      "graphql_name": "Lactantia Chocolate Milk",
+      "chrome_name": "Lactantia Chocolate Milk",
+      "match": true,
+      "fields_compared": {
+        "name": true,
+        "size": "237 ml",
+        "brandName": "lactantia",
+        "category": "Chocolate Milk",
+        "retailerRef": "1395119",
+        "available": true
+      },
+      "notes": "All fields present and consistent."
+    },
+    {
+      "productId": "23650249",
+      "graphql_name": "Kirkland Signature Kombucha",
+      "chrome_name": "Kirkland Signature Kombucha",
+      "match": true,
+      "fields_compared": {
+        "name": true,
+        "size": "473 ml",
+        "brandName": "kirkland signature",
+        "category": "Kombucha",
+        "retailerRef": "1371232",
+        "available": true
+      },
+      "notes": "All fields present and consistent."
+    },
+    {
+      "productId": "92496202",
+      "graphql_name": "SkinnyPop Popcorn Vending Packs",
+      "chrome_name": "SkinnyPop Popcorn Vending Packs",
+      "match": true,
+      "fields_compared": {
+        "name": true,
+        "size": "18 g",
+        "brandName": "skinnypop",
+        "category": "Popcorn",
+        "retailerRef": "1952864",
+        "available": true
+      },
+      "notes": "All fields present and consistent."
+    },
+    {
+      "productId": "16784659",
+      "graphql_name": "Navel Orange",
+      "chrome_name": "Navel Orange",
+      "match": true,
+      "fields_compared": {
+        "name": true,
+        "size": "10 lb",
+        "brandName": null,
+        "category": "Navel Oranges",
+        "retailerRef": "90589",
+        "available": true
+      },
+      "notes": "brandName is null (no brand for produce) — expected for this product type."
+    },
+    {
+      "productId": "17523901",
+      "graphql_name": "Avocado",
+      "chrome_name": "Avocado",
+      "match": true,
+      "fields_compared": {
+        "name": true,
+        "size": "6 count",
+        "brandName": null,
+        "category": "Hass Avocado",
+        "retailerRef": "647465",
+        "available": true
+      },
+      "notes": "brandName is null (no brand for produce) — expected for this product type."
+    },
+    {
+      "productId": "21020669",
+      "graphql_name": "Ajinomoto Frozen Vegetable Yakisoba",
+      "chrome_name": "Ajinomoto Frozen Vegetable Yakisoba",
+      "match": true,
+      "fields_compared": {
+        "name": true,
+        "size": "255 g",
+        "brandName": "ajinomoto",
+        "category": "Frozen Asian Meals",
+        "retailerRef": "5464292",
+        "available": true
+      },
+      "notes": "All fields present and consistent."
+    },
+    {
+      "productId": "41282778",
+      "graphql_name": "Olivieri Skillet Gnocchi",
+      "chrome_name": "Olivieri Skillet Gnocchi",
+      "match": true,
+      "fields_compared": {
+        "name": true,
+        "size": "480 g",
+        "brandName": "olivieri",
+        "category": "Frozen Pasta Meals",
+        "retailerRef": "2268256",
+        "available": true
+      },
+      "notes": "All fields present and consistent."
+    },
+    {
+      "productId": "17770205",
+      "graphql_name": "Kirkland Signature Peanut Butter Pretzels",
+      "chrome_name": "Kirkland Signature Peanut Butter Pretzels",
+      "match": true,
+      "fields_compared": {
+        "name": true,
+        "size": "1.56 kg",
+        "brandName": "kirkland signature",
+        "category": "Pretzels",
+        "retailerRef": "1050557",
+        "available": true
+      },
+      "notes": "All fields present and consistent."
+    },
+    {
+      "productId": "21021092",
+      "graphql_name": "Canada Dry Ginger Ale",
+      "chrome_name": "Canada Dry Ginger Ale",
+      "match": true,
+      "fields_compared": {
+        "name": true,
+        "size": "355 ml",
+        "brandName": "canada dry",
+        "category": "Ginger Ale",
+        "retailerRef": "165763",
+        "available": true
+      },
+      "notes": "All fields present and consistent."
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "matched": 10,
+    "mismatched": 0
+  }
+}

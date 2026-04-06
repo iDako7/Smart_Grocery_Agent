@@ -1,0 +1,773 @@
+{
+  "department": "snacks_candy",
+  "scrape_date": "2026-03-28",
+  "store": {
+    "shopId": "8470",
+    "postalCode": "V5S3A8",
+    "zoneId": "750",
+    "name": "Costco Canada"
+  },
+  "product_count": 76,
+  "products": [
+    {
+      "productId": "18111074",
+      "name": "MUNCHIES Original Snack Mix",
+      "size": "1100 g",
+      "brandName": "munchies",
+      "category": "Mixed Dry Snacks",
+      "retailerRef": "100778",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1a47755f-9e30-4451-a28e-fae764eba03f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "27126790",
+      "name": "Sensible Portions Garden Veggie Straws",
+      "size": "475 g",
+      "brandName": "sensible portions",
+      "category": "Vegetable Chips",
+      "retailerRef": "195047",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fdee39e5-fc09-4189-9591-d8a63f429860.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21132205",
+      "name": "Simple Mills  Almond Flour Crackers",
+      "size": "482 g",
+      "brandName": "simple mills ",
+      "category": "Crackers",
+      "retailerRef": "1400953",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d59f77a8-f263-44d1-8845-7ae1d19002c4.jpeg",
+      "available": true
+    },
+    {
+      "productId": "25439820",
+      "name": "MadeGood Red Velvet Soft Baked Mini Cookies",
+      "size": "24 g",
+      "brandName": "madegood",
+      "category": "Packaged Cookies",
+      "retailerRef": "2422485",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_772895df-79a2-4b2c-8594-39cefa18092a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018280",
+      "name": "Kirkland Signature Que Pasa Organic Tortilla Chips",
+      "size": "908 g",
+      "brandName": "kirkland signature",
+      "category": "Tortilla Chips",
+      "retailerRef": "161552",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_25a7f3b1-4339-45a8-8fd4-3d1fd8419c7d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "27485892",
+      "name": "Frito-Lay Variety Pack (Lay's, Doritos, Ruffles, Cheetos)",
+      "size": "28 g",
+      "brandName": "frito-lay",
+      "category": "Variety Pack Chips",
+      "retailerRef": "2118631",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_38b005c9-6c17-4e69-92ac-929ecc255378.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21137658",
+      "name": "DJ & A Shiitake Mushroom Crisps",
+      "size": "300 g",
+      "brandName": "dj & a",
+      "category": "Vegetable Chips",
+      "retailerRef": "1351997",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_73ddecb5-f056-4b36-bc29-6be7952c0282.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21137675",
+      "name": "Rochef Easter Chocolate Bunny",
+      "size": "400 g",
+      "brandName": "rochef",
+      "category": "Chocolate Candies",
+      "retailerRef": "1133758",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_131fdf31-6378-402c-a4bc-78fcc05a2789.jpeg",
+      "available": true
+    },
+    {
+      "productId": "102169751",
+      "name": "Amos Peelerz Spring Mix Gummy Candy",
+      "size": "925 g",
+      "brandName": "amos",
+      "category": "Gummy Candies",
+      "retailerRef": "1983271",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d4d3d6e5-f00e-4762-a17d-a04fb2689af6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "100792201",
+      "name": "GODIVA Masterpiece Decadent Dark Chocolate with Ganache",
+      "size": "428 g",
+      "brandName": "godiva",
+      "category": "Chocolate Candies",
+      "retailerRef": "1971606",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_14ea908f-d22d-4a5b-9674-128ef2e0a99b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "106251007",
+      "name": "Chocovia Milk Chocolate Egg with Pistachio and Kadaif Mini Eggs",
+      "size": "650 g",
+      "brandName": "chocovia",
+      "category": "Chocolate Candies",
+      "retailerRef": "1982506",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_9daafc8a-6a95-4f1d-837a-f553b6529e24.jpeg",
+      "available": true
+    },
+    {
+      "productId": "30863026",
+      "name": "Dare Cracker Variety Pack",
+      "size": "1.25 kg",
+      "brandName": "dare",
+      "category": "Crackers",
+      "retailerRef": "1720359",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7fba1d5e-37c4-4544-98ca-18a7feba6e55.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17313857",
+      "name": "Pepperidge Farm Goldfish Crackers",
+      "size": "1.64 kg",
+      "brandName": "pepperidge farm",
+      "category": "Crackers",
+      "retailerRef": "339054",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_01667a6a-4a98-4610-8219-7584f4dc4ae8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "29873211",
+      "name": "Crunchmaster Avocado Toast Crackers With Salt & Pepper",
+      "size": "454 g",
+      "brandName": "crunchmaster",
+      "category": "Crackers",
+      "retailerRef": "1691567",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fed629ce-67c8-4cb0-8e8d-7f88dc6d3ab3.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022249",
+      "name": "Kirkland Signature Soft & Chewy Granola Bars",
+      "size": "24 g",
+      "brandName": "kirkland signature",
+      "category": "Granola Bars",
+      "retailerRef": "1212860",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7d87b5e6-8d2b-4273-9586-5d50017b5446.jpeg",
+      "available": true
+    },
+    {
+      "productId": "47941525",
+      "name": "Quaker Dipps Granola Bars Variety Pack",
+      "size": "31 g",
+      "brandName": "quaker",
+      "category": "Granola Bars",
+      "retailerRef": "1800926",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a0f80cd6-90d6-49f3-a48e-29d2133853f7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "69448152",
+      "name": "SimplyProtein Crispy Snack Bars",
+      "size": "40 g",
+      "brandName": "simplyprotein",
+      "category": "Protein Bars",
+      "retailerRef": "3340923",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fff27590-50c7-4109-9188-864d43650550.jpeg",
+      "available": true
+    },
+    {
+      "productId": "54789259",
+      "name": "Grenade Protein Bars Oreo",
+      "size": "14 ct",
+      "brandName": "grenade protein bars",
+      "category": "Protein Bars",
+      "retailerRef": "1844665",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_199f3b6e-54bc-4a73-97d8-a7f40ff6091d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "25029714",
+      "name": "Kirkland Signature Trail Mix With M & M's",
+      "size": "28 ct",
+      "brandName": "kirkland signature",
+      "category": "Trail Mix",
+      "retailerRef": "1473917",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a081a94d-7175-46a2-99c8-811a7865ca50.jpeg",
+      "available": true
+    },
+    {
+      "productId": "28018653",
+      "name": "Kirkland Signature Unsalted Mixed Nuts",
+      "size": "1.13 kg",
+      "brandName": "kirkland signature",
+      "category": "Mixed Nuts",
+      "retailerRef": "1652577",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b29bc967-c657-41e7-9a51-eafb8a7c3762.jpeg",
+      "available": true
+    },
+    {
+      "productId": "28018715",
+      "name": "Kirkland Signature Salted Mixed Nuts",
+      "size": "1.13 kg",
+      "brandName": "kirkland signature",
+      "category": "Mixed Nuts",
+      "retailerRef": "1645578",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4cfc7c74-ba85-46a1-a6a7-e1fa3892b93a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "106138720",
+      "name": "Wonderful No Shell Dill Pickle Pistachios",
+      "size": "623 g",
+      "brandName": "wonderful",
+      "category": "Pistachios",
+      "retailerRef": "1982893",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_03cf1032-6e08-4852-a3c3-380bd1b6ea7d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019777",
+      "name": "Kellogg's Rice Krispies Original Squares Bars",
+      "size": "22 g",
+      "brandName": "kellogg's",
+      "category": "Other Packaged Treats",
+      "retailerRef": "247221",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e53d4edb-459d-4499-8cf0-0aa14c644793.webp",
+      "available": true
+    },
+    {
+      "productId": "21018809",
+      "name": "TREASURE MILLS School Safe Banana Chocolate Chip Mini Cakes",
+      "size": "40 g",
+      "brandName": "treasure mills school safe",
+      "category": "Other Packaged Treats",
+      "retailerRef": "197055",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ce3a9a2e-751c-4bbc-a719-fd0b5a5a988e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "64879452",
+      "name": "PM Sweets Spring French Macarons",
+      "size": "36 ct",
+      "brandName": null,
+      "category": "Packaged Cookies",
+      "retailerRef": "1864701",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1cc2d4b5-e1b8-478a-b5d3-190f3cc281f8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018510",
+      "name": "Welch\u2019s Mixed Fruit Snacks",
+      "size": "22 g",
+      "brandName": "welch\u2019s",
+      "category": "Gummy Fruit Snacks",
+      "retailerRef": "1704012",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6acfb69e-29d1-4d54-b61a-db22ea04bfe7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21137494",
+      "name": "Mott's Fruitsations & Veggies, Gluten Free, Assorted Fruit Shapes",
+      "size": "1542 g",
+      "brandName": "mott's",
+      "category": "Gummy Fruit Snacks",
+      "retailerRef": "366145",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_14efceb7-6fc6-432c-ab0a-d5105e8c5fe6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "63454987",
+      "name": "Kirkland Signature Sweetened Dried Mango",
+      "size": "992 g",
+      "brandName": "kirkland signature",
+      "category": "Dried Mango",
+      "retailerRef": "1767102",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_937beb29-ea61-4283-8ec1-dd55bc767b7d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "94775029",
+      "name": "BEAR Fruit Splits Variety Pack",
+      "size": "20 g",
+      "brandName": "bear",
+      "category": "Dried Mixed Fruit",
+      "retailerRef": "1809868",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8dc76447-6b3f-4787-a0d2-0a6636ec1ed0.jpeg",
+      "available": true
+    },
+    {
+      "productId": "2577229",
+      "name": "Kirkland Signature Organic Applesauce",
+      "size": "90 g",
+      "brandName": "kirkland signature",
+      "category": "Applesauce",
+      "retailerRef": "897971",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c2881f38-54a1-4044-8216-f6efd976bd52.jpeg",
+      "available": true
+    },
+    {
+      "productId": "97795311",
+      "name": "GoGo Squeez Fruit Sauce Variety Pack",
+      "size": "2.52 kg",
+      "brandName": "gogo squeez",
+      "category": "Applesauce",
+      "retailerRef": "3359955",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_37602345-1f43-4e6e-b437-d473720ec2da.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022431",
+      "name": "Dole Mandarin Orange Cups",
+      "size": "107 ml",
+      "brandName": "dole",
+      "category": "Fruit Snack Cups",
+      "retailerRef": "269765",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a9902460-881e-4f62-bda6-ec60ab373daa.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022084",
+      "name": "Dole Diced Peaches Cups",
+      "size": "107 ml",
+      "brandName": "dole",
+      "category": "Fruit Snack Cups",
+      "retailerRef": "369765",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7fbe0879-1088-42cc-984f-6dfedcae4e03.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022185",
+      "name": "Angie's Artisan Treats P108 Boom Chicka Pop Sea Salt Popcorn",
+      "size": "340 g",
+      "brandName": "angie's artisan treats",
+      "category": "Popcorn",
+      "retailerRef": "324547",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_559558b0-783f-4e2d-96be-7faac3ade91a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17770205",
+      "name": "Kirkland Signature Peanut Butter Pretzels",
+      "size": "1.56 kg",
+      "brandName": "kirkland signature",
+      "category": "Pretzels",
+      "retailerRef": "1050557",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b460739f-8357-424c-8a56-4d23108d91dc.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21020367",
+      "name": "Kirkland Signature Microwave Butter Popcorn",
+      "size": "44 ct",
+      "brandName": "kirkland signature",
+      "category": "Popcorn",
+      "retailerRef": "9559",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_79f85602-878e-470a-9ae4-8cc5841ae938.jpeg",
+      "available": true
+    },
+    {
+      "productId": "92496202",
+      "name": "SkinnyPop Popcorn Vending Packs",
+      "size": "18 g",
+      "brandName": "skinnypop",
+      "category": "Popcorn",
+      "retailerRef": "1952864",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1ed73b67-fe73-4f23-bb15-5a6397c45bcd.jpeg",
+      "available": true
+    },
+    {
+      "productId": "59159603",
+      "name": "Excel Sugar Free Gum Variety Pack",
+      "size": "12 ct",
+      "brandName": "excel",
+      "category": "Chewing Gum",
+      "retailerRef": "2227573",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c49527b7-e69f-4368-a8de-ef3b86c1c653.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019734",
+      "name": "Jack Link's Beef Jerky, Teriyaki, Meat Snacks",
+      "size": "300 g",
+      "brandName": "jack link's",
+      "category": "Meat Jerky",
+      "retailerRef": "1256995",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_0e815dd4-afa2-4ba2-803e-b03646961808.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16306399",
+      "name": "Kirkland Signature Extra Thick Steak Strips",
+      "size": "340 g",
+      "brandName": "kirkland signature",
+      "category": "Meat Jerky",
+      "retailerRef": "321880",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7d6ed065-28d8-418d-abc3-916e52bbfd05.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21132232",
+      "name": "Oberto Natural Wood Smoke Beef Jerky",
+      "size": "28 g",
+      "brandName": "oberto",
+      "category": "Meat Jerky",
+      "retailerRef": "4316364",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_04a1372f-dfc3-48bd-a2f4-72602cb8ef22.jpeg",
+      "available": true
+    },
+    {
+      "productId": "34345295",
+      "name": "Grimm\u2019s Fine Foods Artisan All Beef Sticks",
+      "size": "500 g",
+      "brandName": "grimm\u2019s fine foods",
+      "category": "Meat Jerky",
+      "retailerRef": "5051601",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_abfc3e08-4319-4611-a327-33de9699c13b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021294",
+      "name": "La Terra Fina Mild Cheddar Queso Dip",
+      "size": "879 g",
+      "brandName": "la terra fina",
+      "category": "Cheese Dips",
+      "retailerRef": "5055002",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_258f550a-821c-4487-bed8-cff73eb7c249.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021324",
+      "name": "Wholly Guacamole Organic Guacamole",
+      "size": "57 g",
+      "brandName": "wholly guacamole",
+      "category": "Guacamole",
+      "retailerRef": "438342",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a081e37d-6157-4605-a816-a067c64da783.jpeg",
+      "available": true
+    },
+    {
+      "productId": "64704384",
+      "name": "The Laughing Cow Original, Cheese Snacks",
+      "size": "800 g",
+      "brandName": "the laughing cow",
+      "category": "Cheese Dips",
+      "retailerRef": "2215670",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a00cf506-375d-4e61-becf-383d11e0d23b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "36953851",
+      "name": "Good Foods Chunky Guacamole",
+      "size": "850 g",
+      "brandName": "good foods",
+      "category": "Guacamole",
+      "retailerRef": "676857",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a4ca9d71-ae74-4c82-b18c-90811ae1e21c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21621572",
+      "name": "E&C's heavenly hunks Oatmeal Dark Chocolate Cookies",
+      "size": "567 g",
+      "brandName": "e&c's heavenly hunks",
+      "category": "Snack Bites",
+      "retailerRef": "1426238",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_0971f97f-ec1a-49a2-bf9d-ac9046f980ee.jpeg",
+      "available": true
+    },
+    {
+      "productId": "93254186",
+      "name": "SunRype Fruit To Go Easy Peel Strips",
+      "size": "14 g",
+      "brandName": "sunrype",
+      "category": "Gummy Fruit Snacks",
+      "retailerRef": "4227932",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3105c624-0ff5-4e49-87bd-babbeb5e6c82.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21017481",
+      "name": "Fontaine Sant\u00e9 Roasted Garlic Hummus",
+      "size": "565 g",
+      "brandName": "fontaine sant\u00e9",
+      "category": "Hummus",
+      "retailerRef": "435164",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ee36e7cd-85b4-4cb8-b5b1-1f16f81f1a5d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019873",
+      "name": "Hershey's Eggies Creamy Milk Chocolate",
+      "size": "1.1 kg",
+      "brandName": "hershey's",
+      "category": "Chocolate Candies",
+      "retailerRef": "1278972",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_feec8e05-1c8f-4431-a665-f886f73a489f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "22806343",
+      "name": "Ruffles Regular",
+      "size": "612 g",
+      "brandName": null,
+      "category": "Potato Chips",
+      "retailerRef": "1696237",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_0eebd871-22ec-407a-a39a-082cc8dddd6b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "75811927",
+      "name": "SunRype Fruit Source Fruit Bars Variety Pack",
+      "size": "37 g",
+      "brandName": "sunrype",
+      "category": "Fruit Bars",
+      "retailerRef": "2400772",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_19cc3155-fa2d-4cd6-a3dd-66f694c8bf59.jpeg",
+      "available": true
+    },
+    {
+      "productId": "99011575",
+      "name": "SunRype Good Bites Superseed Oat Bars Variety Pack",
+      "size": "28 g",
+      "brandName": "sunrype",
+      "category": "Granola Bars",
+      "retailerRef": "1987233",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_76b9f8d2-1226-4589-8413-d42421c73b0a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "22703476",
+      "name": "Miss Vickie's Sea Salt & Vinegar Flavoured Kettle Cooked Potato Chips",
+      "size": "572 g",
+      "brandName": "miss vickie's",
+      "category": "Potato Chips",
+      "retailerRef": "2078105",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_904ffea4-5e0c-402e-83ce-c3b762370666.jpeg",
+      "available": true
+    },
+    {
+      "productId": "22792350",
+      "name": "Tostitos Rounds Tortilla Chips",
+      "size": "826 g",
+      "brandName": "tostitos",
+      "category": "Tortilla Chips",
+      "retailerRef": "2217771",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fbe027c7-8c99-4b31-9f27-b692c2e06192.jpeg",
+      "available": true
+    },
+    {
+      "productId": "24706351",
+      "name": "Ruffles All Dressed Flavored Potato Chips",
+      "size": "612 g",
+      "brandName": "ruffles",
+      "category": "Potato Chips",
+      "retailerRef": "4696334",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7f127b72-8175-47ed-b6df-2914b2dd4e38.jpeg",
+      "available": true
+    },
+    {
+      "productId": "24610061",
+      "name": "Doritos Nacho Cheese Tortilla Chips",
+      "size": "730 g",
+      "brandName": "doritos",
+      "category": "Tortilla Chips",
+      "retailerRef": "1696245",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1ea38c14-3828-4f07-9910-6e6ef412000d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021989",
+      "name": "Kirkland Signature Dipped & Chewy Granola Bar",
+      "size": "48 ct",
+      "brandName": "kirkland signature",
+      "category": "Granola Bars",
+      "retailerRef": "9339999",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7101a464-3ef4-4caa-80ae-0e338eabd495.jpeg",
+      "available": true
+    },
+    {
+      "productId": "22239728",
+      "name": "Miss Vickie's Potato Chips Variety Pack",
+      "size": "24 g",
+      "brandName": "miss vickie's",
+      "category": "Variety Pack Chips",
+      "retailerRef": "1099716",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d419c894-9316-4190-839c-06e2b3ab2b81.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21147285",
+      "name": "Schwartz Brothers Bakery Organic Everything Bagel Chips",
+      "size": "15 oz",
+      "brandName": "schwartz brothers bakery",
+      "category": "Bagel and Pita Chips",
+      "retailerRef": "1391546",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_2c9e324a-6762-4f9c-aaef-85dbfae89a85.jpeg",
+      "available": true
+    },
+    {
+      "productId": "3073868",
+      "name": "Hello Panda Chocolate Creme Filled Cookies",
+      "size": "21 g",
+      "brandName": "hello panda",
+      "category": "Packaged Cookies",
+      "retailerRef": "969786",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5d91b3ac-bec6-49e2-81a2-76deecff7771.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022171",
+      "name": "Sensible Portion Garlic 'n Chive Pita Bites",
+      "size": "567 g",
+      "brandName": "sensible portion",
+      "category": "Bagel and Pita Chips",
+      "retailerRef": "242470",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_575f099f-03dc-4370-9049-6be26843322a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018905",
+      "name": "RW Garcia 3 Seed Sweet Potato Crackers",
+      "size": "850 g",
+      "brandName": "rw garcia",
+      "category": "Crackers",
+      "retailerRef": "475610",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_df3b1214-2ae7-4021-b66c-f41e066753ef.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17886423",
+      "name": "Brookside Dark Chocolate With Acai & Blueberry",
+      "size": "850 g",
+      "brandName": "brookside",
+      "category": "Chocolate Candies",
+      "retailerRef": "919922",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fc633818-393e-43e7-b353-12345098461f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "25129019",
+      "name": "That\u2019s It. Mini Fruit Bars",
+      "size": "20 g",
+      "brandName": "that\u2019s it.",
+      "category": "Fruit Bars",
+      "retailerRef": "1361170",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fec6ded2-3bf7-4e77-bf00-910beea10452.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16955993",
+      "name": "Organic Aussie Bites",
+      "size": "850 g",
+      "brandName": null,
+      "category": "Snack Bites",
+      "retailerRef": "891394",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_171c4a3c-0e84-4234-9c09-e3881506d173.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17462012",
+      "name": "Kirkland Signature Organic Roasted Seaweed Snack",
+      "size": "17 g",
+      "brandName": "kirkland signature",
+      "category": "Seaweed Chips",
+      "retailerRef": "1098502",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_989782e2-4ec6-46e2-af64-762825fadb87.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019920",
+      "name": "Pure Protein Variety Pack Bars",
+      "size": "50 g",
+      "brandName": "pure protein",
+      "category": "Protein Bars",
+      "retailerRef": "324143",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_653be1d3-f8f9-499d-8e1b-884914b370e1.jpeg",
+      "available": true
+    },
+    {
+      "productId": "26769547",
+      "name": "Welch's Juicefuls Juicy Fruit Snacks",
+      "size": "25 g",
+      "brandName": "welch's",
+      "category": "Gummy Fruit Snacks",
+      "retailerRef": "1598581",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4b15c2d4-fbd0-413e-a5ea-1b33600be6ae.jpeg",
+      "available": true
+    },
+    {
+      "productId": "26201361",
+      "name": "Betty Crocker Fruit By The Foot Variety Pack",
+      "size": "937 g",
+      "brandName": "betty crocker",
+      "category": "Gummy Fruit Snacks",
+      "retailerRef": "3030226",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c55a469f-eec7-41c0-aa96-2adb67ce2599.jpeg",
+      "available": true
+    },
+    {
+      "productId": "20214376",
+      "name": "UNREAL Dark Chocolate Coconut Mini Bars",
+      "size": "15.34 oz",
+      "brandName": "unreal",
+      "category": "Chocolate Candies",
+      "retailerRef": "1268728",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8a471322-974f-433d-b71d-b511bbc38f58.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21138904",
+      "name": "TERRA Real Vegetable Chips, Sweets Medley",
+      "size": "453 g",
+      "brandName": "terra",
+      "category": "Potato Chips",
+      "retailerRef": "1127643",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_408712d5-e94f-40dc-85e7-393ee5f4dcaf.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21017055",
+      "name": "Philippine Brand Dried Mangoes",
+      "size": "850 g",
+      "brandName": "philippine brand",
+      "category": "Dried Mango",
+      "retailerRef": "587",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ec0cedae-322c-422d-9cd3-b223b0c6cf46.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19327174",
+      "name": "Kettle Brand Krinkle Cut Himalayan Salt Potato Chips",
+      "size": "907 g",
+      "brandName": "kettle brand",
+      "category": "Potato Chips",
+      "retailerRef": "938492",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f11fb31e-f321-4a94-966c-345ed654dc99.jpeg",
+      "available": true
+    },
+    {
+      "productId": "25815731",
+      "name": "Kirkland Signature Organic Fruit & Vegetable Pouches",
+      "size": "24 ct",
+      "brandName": "kirkland signature",
+      "category": "Squeeze Snack Pouches",
+      "retailerRef": "1538359",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_0be07977-02d6-47d4-9260-d66f0f4f1f0c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21948168",
+      "name": "Kirkland Signature Thin & Crispy Mini Chocolate Chip Cookies",
+      "size": "28 g",
+      "brandName": "kirkland signature",
+      "category": "Packaged Cookies",
+      "retailerRef": "5014935",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b3ff6a35-e3aa-4216-9ea4-9b83f2c1785d.jpeg",
+      "available": true
+    }
+  ]
+}
