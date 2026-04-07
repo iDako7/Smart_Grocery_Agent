@@ -21,12 +21,17 @@ def get_substitutions(
 
     for sub in subs:
         if query in sub["ingredient"].lower() or sub["ingredient"].lower() in query:
-            if reason and sub.get("reason") != reason:
-                continue
-            results.append({
+            entry = {
                 "substitute": sub["substitute"],
                 "match_quality": sub["match_quality"],
                 "notes": sub.get("notes", ""),
-            })
+            }
+            if reason:
+                entry["reason_match"] = sub.get("reason") == reason
+            results.append(entry)
+
+    # Sort reason-matched results first
+    if reason:
+        results.sort(key=lambda r: r["reason_match"], reverse=True)
 
     return results

@@ -58,9 +58,10 @@ def lookup_store_product(
         best_score = max(name_score, cat_score)
         scored.append((best_score, product))
 
-    scored.sort(key=lambda x: x[0], reverse=True)
+    # Sort by score desc, then prefer shorter names (closer match) to break ties
+    scored.sort(key=lambda x: (x[0], -len(x[1]["name"])), reverse=True)
 
-    if not scored or scored[0][0] < 40:
+    if not scored or scored[0][0] < 60:
         return {
             "product_name": item_name,
             "package_size": "not found",
@@ -69,9 +70,9 @@ def lookup_store_product(
             "alternatives": [],
         }
 
-    best = scored[0][1]
+    best_score, best = scored[0]
     alternatives = [
-        s[1]["name"] for s in scored[1:4] if s[0] > 50
+        s[1]["name"] for s in scored[1:4] if s[0] >= 60
     ]
 
     return {
@@ -79,5 +80,6 @@ def lookup_store_product(
         "package_size": best["size"],
         "department": best["department"],
         "store": "costco",
+        "confidence": round(best_score / 100, 2),
         "alternatives": alternatives,
     }
