@@ -1,0 +1,593 @@
+{
+  "department": "meat_seafood",
+  "scrape_date": "2026-03-28",
+  "store": {
+    "shopId": "8470",
+    "postalCode": "V5S3A8",
+    "zoneId": "750",
+    "name": "Costco Canada"
+  },
+  "product_count": 58,
+  "products": [
+    {
+      "productId": "29561419",
+      "name": "Kirkland Signature Boneless Skinless Chicken Thighs",
+      "size": "1 each",
+      "brandName": "kirkland signature",
+      "category": "Chicken Thigh",
+      "retailerRef": "55506",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_338524cc-7b04-48ad-9af0-86918d72d313.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115490",
+      "name": "Lean Ground Beef",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Ground Beef",
+      "retailerRef": "21927",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_229cc04a-f789-4454-94f5-584a18b10949.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115610",
+      "name": "Kirkland Signature Organic Lean Ground Beef",
+      "size": "600 g",
+      "brandName": "kirkland signature",
+      "category": "Ground Beef",
+      "retailerRef": "91873",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1d10d643-3994-4e35-ad88-0b7ff4d17b92.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21112490",
+      "name": "Cap Removed Top Sirloin Grilling Steak",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Sirloin Steaks",
+      "retailerRef": "21854",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_2c376470-49d5-4efe-8c2c-69815c618ac9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21112489",
+      "name": "Stewing Beef",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Beef Stew Meat",
+      "retailerRef": "21931",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3e476dc0-db17-407a-95db-2f31332115be.jpeg",
+      "available": true
+    },
+    {
+      "productId": "29562127",
+      "name": "Kirkland Signature Chicken Drumsticks",
+      "size": "1 each",
+      "brandName": "kirkland signature",
+      "category": "Chicken Drumstick",
+      "retailerRef": "55502",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5fdb2c7d-1709-4a00-a89a-7fa7848fadc2.jpeg",
+      "available": true
+    },
+    {
+      "productId": "29563138",
+      "name": "Kirkland Signature Bone-In Chicken Thighs",
+      "size": "1 each",
+      "brandName": "kirkland signature",
+      "category": "Chicken Thigh",
+      "retailerRef": "55501",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_cd2498f5-9261-49a9-8f20-5db0588cf428.jpeg",
+      "available": true
+    },
+    {
+      "productId": "29560122",
+      "name": "Kirkland Signature Split Tip Removed Chicken Wings",
+      "size": "1 each",
+      "brandName": "kirkland signature",
+      "category": "Chicken Wing",
+      "retailerRef": "55504",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4759ffe4-217c-4957-b6af-eaa095fecf9b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114897",
+      "name": "Harvest Naturally Smoked Wieners",
+      "size": "1.5 kg",
+      "brandName": "harvest",
+      "category": "Hot Dogs",
+      "retailerRef": "4689",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6166d2b1-5c2e-427c-b3e2-02c1d420f70e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "47573265",
+      "name": "Kirkland Signature Extra Lean Ground Turkey",
+      "size": "3 kg",
+      "brandName": "kirkland signature",
+      "category": "Ground Turkey",
+      "retailerRef": "2213177",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_153cb98b-f191-489e-a81d-3310de69e976.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115259",
+      "name": "Boneless Centre Cut Pork Loin & Rib Chops",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Pork Loin Center Chops",
+      "retailerRef": "21976",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e29c7d41-9bc0-4ef3-8b8e-2035bd19640a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115072",
+      "name": "Kirkland Signature Sliced Bacon",
+      "size": "500 g",
+      "brandName": "kirkland signature",
+      "category": "Sliced Bacon",
+      "retailerRef": "104847",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5886dd63-cc16-4b83-84bd-27a55ee5543c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021973",
+      "name": "Kirkland Signature Frozen Tail-Off Shrimp",
+      "size": "907 g",
+      "brandName": "kirkland signature",
+      "category": "Frozen Whole Shrimp",
+      "retailerRef": "1075424",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d7c92fe7-e79c-4410-9136-2fe8b16fdee9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021737",
+      "name": "Greek Chicken Souvlaki",
+      "size": "1 kg",
+      "brandName": null,
+      "category": "Chicken Kabob",
+      "retailerRef": "380848",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b75eb431-23b7-43ef-8963-95ae71982a97.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21113038",
+      "name": "Harvest Smoked Farmer's Sausages",
+      "size": "1.5 kg",
+      "brandName": "harvest",
+      "category": "Other Sausage",
+      "retailerRef": "183409",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_070cbdc6-b12b-4a18-9391-9bb52a6abcea.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115322",
+      "name": "Lilydale Natural Turkey Bacon",
+      "size": "500 g",
+      "brandName": "lilydale",
+      "category": "Turkey Bacon",
+      "retailerRef": "1379177",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_af9dd6a7-73ad-4a86-b8a1-bb20cab6e9ff.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21132164",
+      "name": "Pork Tenderloin",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Pork Tenderloins",
+      "retailerRef": "22389",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_81a5419d-27f2-4678-af38-aeb12d4e0e36.jpeg",
+      "available": true
+    },
+    {
+      "productId": "57164242",
+      "name": "Soyganic Extra Firm Tofu",
+      "size": "350 g",
+      "brandName": "soyganic",
+      "category": "Tofu and Bean Curd",
+      "retailerRef": "1618188",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_29ac0a09-312f-49ba-8bca-a73890c9cc88.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21138677",
+      "name": "Kirkland Signature Maple Bacon",
+      "size": "1.81 kg",
+      "brandName": "kirkland signature",
+      "category": "Sliced Bacon",
+      "retailerRef": "999977",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a976919f-f6c5-4138-a13e-55f552839e44.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018283",
+      "name": "Kirkland Signature Frozen Cooked Tail-On Shrimp",
+      "size": "907 g",
+      "brandName": "kirkland signature",
+      "category": "Frozen Whole Shrimp",
+      "retailerRef": "175545",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8b4939ab-83a2-4379-9062-4dd58ddffa2a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21132411",
+      "name": "DOM Norwegian Fjord Frozen Smoke Salmon",
+      "size": "550 g",
+      "brandName": "dom norwegian fjord",
+      "category": "Frozen Salmon",
+      "retailerRef": "14015",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6b32f531-e1da-48db-86fa-a7bccdac669c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21132221",
+      "name": "Pacific Seafood Hot Smoked Maple Glazed Atlantic Salmon Nuggets",
+      "size": "400 g",
+      "brandName": "pacific seafood",
+      "category": "Smoked Salmon",
+      "retailerRef": "1116262",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_202a63b3-3e9f-422a-832f-6556e98e92b2.jpeg",
+      "available": true
+    },
+    {
+      "productId": "29059623",
+      "name": "Hot Pot Lamb Rolls",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Lamb",
+      "retailerRef": "3332383",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1e4fa628-f68a-4015-b78a-a10cf0a30cda.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019498",
+      "name": "Kirkland Signature Frozen Lean Beef Patties",
+      "size": "24 ct",
+      "brandName": "kirkland signature",
+      "category": "Frozen Beef Burgers",
+      "retailerRef": "50846",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ae48c8b8-d884-4599-96d4-9595bc95e7f9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "42273764",
+      "name": "Aqua Star Wild Pink Salmon Fillets",
+      "size": "1.81 kg",
+      "brandName": "aqua star",
+      "category": "Frozen Salmon",
+      "retailerRef": "5246499",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_eb12788d-aa6b-4e48-8cd3-d8e7deabc5f7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114446",
+      "name": "Farmed Steelhead Trout Fillets",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Trout Fillets",
+      "retailerRef": "10931",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6ade9c9d-2458-48d6-81d2-9c27d41bfe69.jpeg",
+      "available": true
+    },
+    {
+      "productId": "63308099",
+      "name": "Sofina Foods Chicken Paws",
+      "size": "4 kg",
+      "brandName": "sofina foods",
+      "category": "Chicken Feet",
+      "retailerRef": "1855826",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_dcf3839d-7355-49ca-88c2-c8567aacf191.jpg",
+      "available": true
+    },
+    {
+      "productId": "21114824",
+      "name": "Traditional Honey Garlic Sausage",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Other Sausage",
+      "retailerRef": "10639",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b433d922-298c-4e5e-836b-61ffe7f7fb3b.jpg",
+      "available": true
+    },
+    {
+      "productId": "21114894",
+      "name": "Kirkland Signature Organic Boneless & Skinless Chicken Breasts",
+      "size": "per lb",
+      "brandName": "kirkland signature",
+      "category": "Chicken Breast",
+      "retailerRef": "47798",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6fb72da1-5790-4fa4-b03e-fb5a3094ff1d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114790",
+      "name": "Traditional Mild Italian Sausage",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Italian Sausage",
+      "retailerRef": "10634",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8a6ef1b7-5e7e-4fb3-afd4-7d02716433d9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115292",
+      "name": "Centre Pork Loin & Boneless Rib",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Pork Loin Center Chops",
+      "retailerRef": "31098",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_9bcf144c-cfc3-477c-926b-db1a3054906b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115200",
+      "name": "Organic Chicken Drumsticks",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Chicken Drumstick",
+      "retailerRef": "47966",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e09fad8e-6e5b-48ef-a2ba-d8fb9b30a0f9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "63724018",
+      "name": "Olymel Country-Style Sausages",
+      "size": "2 kg",
+      "brandName": "olymel",
+      "category": "Other Sausage",
+      "retailerRef": "2319258",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_daacbb62-845c-43e5-bba2-20782d0b21c5.jpg",
+      "available": true
+    },
+    {
+      "productId": "21114933",
+      "name": "Kirkland Signature Beef Wieners",
+      "size": "1.72 kg",
+      "brandName": "kirkland signature",
+      "category": "Hot Dogs",
+      "retailerRef": "575675",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_20afe2c7-e425-4b1e-8b60-e59ee024e264.jpeg",
+      "available": true
+    },
+    {
+      "productId": "29564276",
+      "name": "Extra Lean Ground Bison",
+      "size": "454 g",
+      "brandName": null,
+      "category": "Bison",
+      "retailerRef": "9187444",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_44809e55-ef6d-4fd0-9280-a7b097fca373.jpeg",
+      "available": true
+    },
+    {
+      "productId": "32751",
+      "name": "Kirkland Signature Atlantic Salmon",
+      "size": "1.08 kg",
+      "brandName": "kirkland signature",
+      "category": "Frozen Salmon",
+      "retailerRef": "46340",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5c9eb539-3c0c-4ff4-826e-89fa47865ba0.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115471",
+      "name": "Skinless Farmed Atlantic Salmon Fillet",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Salmon Fillets",
+      "retailerRef": "51453",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_63897500-5716-4572-b6ed-7040555c4934.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19337093",
+      "name": "DOM Reserve Singles Frozen Smoked Salmon",
+      "size": "750 g",
+      "brandName": "dom reserve singles",
+      "category": "Frozen Salmon",
+      "retailerRef": "385778",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5db58c6b-8758-49e5-9997-46f0b6f75204.jpeg",
+      "available": true
+    },
+    {
+      "productId": "26745939",
+      "name": "Kirkland Signature Precooked Bacon",
+      "size": "500 g",
+      "brandName": "kirkland signature",
+      "category": "Sliced Bacon",
+      "retailerRef": "1527958",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_146685f4-e175-4644-bcfd-9c2849583773.jpeg",
+      "available": true
+    },
+    {
+      "productId": "32754",
+      "name": "Kirkland Signature Frozen Wild Alaskan Sockeye Salmon",
+      "size": "1.36 kg",
+      "brandName": "kirkland signature",
+      "category": "Frozen Salmon",
+      "retailerRef": "221177",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_163ae146-96cb-41dd-a37f-f932e1a4c79f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022150",
+      "name": "Kirkland Signature Frozen Cooked Shrimp",
+      "size": "907 g",
+      "brandName": "kirkland signature",
+      "category": "Frozen Whole Shrimp",
+      "retailerRef": "175548",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a9718364-bbf5-48b3-ad07-b26c02b82635.jpeg",
+      "available": true
+    },
+    {
+      "productId": "29513238",
+      "name": "Tempura Shrimp",
+      "size": "1.15 kg",
+      "brandName": null,
+      "category": "Frozen Whole Shrimp",
+      "retailerRef": "1562720",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f70f4f85-4818-424b-bd29-6086a1bb68de.jpeg",
+      "available": true
+    },
+    {
+      "productId": "63993430",
+      "name": "Kirkland Signature Garlic Butter Shrimps",
+      "size": "454 g",
+      "brandName": "kirkland signature",
+      "category": "Frozen Shrimp",
+      "retailerRef": "1695370",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_87de6d02-83d2-4636-b7f2-b22b967576a9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "77191895",
+      "name": "Greenfield Natural Meat Co. Breakfast Sausage Rounds",
+      "size": "1.5 kg",
+      "brandName": "greenfield natural meat co.",
+      "category": "Breakfast Sausage",
+      "retailerRef": "5001938",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_38a2f0b8-1b2c-4ab4-ae0f-253a64cd6db6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115378",
+      "name": "Kirkland Signature Australian Lamb Loin Chops",
+      "size": "per lb",
+      "brandName": "kirkland signature",
+      "category": "Lamb Loin Chop",
+      "retailerRef": "23524",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a58a3163-53a5-424e-ab0a-99c296c433dc.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114871",
+      "name": "Kirkland Signature Australian Boneless Leg Lamb",
+      "size": "per lb",
+      "brandName": "kirkland signature",
+      "category": "Leg of Lamb",
+      "retailerRef": "13466",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_392e2637-35cd-4318-8f8f-4ae338a439b9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114726",
+      "name": "Kirkland Signature Australian Rack of Lamb",
+      "size": "per lb",
+      "brandName": "kirkland signature",
+      "category": "Rack of Lamb",
+      "retailerRef": "348",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fac77452-ced6-4a25-93f5-76c6957b043d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "102174534",
+      "name": "Lightlife Original Tempeh",
+      "size": "227 g",
+      "brandName": "lightlife",
+      "category": "Tempeh",
+      "retailerRef": "1948200",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_bc300a88-90bf-4955-97c0-bc3dd053c2a7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "104771822",
+      "name": "Dr. Praeger's Crispy California Style Veggie Burgers",
+      "size": "1.09 kg",
+      "brandName": "dr. praeger's",
+      "category": "Frozen Vegetarian Burgers",
+      "retailerRef": "2135557",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d3e24b3c-a414-4d4f-95a8-1c58a688e8a3.jpeg",
+      "available": true
+    },
+    {
+      "productId": "102274635",
+      "name": "Beyond Meat Beyond Burger Plant-Based Burgers",
+      "size": "113 g",
+      "brandName": "beyond meat",
+      "category": "Frozen Vegetarian Burgers",
+      "retailerRef": "5338620",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_cba9549f-a2db-4d60-a09c-b34e477a479b.jpg",
+      "available": true
+    },
+    {
+      "productId": "21114506",
+      "name": "Whole Pork Belly",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Pork Belly",
+      "retailerRef": "31484",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4fce8468-2ffc-41d9-b2c1-4bef2acfc77e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "62343868",
+      "name": "One Ocean Smoked Sockeye Salmon",
+      "size": "454 g",
+      "brandName": "one ocean",
+      "category": "Smoked Salmon",
+      "retailerRef": "5118421",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4164501f-5f16-46fb-b020-08cc0bb723e3.jpg",
+      "available": true
+    },
+    {
+      "productId": "26827284",
+      "name": "Belmont Pure Angus Beef Burgers",
+      "size": "151 g",
+      "brandName": "belmont",
+      "category": "Frozen Beef Burgers",
+      "retailerRef": "1511469",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8972fdb2-cba5-41cb-85a1-f476884fcc71.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21139014",
+      "name": "Halal Lean Ground Beef",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Ground Beef",
+      "retailerRef": "21928",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_19c98916-74a1-4621-9fe6-83eb0c291bd7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114543",
+      "name": "Sliced Skinless Pork Belly",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Pork Belly",
+      "retailerRef": "31483",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_06d99b3d-8380-4886-b97a-8661fb89052d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21112963",
+      "name": "Kirkland Signature Organic Split Chicken Wings",
+      "size": "per lb",
+      "brandName": "kirkland signature",
+      "category": "Chicken Wing",
+      "retailerRef": "47969",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_60ebfedd-eb5f-4f26-9307-ab14dce76d4d.jpg",
+      "available": true
+    },
+    {
+      "productId": "21114447",
+      "name": "Kirkland Signature Beef Wieners",
+      "size": "675 g",
+      "brandName": "kirkland signature",
+      "category": "Hot Dogs",
+      "retailerRef": "575680",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_28a3957b-f5f3-49e7-a94f-859681701181.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114941",
+      "name": "Whole Eye of Round",
+      "size": "per lb",
+      "brandName": null,
+      "category": "Eye of Round",
+      "retailerRef": "29339",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a2a5ae6a-a6c4-4380-8a03-acc487f43d43.jpeg",
+      "available": true
+    }
+  ]
+}

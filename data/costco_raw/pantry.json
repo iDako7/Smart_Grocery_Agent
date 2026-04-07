@@ -1,0 +1,703 @@
+{
+  "department": "pantry",
+  "scrape_date": "2026-03-28",
+  "store": {
+    "shopId": "8470",
+    "postalCode": "V5S3A8",
+    "zoneId": "750",
+    "name": "Costco Canada"
+  },
+  "product_count": 69,
+  "products": [
+    {
+      "productId": "18111074",
+      "name": "MUNCHIES Original Snack Mix",
+      "size": "1100 g",
+      "brandName": "munchies",
+      "category": "Mixed Dry Snacks",
+      "retailerRef": "100778",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1a47755f-9e30-4451-a28e-fae764eba03f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21020710",
+      "name": "Hellmann\u2019s Real Mayonnaise",
+      "size": "1.8 L",
+      "brandName": "hellmann\u2019s",
+      "category": "Mayonnaise",
+      "retailerRef": "170600",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6d6218b8-9774-4dd2-a59c-1017b21f23b5.jpeg",
+      "available": true
+    },
+    {
+      "productId": "27126790",
+      "name": "Sensible Portions Garden Veggie Straws",
+      "size": "475 g",
+      "brandName": "sensible portions",
+      "category": "Vegetable Chips",
+      "retailerRef": "195047",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fdee39e5-fc09-4189-9591-d8a63f429860.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21132205",
+      "name": "Simple Mills  Almond Flour Crackers",
+      "size": "482 g",
+      "brandName": "simple mills ",
+      "category": "Crackers",
+      "retailerRef": "1400953",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d59f77a8-f263-44d1-8845-7ae1d19002c4.jpeg",
+      "available": true
+    },
+    {
+      "productId": "2577229",
+      "name": "Kirkland Signature Organic Applesauce",
+      "size": "90 g",
+      "brandName": "kirkland signature",
+      "category": "Applesauce",
+      "retailerRef": "897971",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c2881f38-54a1-4044-8216-f6efd976bd52.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18111152",
+      "name": "Dole Tropical Gold Pineapple Chunks Club Pack",
+      "size": "3240 ml",
+      "brandName": "dole",
+      "category": "Canned Pineapple",
+      "retailerRef": "188420",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_bde5ff6b-015c-4dad-8567-3348c1ba3776.jpeg",
+      "available": true
+    },
+    {
+      "productId": "97795311",
+      "name": "GoGo Squeez Fruit Sauce Variety Pack",
+      "size": "2.52 kg",
+      "brandName": "gogo squeez",
+      "category": "Applesauce",
+      "retailerRef": "3359955",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_37602345-1f43-4e6e-b437-d473720ec2da.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018964",
+      "name": "Ocean's Solid White Albacore Tuna",
+      "size": "184 g",
+      "brandName": "ocean's",
+      "category": "Canned Tuna",
+      "retailerRef": "259629",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_35004e1f-69b5-4cac-b442-4fc7b37c9975.jpeg",
+      "available": true
+    },
+    {
+      "productId": "73991037",
+      "name": "Real Good Foods 100% Angus Beef Tallow",
+      "size": "794 g",
+      "brandName": "real good foods",
+      "category": "Lard",
+      "retailerRef": "1940107",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7f2a239d-2c80-45fd-9963-dd39257040e3.jpeg",
+      "available": true
+    },
+    {
+      "productId": "3117978",
+      "name": "Terra Delyssa Organic Extra Virgin Olive Oil",
+      "size": "1 L",
+      "brandName": "terra delyssa",
+      "category": "Olive Oils",
+      "retailerRef": "362996",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_596a99c2-23ce-45ed-9236-86084f7eca1b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "2783343",
+      "name": "Nonna Pia's Classic Balsamic Glaze",
+      "size": "250 ml",
+      "brandName": "nonna pia's",
+      "category": "Balsamic Vinegar",
+      "retailerRef": "1022898",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f2705065-2405-458b-92ec-321231285c9a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021035",
+      "name": "Naturoney Organic Honey",
+      "size": "1 kg",
+      "brandName": "naturoney",
+      "category": "Honey",
+      "retailerRef": "130958",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_304c2938-422c-49e3-bc0c-0ac4874095e6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "25029714",
+      "name": "Kirkland Signature Trail Mix With M & M's",
+      "size": "28 ct",
+      "brandName": "kirkland signature",
+      "category": "Trail Mix",
+      "retailerRef": "1473917",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a081a94d-7175-46a2-99c8-811a7865ca50.jpeg",
+      "available": true
+    },
+    {
+      "productId": "43679701",
+      "name": "Samyang Foods Co., Ltd Carbonara Buldak Spicy Ramen",
+      "size": "105 g",
+      "brandName": "samyang foods co., ltd",
+      "category": "Instant Noodles",
+      "retailerRef": "1875629",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fbd9c362-dd68-45fe-8d17-8196094b2b6c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "36522470",
+      "name": "Antonio Amato Pasta Variety Pack",
+      "size": "4.5 kg",
+      "brandName": "antonio amato",
+      "category": "Other Pasta",
+      "retailerRef": "1609439",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f44ddfe6-5bba-41fc-aa75-e916d2fa5043.jpeg",
+      "available": true
+    },
+    {
+      "productId": "28018653",
+      "name": "Kirkland Signature Unsalted Mixed Nuts",
+      "size": "1.13 kg",
+      "brandName": "kirkland signature",
+      "category": "Mixed Nuts",
+      "retailerRef": "1652577",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b29bc967-c657-41e7-9a51-eafb8a7c3762.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21020523",
+      "name": "Annie's Mac & Cheese",
+      "size": "170 g",
+      "brandName": "annie's",
+      "category": "Boxed Pasta Meals & Sides",
+      "retailerRef": "1242603",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4a9649e8-b7ca-4d26-87e7-66af97fd228c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18110641",
+      "name": "Last Mountain Raspberry Spread",
+      "size": "950 ml",
+      "brandName": "last mountain",
+      "category": "Fruit Spreads",
+      "retailerRef": "463139",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_223a86a8-c199-4121-af98-0e5e0d8d7f13.jpeg",
+      "available": true
+    },
+    {
+      "productId": "82416563",
+      "name": "Nutty Fruity Pistachio Cream with Kadayif Spread",
+      "size": "595 g",
+      "brandName": "nutty fruity",
+      "category": "Pistachio Butter",
+      "retailerRef": "1952148",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ac030b89-8203-4b01-b775-ba66b4222a0a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17881950",
+      "name": "Kraft Smooth Peanut Butter",
+      "size": "2 kg",
+      "brandName": "kraft",
+      "category": "Peanut Butter",
+      "retailerRef": "71408",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_06f520da-d5bb-4f10-b57a-83e762f1aa0d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022279",
+      "name": "Kirkland Signature Natural Peanut Butter",
+      "size": "1 kg",
+      "brandName": "kirkland signature",
+      "category": "Peanut Butter",
+      "retailerRef": "321724",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_397a52d4-01a7-49a1-a0bf-483b9f0c40c6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "44412647",
+      "name": "MadeGood Granola Minis",
+      "size": "24 g",
+      "brandName": "madegood",
+      "category": "Granola",
+      "retailerRef": "2154720",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d287f3b9-58c4-4d0a-b71d-256acea093b9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018665",
+      "name": "Cheerios Multi Grain Cereal, Whole Grains",
+      "size": "1.24 kg",
+      "brandName": "cheerios",
+      "category": "Cereal",
+      "retailerRef": "1134671",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_458284f5-c5f4-45ef-8d49-41ae497142a6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "28989141",
+      "name": "Quaker Instant Oatmeal Assorted Flavour Variety Pack",
+      "size": "2.45 kg",
+      "brandName": "quaker",
+      "category": "Quick Oats",
+      "retailerRef": "1422488",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d0ef3e3e-f29f-4fcf-8a50-35b5da8dac14.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17966999",
+      "name": "Quaker Quick Oats",
+      "size": "5000 g",
+      "brandName": "quaker",
+      "category": "Quick Oats",
+      "retailerRef": "1412124",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4650af44-f832-4baa-8f8b-0c50e4f3a0b8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "66823295",
+      "name": "Heinz Tomato Ketchup",
+      "size": "1.5 l",
+      "brandName": "heinz",
+      "category": "Ketchup",
+      "retailerRef": "1920641",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4defc5ed-7b3d-4250-bbe5-7aa8178f2258.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021497",
+      "name": "Bick's Garlic Baby Dill Pickles",
+      "size": "2 L",
+      "brandName": "bick's",
+      "category": "Pickles",
+      "retailerRef": "72251",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e13f8d6a-2996-438f-9d86-e3bfbbf774b4.jpeg",
+      "available": true
+    },
+    {
+      "productId": "37085973",
+      "name": "Campbell Prego Traditional Pasta Sauce",
+      "size": "1.75 L",
+      "brandName": "campbell prego",
+      "category": "Tomato Based Sauces",
+      "retailerRef": "1611075",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_da2a060f-1943-4d27-bc84-aa935d7a3a11.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019718",
+      "name": "Nature's Path Organic Coconut & Cashew Butter Granola",
+      "size": "720 g",
+      "brandName": "nature's path",
+      "category": "Granola",
+      "retailerRef": "1124423",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5f9f3ac1-1779-423b-909d-27f5307264ce.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018510",
+      "name": "Welch\u2019s Mixed Fruit Snacks",
+      "size": "22 g",
+      "brandName": "welch\u2019s",
+      "category": "Gummy Fruit Snacks",
+      "retailerRef": "1704012",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6acfb69e-29d1-4d54-b61a-db22ea04bfe7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018280",
+      "name": "Kirkland Signature Que Pasa Organic Tortilla Chips",
+      "size": "908 g",
+      "brandName": "kirkland signature",
+      "category": "Tortilla Chips",
+      "retailerRef": "161552",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_25a7f3b1-4339-45a8-8fd4-3d1fd8419c7d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022084",
+      "name": "Dole Diced Peaches Cups",
+      "size": "107 ml",
+      "brandName": "dole",
+      "category": "Fruit Snack Cups",
+      "retailerRef": "369765",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7fbe0879-1088-42cc-984f-6dfedcae4e03.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21137658",
+      "name": "DJ & A Shiitake Mushroom Crisps",
+      "size": "300 g",
+      "brandName": "dj & a",
+      "category": "Vegetable Chips",
+      "retailerRef": "1351997",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_73ddecb5-f056-4b36-bc29-6be7952c0282.jpeg",
+      "available": true
+    },
+    {
+      "productId": "94775029",
+      "name": "BEAR Fruit Splits Variety Pack",
+      "size": "20 g",
+      "brandName": "bear",
+      "category": "Dried Mixed Fruit",
+      "retailerRef": "1809868",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8dc76447-6b3f-4787-a0d2-0a6636ec1ed0.jpeg",
+      "available": true
+    },
+    {
+      "productId": "54789259",
+      "name": "Grenade Protein Bars Oreo",
+      "size": "14 ct",
+      "brandName": "grenade protein bars",
+      "category": "Protein Bars",
+      "retailerRef": "1844665",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_199f3b6e-54bc-4a73-97d8-a7f40ff6091d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022249",
+      "name": "Kirkland Signature Soft & Chewy Granola Bars",
+      "size": "24 g",
+      "brandName": "kirkland signature",
+      "category": "Granola Bars",
+      "retailerRef": "1212860",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7d87b5e6-8d2b-4273-9586-5d50017b5446.jpeg",
+      "available": true
+    },
+    {
+      "productId": "22806343",
+      "name": "Ruffles Regular",
+      "size": "612 g",
+      "brandName": null,
+      "category": "Potato Chips",
+      "retailerRef": "1696237",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_0eebd871-22ec-407a-a39a-082cc8dddd6b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018809",
+      "name": "TREASURE MILLS School Safe Banana Chocolate Chip Mini Cakes",
+      "size": "40 g",
+      "brandName": "treasure mills school safe",
+      "category": "Other Packaged Treats",
+      "retailerRef": "197055",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ce3a9a2e-751c-4bbc-a719-fd0b5a5a988e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "22703476",
+      "name": "Miss Vickie's Sea Salt & Vinegar Flavoured Kettle Cooked Potato Chips",
+      "size": "572 g",
+      "brandName": "miss vickie's",
+      "category": "Potato Chips",
+      "retailerRef": "2078105",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_904ffea4-5e0c-402e-83ce-c3b762370666.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21017355",
+      "name": "KFI Butter Chicken Sauce",
+      "size": "650 ml",
+      "brandName": "kfi",
+      "category": "Other Sauces",
+      "retailerRef": "1359722",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_306bc04c-4b8c-46b7-adc6-a6dae33486b9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "93254186",
+      "name": "SunRype Fruit To Go Easy Peel Strips",
+      "size": "14 g",
+      "brandName": "sunrype",
+      "category": "Gummy Fruit Snacks",
+      "retailerRef": "4227932",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3105c624-0ff5-4e49-87bd-babbeb5e6c82.jpeg",
+      "available": true
+    },
+    {
+      "productId": "75811927",
+      "name": "SunRype Fruit Source Fruit Bars Variety Pack",
+      "size": "37 g",
+      "brandName": "sunrype",
+      "category": "Fruit Bars",
+      "retailerRef": "2400772",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_19cc3155-fa2d-4cd6-a3dd-66f694c8bf59.jpeg",
+      "available": true
+    },
+    {
+      "productId": "99011575",
+      "name": "SunRype Good Bites Superseed Oat Bars Variety Pack",
+      "size": "28 g",
+      "brandName": "sunrype",
+      "category": "Granola Bars",
+      "retailerRef": "1987233",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_76b9f8d2-1226-4589-8413-d42421c73b0a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022185",
+      "name": "Angie's Artisan Treats P108 Boom Chicka Pop Sea Salt Popcorn",
+      "size": "340 g",
+      "brandName": "angie's artisan treats",
+      "category": "Popcorn",
+      "retailerRef": "324547",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_559558b0-783f-4e2d-96be-7faac3ade91a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21020924",
+      "name": "Kirkland Signature Solid Light Tuna In Water",
+      "size": "184 g",
+      "brandName": "kirkland signature",
+      "category": "Canned Tuna",
+      "retailerRef": "820272",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e216b1ef-46fa-4021-a65b-02fc1aaf9730.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021239",
+      "name": "Kirkland Signature Organic Chicken Broth",
+      "size": "946 ml",
+      "brandName": "kirkland signature",
+      "category": "Chicken Broth",
+      "retailerRef": "411844",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_57602bfb-3203-4d06-9011-01e44a768d0e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "22703466",
+      "name": "Premium Organic Coconut Milk",
+      "size": "400 ml",
+      "brandName": null,
+      "category": "Canned Coconut Milk",
+      "retailerRef": "1457845",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a83300aa-f28d-413c-a60d-5aa658d053d6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "22239728",
+      "name": "Miss Vickie's Potato Chips Variety Pack",
+      "size": "24 g",
+      "brandName": "miss vickie's",
+      "category": "Variety Pack Chips",
+      "retailerRef": "1099716",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d419c894-9316-4190-839c-06e2b3ab2b81.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21147285",
+      "name": "Schwartz Brothers Bakery Organic Everything Bagel Chips",
+      "size": "15 oz",
+      "brandName": "schwartz brothers bakery",
+      "category": "Bagel and Pita Chips",
+      "retailerRef": "1391546",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_2c9e324a-6762-4f9c-aaef-85dbfae89a85.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17462012",
+      "name": "Kirkland Signature Organic Roasted Seaweed Snack",
+      "size": "17 g",
+      "brandName": "kirkland signature",
+      "category": "Seaweed Chips",
+      "retailerRef": "1098502",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_989782e2-4ec6-46e2-af64-762825fadb87.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16955993",
+      "name": "Organic Aussie Bites",
+      "size": "850 g",
+      "brandName": null,
+      "category": "Snack Bites",
+      "retailerRef": "891394",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_171c4a3c-0e84-4234-9c09-e3881506d173.jpeg",
+      "available": true
+    },
+    {
+      "productId": "24328881",
+      "name": "Rao\u2019s Marinara Sauce",
+      "size": "770 ml",
+      "brandName": "rao\u2019s",
+      "category": "Tomato Based Sauces",
+      "retailerRef": "1460350",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_204facd9-328a-4092-8420-3a006198f302.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021312",
+      "name": "Pure Vanilla Extract",
+      "size": "473 ml",
+      "brandName": null,
+      "category": "Vanilla Extract",
+      "retailerRef": "1072687",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_feb97f3b-b1f0-4170-80d1-612909e6016d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19327174",
+      "name": "Kettle Brand Krinkle Cut Himalayan Salt Potato Chips",
+      "size": "907 g",
+      "brandName": "kettle brand",
+      "category": "Potato Chips",
+      "retailerRef": "938492",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f11fb31e-f321-4a94-966c-345ed654dc99.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21324106",
+      "name": "Kirkland Signature Basil Pesto",
+      "size": "630 ml",
+      "brandName": "kirkland signature",
+      "category": "Pesto",
+      "retailerRef": "990551",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6303dff0-e0a5-4678-98fc-22efc1358793.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019734",
+      "name": "Jack Link's Beef Jerky, Teriyaki, Meat Snacks",
+      "size": "300 g",
+      "brandName": "jack link's",
+      "category": "Meat Jerky",
+      "retailerRef": "1256995",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_0e815dd4-afa2-4ba2-803e-b03646961808.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018733",
+      "name": "Kirkland Signature California Pistachios",
+      "size": "1.36 kg",
+      "brandName": "kirkland signature",
+      "category": "Pistachios",
+      "retailerRef": "203435",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_9b795b14-48dd-482d-9238-eeb0f59a82e2.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021815",
+      "name": "Kellogg\u2019s Froot Loops",
+      "size": "1.1 kg",
+      "brandName": "kellogg\u2019s",
+      "category": "Cereal",
+      "retailerRef": "822550",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5eddd4f1-24f3-4ab0-b448-e4bebb94c513.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019747",
+      "name": "General Mills Honey Nut Cheerios Cereal",
+      "size": "1.51 kg",
+      "brandName": "general mills",
+      "category": "Cereal",
+      "retailerRef": "1134668",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_bb7fc749-1772-42f0-b172-249718272d25.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21017055",
+      "name": "Philippine Brand Dried Mangoes",
+      "size": "850 g",
+      "brandName": "philippine brand",
+      "category": "Dried Mango",
+      "retailerRef": "587",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ec0cedae-322c-422d-9cd3-b223b0c6cf46.jpeg",
+      "available": true
+    },
+    {
+      "productId": "25129019",
+      "name": "That\u2019s It. Mini Fruit Bars",
+      "size": "20 g",
+      "brandName": "that\u2019s it.",
+      "category": "Fruit Bars",
+      "retailerRef": "1361170",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fec6ded2-3bf7-4e77-bf00-910beea10452.jpeg",
+      "available": true
+    },
+    {
+      "productId": "20214376",
+      "name": "UNREAL Dark Chocolate Coconut Mini Bars",
+      "size": "15.34 oz",
+      "brandName": "unreal",
+      "category": "Chocolate Candies",
+      "retailerRef": "1268728",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8a471322-974f-433d-b71d-b511bbc38f58.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21948168",
+      "name": "Kirkland Signature Thin & Crispy Mini Chocolate Chip Cookies",
+      "size": "28 g",
+      "brandName": "kirkland signature",
+      "category": "Packaged Cookies",
+      "retailerRef": "5014935",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b3ff6a35-e3aa-4216-9ea4-9b83f2c1785d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "25815731",
+      "name": "Kirkland Signature Organic Fruit & Vegetable Pouches",
+      "size": "24 ct",
+      "brandName": "kirkland signature",
+      "category": "Squeeze Snack Pouches",
+      "retailerRef": "1538359",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_0be07977-02d6-47d4-9260-d66f0f4f1f0c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019920",
+      "name": "Pure Protein Variety Pack Bars",
+      "size": "50 g",
+      "brandName": "pure protein",
+      "category": "Protein Bars",
+      "retailerRef": "324143",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_653be1d3-f8f9-499d-8e1b-884914b370e1.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17968713",
+      "name": "Kellogg's Vector Cereal",
+      "size": "1.13 kg",
+      "brandName": "kellogg's",
+      "category": "Cereal",
+      "retailerRef": "128888",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6a505f2f-1d19-4bcb-a671-8506e4ec64f2.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022100",
+      "name": "WildRoots Coastal Berry Natural Trail Mix",
+      "size": "737 g",
+      "brandName": "wildroots",
+      "category": "Trail Mix",
+      "retailerRef": "234745",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7f91f889-976d-481a-9afa-3a0d0bde5dfb.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21132232",
+      "name": "Oberto Natural Wood Smoke Beef Jerky",
+      "size": "28 g",
+      "brandName": "oberto",
+      "category": "Meat Jerky",
+      "retailerRef": "4316364",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_04a1372f-dfc3-48bd-a2f4-72602cb8ef22.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16306399",
+      "name": "Kirkland Signature Extra Thick Steak Strips",
+      "size": "340 g",
+      "brandName": "kirkland signature",
+      "category": "Meat Jerky",
+      "retailerRef": "321880",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7d6ed065-28d8-418d-abc3-916e52bbfd05.jpeg",
+      "available": true
+    }
+  ]
+}

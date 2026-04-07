@@ -1,0 +1,703 @@
+{
+  "department": "produce",
+  "scrape_date": "2026-03-28",
+  "store": {
+    "shopId": "8470",
+    "postalCode": "V5S3A8",
+    "zoneId": "750",
+    "name": "Costco Canada"
+  },
+  "product_count": 69,
+  "products": [
+    {
+      "productId": "17328915",
+      "name": "Banana",
+      "size": "1.36 kg",
+      "brandName": null,
+      "category": "Yellow Bananas",
+      "retailerRef": "30669",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_be488d46-c34f-42ed-a924-f4c5e6b63427.jpeg",
+      "available": true
+    },
+    {
+      "productId": "20983650",
+      "name": "Naturipe Farms Blueberries",
+      "size": "1 each",
+      "brandName": "naturipe farms",
+      "category": "Blueberries",
+      "retailerRef": "57554",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c0638e61-7110-4540-bd1e-0743ad5f6267.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17444545",
+      "name": "Green Seedless Grapes",
+      "size": "1.36 kg",
+      "brandName": null,
+      "category": "Green Grapes",
+      "retailerRef": "47825",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8c73a2af-c99c-47ab-ae60-712eb01a1d42.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17327143",
+      "name": "Raspberries Package",
+      "size": "12 oz",
+      "brandName": null,
+      "category": "Red Raspberries",
+      "retailerRef": "56366",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_36da4c96-eba1-4f4b-bb75-b72c91e3dc8b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "2600211",
+      "name": "English Cucumber",
+      "size": "3 count",
+      "brandName": null,
+      "category": "English Cucumbers",
+      "retailerRef": "88426",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_accf7ce5-17ee-49a1-9405-3a3553fdcd8b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18471045",
+      "name": "Mini Cucumber",
+      "size": "907 g",
+      "brandName": null,
+      "category": "Mini Cucumbers",
+      "retailerRef": "25771",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ed754fe7-be38-42e7-925b-ace27fcc440d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "20595825",
+      "name": "Mixed Bell Peppers",
+      "size": "6 ct",
+      "brandName": null,
+      "category": "Sweet Mini Bell Peppers",
+      "retailerRef": "60357",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_bf1b3b0d-f51a-4b97-a5ee-98131e90a152.jpeg",
+      "available": true
+    },
+    {
+      "productId": "20042763",
+      "name": "Tomato on the Vine",
+      "size": "1.36 kg",
+      "brandName": null,
+      "category": "Tomatoes on the Vine",
+      "retailerRef": "355463",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1babe4cc-ef99-42b9-86f3-f70240d30d7f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16502205",
+      "name": "Strawberries",
+      "size": "908 g",
+      "brandName": null,
+      "category": "Strawberries",
+      "retailerRef": "27003",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_bda6c3b4-eaba-437e-96db-8f596bd5da90.jpeg",
+      "available": true
+    },
+    {
+      "productId": "58201250",
+      "name": "Mandarin Clementine",
+      "size": "2.27 kg",
+      "brandName": null,
+      "category": "Mandarines",
+      "retailerRef": "18600",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_506f45ae-757b-40e5-8981-15757c34b499.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17523901",
+      "name": "Avocado",
+      "size": "6 count",
+      "brandName": null,
+      "category": "Hass Avocado",
+      "retailerRef": "647465",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c77beac9-04dd-4a3f-8b39-5d302e81218f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21091323",
+      "name": "Organic Banana",
+      "size": "3 lb",
+      "brandName": null,
+      "category": "Yellow Bananas",
+      "retailerRef": "2619",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e6e74d08-f4f1-4b1d-b3b9-da5a84dc2eb8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17330345",
+      "name": "Gala Apple Bag",
+      "size": "6 lb",
+      "brandName": null,
+      "category": "Gala Apples",
+      "retailerRef": "49118",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_55f15f5e-2a3d-468b-bfdc-bf50e679adad.jpeg",
+      "available": true
+    },
+    {
+      "productId": "3392835",
+      "name": "Broccoli Florets",
+      "size": "908 g",
+      "brandName": null,
+      "category": "Green Broccoli",
+      "retailerRef": "426192",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3e499ca6-1625-453e-9027-ef765baea9c0.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17973827",
+      "name": "Baby Spinach",
+      "size": "312 g",
+      "brandName": null,
+      "category": "Spinach",
+      "retailerRef": "804449",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e03c2b58-1c07-4151-b9b0-8a4f1879c1ec.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16345635",
+      "name": "Asparagus Bunch",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Green Asparagus",
+      "retailerRef": "94676",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_9a49c7a1-d168-42ca-9dac-8a0914f19660.jpeg",
+      "available": true
+    },
+    {
+      "productId": "3256494",
+      "name": "Sugar Snap Peas",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Snap Peas",
+      "retailerRef": "45341",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b54de93e-df9c-4a4e-a170-4bb51f978144.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16614403",
+      "name": "Sweet Potato (Yam)",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Sweet Potatoes",
+      "retailerRef": "15751",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4e62b9ef-11d0-43f3-9f16-801bdace38e6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16595609",
+      "name": "Organic Blueberries",
+      "size": "510 g",
+      "brandName": null,
+      "category": "Blueberries",
+      "retailerRef": "519638",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_31b2ed4e-1e87-4509-ba43-223fd174d5d0.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19272120",
+      "name": "Yellow Sweet Corn",
+      "size": "8 ct",
+      "brandName": null,
+      "category": "Sweet Corn",
+      "retailerRef": "38742",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_444339b8-79cf-4dd3-bc5e-2e94f9de6697.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17616125",
+      "name": "Lemon",
+      "size": "2.27 kg",
+      "brandName": null,
+      "category": "Yellow Lemons",
+      "retailerRef": "83345",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d759452d-0e9d-4310-9fbf-6eb8f3afc51a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19151255",
+      "name": "Celery Sticks",
+      "size": "1.13 kg",
+      "brandName": null,
+      "category": "Celery",
+      "retailerRef": "3879",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ef06d602-cd83-44da-80ae-472d7a55e886.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18830804",
+      "name": "Cotton Candy Grapes",
+      "size": "2 lb",
+      "brandName": null,
+      "category": "Cotton Candy Grapes",
+      "retailerRef": "1461030",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_10b607e9-8fde-4165-bf48-045f77cb3c7f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "76198687",
+      "name": "Cara Cara Orange",
+      "size": "3.63 kg",
+      "brandName": null,
+      "category": "Cara Cara Oranges",
+      "retailerRef": "109764",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_2d6adfc9-ac0f-4f68-bcd4-95ce097f5178.jpeg",
+      "available": true
+    },
+    {
+      "productId": "70516042",
+      "name": "Organic Carrot",
+      "size": "6 lb",
+      "brandName": null,
+      "category": "Orange Carrots",
+      "retailerRef": "3333011",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_9182589d-3609-4e98-b3de-b5eaa71b5acb.jpg",
+      "available": true
+    },
+    {
+      "productId": "16784659",
+      "name": "Navel Orange",
+      "size": "10 lb",
+      "brandName": null,
+      "category": "Navel Oranges",
+      "retailerRef": "90589",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_9008892e-a22d-46cc-ab7c-424b3b2cf914.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17656002",
+      "name": "Frozen Wild Blueberries",
+      "size": "1.5 kg",
+      "brandName": null,
+      "category": "Blueberries",
+      "retailerRef": "3373517",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ed58e1f3-995b-465b-9671-6f440c83319a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17328458",
+      "name": "White Mushroom",
+      "size": "680 g",
+      "brandName": null,
+      "category": "White Button Mushrooms",
+      "retailerRef": "1596",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_95945240-9824-49ba-84d5-07e7ab060fa2.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115091",
+      "name": "Pineapple Spears",
+      "size": "1.36 kg",
+      "brandName": null,
+      "category": "Pineapples",
+      "retailerRef": "247590",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fe91fac6-e1d2-451b-bb4e-6759b577a1b0.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17330067",
+      "name": "Red Grape Tomato",
+      "size": "2 lb",
+      "brandName": null,
+      "category": "Grape Tomatoes",
+      "retailerRef": "77053",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_9408adc1-9023-4da3-a672-53ebabfb8f6b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "2008701",
+      "name": "Seedless Red Grapes",
+      "size": "3 lb",
+      "brandName": null,
+      "category": "Red Grapes",
+      "retailerRef": "5276",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_04a22376-69f8-430f-bced-d74370b837fb.jpeg",
+      "available": true
+    },
+    {
+      "productId": "20027559",
+      "name": "Organic Peeled Carrots",
+      "size": "2 lb",
+      "brandName": null,
+      "category": "Baby Carrots",
+      "retailerRef": "412",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_47d9013a-5946-4e5d-850b-f2c5599dc680.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114829",
+      "name": "Broccoli Tenders",
+      "size": "680 g",
+      "brandName": null,
+      "category": "Green Broccoli",
+      "retailerRef": "810709",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e27c9855-bb2a-4e39-ab56-b93013c14b24.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16614371",
+      "name": "Green Onions (Scallions)",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Scallions",
+      "retailerRef": "3028018",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_beed8831-90a4-441c-94e2-2d01f98c1db6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "439841",
+      "name": "Pineapple",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Pineapples",
+      "retailerRef": "15099",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_301a91b3-4bd6-41f9-8b4d-1a5a30220ee6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19908920",
+      "name": "Black Seedless Grapes",
+      "size": "1.36 kg",
+      "brandName": null,
+      "category": "Black Grapes",
+      "retailerRef": "1083849",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_99bb6166-ae58-4927-b6ff-76159bb12183.jpeg",
+      "available": true
+    },
+    {
+      "productId": "30380215",
+      "name": "Limes",
+      "size": "1.36 kg",
+      "brandName": null,
+      "category": "Green Limes",
+      "retailerRef": "881393",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6fa834cc-98c0-4865-a52b-25086f7a7d5f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17621805",
+      "name": "Red Onion",
+      "size": "5 lb",
+      "brandName": null,
+      "category": "Red Onions",
+      "retailerRef": "127747",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_2f86ad18-7693-40e4-b8ee-54d693d076aa.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115007",
+      "name": "Yellow (Ataulfo) Mango",
+      "size": "2.27 lb",
+      "brandName": null,
+      "category": "Ataulfo Mango",
+      "retailerRef": "280100",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_37be6170-27c2-4053-bffd-99ca53890780.jpg",
+      "available": true
+    },
+    {
+      "productId": "2361408",
+      "name": "Spring Mix Clamshell",
+      "size": "312 g",
+      "brandName": null,
+      "category": "Mixed Greens",
+      "retailerRef": "878209",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f00c7ec2-2c46-4142-8a8c-471607b25fc0.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17330185",
+      "name": "Roma Tomato Bag",
+      "size": "907 g",
+      "brandName": null,
+      "category": "Roma Tomatoes",
+      "retailerRef": "171104",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f17ae2a0-4aa5-4159-bd34-d0d1f7225b18.jpeg",
+      "available": true
+    },
+    {
+      "productId": "20214327",
+      "name": "Cauliflower Florettes",
+      "size": "907 g",
+      "brandName": null,
+      "category": "Cauliflower Florettes",
+      "retailerRef": "760770",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_772ded5d-8ab9-4c43-a9c5-d7f00a22bc4a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "58201232",
+      "name": "Brussels Sprouts",
+      "size": "907 g",
+      "brandName": null,
+      "category": "Brussels Sprouts",
+      "retailerRef": "15764",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_75491cb8-85c6-42d9-8c36-91f49d2048cc.jpeg",
+      "available": true
+    },
+    {
+      "productId": "22168002",
+      "name": "The Little Potato Company Mixed Potato Nuggets",
+      "size": "2.27 kg",
+      "brandName": "the little potato company",
+      "category": "Medley Potatoes",
+      "retailerRef": "174695",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d19995fa-c2f1-48ba-8a01-7424752050d5.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17393561",
+      "name": "Yellow Potato",
+      "size": "10 lb",
+      "brandName": null,
+      "category": "Yukon Gold Potatoes",
+      "retailerRef": "36155",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_97289821-6449-42dd-98c9-1fb5b49f996e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115205",
+      "name": "Cremini Mushroom",
+      "size": "680 g",
+      "brandName": null,
+      "category": "Baby Bella Mushrooms",
+      "retailerRef": "1076115",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e5304bb2-4181-4db8-affd-68da23ea71d3.jpeg",
+      "available": true
+    },
+    {
+      "productId": "33184850",
+      "name": "Cantaloupe",
+      "size": "1 count",
+      "brandName": null,
+      "category": "Cantaloupe Melons",
+      "retailerRef": "67237",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_340ecb90-2ed9-43aa-910f-4c277ba9ca6a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16595607",
+      "name": "Sweet Onion",
+      "size": "5 lb",
+      "brandName": null,
+      "category": "Sweet Onions",
+      "retailerRef": "39054",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e7332944-4a1d-4b62-ab75-6c2c70bdd52f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115070",
+      "name": "Organic Mixed Peppers",
+      "size": "6 ct",
+      "brandName": null,
+      "category": "Mixed Bell Peppers",
+      "retailerRef": "1046243",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_603b85c1-6023-447d-a42d-7857009040aa.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114991",
+      "name": "Organic Zucchini Squash Bag",
+      "size": "2 lb",
+      "brandName": null,
+      "category": "Green Zucchini",
+      "retailerRef": "1078732",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3ceafeec-c262-4d32-a1bb-cd8938445f7d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21114571",
+      "name": "Shallot",
+      "size": "1.36 kg",
+      "brandName": null,
+      "category": "Shallots",
+      "retailerRef": "879639",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3345b845-eedd-4e64-9284-4b736fe8826f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "38699199",
+      "name": "CDS Foods Fresh Peeled Garlic",
+      "size": "1.36 kg",
+      "brandName": "cds foods",
+      "category": "White Garlic",
+      "retailerRef": "1508733",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_045a6cc4-db30-41fd-8b65-665780a3987e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "2726576",
+      "name": "Grapefruit",
+      "size": "2.27 kg",
+      "brandName": null,
+      "category": "Other Grapefruits",
+      "retailerRef": "418746",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8dba0dc1-ab64-4834-a4c2-cf9671dc6f95.jpeg",
+      "available": true
+    },
+    {
+      "productId": "20962589",
+      "name": "Pointed Peppers",
+      "size": "907 g",
+      "brandName": null,
+      "category": "Other Chili Peppers",
+      "retailerRef": "1354865",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_12d5d1c1-ba1d-4ef4-8718-3ea59a77d8f7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16345713",
+      "name": "Ambrosia Apple",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Ambrosia Apples",
+      "retailerRef": "214203",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_38b5a5ff-53d2-4c7b-96b1-fbc134a83b30.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16665641",
+      "name": "Garlic",
+      "size": "1 each",
+      "brandName": null,
+      "category": "White Garlic",
+      "retailerRef": "1641849",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1162afc1-447d-40df-a22c-1d3b249c83c7.jpg",
+      "available": true
+    },
+    {
+      "productId": "32315",
+      "name": "Kirkland Signature Minced California Garlic",
+      "size": "1.36 kg",
+      "brandName": "kirkland signature",
+      "category": "Garlic Paste",
+      "retailerRef": "581871",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ca05fb35-8443-4c4a-9e12-167ea50d8feb.jpeg",
+      "available": true
+    },
+    {
+      "productId": "29076610",
+      "name": "Guava",
+      "size": "907 g",
+      "brandName": null,
+      "category": "Guava",
+      "retailerRef": "1540490",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_db1e921f-15e0-4302-bb7e-eb4b01f5863d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17329714",
+      "name": "Organic Medjool Dates",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Fresh Dates",
+      "retailerRef": "1101646",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6a281611-c82b-40d9-8553-f676d79e157f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21285280",
+      "name": "Kumato Tomato",
+      "size": "908 g",
+      "brandName": null,
+      "category": "Kumato Tomatoes",
+      "retailerRef": "43483",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_21355f61-12ca-4847-af07-8b104d5e97d8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "64034303",
+      "name": "UP Vertical Farms Live It Up Lettuce Blend",
+      "size": "10 oz",
+      "brandName": "up vertical farms",
+      "category": "Mixed Greens",
+      "retailerRef": "1744723",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_697fdaa2-d384-484c-a66a-633d17b8e6a3.png",
+      "available": true
+    },
+    {
+      "productId": "28071909",
+      "name": "Pier-C Bagged Beets",
+      "size": "1 each",
+      "brandName": "pier-c",
+      "category": "Red Beets",
+      "retailerRef": "1605480",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_be43acb8-5296-46e2-addd-8bc9d2c6fd10.jpeg",
+      "available": true
+    },
+    {
+      "productId": "29109476",
+      "name": "GRAPFRUIT 2.27KG/5LB",
+      "size": null,
+      "brandName": null,
+      "category": "Other Grapefruits",
+      "retailerRef": "3987",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_28bea320-89e2-44c7-9191-63cb14634bce.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16516422",
+      "name": "Organic Shiitake Mushroom",
+      "size": "1 each",
+      "brandName": null,
+      "category": "Shiitake Mushrooms",
+      "retailerRef": "115226",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_bbe5e84d-808d-40b2-a19b-67511de50372.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21115182",
+      "name": "Organic Grape Tomatoes",
+      "size": "2 lb",
+      "brandName": null,
+      "category": "Cocktail Tomatoes",
+      "retailerRef": "743244",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c312b984-128b-4b7c-bd0f-00933066b198.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16346030",
+      "name": "Anjou Pear, 2.72 Kg / 6 lb",
+      "size": "1 each",
+      "brandName": null,
+      "category": "D'Anjou Pears",
+      "retailerRef": "27197",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_25d03a0d-97c4-40af-a302-90c43b0babb6.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17329306",
+      "name": "Potato",
+      "size": "15 lb",
+      "brandName": null,
+      "category": "Russet Potatoes",
+      "retailerRef": "175",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ec5b7448-cb85-4231-ad1d-d71e90042d84.jpeg",
+      "available": true
+    },
+    {
+      "productId": "66265571",
+      "name": "Yu Choy",
+      "size": "3 lb",
+      "brandName": null,
+      "category": "Yu Choy",
+      "retailerRef": "2027752",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a3055816-8a7c-4edc-afc4-a88c6c1c244f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21090517",
+      "name": "Organic Ginger Root",
+      "size": "2 lb",
+      "brandName": null,
+      "category": "Ginger",
+      "retailerRef": "532683",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_79265ae0-924d-4f04-b0c2-f07741ac5f32.jpeg",
+      "available": true
+    }
+  ]
+}

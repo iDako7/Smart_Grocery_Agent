@@ -38,7 +38,7 @@ Both stories follow the same arc with different starting conditions.
 
 **Story 1: "I have a plan, help me shop smarter."** Dako is hosting a BBQ for 8. He has pork belly and burger patties. The system identifies his veggie gap, suggests Korean cucumber salad and corn from Costco, and generates a store-organized shopping list. When he cooks, he taps pork belly and sees: "slice thin, marinate 30 min in soy-gochujang mix, grill 2-3 min per side."
 
-**Story 2: "I have leftovers, help me plan."** Dako has 3/4 of a Costco chicken wing pack, rice, soy sauce, aging bok choy. The system suggests three different preparations (teriyaki wings, congee, stir-fry) — same protein, different sauces and methods. For his next trip: teriyaki sauce, green onions, mushrooms. The system says "use the bok choy tonight before it goes bad."
+**Story 2: "I have leftovers, help me plan."** Dako has 3/4 of a Costco chicken wing pack, rice, soy sauce, bok choy. The system suggests three different preparations (teriyaki wings, congee, stir-fry) — same protein, different sauces and methods. For his next trip: teriyaki sauce, green onions, mushrooms.
 
 ## 4. Product Architecture
 
@@ -142,8 +142,6 @@ One list with store sections (not separate lists per store). Editable:
 **PCV gap analysis.** Before creative suggestions, compare user's state against Protein/Carb/Vegetable categories. Sauce tracked internally, surfaced only in grocery suggestions.
 
 **Recipe matching over generation.** Primary mode is retrieval from curated KB. Multi-preparation awareness: bulk items get varied suggestions (different sauces, cooking methods) across meals.
-
-**Waste-aware reasoning.** Aging ingredients should be used first. Pantry staples can wait. Bulk meat can be portioned and frozen. Common-sense food awareness, not expiration-date tracking.
 
 ## 7. Knowledge Base
 

@@ -1,0 +1,653 @@
+{
+  "department": "beverages",
+  "scrape_date": "2026-03-28",
+  "store": {
+    "shopId": "8470",
+    "postalCode": "V5S3A8",
+    "zoneId": "750",
+    "name": "Costco Canada"
+  },
+  "product_count": 64,
+  "products": [
+    {
+      "productId": "35994022",
+      "name": "SToK Cold Brew Coffee, Black, Unsweetened",
+      "size": "1.42 L",
+      "brandName": "stok",
+      "category": "Coffee Drinks",
+      "retailerRef": "1657589",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5c736d90-652c-44a7-a2d2-673163310607.jpeg",
+      "available": true
+    },
+    {
+      "productId": "25627301",
+      "name": "McDonald\u2019s McCaf\u00e9 Premium Roast Coffee K-Cup Pods",
+      "size": "80 ct",
+      "brandName": "mcdonald\u2019s mccaf\u00e9",
+      "category": "Coffee Pods",
+      "retailerRef": "1477486",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c7b59511-22e5-4eec-9cb8-cf76d5d5a4dd.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17818762",
+      "name": "NESCAF\u00c9 Rich Instant Coffee",
+      "size": "475 g",
+      "brandName": "nescaf\u00e9",
+      "category": "Instant Coffee",
+      "retailerRef": "10256",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_77045b0c-fb04-4aa5-99cd-89f5c9cd24bb.jpeg",
+      "available": true
+    },
+    {
+      "productId": "87900479",
+      "name": "Alani Nu Variety Pack Energy Drink",
+      "size": "355 ml",
+      "brandName": "alani nu",
+      "category": "Energy Drinks",
+      "retailerRef": "8888331",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_69fdf55b-f4f4-4049-8ac3-5df156efdcb9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21112355",
+      "name": "Gatorade Zero Thirst Quencher",
+      "size": "591 ml",
+      "brandName": "gatorade",
+      "category": "Sports Drinks",
+      "retailerRef": "1316393",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1cb58384-9c59-4184-9e95-fabaab0c8ab3.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019081",
+      "name": "Gatorade Club Pack",
+      "size": "591 ml",
+      "brandName": "gatorade",
+      "category": "Sports Drinks",
+      "retailerRef": "306657",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c0dd63cb-c9cb-4789-889b-63b872c98a36.jpeg",
+      "available": true
+    },
+    {
+      "productId": "32021",
+      "name": "Coca-Cola Coke Zero Cola",
+      "size": "355 ml",
+      "brandName": "coca-cola",
+      "category": "Cola",
+      "retailerRef": "232952",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d5849039-73e1-4317-8f2d-4f512dd53228.jpeg",
+      "available": true
+    },
+    {
+      "productId": "16684239",
+      "name": "Coca-Cola Coke",
+      "size": "355 ml",
+      "brandName": "coca-cola",
+      "category": "Cola",
+      "retailerRef": "84",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a28bc7bc-b2ea-4254-bdb8-6df714961722.jpeg",
+      "available": true
+    },
+    {
+      "productId": "32023",
+      "name": "Diet Coke",
+      "size": "355 ml",
+      "brandName": null,
+      "category": "Cola",
+      "retailerRef": "85",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_cec1d5ba-7b85-4d38-ad9d-5c6fe4742a6f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21022206",
+      "name": "Pepsi Cans",
+      "size": "355 ml",
+      "brandName": "pepsi",
+      "category": "Cola",
+      "retailerRef": "310062",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4ce7346e-0c2c-4857-adf8-df864459d08d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019707",
+      "name": "Van Houtte Original House Blend Coffee K-Cup Pods",
+      "size": "80 ct",
+      "brandName": "van houtte",
+      "category": "Coffee Pods",
+      "retailerRef": "266556",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4a027b3f-cfa0-4ba3-b5b3-f57a17d8b963.jpeg",
+      "available": true
+    },
+    {
+      "productId": "75767018",
+      "name": "Cove Zero Sugar Probiotic Soda, Summer Variety",
+      "size": "355 ml",
+      "brandName": "cove",
+      "category": "Probiotic Drinks",
+      "retailerRef": "1943447",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fe831bf0-49f2-443f-8e5b-180a23a3769d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "23650249",
+      "name": "Kirkland Signature Kombucha",
+      "size": "473 ml",
+      "brandName": "kirkland signature",
+      "category": "Kombucha",
+      "retailerRef": "1371232",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_75347639-5304-408f-bc6d-da59ba08b70d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "78511406",
+      "name": "Brew Dr. Kombucha Kombucha Variety Pack",
+      "size": "414 ml",
+      "brandName": "brew dr. kombucha",
+      "category": "Kombucha",
+      "retailerRef": "1953084",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3eef0e4e-be91-4c1b-b786-3faf018ac59b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "100791703",
+      "name": "Cove Zero Sugar Prebiotic Soda Variety Pack",
+      "size": "355 ml",
+      "brandName": "cove",
+      "category": "Probiotic Drinks",
+      "retailerRef": "2005203",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6f040bb4-0357-493e-b9d9-00356d712df0.jpeg",
+      "available": true
+    },
+    {
+      "productId": "70362352",
+      "name": "Celsius Sparkling Vibes Variety Pack, Zero Sugar Energy Drink",
+      "size": "355 ml",
+      "brandName": "celsius",
+      "category": "Energy Drinks",
+      "retailerRef": "2780636",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ad50bdcc-7ffd-436c-9c31-0437195f03e7.jpeg",
+      "available": true
+    },
+    {
+      "productId": "74961937",
+      "name": "Alani Nu Cotton Candy Energy Drink",
+      "size": "355 ml",
+      "brandName": "alani nu",
+      "category": "Energy Drinks",
+      "retailerRef": "1921157",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7951c41e-0788-438a-93c6-c70c55b16a57.jpeg",
+      "available": true
+    },
+    {
+      "productId": "104671923",
+      "name": "Greenhouse Organic Ginger Defence Immunity Wellness Shots",
+      "size": "60 ml",
+      "brandName": "greenhouse",
+      "category": "Juice Shots",
+      "retailerRef": "1976640",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_ff32a856-ff86-48a5-8eef-43ab37ef87df.jpeg",
+      "available": true
+    },
+    {
+      "productId": "28873806",
+      "name": "Kirkland Signature Organic Coconut Water",
+      "size": "330 ml",
+      "brandName": "kirkland signature",
+      "category": "Coconut Water",
+      "retailerRef": "1394201",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1f443dff-20e2-4d17-a9b3-3927da25e067.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21020757",
+      "name": "Fresh'n Pure Pineapple Burst Juice",
+      "size": "1 L",
+      "brandName": "fresh'n pure",
+      "category": "Pineapple Juice",
+      "retailerRef": "1041477",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_1863b5a2-f44b-4c9a-8410-4d9c8071e765.jpeg",
+      "available": true
+    },
+    {
+      "productId": "24791029",
+      "name": "Watermark Beverages Sparkling Tropical Juice",
+      "size": "11.2 fl oz",
+      "brandName": "watermark beverages",
+      "category": "Sparkling Juice",
+      "retailerRef": "1510729",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_0ac3583b-dbed-4120-9247-a9aa166c82df.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21019306",
+      "name": "Kirkland Signature Natural Spring Water",
+      "size": "500 ml",
+      "brandName": "kirkland signature",
+      "category": "Spring Water",
+      "retailerRef": "500666",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4c8312e8-2b23-45e0-be28-e2c42d34f835.jpg",
+      "available": true
+    },
+    {
+      "productId": "64504925",
+      "name": "Sparkling Ice\u00ae Starburst Flavoured Sparkling Water",
+      "size": "503 ml",
+      "brandName": "sparkling ice\u00ae",
+      "category": "Sparkling Water",
+      "retailerRef": "1872053",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_67b50fce-308c-4794-9b5a-02df2ee6347c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "60485610",
+      "name": "Sparkling Ice\u00ae Flavoured Water Beverage Variety Pack",
+      "size": "503 ml",
+      "brandName": "sparkling ice\u00ae",
+      "category": "Sparkling Water",
+      "retailerRef": "5555023",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_189a0c9c-391f-4dfb-b225-73e811a6e87c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21112771",
+      "name": "Apple & Eve P52 Demineralized Water",
+      "size": "15 L",
+      "brandName": "apple & eve",
+      "category": "Other Water",
+      "retailerRef": "1242981",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_2179a08f-a34d-45e8-9851-e08452dc883f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19461863",
+      "name": "2% Milk",
+      "size": "4 l",
+      "brandName": null,
+      "category": "Plain Milk",
+      "retailerRef": "458",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fd5dbc7a-ebea-450d-a7d6-dd76b64939d2.jpeg",
+      "available": false
+    },
+    {
+      "productId": "19461851",
+      "name": "3.25% Homogenized Milk",
+      "size": "4 l",
+      "brandName": null,
+      "category": "Plain Milk",
+      "retailerRef": "457",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8fc63956-452a-40d1-854d-c2c0a332226e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21017924",
+      "name": "Kirkland Signature Organic Original Almond Beverage",
+      "size": "946 ml",
+      "brandName": "kirkland signature",
+      "category": "Almond Milk",
+      "retailerRef": "1002374",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_5431f9b4-6e69-429e-9512-efb836ba0f54.jpeg",
+      "available": true
+    },
+    {
+      "productId": "17819549",
+      "name": "Natrel Lactose Free 2%",
+      "size": "2 L",
+      "brandName": "natrel",
+      "category": "Lactose-Free Milk",
+      "retailerRef": "4788",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_781c5de2-a1ef-44b5-830a-414f20c63057.jpeg",
+      "available": true
+    },
+    {
+      "productId": "27758358",
+      "name": "Corona Cero Non-Alcoholic Beer Bottles",
+      "size": "330 ml",
+      "brandName": "corona cero",
+      "category": "Non-Alcoholic Beers",
+      "retailerRef": "2663109",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_c590363f-31cb-41e4-b56b-df40a3ab606c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21970454",
+      "name": "Budweiser Zero Non-Alcoholic Beer Cans",
+      "size": "355 ml",
+      "brandName": "budweiser zero",
+      "category": "Non-Alcoholic Beers",
+      "retailerRef": "1450137",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3b9bd4b4-f281-4178-9c95-731e94ba3b8d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "69331189",
+      "name": "Fever-Tree Tonic",
+      "size": "250 ml",
+      "brandName": "fever-tree",
+      "category": "Tonic Water",
+      "retailerRef": "1885044",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_63138c5a-9936-48a6-8df5-ed351f73b212.jpeg",
+      "available": true
+    },
+    {
+      "productId": "69332394",
+      "name": "Fever-Tree Ginger Beer",
+      "size": "250 ml",
+      "brandName": "fever-tree",
+      "category": "Ginger Beer",
+      "retailerRef": "1885045",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fb6ae5d0-78c9-4d42-bcbb-b87e19ee0610.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018497",
+      "name": "Carnation Simplement 5 Ingredients Chocolat Chaud",
+      "size": "1.9 g",
+      "brandName": "carnation",
+      "category": "Hot Cocoa Mix",
+      "retailerRef": "525",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_0b22223e-a11d-41db-98a6-a74467b67b7a.jpeg",
+      "available": true
+    },
+    {
+      "productId": "103132917",
+      "name": "Prime Rapid Rehydration Electrolyte Drink Mix Sticks Variety Pack",
+      "size": "30 ct",
+      "brandName": "prime",
+      "category": "Electrolyte Supplements",
+      "retailerRef": "1996521",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f54ef5b2-7b69-4228-a7d9-b323b7a2d8f0.jpeg",
+      "available": true
+    },
+    {
+      "productId": "32533243",
+      "name": "Goodhost Raspberry Lemonade Drink Mix, Powder",
+      "size": "2.35 kg",
+      "brandName": "goodhost",
+      "category": "Powdered Drink Mix",
+      "retailerRef": "1633765",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f4ef2eff-cc9c-424d-8610-3d705f0da059.jpeg",
+      "available": true
+    },
+    {
+      "productId": "79836016",
+      "name": "LMNT Hydration Electrolyte Drink Mix",
+      "size": "32 ct",
+      "brandName": "lmnt",
+      "category": "Electrolyte Supplements",
+      "retailerRef": "1896801",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b073a98b-e98d-41b1-bd02-5969444bdc10.jpeg",
+      "available": true
+    },
+    {
+      "productId": "62972591",
+      "name": "FUZE Lemon Iced Tea",
+      "size": "341 ml",
+      "brandName": "fuze",
+      "category": "Other Bottled Teas",
+      "retailerRef": "1878075",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fceffb5c-84e3-4490-9dd1-a90a4c33fa8d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18455065",
+      "name": "Good Host Original Iced Tea",
+      "size": "2.35 kg",
+      "brandName": "good host",
+      "category": "Powdered Tea",
+      "retailerRef": "28236",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_43060fde-c8b4-449c-9bf6-047470584f4c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021560",
+      "name": "Tetley Orange Pekoe Tea Bags",
+      "size": "300 ct",
+      "brandName": "tetley",
+      "category": "Black Tea",
+      "retailerRef": "1759",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fef1931c-4a32-4cc8-9640-fc68988e7553.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018293",
+      "name": "TAZO Tea Chai Latte",
+      "size": "946 ml",
+      "brandName": "tazo tea",
+      "category": "Bottled Chai Tea",
+      "retailerRef": "208462",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_901fc8a1-335e-4777-8828-82aeb62feb4e.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21020810",
+      "name": "Premier Protein Vanilla High Protein Shake",
+      "size": "325 ml",
+      "brandName": "premier protein",
+      "category": "Protein Drinks",
+      "retailerRef": "985090",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_91e565a0-d6c6-412e-951f-fde2488829b1.jpeg",
+      "available": true
+    },
+    {
+      "productId": "68882971",
+      "name": "Super Coffee Protein+ Vanilla Latte",
+      "size": "330 ml",
+      "brandName": "super coffee",
+      "category": "Protein Drinks",
+      "retailerRef": "1891765",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_bbed8187-e998-4d61-a29a-5238a1d42164.jpeg",
+      "available": true
+    },
+    {
+      "productId": "101531300",
+      "name": "Vega Creamy Chocolate Plant-Based Protein Shake",
+      "size": "330 ml",
+      "brandName": "vega",
+      "category": "Protein Drinks",
+      "retailerRef": "1992356",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_01587972-828d-4749-8812-5d693d697600.jpeg",
+      "available": true
+    },
+    {
+      "productId": "20129580",
+      "name": "Starbucks Caffe Verona Coffee K-Cup Pods",
+      "size": "54 ct",
+      "brandName": "starbucks",
+      "category": "Coffee Pods",
+      "retailerRef": "297676",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d1ceb504-3cc0-441b-b5dd-7cb4b92e1c9b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19411985",
+      "name": "Natrel Organic 3.25% Milk",
+      "size": "4 L",
+      "brandName": "natrel",
+      "category": "Plain Milk",
+      "retailerRef": "695035",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_df40c265-11c3-4beb-86b5-834c8fb8467c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "28873854",
+      "name": "Kirkland Signature Sugar Free Organic Coconut Water",
+      "size": "1 L",
+      "brandName": "kirkland signature",
+      "category": "Coconut Water",
+      "retailerRef": "1495250",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_6024f993-e222-4680-aa27-b11f7dc5508c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21938317",
+      "name": "Kirkland Signature 2% Organic Milk",
+      "size": "4 l",
+      "brandName": "kirkland signature",
+      "category": "Plain Milk",
+      "retailerRef": "1346911",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_518459d3-1bb8-4965-9a7e-85462257250c.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19466178",
+      "name": "1% Milk",
+      "size": "4 l",
+      "brandName": null,
+      "category": "Plain Milk",
+      "retailerRef": "1281",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_74378a18-bae1-45eb-9379-80150cab2962.jpeg",
+      "available": true
+    },
+    {
+      "productId": "18454818",
+      "name": "1% Chocolate Milk",
+      "size": "4 l",
+      "brandName": null,
+      "category": "Chocolate Milk",
+      "retailerRef": "1782",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_fda7e7b5-c2a4-42e7-b4d7-7fbb8fd76f28.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21018106",
+      "name": "Grown Right Organic Orange & Mango Juice",
+      "size": "1.89 L",
+      "brandName": "grown right",
+      "category": "Fruit Juice Blends",
+      "retailerRef": "410555",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e1e4ee81-8393-4528-a84a-0a42a5577659.jpeg",
+      "available": true
+    },
+    {
+      "productId": "20201032",
+      "name": "Lotte Milkis Carbonated Soft Drink Variety Pack",
+      "size": "250 ml",
+      "brandName": "lotte milkis",
+      "category": "Variety Pack Soda",
+      "retailerRef": "1935586",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_3cad68d7-4519-4395-854a-4f7c0499f2f4.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021092",
+      "name": "Canada Dry Ginger Ale",
+      "size": "355 ml",
+      "brandName": "canada dry",
+      "category": "Ginger Ale",
+      "retailerRef": "165763",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_8fdeb286-b620-4964-9eb7-cd627cf016b3.jpeg",
+      "available": true
+    },
+    {
+      "productId": "32818",
+      "name": "POM 100% Pomegranate Juice",
+      "size": "1.77 l",
+      "brandName": "pom",
+      "category": "Pomegranate Juice",
+      "retailerRef": "298801",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_742af396-f3d5-4877-98ef-c2f5d701eb7f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19689166",
+      "name": "Oasis 100% Orange Juice",
+      "size": "300 ml",
+      "brandName": "oasis",
+      "category": "Orange Juice",
+      "retailerRef": "353969",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e7f8c0a3-1a82-4580-ae07-39087a4e47f9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19412004",
+      "name": "Natrel Organic 1% Milk",
+      "size": "4 L",
+      "brandName": "natrel",
+      "category": "Plain Milk",
+      "retailerRef": "795035",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_b7c0a27d-be94-456e-8dbb-a56609cb9cc1.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021342",
+      "name": "Grown Right Organic Orange Juice",
+      "size": "1.89 L",
+      "brandName": "grown right",
+      "category": "Orange Juice",
+      "retailerRef": "974579",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_161194ac-bb67-4ada-9a97-1aecd94cd5a8.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21138842",
+      "name": "Lactantia Chocolate Milk",
+      "size": "237 ml",
+      "brandName": "lactantia",
+      "category": "Chocolate Milk",
+      "retailerRef": "1395119",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_7e9b9dce-393a-413b-9436-49145bcff55d.jpeg",
+      "available": true
+    },
+    {
+      "productId": "26963199",
+      "name": "Kirkland Signature Assorted Flavours Organic Juice",
+      "size": "200 ml",
+      "brandName": "kirkland signature",
+      "category": "Variety Juice Packs",
+      "retailerRef": "1417235",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_72442129-7a49-4005-a0cf-e0d0e9f09d2f.jpeg",
+      "available": true
+    },
+    {
+      "productId": "21021346",
+      "name": "Kirkland Signature Carbonated Spring Water",
+      "size": "500 ml",
+      "brandName": "kirkland signature",
+      "category": "Sparkling Water",
+      "retailerRef": "9262015",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_d3162788-0a0e-4f4c-b2f6-625b37a0b3fa.jpeg",
+      "available": true
+    },
+    {
+      "productId": "107616770",
+      "name": "Fresh'n Pure Peach Mango Carrot 100% Juice",
+      "size": "1.89 L",
+      "brandName": "fresh'n pure",
+      "category": "Fruit and Vegetable Juice Blends",
+      "retailerRef": "2015227",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_a43beb5a-8f82-4db3-b54b-b47efcc8fc73.jpeg",
+      "available": true
+    },
+    {
+      "productId": "26942867",
+      "name": "Kicking Horse Coffee Organic Fairtrade Three Sisters Coffee Bean",
+      "size": "1 kg",
+      "brandName": "kicking horse coffee",
+      "category": "Whole Bean Coffee",
+      "retailerRef": "5552410",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_e841378b-5f66-4698-8fcc-df7023fd94e9.jpeg",
+      "available": true
+    },
+    {
+      "productId": "19461930",
+      "name": "0% Skim Milk",
+      "size": "4 l",
+      "brandName": null,
+      "category": "Plain Milk",
+      "retailerRef": "275",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_f0969b11-766a-4b73-94ee-061b5d9fce5b.jpeg",
+      "available": true
+    },
+    {
+      "productId": "20137005",
+      "name": "Kirkland Signature Kirkland Signature Organic Oat Beverage, 6 x 946 mL",
+      "size": "946 ml",
+      "brandName": "kirkland signature",
+      "category": "Oat Milk",
+      "retailerRef": "1272413",
+      "imageUrl": "https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_4964f7a9-53d6-4fbe-a07a-21615eef7250.jpeg",
+      "available": true
+    }
+  ]
+}
