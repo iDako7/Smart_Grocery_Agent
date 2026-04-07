@@ -16,7 +16,7 @@ V2's AI layer is a **single conversational agent with tool-use**, not a collecti
 
 ### Phase 1 — Prove the Agent Works
 
-**Goal:** Validate that the agent's reasoning (PCSV analysis, recipe matching, waste-aware suggestions) delivers real value through actual conversations.
+**Goal:** Validate that the agent's reasoning (PCSV analysis, recipe matching, multi-preparation suggestions) delivers real value through actual conversations.
 
 **Scope:** Build a Claude artifact that calls the real Claude API with the product spec's logic embedded as a system prompt and tool definitions. Tools return mock KB data. Have real conversations to test the agent's decision-making, then refine the system prompt and tool designs based on what fails. Build promptfoo evals from real conversation logs.
 

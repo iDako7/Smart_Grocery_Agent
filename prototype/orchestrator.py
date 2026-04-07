@@ -17,6 +17,7 @@ from prototype.tools.get_recipe_detail import get_recipe_detail
 from prototype.tools.get_substitutions import get_substitutions
 from prototype.tools.lookup_store_product import lookup_store_product
 from prototype.tools.search_recipes import search_recipes
+from prototype.tools.translate_term import translate_term
 from prototype.tools.update_user_profile import update_user_profile
 
 MAX_ITERATIONS = 10
@@ -51,6 +52,8 @@ def _dispatch_tool(name: str, params: dict, profile: UserProfile) -> dict:
         return get_recipe_detail(params["recipe_id"])
     elif name == "update_user_profile":
         return update_user_profile(profile, params["field"], params["value"])
+    elif name == "translate_term":
+        return translate_term(params["term"], params.get("direction", "auto"))
     else:
         return {"error": f"Unknown tool: {name}"}
 

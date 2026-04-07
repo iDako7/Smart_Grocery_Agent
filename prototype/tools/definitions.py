@@ -164,4 +164,30 @@ TOOLS = [
             },
         },
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "translate_term",
+            "description": (
+                "Translate grocery, ingredient, or cooking terms between English and Chinese. "
+                "Use when the user speaks Chinese, when explaining unfamiliar ingredients, "
+                "or when providing bilingual names for items not in the recipe KB."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "term": {
+                        "type": "string",
+                        "description": "The term to translate (English or Chinese)",
+                    },
+                    "direction": {
+                        "type": "string",
+                        "enum": ["en_to_zh", "zh_to_en", "auto"],
+                        "description": "Translation direction. 'auto' detects based on input characters. Defaults to 'auto'.",
+                    },
+                },
+                "required": ["term"],
+            },
+        },
+    },
 ]
