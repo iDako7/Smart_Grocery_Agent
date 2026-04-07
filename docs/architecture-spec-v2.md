@@ -91,8 +91,8 @@ Prompt content is designed and refined during Phase 1 through real conversations
 Six tools. The LLM decides *what* to look up, the backend decides *how*.
 
 ### 5.1 `search_recipes`
-- **Params:** `ingredients[]`, `cuisine?`, `cooking_method?`, `max_time?`, `serves?`
-- **Returns:** List of recipe summaries (id, name, name_zh, cuisine, method, time, pcsv_roles, ingredients_have, ingredients_need)
+- **Params:** `ingredients[]`, `cuisine?`, `cooking_method?`, `effort_level?`, `flavor_tags[]?`, `serves?`
+- **Returns:** List of recipe summaries (id, name, name_zh, cuisine, method, effort_level, flavor_tags, pcsv_roles, ingredients_have, ingredients_need)
 - **Executes:** SQL query against SQLite recipe table
 
 ### 5.2 `analyze_pcsv`
@@ -131,7 +131,16 @@ Six tools. The LLM decides *what* to look up, the backend decides *how*.
 
 SQLite as a single-file, read-only KB with four logical domains:
 
-- **Recipes** — indexed by ingredients, PCSV categories, cuisine, method, effort. Source attribution field ("Kenji / The Food Lab" vs "AI-suggested"). Compact detail blob for cooking instructions
+- **Recipes** — indexed by ingredients, PCSV categories, cuisine, method, effort_level, flavor_tags. Source attribution field ("Kenji / The Food Lab" vs "AI-suggested"). Compact detail blob for cooking instructions
+
+**Effort levels:** `quick` (~15 min or less, minimal active prep), `medium` (~15–45 min, moderate prep), `long` (45+ min or requires marinating/slow cooking). Qualitative by design — a "30-minute" recipe with 20 minutes of knife work feels harder than a "45-minute" recipe where 30 minutes is unattended oven time.
+
+**Flavor tag schema:** Each recipe carries a `flavor_tags` array drawn from two tiers:
+- **Taste** (5 basics): sweet, salty, sour, bitter, umami
+- **Sensory descriptors**: spicy, creamy, smoky, fresh, rich, numbing, tangy, herbal, aromatic
+
+A recipe typically has 2–4 tags (e.g., Mapo Tofu: `[umami, spicy, numbing]`; teriyaki chicken: `[sweet, umami, rich]`). The tag vocabulary is a flat list now but designed to expand to full aroma profile dimensions (citrus, floral, woody, etc.) in a future phase. New tags can be added without schema migration.
+
 - **PCSV mappings** — ingredient → category lookup. Multi-role supported (beans → protein + carb)
 - **Store products** — item, package size, department, store. Starting with Costco Vancouver + local community markets. No price data
 - **Substitutions** — ingredient pairs with match quality and context tags (dietary, cultural, availability)

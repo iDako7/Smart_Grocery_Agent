@@ -113,8 +113,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 </div>
 <div class="sb-section" style="border-top:0.5px solid var(--color-border-tertiary)">
 <div class="sb-section-title">Saved recipes</div>
-<div class="sb-item"><span style="font-weight:500">Salt & pepper wings</span><p class="sb-item-sub">Chinese · 45 min</p></div>
-<div class="sb-item"><span style="font-weight:500">Kenji's smash burger</span><p class="sb-item-sub">Western · 15 min</p></div>
+<div class="sb-item"><span style="font-weight:500">Salt & pepper wings</span><p class="sb-item-sub">Chinese · Long · salty, numbing, spicy</p></div>
+<div class="sb-item"><span style="font-weight:500">Kenji's smash burger</span><p class="sb-item-sub">Western · Quick · savory, rich</p></div>
 </div>
 <div class="sb-section" style="border-top:0.5px solid var(--color-border-tertiary)">
 <div class="sb-section-title">Grocery lists</div>
@@ -144,15 +144,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="screen" id="s2">
 <div class="card">
 <div class="hdr"><h3>Your meal plan</h3><p>3 meals for BBQ weekend · fills your veggie gap</p></div>
-<div class="row"><div style="flex:1"><span class="lbl">Korean BBQ pork belly</span><span class="ibtn">i</span><p class="sub">Gochujang · grill · 30 min</p><div><span class="pill pill-g">have: pork belly</span><span class="pill pill-w">buy: gochujang</span></div></div><span class="swap">swap</span></div>
-<div class="row highlight dim"><div style="flex:1"><span class="lbl">Grilled corn + cucumber salad</span><span class="ibtn">i</span><p class="sub">Classic BBQ side · 15 min</p></div><span style="font-size:11px;color:var(--color-text-secondary)">swapping...</span></div>
+<div class="row"><div style="flex:1"><span class="lbl">Korean BBQ pork belly</span><span class="ibtn">i</span><p class="sub">Gochujang · grill · Medium · spicy, umami, rich</p><div><span class="pill pill-g">have: pork belly</span><span class="pill pill-w">buy: gochujang</span></div></div><span class="swap">swap</span></div>
+<div class="row highlight dim"><div style="flex:1"><span class="lbl">Grilled corn + cucumber salad</span><span class="ibtn">i</span><p class="sub">Classic BBQ side · Quick · smoky, fresh</p></div><span style="font-size:11px;color:var(--color-text-secondary)">swapping...</span></div>
 <div class="swap-zone">
 <p style="font-size:10px;color:var(--color-text-secondary);margin-bottom:5px">Try instead:</p>
-<div class="swap-card"><div style="flex:1"><span style="font-size:12px;font-weight:500">Asian slaw</span><span class="ibtn">i</span><p style="font-size:10px;color:var(--color-text-secondary);margin-top:1px">Crunchy, tangy · 10 min</p></div><span style="font-size:11px;color:var(--color-text-info)">pick</span></div>
-<div class="swap-card"><div style="flex:1"><span style="font-size:12px;font-weight:500">Grilled veggie skewers</span><span class="ibtn">i</span><p style="font-size:10px;color:var(--color-text-secondary);margin-top:1px">Zucchini, pepper · 20 min</p></div><span style="font-size:11px;color:var(--color-text-info)">pick</span></div>
+<div class="swap-card"><div style="flex:1"><span style="font-size:12px;font-weight:500">Asian slaw</span><span class="ibtn">i</span><p style="font-size:10px;color:var(--color-text-secondary);margin-top:1px">Quick · tangy, fresh, crunchy</p></div><span style="font-size:11px;color:var(--color-text-info)">pick</span></div>
+<div class="swap-card"><div style="flex:1"><span style="font-size:12px;font-weight:500">Grilled veggie skewers</span><span class="ibtn">i</span><p style="font-size:10px;color:var(--color-text-secondary);margin-top:1px">Quick · smoky, fresh</p></div><span style="font-size:11px;color:var(--color-text-info)">pick</span></div>
 <div style="display:flex;align-items:center;gap:6px;padding:3px 0"><div style="width:12px;height:12px;border:1px solid var(--color-border-secondary);border-radius:50%"></div><span style="font-size:11px;color:var(--color-text-secondary)">Keep original</span></div>
 </div>
-<div class="row"><div style="flex:1"><span class="lbl">Classic smash burgers</span><span class="ibtn">i</span><p class="sub">With cheese · 15 min</p><div><span class="pill pill-g">have: patties, buns</span><span class="pill pill-w">buy: cheese, lettuce</span></div></div><span class="swap">swap</span></div>
+<div class="row"><div style="flex:1"><span class="lbl">Classic smash burgers</span><span class="ibtn">i</span><p class="sub">With cheese · Quick · savory, rich</p><div><span class="pill pill-g">have: patties, buns</span><span class="pill pill-w">buy: cheese, lettuce</span></div></div><span class="swap">swap</span></div>
 <div style="border-top:0.5px solid var(--color-border-tertiary);padding:8px 12px;text-align:center"><span style="font-size:11px;color:var(--color-text-info)">Browse all recipes &#8594;</span></div>
 <div class="actions"><button>Save plan</button><button onclick="show(3)" class="btn-p">Build shopping list</button></div>
 <div class="chatbar"><input type="text" value="Suggest a different side (replacing corn + cucumber)" style="border-color:var(--color-border-info)"></div>
@@ -185,7 +185,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <div class="toolbar"><span class="tool-btn">+ Add recipe via chat</span></div>
 
 <div class="row expand-card" onclick="toggleDetail('d1')">
-<div style="flex:1"><span class="lbl">Korean BBQ pork belly</span><p class="sub">Gochujang · grill · 30 min</p></div>
+<div style="flex:1"><span class="lbl">Korean BBQ pork belly</span><p class="sub">Gochujang · grill · Medium · spicy, umami</p></div>
 <span class="remove-x">&#10005;</span>
 </div>
 <div class="detail-block open" id="d1">
@@ -204,7 +204,7 @@ Serve with rice, lettuce wraps</div>
 </div>
 
 <div class="row expand-card" onclick="toggleDetail('d2')">
-<div style="flex:1"><span class="lbl">Grilled corn + cucumber salad</span><p class="sub">Classic BBQ side · 15 min</p></div>
+<div style="flex:1"><span class="lbl">Grilled corn + cucumber salad</span><p class="sub">Classic BBQ side · Quick · smoky, fresh</p></div>
 <span class="remove-x">&#10005;</span>
 </div>
 <div class="detail-block" id="d2">
@@ -220,7 +220,7 @@ Cucumber salad:
 </div>
 
 <div class="row expand-card" onclick="toggleDetail('d3')">
-<div style="flex:1"><span class="lbl">Classic smash burgers</span><p class="sub">With cheese · 15 min</p></div>
+<div style="flex:1"><span class="lbl">Classic smash burgers</span><p class="sub">With cheese · Quick · savory, rich</p></div>
 <span class="remove-x">&#10005;</span>
 </div>
 <div class="detail-block" id="d3">
@@ -243,7 +243,7 @@ Stack: bun, patty, lettuce, sauce</div>
 <div class="screen" id="s5">
 <div class="card">
 <div class="hdr" style="display:flex;justify-content:space-between;align-items:flex-start">
-<div><h3>Salt & pepper chicken wings</h3><p>Chinese · 45 min · serves 4</p></div>
+<div><h3>Salt & pepper chicken wings</h3><p>Chinese · Long · serves 4 · salty, numbing, spicy</p></div>
 <span class="remove-x" style="padding-top:2px">&#10005;</span>
 </div>
 <div style="padding:4px 12px;display:flex;gap:4px;flex-wrap:wrap">

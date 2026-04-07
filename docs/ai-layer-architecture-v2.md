@@ -210,6 +210,7 @@ graph TB
 - No `generate_recipe` tool — when KB has no match, the LLM falls back to generation in its response text, flagged as "AI-suggested."
 - No `get_user_history` tool — fridge recall (OQ-1) is deferred. Adding it later is a clean extension: new tool + new table.
 - If Phase 1 testing shows the LLM struggles with 6 tools, merge `get_substitutions` into `search_recipes` as an optional flag.
+- `search_recipes` accepts optional `effort_level` (enum: quick / medium / long) and `flavor_tags[]` filters. See architecture-spec-v2.md §5.1 for the full parameter schema.
 
 **Risk:** LLM may call tools unnecessarily or in suboptimal order. Mitigated by tool instructions in the system prompt specifying preferred sequences (e.g., "always call `analyze_pcsv` before `search_recipes`").
 

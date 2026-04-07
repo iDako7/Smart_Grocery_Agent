@@ -80,7 +80,7 @@ The agent presents its understanding for the user to validate or correct.
 
 Where the agent delivers its core value — turning ingredients + context into an actionable meal plan.
 
-**Card-based presentation.** The agent presents one curated set of 3-5 meal cards. Each card shows: recipe name + info button, one-line description with cooking time, "have" pills (ingredients on hand) and "buy" pills (gap items). The cards work as a coherent set — varied sauces, varied cooking methods, PCV coverage.
+**Card-based presentation.** The agent presents one curated set of 3-5 meal cards. Each card shows: recipe name + info button, one-line description with effort level and key flavor tags, "have" pills (ingredients on hand) and "buy" pills (gap items). The cards work as a coherent set — varied sauces, varied cooking methods, PCV coverage.
 
 **Unified swap + chat pattern.** Each card has a "swap" button. Tapping swap does not open a separate alternatives panel — it pre-fills the chat input with a contextual message (e.g., "Suggest a different dish for meal 2 (congee)") and highlights the card being swapped. Three paths from here:
 
@@ -88,7 +88,7 @@ Where the agent delivers its core value — turning ingredients + context into a
 2. Edit the pre-filled text for specificity ("...something quicker") → agent gives targeted alternatives
 3. Ignore swap, type freely in chat for big changes ("make it all Mexican instead") → agent regenerates all cards
 
-**Info button (i).** Bottom sheet with: bilingual name (English + Chinese), 2-line flavor description, what it tastes like. Essential for both user groups discovering unfamiliar dishes.
+**Info button (i).** Bottom sheet with: bilingual name (English + Chinese), flavor tags displayed as pills, 2-line description of what it tastes like. Essential for both user groups discovering unfamiliar dishes.
 
 **Browse all recipes.** A link below the cards to a searchable/filterable recipe list from the KB. Secondary to the curated set — appears after the user has seen the agent's curation.
 
@@ -147,12 +147,12 @@ One list with store sections (not separate lists per store). Editable:
 
 ## 7. Knowledge Base
 
-- **Recipes** — Kenji López-Alt's *The Food Lab* and *The Wok* as backbone, indexed by ingredients, PCV categories, cuisine, effort, and cooking method. LLM-generated recipes fill gaps, flagged as "AI-suggested."
+- **Recipes** — Kenji López-Alt's *The Food Lab* and *The Wok* as backbone, indexed by ingredients, PCV categories, cuisine, effort level, cooking method, and flavor tags. LLM-generated recipes fill gaps, flagged as "AI-suggested."
 - **Product data** — Costco and community market items with package sizes and department locations. Starting with Vancouver. No price data.
 - **PCV mappings** — every ingredient mapped to its category role (some multi-role: beans = protein + carb)
 - **Substitutions** — "if you can't find X, use Y" with match quality. Supports dietary restrictions and cultural bridges.
 - **Ingredient-to-recipe index** — reverse lookup enabling multi-preparation suggestions
-- **Cuisine and flavor tags** — for variety across meals (if tonight is sweet teriyaki, suggest a different flavor profile tomorrow)
+- **Flavor tags** — multi-dimensional taste and sensory descriptors (e.g., `[sweet, umami, rich]` for teriyaki; `[sour, fresh, herbal]` for Vietnamese salad). Used for variety matching across meals: if tonight's dish is `[sweet, umami]`, the agent suggests a contrasting profile like `[sour, fresh]` tomorrow. Cuisine remains a separate dimension — flavor tags describe *how a dish tastes*, cuisine describes *where it comes from*.
 
 ## 8. Quality Boundaries
 
