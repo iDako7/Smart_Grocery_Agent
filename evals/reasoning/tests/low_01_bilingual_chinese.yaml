@@ -1,0 +1,39 @@
+# LOW-01: Bilingual input — Chinese
+# Agent must correctly identify ingredients from Chinese input
+- description: 'LOW-01: Agent correctly identifies ingredients from Chinese input'
+  vars:
+    input: '我有鸡翅和大米，还有酱油'
+  assert:
+    # Structural: agent correctly identifies the three ingredients
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        const text = parsed.response_text.toLowerCase();
+        const toolInputs = JSON.stringify(parsed.tool_calls).toLowerCase();
+        const combined = text + ' ' + toolInputs;
+        const hasChicken = combined.includes('chicken wing') || combined.includes('鸡翅');
+        const hasRice = combined.includes('rice') || combined.includes('大米');
+        const hasSoySauce = combined.includes('soy sauce') || combined.includes('酱油');
+        return hasChicken && hasRice && hasSoySauce;
+      weight: 3
+      metric: correct_ingredient_identification
+
+    # Structural: agent processes the ingredients (calls analyze_pcsv or search_recipes)
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        return parsed.tool_calls.some(tc =>
+          tc.name === 'analyze_pcsv' || tc.name === 'search_recipes' || tc.name === 'translate_term'
+        );
+      weight: 2
+      metric: processes_chinese_input
+
+    # Content: response works with the identified ingredients meaningfully
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        const text = parsed.response_text.toLowerCase();
+        return (text.includes('chicken') || text.includes('鸡翅')) &&
+               (text.includes('rice') || text.includes('大米'));
+      weight: 2
+      metric: uses_ingredients_in_response

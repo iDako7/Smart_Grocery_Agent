@@ -1,0 +1,46 @@
+# HIGH-06: Substitution — dietary reason
+# Vegetarian user needs fish sauce substitute. All suggestions must be vegetarian.
+- description: 'HIGH-06: Fish sauce substitutes are all vegetarian-compatible'
+  vars:
+    input: "What can I use instead of fish sauce? I'm vegetarian"
+    dietary_restrictions: '["vegetarian"]'
+  assert:
+    # Structural: agent calls get_substitutions for fish sauce
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        return parsed.tool_calls.some(tc =>
+          tc.name === 'get_substitutions' &&
+          tc.input.ingredient && tc.input.ingredient.toLowerCase().includes('fish sauce')
+        );
+      weight: 3
+      metric: calls_get_substitutions_fish_sauce
+
+    # Content: no animal-derived substitutes suggested
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        const text = parsed.response_text.toLowerCase();
+        const nonVeg = ['anchov', 'oyster sauce', 'shrimp paste', 'bonito', 'dashi'];
+        const violations = nonVeg.filter(term => text.includes(term));
+        if (violations.length === 0) return true;
+        return { pass: false, score: 0, reason: `Non-vegetarian substitutes found: ${violations.join(', ')}` };
+      weight: 4
+      metric: all_substitutes_vegetarian
+
+    # Content: provides at least one concrete substitute
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        const text = parsed.response_text.toLowerCase();
+        return text.includes('soy sauce') || text.includes('mushroom') || text.includes('miso') ||
+          text.includes('tamari') || text.includes('seaweed') || text.includes('coconut aminos') ||
+          text.includes('liquid aminos');
+      weight: 2
+      metric: concrete_substitute_provided
+
+    # Content: acknowledges vegetarian constraint
+    - type: icontains
+      value: 'vegetarian'
+      weight: 1
+      metric: vegetarian_acknowledged

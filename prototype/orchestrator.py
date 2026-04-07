@@ -20,8 +20,7 @@ from prototype.tools.search_recipes import search_recipes
 from prototype.tools.update_user_profile import update_user_profile
 
 MAX_ITERATIONS = 10
-# TODO: model need modification before eval
-MODEL = "anthropic/claude-sonnet-4"
+MODEL = os.environ.get("SGA_MODEL", "anthropic/claude-sonnet-4.6")
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 
