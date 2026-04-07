@@ -155,7 +155,7 @@ One list with store sections (not separate lists per store). Editable:
 ## 8. Quality Boundaries
 
 - **Recipe accuracy:** KB recipes are trusted. LLM-generated recipes are flagged as "AI-suggested."
-- **Dietary restrictions are hard constraints.** Halal = no pork, ever. No exceptions.
+- **Dietary restrictions are strict response constraints.** The agent must not present non-compliant ingredients, substitutions, or recipes as usable options in its response. Example: halal means no pork in anything the user is told they can make or buy, even if intermediate retrieval returns broader candidates.
 - **Quantity awareness:** Don't suggest 5 recipes needing a full pack when the user has one pack.
 - **Bilingual consistency:** When bilingual mode is on, every name and key instruction appears in both languages. No partial output.
 - **Transparency:** Briefly explain why each suggestion is made. "Adding vegetables because your list is protein-heavy."
