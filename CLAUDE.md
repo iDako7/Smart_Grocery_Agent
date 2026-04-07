@@ -25,13 +25,14 @@ React SPA (Vite) ──SSE──> FastAPI ──tool-use loop──> Claude via 
 
 **Two databases by access pattern:** SQLite for the curated reference KB (shipped as a file), PostgreSQL for user-generated mutable data.
 
-**Single conversational agent** with 6 tools — not separate REST endpoints. The LLM decides tool ordering per conversation:
+**Single conversational agent** with 7 tools — not separate REST endpoints. The LLM decides tool ordering per conversation:
 - `analyze_pcsv` — categorize ingredients by Protein/Carb/Veggie/Sauce
 - `search_recipes` — find KB recipes matching ingredients/constraints
 - `lookup_store_product` — package sizes, departments, store availability
 - `get_substitutions` — ingredient alternatives by reason
 - `get_recipe_detail` — full cooking instructions for a recipe
 - `update_user_profile` — persist learned preferences/restrictions to PostgreSQL
+- `translate_term` — bilingual EN↔ZH glossary lookup for grocery and cooking terms
 
 **Orchestration:** Explicit while-loop (no LangChain/LangGraph). ~40 lines. Max 10 iterations with partial result fallback.
 
