@@ -1,0 +1,198 @@
+Loading environment variables from ../../.env
+Cache is disabled.
+Starting evaluation eval-xRI-2026-04-07T06:02:16
+Running 14 test cases (up to 4 at a time)...
+(node:17647) MetadataLookupWarning: received unexpected error = All promises were rejected code = UNKNOWN
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[90m┌──────────────────────────────[39m[90m┬──────────────────────────────[39m[90m┬──────────────────────────────[39m[90m┬──────────────────────────────┐[39m
+[90m│[39m[1m[34m dietary_restrictions         [39m[22m[90m│[39m[1m[34m household_size               [39m[22m[90m│[39m[1m[34m input                        [39m[22m[90m│[39m[1m[34m [python:provider.py:default] [39m[22m[90m│[39m
+[90m│[39m[1m[34m                              [39m[22m[90m│[39m[1m[34m                              [39m[22m[90m│[39m[1m[34m                              [39m[22m[90m│[39m[1m[34m {{input}}                    [39m[22m[90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m I have some stuff for dinner [90m│[39m [PASS] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "I'd love to help you figure [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m out dinner! What ingredients [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m do you have on hand? Even a  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m rough list works — something [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m like \"chicken, rice, and    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m some vegetables\" is totally [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m fine. 😊", "tool_calls": [], [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "total_i...                  [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m maybe some chicken and rice, [90m│[39m [PASS] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m not sure what else           [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "Here's what you've got to   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m work with! Great news —      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m chicken + rice is a super    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m flexible combo. Here are my  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m top picks:\n\n---\n\n### 🍳  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Top Recipe Picks\n\n#### 1.  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m 姜丝炒鸡 — Chicken and       [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Ginger Stir Fry\n- ⏱️ 25     [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m mi...                        [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m ["vegetarian"]               [90m│[39m                              [90m│[39m BBQ for 4, I have pork belly [90m│[39m [PASS] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m and burger patties           [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "The recipe KB returned a    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m non-compliant result, so     [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m I'll filter that out and go  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m AI-suggested. The store      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m database didn't return       [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m specific products this time, [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m so let me point you to the   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m community market for fres... [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m ["vegetarian"]               [90m│[39m                              [90m│[39m Help me plan meals for the   [90m│[39m [FAIL] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m week with what I have: tofu, [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m rice, bok choy, soy sauce    [90m│[39m "Here's your shopping        [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m summary:\n\n### 🛒 What to   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Grab\n\n| Item | Store |     [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Notes                        [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m |\n|------|-------|-------|… [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m **Garlic** | Costco –        [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Produce | Available as       [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m whole, fresh peeled, or      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Kirkland minced — all work   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m ...                          [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m I want to make Korean BBQ    [90m│[39m [FAIL] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m pork belly but I can't find  [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m gochujang anywhere           [90m│[39m "Great news — I found the    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m recipe and a solid           [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m substitute for gochujang!    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Here's everything you        [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m need:\n\n---\n\n## 🥩 Korean [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m BBQ Pork Belly /             [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m 韩式烤五花肉\n\n**Source:**  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Recipe KB | Grill | 45 min | [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Serves 4\n\n### �...         [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m ["vegetarian"]               [90m│[39m                              [90m│[39m What can I use instead of    [90m│[39m [PASS] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m fish sauce? I'm vegetarian   [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "Great news — there's a      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m solid vegetarian-friendly    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m substitute for fish          [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m sauce:\n\n---\n\n### 🌿 Fish [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Sauce Substitute for         [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Vegetarians\n\n| Substitute  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m | Match Quality | Notes      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m |\n|---|---|---|\n| **Soy    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m sauce + l...                 [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m I'm hosting a BBQ for 8      [90m│[39m [FAIL] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m people this Saturday. I have [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m pork belly and burger        [90m│[39m "Great start! You've got     [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m patties.                     [90m│[39m **protein covered** with     [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m both pork belly and burger   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m patties — but the PCSV       [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m analysis flagged three gaps  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m you'll want to fill before   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Saturday:\n\n| Category |    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Status | Notes               [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m |\n|-------...               [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m I have 3/4 of a Costco       [90m│[39m [PASS] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m chicken wing pack, rice, soy [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m sauce, bok choy              [90m│[39m "Great news — you've got a   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m solid foundation! Here's a   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m quick look at your balance   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m before the                   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m recipes:\n\n**Your PCSV      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Balance**\n| Category |      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Status | What you have       [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m |\n|---|---|---|\n| 🥩       [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Protein | Low | Chick...     [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m                              [90m│[39m 2                            [90m│[39m I bought a huge pack of      [90m│[39m [PASS] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m chicken thighs from Costco.  [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m Give me ideas for the whole  [90m│[39m "Here's your **full week of  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m week.                        [90m│[39m chicken thigh ideas** —      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m varied methods and flavours  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m so you won't get bored!      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m 🍗\n\n---\n\n## 📊 What      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m You're Working With\n\nYour  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m PCSV analysis shows:\n- ✅   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m **Protein:** Chicken thig... [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m 我有鸡翅和大米，还有酱油     [90m│[39m [PASS] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "好的！我帮你梳理了一下      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m 🍚🍗\n\n---\n\n##            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m 你现在有的食材：\n- 🍗       [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m **鸡翅 (Chicken Wings)** —   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m 蛋白质\n- 🍚 **大米 (Rice)** [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m — 碳水\n- 🥢 **酱油 (Soy     [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Sauce)** — 酱汁\n\n---\n\n## [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m 📊 营养结构分析 (PCSV)\n\n|  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m 类别 | 状态 | 说明           [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m |\n|------|------|------|\n| [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m ...                          [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m I have some 五花肉 and rice, [90m│[39m [PASS] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m want to do Korean style      [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "Great news — your 五花肉    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m (pork belly) + rice combo is [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m a perfect Korean BBQ base!   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Here's the full              [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m picture:\n\n---\n\n## 📊     [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Pantry Balance Check\n\n|    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Category | Status | What you [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m have |\n|---|---|---|\n| 🥩  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Prot...                      [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m What's gochujang in Chinese? [90m│[39m [PASS] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "**Gochujang** is            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m **韩国辣椒酱** (Hán guó là   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m jiāo jiàng) in               [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Chinese.\n\nIt's a Korean    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m fermented chili paste —      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m thick, spicy, slightly       [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m sweet, and savory all at     [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m once. You'll find it in      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m dishes like Korean BBQ,      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m bibimb...                    [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m How do you say 'lemongrass'  [90m│[39m [PASS] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m in Chinese?                  [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "The glossary doesn't have   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m an entry for \"lemongrass,\" [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m so here's my own             [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m translation:\n\n**Lemongras… [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m = **柠檬草** (níng méng cǎo) [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m *(AI-translated, not in      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m glossary)*\n\nIt's a         [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m fragrant stalk herb commonly [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m use...                       [90m│[39m
+[90m├──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────[39m[90m┼──────────────────────────────┤[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m What's gochujang in Chinese? [90m│[39m [PASS] {"status":            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "complete", "response_text": [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m "**Gochujang** is            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m **韩国辣椒酱** in            [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m Chinese.\n\nIt's a Korean    [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m fermented chili paste —      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m thick, spicy, and slightly   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m sweet with a deep umami      [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m flavour from the             [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m fermentation. It's a staple  [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m in Korean cooking, used in   [90m│[39m
+[90m│[39m                              [90m│[39m                              [90m│[39m                              [90m│[39m dis...                       [90m│[39m
+[90m└──────────────────────────────[39m[90m┴──────────────────────────────[39m[90m┴──────────────────────────────[39m[90m┴──────────────────────────────┘[39m
+✓ Eval complete (ID: eval-xRI-2026-04-07T06:02:16)
+
+» View results: promptfoo view
+» Share with your team: https://promptfoo.app
+» Feedback: https://promptfoo.dev/feedback
+
+Total Tokens: 186,986
+  Eval: 160,951 (149,554 prompt, 11,397 completion)
+  Grading: 26,035 (23,304 prompt, 2,731 completion)
+
+Results:
+  ✓ 11 passed (78.57%)
+  ✗ 3 failed (21.43%)
+  0 errors (0%)
+Duration: 4m 37s (concurrency: 4)
+
+Writing output to results_round2.json

@@ -103,6 +103,12 @@ This is where `promptfoo` belongs. It is not a post-prototype add-on. It is the 
 
 ## Phase 1c — Handoff to Phase 2
 
+> **Status note (2026-04-07):** Phase 1a and 1b are complete. Two items remain before handoff:
+> 1. **OQ-3 model comparison** — swap `SGA_MODEL` in `.env` and re-run the eval suite against a cheaper model. Document cost/quality trade-off.
+> 2. **KB data gap** — add 3-5 vegetarian/vegan recipes to `recipes.json`. HIGH-04 currently relies on AI-generated fallbacks because the KB has none.
+>
+> No structural code changes needed — `prototype/` is the integration package.
+
 ### Objective
 
 Take the validated artifacts from Phases 1a and 1b and integrate them into the deployable product architecture.
