@@ -129,6 +129,20 @@ All tiers are must-pass. The tier signals complexity and how much the implementi
 - **Structural:** Agent calls `translate_term` with `term="gochujang"`. Agent MUST NOT call `search_recipes` for a simple translation question.
 - **Content:** Response includes the Chinese translation.
 
+#### LOW-04: Glossary miss — agent provides AI-translated fallback
+
+- **Input:** `"How do you say 'lemongrass' in Chinese?"`
+- **Profile:** default
+- **Structural:** Agent calls `translate_term` with `term="lemongrass"`. Tool returns `match_type: "none"`.
+- **Content:** Response includes a Chinese translation for lemongrass. Response contains the phrase "AI-translated" or equivalent label indicating this is not glossary-verified.
+
+#### LOW-05: Glossary hit — no AI-translated label
+
+- **Input:** `"What's gochujang in Chinese?"`
+- **Profile:** default
+- **Structural:** Agent calls `translate_term` with `term="gochujang"`. Tool returns `match_type: "exact"`.
+- **Content:** Response includes "韩国辣椒酱". Response does NOT contain "AI-translated."
+
 #### MED-03: Multi-preparation variety
 
 - **Input:** `"I bought a huge pack of chicken thighs from Costco. Give me ideas for the whole week."`
