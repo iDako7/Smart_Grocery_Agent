@@ -1,0 +1,37 @@
+# LOW-03: translate_term vs recipe KB — simple translation question
+# Agent must call translate_term and must NOT call search_recipes
+- description: 'LOW-03: Simple translation calls translate_term, not search_recipes'
+  vars:
+    input: "What's gochujang in Chinese?"
+  assert:
+    # Structural: calls translate_term with gochujang
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        return parsed.tool_calls.some(tc =>
+          tc.name === 'translate_term' &&
+          tc.input.term && tc.input.term.toLowerCase().includes('gochujang')
+        );
+      weight: 3
+      metric: calls_translate_term
+
+    # Structural: must NOT call search_recipes
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        const callsRecipe = parsed.tool_calls.some(tc => tc.name === 'search_recipes');
+        if (callsRecipe) return { pass: false, score: 0, reason: 'search_recipes was called for a simple translation question' };
+        return true;
+      weight: 3
+      metric: no_search_recipes
+
+    # Content: response includes the Chinese translation
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        const text = parsed.response_text;
+        // Check for Chinese characters in the response
+        const hasChinese = /[\u4e00-\u9fff]/.test(text);
+        return hasChinese;
+      weight: 2
+      metric: chinese_translation_provided

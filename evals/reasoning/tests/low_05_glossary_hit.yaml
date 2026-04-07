@@ -1,0 +1,45 @@
+# LOW-05: Glossary hit — no AI-translated label
+# translate_term returns match_type "exact" for gochujang, response must include 韩国辣椒酱
+- description: 'LOW-05: Glossary hit for gochujang — includes 韩国辣椒酱, no AI-translated label'
+  vars:
+    input: "What's gochujang in Chinese?"
+  assert:
+    # Structural: calls translate_term with gochujang
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        return parsed.tool_calls.some(tc =>
+          tc.name === 'translate_term' &&
+          tc.input.term && tc.input.term.toLowerCase().includes('gochujang')
+        );
+      weight: 3
+      metric: calls_translate_term_gochujang
+
+    # Structural: translate_term returns match_type "exact"
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        const translateCall = parsed.tool_calls.find(tc => tc.name === 'translate_term');
+        if (!translateCall) return { pass: false, score: 0, reason: 'translate_term not called' };
+        const result = translateCall.result;
+        return result.match_type === 'exact';
+      weight: 2
+      metric: glossary_hit_confirmed
+
+    # Content: response includes 韩国辣椒酱
+    - type: icontains
+      value: '韩国辣椒酱'
+      weight: 3
+      metric: correct_chinese_term
+
+    # Content: response does NOT contain "AI-translated"
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        const text = parsed.response_text.toLowerCase();
+        const hasLabel = text.includes('ai-translated') || text.includes('ai translated') ||
+          text.includes('not in glossary') || text.includes('not glossary-verified');
+        if (hasLabel) return { pass: false, score: 0, reason: 'Response incorrectly includes AI-translated label for a glossary hit' };
+        return true;
+      weight: 3
+      metric: no_ai_translated_label

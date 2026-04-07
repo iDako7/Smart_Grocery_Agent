@@ -1,0 +1,42 @@
+# LOW-02: Bilingual input — mixed language
+# Agent must recognize 五花肉 as pork belly and filter for Korean cuisine
+- description: 'LOW-02: Agent recognizes 五花肉 as pork belly and applies Korean cuisine filter'
+  vars:
+    input: 'I have some 五花肉 and rice, want to do Korean style'
+  assert:
+    # Structural: agent recognizes 五花肉 as pork belly
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        const text = parsed.response_text.toLowerCase();
+        const toolData = JSON.stringify(parsed.tool_calls).toLowerCase();
+        const combined = text + ' ' + toolData;
+        return combined.includes('pork belly') || combined.includes('五花肉');
+      weight: 3
+      metric: recognizes_pork_belly
+
+    # Structural: calls search_recipes with Korean cuisine filter
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        const recipeCall = parsed.tool_calls.find(tc => tc.name === 'search_recipes');
+        if (!recipeCall) return { pass: false, score: 0, reason: 'search_recipes not called' };
+        const cuisine = (recipeCall.input.cuisine || '').toLowerCase();
+        return cuisine.includes('korean');
+      weight: 3
+      metric: korean_cuisine_filter
+
+    # Content: response treats 五花肉 as pork belly
+    - type: javascript
+      value: |
+        const parsed = JSON.parse(output);
+        const text = parsed.response_text.toLowerCase();
+        return text.includes('pork belly') || text.includes('五花肉');
+      weight: 2
+      metric: pork_belly_in_response
+
+    # Content: mentions Korean style
+    - type: icontains
+      value: 'Korean'
+      weight: 1
+      metric: korean_mentioned
