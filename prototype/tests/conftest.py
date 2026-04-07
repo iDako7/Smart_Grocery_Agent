@@ -21,3 +21,9 @@ def clear_product_cache():
     """
     yield
     _lookup_module._product_cache = None
+
+
+@pytest.fixture
+def mock_openai_env(monkeypatch):
+    """Set OPENROUTER_API_KEY to a dummy value so OpenAI client can be constructed."""
+    monkeypatch.setenv("OPENROUTER_API_KEY", "test-dummy-key")
