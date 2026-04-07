@@ -52,7 +52,7 @@ React SPA (Vite) ──SSE──> FastAPI ──tool-use loop──> Claude via 
 
 ## Key Documentation
 
-- `docs/product-spec-v2.md` — full product vision, user stories, screens, saved content
-- `docs/architecture-spec-v2.md` — system architecture, API contract, deployment
-- `docs/ai-layer-architecture-v2.md` — agent internals, ADRs (7 decisions documented)
-- `docs/Smart_Grocery_Assistant___V2_Implementation_Plan.md` — phase plan, V1 lessons
+- `docs/00-specs/product-spec-v2.md` — full product vision, user stories, screens, saved content
+- `docs/00-specs/architecture-spec-v2.md` — system architecture, API contract, deployment
+- `docs/00-specs/ai-layer-architecture-v2.md` — agent internals, ADRs (7 decisions documented)
+- `docs/01-plans/Implementation_Plan_high_level.md` — phase plan, V1 lessons
