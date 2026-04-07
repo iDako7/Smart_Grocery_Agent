@@ -32,11 +32,18 @@ def analyze_pcsv(ingredients: list[str]) -> dict:
         key = ingredient.lower().strip()
         roles = mappings.get(key, [])
         if not roles:
-            # Try partial match
+            # Try partial match — prefer the closest-length match to avoid
+            # "rice" matching "rice vinegar" when "rice" itself exists
+            best_match = None
+            best_delta = float("inf")
             for mapped_name, mapped_roles in mappings.items():
                 if key in mapped_name or mapped_name in key:
-                    roles = mapped_roles
-                    break
+                    delta = abs(len(mapped_name) - len(key))
+                    if delta < best_delta:
+                        best_delta = delta
+                        best_match = mapped_roles
+            if best_match is not None:
+                roles = best_match
         for role in roles:
             if role in categories and ingredient not in categories[role]:
                 categories[role].append(ingredient)

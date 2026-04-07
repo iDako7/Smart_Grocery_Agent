@@ -116,7 +116,20 @@ def run_agent(
         tool_messages = []
         for tc in message.tool_calls:
             name = tc.function.name
-            params = json.loads(tc.function.arguments)
+            try:
+                params = json.loads(tc.function.arguments)
+            except json.JSONDecodeError as e:
+                params = {}
+                result = {"error": f"Malformed tool arguments: {e}"}
+                all_tool_calls.append(ToolCall(name=name, input=params, result=result))
+                tool_messages.append(
+                    {
+                        "role": "tool",
+                        "tool_call_id": tc.id,
+                        "content": json.dumps(result, ensure_ascii=False),
+                    }
+                )
+                continue
             print(
                 f"  -> calling {name}({json.dumps(params, ensure_ascii=False)[:120]})"
             )

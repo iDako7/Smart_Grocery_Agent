@@ -11,10 +11,6 @@ def _load_recipes() -> list[dict]:
         return json.load(f)
 
 
-def _ingredient_names(recipe: dict) -> set[str]:
-    return {ing["name"].lower() for ing in recipe["ingredients"]}
-
-
 def search_recipes(
     ingredients: list[str],
     cuisine: str | None = None,
@@ -34,8 +30,6 @@ def search_recipes(
             continue
         if max_time and recipe.get("time_minutes", 0) > max_time:
             continue
-
-        recipe_ingredients = _ingredient_names(recipe)
 
         # Compute match score: how many user ingredients appear in recipe
         have = []
