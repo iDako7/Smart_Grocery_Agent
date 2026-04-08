@@ -25,6 +25,7 @@
 | ADR-14 | Single VPS + Docker Compose Deployment | Decided | New |
 | ADR-15 | Multi-Dimensional Flavor Tags for Variety Matching | Decided | New |
 | ADR-16 | Frontend Stack: React + Vite + shadcn/ui + Tailwind + Bun | Decided | New |
+| ADR-17 | Screen-Agnostic API Design | Decided | New |
 
 ---
 
@@ -154,6 +155,8 @@
 - *Polling:* Wrong model for a stream of typed events. Too frequent wastes requests during idle; too infrequent misses updates during 5–15s tool-use loops.
 
 **Trade-off:** SSE connections are long-lived. Server must handle drops gracefully — `done` event carries status field (`"complete"` | `"partial"`) so frontend knows whether to show a retry prompt.
+
+> **Update (Phase 2 planning):** Clarified transport mechanism. The SSE *wire format* is the decision; the *transport* is streaming fetch (`POST` → `ReadableStream`), not the native browser `EventSource` API (which is GET-only and can't send a request body). This is the standard pattern for AI chat endpoints (OpenAI, Anthropic).
 
 ---
 
@@ -347,6 +350,21 @@ VPS
 - *Expo (React Native for web):* Web output quality is noticeably worse than native web. Design system wouldn't translate to React Native's StyleSheet model.
 
 **Trade-off:** shadcn/ui components are copied into the project (not installed as a package), which means manual updates. Acceptable given the small component surface area (< 15 components).
+
+---
+
+## ADR-17: Screen-Agnostic API Design
+
+**Decision:** The backend emits all relevant typed SSE events regardless of which screen the frontend is showing. The `screen` field in the `/chat` request body is a context hint (used for context compression and logging), not a directive for which event types to emit. The frontend decides what to render based on its current screen state.
+
+**Why:** Different clients may render the same data differently. A web SPA shows 4 sequential screens; a future mobile app might combine Clarify and Recipes into one view. Coupling event emission to screen identity forces every new client to match the web's screen model. Screen-agnostic events let the backend focus on *what data exists* while each client decides *how to present it*.
+
+**Why not alternatives:**
+
+- *Screen-coupled emission (backend decides which events to send per screen):* Simpler backend logic — only emit `pcsv_update` on Clarify screen, only `recipe_card` on Recipes screen. But locks the API to one client's screen model. Adding a mobile client with different screen boundaries requires backend changes.
+- *Separate endpoints per screen:* V1 approach. Already rejected in ADR-5.
+
+**Trade-off:** Frontend receives events it may not render on the current screen. Marginal bandwidth cost — typed SSE events are small (< 1KB each). The reducer simply ignores events that don't map to the current screen's state slots.
 
 ---
 
