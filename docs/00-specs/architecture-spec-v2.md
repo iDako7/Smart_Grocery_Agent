@@ -10,7 +10,7 @@ V1 built the AI layer as six separate REST endpoints with isolated prompts. V2 r
 
 ---
 
-## 1. System Shape
+## 1. System Architecture
 
 Three-layer architecture: Frontend → Backend API → External LLM.
 
@@ -52,6 +52,46 @@ graph LR
 
 - Serverless functions — tool-use conversations are stateful across multiple round-trips; requires persistent orchestration
 - LLM directly from frontend — tools need DB access; can't expose KB or sessions to the browser
+
+### Tech Stack
+
+| Layer | Technology | Notes |
+|---|---|---|
+| **Frontend language** | TypeScript | |
+| **Frontend framework** | React + Vite | SPA only, no SSR |
+| **Frontend runtime** | Bun | Package manager + dev server |
+| **UI components** | shadcn/ui + Tailwind CSS | Soft Bento design tokens |
+| **Frontend state** | `useReducer` + Context | No Redux / Zustand |
+| **Backend language** | Python | |
+| **Backend framework** | FastAPI | Async, single service |
+| **Schema validation** | Pydantic | Coercion pipeline, no re-prompting |
+| **LLM provider** | Claude via OpenRouter | HTTP/JSON, no SDK |
+| **Agent orchestration** | Explicit `while` loop (~40 lines) | No LangChain / LangGraph |
+| **Streaming transport** | SSE (Server-Sent Events) | `POST /chat` → SSE stream back |
+| **Knowledge base DB** | SQLite (read-only) | Shipped as a file in Docker image |
+| **Mutable data DB** | PostgreSQL | Sessions, users, saved content |
+| **Auth** | Magic link + JWT | Passwordless email; token in memory |
+| **Deployment (Phase 2)** | Docker Compose → Render / DigitalOcean | Single instance |
+| **Deployment (Phase 3)** | AWS ECS Fargate + RDS + CloudFront | Auto-scaling |
+
+### Document Index
+
+| Section | What it covers |
+|---|---|
+| **§2 — Conversation & Session Design** | How the full Home → Clarify → Recipes → Grocery flow is one continuous LLM thread; context compression strategy |
+| **§3 — Responsibility Split** | What belongs to the LLM vs. backend vs. frontend; schema coercion hierarchy |
+| **§4 — Agent Architecture** | Single-agent design; system prompt structure (persona / rules / tool instructions); cross-session user profile |
+| **§5 — Tool Design** | All 7 tool contracts: params, return types, data source |
+| **§6 — Knowledge Base** | SQLite schema domains (recipes, PCSV, products, substitutions); flavor tag system; vector search path |
+| **§7 — User Profile** | Profile schema; how the agent reads and writes it; Phase 3 automated extraction |
+| **§8 — Response Streaming (SSE)** | All SSE event types; Phase 2 collect-then-emit flow; Phase 3 progressive streaming upgrade |
+| **§9 — API Contract** | All endpoints; `/chat` as the single LLM gateway; saved content CRUD |
+| **§10 — Authentication** | Magic link flow; JWT strategy; Phase 2a mock auth for local dev |
+| **§11 — Frontend Architecture** | Component tree; screen state machine (`IDLE → LOADING → STREAMING → COMPLETE`) |
+| **§12 — Deployment** | Phase 2a Docker Compose → Phase 2b single instance → Phase 3 AWS |
+| **§13 — Error Handling** | LLM failures; tool handler failures; SSE reconnection |
+| **§14 — Mobile Strategy** | PWA-first; React Native as deferred upgrade path |
+| **Phase Alignment table** | Every component mapped across Phase 1 / 2 / 3 |
 
 ---
 
