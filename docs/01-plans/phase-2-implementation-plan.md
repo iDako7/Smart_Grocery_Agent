@@ -8,7 +8,7 @@
 
 Phase 2 delivers a workable full-stack web app running locally. Development uses contract-first parallel worktrees: shared schemas in `contracts/` on `main` are the source of truth, 3 worktrees develop independently against them, and the orchestrator (human on `main`) manages merges and contract evolution.
 
-**Prerequisite:** Phase 1c cleanup (OQ-3 model comparison + vegetarian KB gap).
+**Prerequisite:** Phase 1c complete. See `phase-1c-handoff.md` for artifact inventory and known gaps.
 
 ---
 
@@ -179,7 +179,7 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 - **Product spec:** `docs/00-specs/product-spec-v2.md`
 - **Phase 1 plan:** `docs/01-plans/phase-1-plan.md`
 - **Wireframe:** `docs/00-specs/wireframe-v2.html`
-- **Design reference:** `docs/00-specs/soft-bento-design-reference.html`
+- **Design reference:** `docs/00-specs/soft-bento-preview.html`
 - **Prototype code:** `prototype/` (integration package from Phase 1)
 - **Eval suite:** `evals/reasoning/`
 
