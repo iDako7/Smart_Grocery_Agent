@@ -244,7 +244,7 @@ graph TB
 
 **Context:** The tool-use loop takes 5–15 seconds. The frontend needs incremental updates during this window. Three transport options: SSE, WebSocket, polling.
 
-**Why:** SSE is unidirectional (server → client), which matches the data flow exactly. The client sends via POST, the server streams back. No connection upgrade negotiation. Native browser `EventSource` API. Works through most proxies and CDNs without special configuration.
+**Why:** SSE wire format is unidirectional (server → client), which matches the data flow exactly. The client sends via POST, the server streams back the response in SSE format (`event:`, `data:`, `\n\n`). Frontend reads via `fetch()` + `ReadableStream` (not the native `EventSource` API, which is GET-only and can't send a request body). Works through most proxies and CDNs without special configuration.
 
 **Alternatives considered:**
 - *WebSocket* — bidirectional, but the client only sends via POST (new messages). The duplex channel adds connection management complexity (heartbeat, reconnection) for no benefit.

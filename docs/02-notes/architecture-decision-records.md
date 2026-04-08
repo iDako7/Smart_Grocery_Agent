@@ -146,7 +146,7 @@
 
 **Decision:** Server-Sent Events for the `/chat` endpoint response stream.
 
-**Why:** SSE is unidirectional (server → client), matching the data flow exactly. Client sends via POST, server streams back. No connection upgrade negotiation. Native browser `EventSource` API. Works through most proxies and CDNs without special configuration.
+**Why:** SSE wire format is unidirectional (server → client), matching the data flow exactly. Client sends via POST, server streams back the response in SSE format (`event:`, `data:`, `\n\n`). Frontend reads via `fetch()` + `ReadableStream` (not the native `EventSource` API, which is GET-only and can't send a request body). Works through most proxies and CDNs without special configuration.
 
 **Why not alternatives:**
 

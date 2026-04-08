@@ -258,7 +258,7 @@ A recipe typically has 2–4 tags (e.g., Mapo Tofu: `[umami, spicy, numbing]`; t
 
 ## 8. Response Streaming (SSE)
 
-The `/chat` endpoint returns a Server-Sent Events stream. Each event is a typed JSON payload representing an incremental UI update.
+The `/chat` endpoint returns a streaming response in SSE wire format (`event:`, `data:`, `\n\n`). The transport is a POST response stream (not a GET-based `EventSource` connection) because the client needs to send a request body (user message + screen context) with each call. The frontend reads the response via `fetch()` + `ReadableStream` and parses SSE lines. Each event is a typed JSON payload representing an incremental UI update.
 
 ### Event types
 
@@ -339,7 +339,7 @@ React SPA with SSE client, screen-based state machine, and component library.
 
 ```
 App
-├── SSEClient          → singleton, manages EventSource connection
+├── SSEClient          → singleton, manages streaming fetch (POST → ReadableStream → SSE parse)
 ├── SessionState       → accumulated SSE events → typed state (useReducer + Context)
 ├── Screens (core flow)
 │   ├── Home           → text input, quick-start chips, no SSE
