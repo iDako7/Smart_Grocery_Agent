@@ -74,6 +74,7 @@ graph TB
         T4["get_substitutions"]
         T5["get_recipe_detail"]
         T6["update_user_profile"]
+        T7["translate_term"]
     end
 
     KB["SQLite knowledge base"]
@@ -94,6 +95,7 @@ graph TB
     T4 --> KB
     T5 --> KB
     T6 --> PG
+    T7 --> KB
 
     style OL fill:#d1fae5,stroke:#059669,stroke-width:1px
     style PA fill:#ede9fe,stroke:#7c3aed,stroke-width:1px
@@ -111,7 +113,7 @@ graph TB
 - **Orchestration loop** is the core runtime. Sends assembled prompt to OpenRouter, inspects response for `tool_use` blocks, dispatches to the right handler, appends tool results, and loops until the LLM returns a final text response. Emits `thinking` status events during the loop.
 - **Schema coercion** takes the LLM's loosely-structured JSON output and validates it through a Pydantic model hierarchy. Handles type coercion, semantic synonyms, and defaults. Re-prompts only as a last resort for structurally broken output.
 - **SSE emitter** sends typed events to the frontend. During the loop: `thinking` events (status strings). After the loop: `pcsv_update`, `recipe_card`, `explanation`, `grocery_list`, `done` events in rapid sequence.
-- **Tool handlers** are six pure functions. Each receives typed params, executes a query (SQL against SQLite, or PostgreSQL for user profile), and returns typed results. No LLM logic, no side effects.
+- **Tool handlers** are seven pure functions. Each receives typed params, executes a query (SQL against SQLite, or PostgreSQL for user profile), and returns typed results. No LLM logic, no side effects.
 
 ---
 
@@ -123,7 +125,7 @@ graph TB
 
 **Context:** The agent calls OpenRouter, inspects responses for tool-use blocks, dispatches tool handlers, and loops. This is ~40 lines of code. Frameworks abstract this loop but add dependency weight.
 
-**Why:** Full control over when status events fire, how many iterations are allowed, and what happens on partial failure. At this scale (one agent, five tools), the framework overhead exceeds the problem complexity. OpenRouter compatibility with framework abstractions is also unverified.
+**Why:** Full control over when status events fire, how many iterations are allowed, and what happens on partial failure. At this scale (one agent, seven tools), the framework overhead exceeds the problem complexity. OpenRouter compatibility with framework abstractions is also unverified.
 
 **Alternatives considered:**
 - *LangChain/LangGraph agent executor* — handles the loop but adds a heavy dependency. Time spent learning its abstractions would exceed time writing the loop.
@@ -187,9 +189,9 @@ graph TB
 
 ---
 
-### ADR-5: Six tools, LLM-controlled sequencing
+### ADR-5: Seven tools, LLM-controlled sequencing
 
-**Decision:** Five KB query tools plus one profile update tool. The LLM decides which tools to call, in what order, and how many times. No hardcoded call sequence.
+**Decision:** Six KB/profile tools plus one bilingual glossary tool. The LLM decides which tools to call, in what order, and how many times. No hardcoded call sequence.
 
 **Context:** V1 used six separate REST endpoints with a hardcoded client-orchestrated sequence. V2 replaces this with tool-use, where the LLM decides the workflow per conversation.
 
@@ -208,8 +210,8 @@ graph TB
 
 **Design notes:**
 - No `generate_recipe` tool — when KB has no match, the LLM falls back to generation in its response text, flagged as "AI-suggested."
-- No `get_user_history` tool — fridge recall (OQ-1) is deferred. Adding it later is a clean extension: new tool + new table.
-- If Phase 1 testing shows the LLM struggles with 6 tools, merge `get_substitutions` into `search_recipes` as an optional flag.
+- Fridge recall (OQ-1) — removed from scope. The system relies on user-provided context each session.
+- If Phase 1 testing shows the LLM struggles with 7 tools, merge `get_substitutions` into `search_recipes` as an optional flag.
 - `search_recipes` accepts optional `effort_level` (enum: quick / medium / long) and `flavor_tags[]` filters. See architecture-spec-v2.md §5.1 for the full parameter schema.
 
 **Risk:** LLM may call tools unnecessarily or in suboptimal order. Mitigated by tool instructions in the system prompt specifying preferred sequences (e.g., "always call `analyze_pcsv` before `search_recipes`").
@@ -268,7 +270,6 @@ graph TB
 
 ## 6. Open Questions
 
-- **OQ-1:** Fridge recall mechanism — how aggressively to prompt based on purchase history. Deferred to prototyping.
 - **OQ-2:** KB seed strategy — which recipes and products to index first. Deferred until source data is available.
 - **OQ-3:** Model selection — depends on Phase 1 evaluation with real conversations.
 - **OQ-4:** Extremely vague input threshold — minimum information before useful suggestions. Deferred to user testing.

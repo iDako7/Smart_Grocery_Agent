@@ -24,6 +24,7 @@
 | ADR-13 | Magic Link + JWT Authentication | Decided | New |
 | ADR-14 | Single VPS + Docker Compose Deployment | Decided | New |
 | ADR-15 | Multi-Dimensional Flavor Tags for Variety Matching | Decided | New |
+| ADR-16 | Frontend Stack: React + Vite + shadcn/ui + Tailwind + Bun | Decided | New |
 
 ---
 
@@ -311,6 +312,8 @@ VPS
 
 **Trade-off:** Single VPS is a single point of failure. Acceptable for validation — no SLA commitments. When user load justifies it, horizontal scaling is straightforward: stateless app containers behind a load balancer, shared PostgreSQL.
 
+> **Phase 3 target:** AWS (ECS/Fargate for backend containers, RDS for managed PostgreSQL, ALB for SSE-compatible load balancing, S3 + CloudFront for frontend). The Docker Compose service structure maps directly to ECS task definitions — no architectural rework needed.
+
 ---
 
 ## ADR-15: Multi-Dimensional Flavor Tags for Variety Matching
@@ -328,6 +331,22 @@ VPS
 **Trade-off:** Tags must be manually curated per recipe — no reliable automated tagging exists. Vocabulary stored as a flat expandable list, so adding descriptors requires no schema migration, only KB updates.
 
 > **Origin:** Inspired by CookWell's recipe categorization. See commit `fbc2e14`.
+
+---
+
+## ADR-16: Frontend Stack — React + Vite + shadcn/ui + Tailwind + Bun
+
+**Decision:** Use React + TypeScript with Vite as the build tool, Bun as the package manager, shadcn/ui for component primitives, and Tailwind CSS for styling. Design tokens from the Soft Bento design system are mapped into the Tailwind configuration.
+
+**Why:** Solo developer needs to minimize frontend time while maintaining quality. shadcn/ui provides accessible, well-structured component primitives (Card, Button, Dialog, Input) that can be customized via Tailwind. Bun replaces npm with 10-30x faster installs. Tailwind's utility-first approach maps naturally to extracting design tokens from the Soft Bento reference into `tailwind.config.ts`. No meta-framework (Next.js) needed — the app is a client-side SPA with no SSR requirements.
+
+**Why not alternatives:**
+
+- *Next.js:* Adds SSR complexity and a redundant server layer when FastAPI is already the backend. SSE proxying through Next.js adds friction.
+- *Vue/Svelte:* Smaller ecosystems. No mobile path equivalent to React Native.
+- *Expo (React Native for web):* Web output quality is noticeably worse than native web. Design system wouldn't translate to React Native's StyleSheet model.
+
+**Trade-off:** shadcn/ui components are copied into the project (not installed as a package), which means manual updates. Acceptable given the small component surface area (< 15 components).
 
 ---
 
