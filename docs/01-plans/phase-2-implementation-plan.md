@@ -14,33 +14,39 @@ Phase 2 delivers a workable full-stack web app running locally. Development uses
 
 ## Phase 0 — Setup (sequential, on `main`)
 
-### 0.1 Finish Phase 1c
+### 0.1 Finish Phase 1c ✓
 
-- Run eval suite against a cheaper model via `SGA_MODEL` env var. Document cost/quality trade-off for OQ-3.
-- Add 3-5 vegetarian/vegan recipes to `data/recipes.json`. Re-run eval suite to confirm HIGH-04 passes with real KB data.
+~~Run eval suite against a cheaper model via `SGA_MODEL` env var. Document cost/quality trade-off for OQ-3.~~
+~~Add 3-5 vegetarian/vegan recipes to `data/recipes.json`. Re-run eval suite to confirm HIGH-04 passes with real KB data.~~
+
+**Done (2026-04-07).** Model set to `openai/gpt-5.4-mini`. 5 vegetarian recipes added. 12/14 eval pass rate. See `phase-1c-handoff.md`.
 
 ### 0.2 Draft `contracts/` directory
 
 Shared schemas that all worktrees import. Contract changes go as small PRs to `main` — no implementation mixed in.
 
-| File | Contents | Source |
-|---|---|---|
-| `tool_schemas.py` | Pydantic models for 7 tool inputs/outputs | Evolved from `prototype/schema.py` + `prototype/tools/definitions.py` |
-| `sse_events.py` | Pydantic models for SSE event types (thinking, pcsv_update, recipe_card, explanation, grocery_list, error, done) | Architecture spec §8 |
-| `api_types.py` | Request/response types for all endpoints (session, chat, saved content, auth) | Architecture spec §9 |
-| `kb_schema.sql` | SQLite DDL (recipes, PCSV mappings, products, substitutions, glossary) | Derived from `data/*.json` structure |
-| `pg_schema.sql` | PostgreSQL DDL (sessions, users/profiles, saved content) | Architecture spec §7 + §9 |
-| `CHANGELOG.md` | Dated one-liners for breaking contract changes | Empty at creation |
+
+| File              | Contents                                                                                                         | Source                                                                |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `tool_schemas.py` | Pydantic models for 7 tool inputs/outputs                                                                        | Evolved from `prototype/schema.py` + `prototype/tools/definitions.py` |
+| `sse_events.py`   | Pydantic models for SSE event types (thinking, pcsv_update, recipe_card, explanation, grocery_list, error, done) | Architecture spec §8                                                  |
+| `api_types.py`    | Request/response types for all endpoints (session, chat, saved content, auth)                                    | Architecture spec §9                                                  |
+| `kb_schema.sql`   | SQLite DDL (recipes, PCSV mappings, products, substitutions, glossary)                                           | Derived from `data/*.json` structure                                  |
+| `pg_schema.sql`   | PostgreSQL DDL (sessions, users/profiles, saved content)                                                         | Architecture spec §7 + §9                                             |
+| `CHANGELOG.md`    | Dated one-liners for breaking contract changes                                                                   | Empty at creation                                                     |
+
 
 **Contract freeze protocol:** Once a contract file is marked `# Status: frozen`, only additive, non-breaking changes are allowed (new optional fields, new event types, new endpoints). Breaking changes (rename, type change, field removal) require a PR to `main` with a `CHANGELOG.md` entry; all worktrees must rebase before continuing.
 
-| Contract | Freezes when | Blocks |
-|---|---|---|
-| `tool_schemas.py` | Phase 0 (before worktrees start) | Already validated in Phase 1 |
-| `kb_schema.sql` | WT1 merges to `main` | Schema final once data is migrated |
-| `sse_events.py` | WT2 has `/chat` returning real events | WT3 Stage 3 (state machine needs event types) |
-| `api_types.py` | WT2 has all endpoints scaffolded | WT3 Stage 4 (frontend needs API types) |
-| `pg_schema.sql` | WT2 has PostgreSQL integration working | Only WT2 consumes it |
+
+| Contract          | Freezes when                           | Blocks                                        |
+| ----------------- | -------------------------------------- | --------------------------------------------- |
+| `tool_schemas.py` | Phase 0 (before worktrees start)       | Already validated in Phase 1                  |
+| `kb_schema.sql`   | WT1 merges to `main`                   | Schema final once data is migrated            |
+| `sse_events.py`   | WT2 has `/chat` returning real events  | WT3 Stage 3 (state machine needs event types) |
+| `api_types.py`    | WT2 has all endpoints scaffolded       | WT3 Stage 4 (frontend needs API types)        |
+| `pg_schema.sql`   | WT2 has PostgreSQL integration working | Only WT2 consumes it                          |
+
 
 ### 0.3 Project scaffolding
 
@@ -120,27 +126,32 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 
 ## Sync Points
 
-| Sync point | What must be true | Who's blocked |
-|---|---|---|
-| WT1 merged | SQLite schema + seeded data on `main` | WT2 (tool handlers need SQLite) |
-| SSE contract frozen | `contracts/sse_events.py` stable | WT3 Stage 3 (state machine needs event types) |
-| WT2 merged | Backend running, `/chat` endpoint works | Phase 2.2 (Frontend Stage 4) |
+
+| Sync point          | What must be true                       | Who's blocked                                 |
+| ------------------- | --------------------------------------- | --------------------------------------------- |
+| WT1 merged          | SQLite schema + seeded data on `main`   | WT2 (tool handlers need SQLite)               |
+| SSE contract frozen | `contracts/sse_events.py` stable        | WT3 Stage 3 (state machine needs event types) |
+| WT2 merged          | Backend running, `/chat` endpoint works | Phase 2.2 (Frontend Stage 4)                  |
+
 
 ---
 
 ## Per-Worktree `CLAUDE.md` Scope
 
 **WT1 (KB + Data):**
+
 - Owns: `data/`, `scripts/migrate_kb.py`, `contracts/kb_schema.sql`
 - Imports: nothing
 - Must not edit: `prototype/`, `src/`, `contracts/` (except `kb_schema.sql`)
 
 **WT2 (Backend + AI Layer):**
+
 - Owns: `src/backend/`, `src/ai/`
 - Imports: `contracts/tool_schemas.py`, `contracts/sse_events.py`, `contracts/api_types.py`, `contracts/pg_schema.sql`
 - Must not edit: `src/frontend/`, `data/`, `evals/`
 
 **WT3 (Frontend):**
+
 - Owns: `src/frontend/`
 - Imports: `contracts/sse_events.py`, `contracts/api_types.py`
 - Must not edit: `src/backend/`, `src/ai/`, `data/`
@@ -182,3 +193,4 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 - **API contracts:** [Evil Martians — API Contracts and Everything I Wish I Knew](https://evilmartians.com/chronicles/api-contracts-and-everything-i-wish-i-knew-a-frontend-survival-guide) — why shared schemas beat ad-hoc coordination
 - **Parallel worktree patterns:** [Mastering Git Worktrees with Claude Code](https://medium.com/@dtunai/mastering-git-worktrees-with-claude-code-parallel-development-workflow-41dc91e645fe) — per-worktree CLAUDE.md, rebase protocol, practical limits
 - **Parallel agent development:** [Mastering Parallel Agent Development in Claude Code](https://claudelab.net/en/articles/claude-code/claude-code-parallel-development-mastery) — orchestrator pattern, 3-5 worktree sweet spot
+

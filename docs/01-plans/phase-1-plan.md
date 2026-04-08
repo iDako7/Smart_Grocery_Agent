@@ -103,11 +103,14 @@ This is where `promptfoo` belongs. It is not a post-prototype add-on. It is the 
 
 ## Phase 1c — Handoff to Phase 2
 
-> **Status note (2026-04-07):** Phase 1a and 1b are complete. Two items remain before handoff:
-> 1. **OQ-3 model comparison** — swap `SGA_MODEL` in `.env` and re-run the eval suite against a cheaper model. Document cost/quality trade-off.
-> 2. **KB data gap** — add 3-5 vegetarian/vegan recipes to `recipes.json`. HIGH-04 currently relies on AI-generated fallbacks because the KB has none.
+> **Status note (2026-04-07):** Phase 1c complete.
 >
-> No structural code changes needed — `prototype/` is the integration package.
+> - **Model selection:** `openai/gpt-5.4-mini` chosen for Phase 2 (OQ-3 resolved).
+> - **KB data gap:** 5 vegetarian/vegan recipes added (`r016`–`r020`). HIGH-04 passes with real KB data.
+> - **Final eval:** 12/14 pass rate with `gpt-5.4-mini` (matches R3 baseline). Known transient failures on HIGH-03 and MED-02.
+> - **Handoff document:** `docs/01-plans/phase-1c-handoff.md` maps all artifacts to Phase 2 integration points.
+>
+> Phase 1 is complete. Proceed to Phase 2.
 
 ### Objective
 

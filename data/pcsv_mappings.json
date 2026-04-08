@@ -70,6 +70,7 @@
   "asparagus": ["veggie"],
   "kale": ["veggie"],
   "celery": ["veggie"],
+  "cauliflower": ["veggie"],
 
   "soy sauce": ["sauce"],
   "oyster sauce": ["sauce"],
@@ -91,6 +92,8 @@
   "sriracha": ["sauce"],
   "hoisin sauce": ["sauce"],
   "chili oil": ["sauce"],
+  "doubanjiang": ["sauce"],
+  "sichuan peppercorn": ["sauce"],
   "mayo": ["sauce"],
   "ketchup": ["sauce"],
   "bbq sauce": ["sauce"],
