@@ -38,7 +38,7 @@ graph LR
         LLM["Claude<br/>via OpenRouter"]
     end
 
-    SPA -- "POST /chat<br/>SSE response" --> API
+    SPA -- "POST /session/{id}/chat<br/>SSE response" --> API
     Tools -- "SQL queries" --> SQLite
     AI -- "read/write" --> PG
     AI -- "tool-use loop" --> LLM
@@ -67,7 +67,7 @@ graph LR
 | **Schema validation** | Pydantic | Coercion pipeline, no re-prompting |
 | **LLM provider** | Claude via OpenRouter | HTTP/JSON, no SDK |
 | **Agent orchestration** | Explicit `while` loop (~40 lines) | No LangChain / LangGraph |
-| **Streaming transport** | SSE (Server-Sent Events) | `POST /chat` → SSE stream back |
+| **Streaming transport** | SSE (Server-Sent Events) | `POST /session/{id}/chat` → SSE stream back |
 | **Knowledge base DB** | SQLite (read-only) | Shipped as a file in Docker image |
 | **Mutable data DB** | PostgreSQL | Sessions, users, saved content |
 | **Auth** | Magic link + JWT | Passwordless email; token in memory |

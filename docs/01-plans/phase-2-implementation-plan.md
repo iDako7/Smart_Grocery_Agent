@@ -76,7 +76,7 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 - Async orchestrator rewrite (`AsyncOpenAI`, `async def run_agent()`)
 - Tool handlers adapted: JSON file reads → SQLite queries
 - FastAPI app structure:
-  - `/chat` SSE endpoint (collect-then-emit, thinking status during loop)
+  - `POST /session/{id}/chat` SSE endpoint (collect-then-emit, thinking status during loop)
   - Session CRUD (`POST /session`, `GET /session/{id}`)
   - Saved content CRUD (meal plans, recipes, grocery lists)
   - Mock auth middleware (hardcoded dev user, real JWT contract)

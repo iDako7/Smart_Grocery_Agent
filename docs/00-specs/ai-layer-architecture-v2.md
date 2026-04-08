@@ -26,7 +26,7 @@ graph TB
     MP["Meal plans"]
     GL["Grocery lists"]
 
-    FE -- "/chat (SSE)" --> AI
+    FE -- "POST /session/{id}/chat (SSE)" --> AI
     FE -- "CRUD (save/load)" --> PG
     AI <-- "tool-use loop" --> OR
     AI -- "read only" --> KB
