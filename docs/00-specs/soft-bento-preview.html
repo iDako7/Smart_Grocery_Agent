@@ -1,0 +1,2009 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soft Bento — Design Reference</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --cream: #f5efe4;
+        --cream-deep: #ece4d2;
+        --paper: #fbf7ee;
+        --tofu: #fff9ec;
+        --ink: #221f1a;
+        --ink-2: #544c3f;
+        --ink-3: #8a8270;
+        --jade: #3d7158;
+        --jade-soft: #c9dccf;
+        --persimmon: #e25822;
+        --persimmon-soft: #fdd9c2;
+        --apricot: #f9c784;
+        --shoyu: #1a1410;
+        --r-lg: 24px;
+        --r-md: 16px;
+        --r-sm: 10px;
+        --sans: "DM Sans", -apple-system, sans-serif;
+        --cjk: "Noto Sans SC", "DM Sans", sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, monospace;
+
+        /* doc page tokens */
+        --doc-bg: #f0e9d8;
+        --doc-surface: #fbf7ee;
+        --doc-ink: #221f1a;
+        --doc-ink-2: #544c3f;
+        --doc-ink-3: #8a8270;
+        --doc-rule: #dcd1b6;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-font-smoothing: antialiased;
+      }
+      html,
+      body {
+        background: var(--doc-bg);
+        font-family: var(--sans);
+        color: var(--doc-ink);
+        min-height: 100vh;
+      }
+
+      /* ===== layout ===== */
+      .doc {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 48px 40px 80px;
+      }
+      .doc-head {
+        border-bottom: 1px solid var(--doc-rule);
+        padding-bottom: 32px;
+        margin-bottom: 48px;
+      }
+      .doc-head .kicker {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--persimmon);
+        margin-bottom: 12px;
+      }
+      .doc-head h1 {
+        font-size: 42px;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        color: var(--doc-ink);
+        line-height: 1.05;
+      }
+      .doc-head .deck {
+        margin-top: 12px;
+        font-size: 15px;
+        line-height: 1.55;
+        color: var(--doc-ink-2);
+        max-width: 680px;
+        font-weight: 400;
+      }
+      .doc-head .meta {
+        margin-top: 18px;
+        font-size: 12px;
+        color: var(--doc-ink-3);
+        display: flex;
+        gap: 22px;
+        flex-wrap: wrap;
+      }
+      .doc-head .meta b {
+        color: var(--doc-ink);
+        font-weight: 600;
+      }
+
+      /* ===== TOC ===== */
+      .toc {
+        background: var(--doc-surface);
+        border-radius: var(--r-md);
+        padding: 18px 22px;
+        margin-bottom: 48px;
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        border: 1px solid var(--doc-rule);
+      }
+      .toc-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--doc-ink-3);
+      }
+      .toc a {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--doc-ink);
+        text-decoration: none;
+      }
+      .toc a:hover {
+        color: var(--persimmon);
+      }
+      .toc a .n {
+        color: var(--doc-ink-3);
+        font-weight: 500;
+        margin-right: 6px;
+      }
+
+      /* ===== sections ===== */
+      section {
+        margin-bottom: 64px;
+        scroll-margin-top: 24px;
+      }
+      .sec-head {
+        margin-bottom: 24px;
+      }
+      .sec-head .num {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--persimmon);
+        margin-bottom: 6px;
+      }
+      .sec-head h2 {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--doc-ink);
+      }
+      .sec-head .lead {
+        margin-top: 8px;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--doc-ink-2);
+        max-width: 680px;
+      }
+
+      h3.sub {
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--doc-ink-3);
+        margin: 32px 0 14px;
+      }
+
+      /* prose */
+      .prose p {
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--doc-ink-2);
+        max-width: 680px;
+        margin-bottom: 12px;
+      }
+      .prose p b {
+        color: var(--doc-ink);
+        font-weight: 600;
+      }
+      .prose ul {
+        margin: 8px 0 16px 18px;
+        max-width: 680px;
+      }
+      .prose li {
+        font-size: 14px;
+        line-height: 1.65;
+        color: var(--doc-ink-2);
+        margin-bottom: 6px;
+      }
+      .prose li b {
+        color: var(--doc-ink);
+        font-weight: 600;
+      }
+      .prose code {
+        font-family: var(--mono);
+        font-size: 12px;
+        background: var(--doc-surface);
+        padding: 1px 6px;
+        border-radius: 4px;
+        border: 1px solid var(--doc-rule);
+        color: var(--persimmon);
+      }
+
+      /* ===== token tables ===== */
+      .token-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 12px;
+        margin-top: 8px;
+      }
+      .swatch {
+        background: var(--doc-surface);
+        border: 1px solid var(--doc-rule);
+        border-radius: var(--r-md);
+        padding: 14px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .swatch .chip {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        flex-shrink: 0;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      .swatch .info {
+        flex: 1;
+        min-width: 0;
+      }
+      .swatch .name {
+        font-family: var(--mono);
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--doc-ink);
+      }
+      .swatch .hex {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--doc-ink-3);
+        margin-top: 2px;
+      }
+      .swatch .role {
+        font-size: 10px;
+        color: var(--doc-ink-3);
+        margin-top: 3px;
+        font-weight: 500;
+      }
+
+      /* type scale */
+      .type-row {
+        background: var(--doc-surface);
+        border: 1px solid var(--doc-rule);
+        border-radius: var(--r-md);
+        padding: 18px 20px;
+        margin-bottom: 10px;
+        display: flex;
+        gap: 24px;
+        align-items: baseline;
+      }
+      .type-row .meta-col {
+        flex-shrink: 0;
+        width: 170px;
+        font-family: var(--mono);
+        font-size: 10.5px;
+        color: var(--doc-ink-3);
+        line-height: 1.6;
+      }
+      .type-row .meta-col b {
+        color: var(--doc-ink);
+        font-weight: 600;
+        display: block;
+      }
+      .type-row .sample {
+        flex: 1;
+        color: var(--doc-ink);
+      }
+      .type-row .sample.cjk {
+        font-family: var(--cjk);
+      }
+
+      /* spacing scale */
+      .scale-row {
+        background: var(--doc-surface);
+        border: 1px solid var(--doc-rule);
+        border-radius: var(--r-md);
+        padding: 14px 18px;
+        margin-bottom: 8px;
+        display: flex;
+        gap: 18px;
+        align-items: center;
+      }
+      .scale-row .label {
+        font-family: var(--mono);
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--doc-ink);
+        width: 100px;
+        flex-shrink: 0;
+      }
+      .scale-row .val {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--doc-ink-3);
+        width: 60px;
+        flex-shrink: 0;
+      }
+      .scale-row .vis {
+        height: 18px;
+        background: var(--persimmon);
+        border-radius: 4px;
+      }
+      .scale-row .vis.radius {
+        width: 60px;
+        height: 60px;
+        background: var(--persimmon);
+      }
+
+      /* ===== component gallery ===== */
+      .comp {
+        background: var(--doc-surface);
+        border: 1px solid var(--doc-rule);
+        border-radius: var(--r-md);
+        padding: 20px;
+        margin-bottom: 14px;
+      }
+      .comp-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 14px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--doc-rule);
+      }
+      .comp-name {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--doc-ink);
+        letter-spacing: -0.01em;
+      }
+      .comp-class {
+        font-family: var(--mono);
+        font-size: 10.5px;
+        color: var(--doc-ink-3);
+      }
+      .comp-stage {
+        background: var(--cream);
+        padding: 24px 20px;
+        border-radius: var(--r-sm);
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        min-height: 80px;
+      }
+      .comp-note {
+        font-size: 11.5px;
+        color: var(--doc-ink-3);
+        margin-top: 10px;
+        line-height: 1.5;
+      }
+
+      /* ===== Recipes render ===== */
+      .render-stage {
+        background: #1f1a14;
+        border-radius: var(--r-md);
+        padding: 48px 24px;
+        display: flex;
+        justify-content: center;
+        background-image:
+          radial-gradient(circle at 20% 20%, #2d2618 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, #2a231a 0%, transparent 50%);
+      }
+
+      /* phone (for the recipes render) */
+      .phone {
+        width: 390px;
+        background: var(--cream);
+        border-radius: 32px;
+        overflow: hidden;
+        position: relative;
+        box-shadow:
+          0 30px 80px -20px rgba(0, 0, 0, 0.55),
+          0 0 0 1px rgba(255, 255, 255, 0.05),
+          inset 0 0 0 6px var(--cream);
+        flex-shrink: 0;
+      }
+
+      /* ========== RECIPES STYLES (scoped) ========== */
+      .recipes,
+      .recipes * {
+        color: var(--ink);
+      }
+      .recipes .bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 22px 0;
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-2);
+      }
+      .recipes .bar .lang {
+        background: var(--paper);
+        padding: 3px 9px;
+        border-radius: 99px;
+        font-size: 10px;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .recipes .bar .lang b {
+        color: var(--ink);
+      }
+      .recipes .bar .lang span {
+        color: var(--ink-3);
+        font-weight: 400;
+      }
+
+      .recipes .header {
+        margin: 14px;
+        padding: 22px;
+        background: var(--paper);
+        border-radius: var(--r-lg);
+        position: relative;
+        overflow: hidden;
+      }
+      .recipes .header::before {
+        content: "";
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          var(--apricot) 0%,
+          var(--persimmon-soft) 60%,
+          transparent 100%
+        );
+        opacity: 0.5;
+      }
+      .recipes .header::after {
+        content: "";
+        position: absolute;
+        bottom: -40px;
+        left: -30px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          var(--jade-soft) 0%,
+          transparent 70%
+        );
+        opacity: 0.6;
+      }
+      .recipes .header-inner {
+        position: relative;
+        z-index: 1;
+      }
+      .recipes .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--shoyu);
+        color: var(--cream);
+        padding: 5px 11px;
+        border-radius: 99px;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        margin-bottom: 14px;
+      }
+      .recipes .eyebrow .leaf {
+        color: var(--apricot);
+      }
+      .recipes h1 {
+        font-weight: 700;
+        font-size: 27px;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        color: var(--ink);
+        max-width: 260px;
+      }
+      .recipes h1 .em {
+        color: var(--persimmon);
+        font-weight: 700;
+      }
+      .recipes .deck {
+        margin-top: 12px;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--ink-2);
+        max-width: 280px;
+        font-weight: 400;
+      }
+      .recipes .deck b {
+        color: var(--persimmon);
+        font-weight: 600;
+      }
+      .recipes .stat-chips {
+        display: flex;
+        gap: 6px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+      }
+      .recipes .stat-chips span {
+        background: var(--cream-deep);
+        padding: 5px 11px;
+        border-radius: 99px;
+        font-size: 10.5px;
+        font-weight: 600;
+        color: var(--ink-2);
+      }
+      .recipes .stat-chips span b {
+        color: var(--jade);
+      }
+
+      .recipes .dish {
+        margin: 0 14px 12px;
+        padding: 18px 20px;
+        background: var(--paper);
+        border-radius: var(--r-lg);
+        position: relative;
+      }
+      .recipes .dish-num {
+        position: absolute;
+        top: 18px;
+        right: 20px;
+        font-weight: 800;
+        font-size: 28px;
+        line-height: 1;
+        color: var(--cream-deep);
+        letter-spacing: -0.02em;
+      }
+      .recipes .dish-id {
+        display: inline-block;
+        font-size: 9.5px;
+        font-weight: 700;
+        color: var(--persimmon);
+        letter-spacing: 0.12em;
+        background: var(--persimmon-soft);
+        padding: 3px 8px;
+        border-radius: 99px;
+        margin-bottom: 10px;
+      }
+      .recipes .dish-name {
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 1.25;
+        letter-spacing: -0.01em;
+        color: var(--ink);
+        max-width: 240px;
+      }
+      .recipes .dish-name .info {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--cream-deep);
+        color: var(--ink-2);
+        font-size: 9px;
+        font-weight: 700;
+        text-align: center;
+        line-height: 14px;
+        margin-left: 4px;
+        vertical-align: 1px;
+        cursor: pointer;
+      }
+      .recipes .dish-cjk {
+        font-family: var(--cjk);
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink-3);
+        margin-top: 3px;
+        letter-spacing: 0.02em;
+      }
+      .recipes .dish-meta {
+        margin-top: 9px;
+        font-size: 11px;
+        color: var(--ink-3);
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        font-weight: 500;
+      }
+      .recipes .dish-meta .pip {
+        width: 3px;
+        height: 3px;
+        border-radius: 50%;
+        background: var(--persimmon);
+        display: inline-block;
+      }
+      .recipes .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 14px;
+      }
+      .recipes .tag {
+        font-size: 10.5px;
+        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: 99px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .recipes .tag.have {
+        background: var(--jade-soft);
+        color: var(--jade);
+      }
+      .recipes .tag.buy {
+        background: var(--persimmon-soft);
+        color: var(--persimmon);
+      }
+      .recipes .tag::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .recipes .tag.have::before {
+        background: var(--jade);
+      }
+      .recipes .tag.buy::before {
+        background: var(--persimmon);
+      }
+      .recipes .dish-foot {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid var(--cream-deep);
+      }
+      .recipes .swap-pill {
+        background: var(--cream-deep);
+        color: var(--ink);
+        border: none;
+        border-radius: 99px;
+        padding: 7px 14px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .recipes .swap-pill .arr {
+        font-size: 13px;
+        line-height: 1;
+      }
+
+      .recipes .dish.swapping {
+        background: var(--paper);
+        border: 2px dashed var(--persimmon);
+        padding: 16px 18px;
+      }
+      .recipes .dish.swapping .dish-num {
+        color: var(--cream-deep);
+      }
+      .recipes .dish.swapping .dish-foot {
+        border-top-color: var(--cream-deep);
+      }
+      .recipes .swap-tag {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--persimmon);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .recipes .swap-tag .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--persimmon);
+        display: inline-block;
+        animation: pulse 1.8s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+
+      .recipes .alts {
+        margin: 0 14px 12px;
+        padding: 16px 18px 14px;
+        background: linear-gradient(
+          165deg,
+          var(--apricot) 0%,
+          var(--persimmon-soft) 100%
+        );
+        border-radius: var(--r-lg);
+      }
+      .recipes .alts-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .recipes .alts-label {
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--shoyu);
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+      }
+      .recipes .alt-card {
+        background: var(--tofu);
+        border-radius: var(--r-md);
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+      .recipes .alt-card:last-of-type {
+        margin-bottom: 0;
+      }
+      .recipes .alt-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .recipes .alt-name {
+        font-weight: 600;
+        font-size: 15px;
+        line-height: 1.2;
+        color: var(--ink);
+        letter-spacing: -0.01em;
+      }
+      .recipes .alt-cjk {
+        font-family: var(--cjk);
+        font-size: 12px;
+        color: var(--ink-3);
+        font-weight: 500;
+        margin-top: 2px;
+      }
+      .recipes .alt-sub {
+        font-size: 10.5px;
+        color: var(--ink-3);
+        margin-top: 4px;
+        font-weight: 500;
+      }
+      .recipes .alt-pick {
+        background: var(--shoyu);
+        color: var(--cream);
+        border: none;
+        border-radius: 99px;
+        width: 34px;
+        height: 34px;
+        flex-shrink: 0;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .recipes .keep-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 4px 2px;
+        font-size: 11px;
+        color: var(--shoyu);
+        font-weight: 500;
+      }
+      .recipes .keep-row .ring {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        border: 1.5px solid var(--shoyu);
+      }
+      .recipes .browse {
+        margin: 0 14px 14px;
+        padding: 14px;
+        background: var(--paper);
+        border-radius: var(--r-md);
+        text-align: center;
+      }
+      .recipes .browse a {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink);
+        text-decoration: none;
+      }
+      .recipes .browse a .arr {
+        display: inline-block;
+        color: var(--persimmon);
+        margin-left: 6px;
+        font-weight: 700;
+      }
+      .recipes .actions {
+        display: flex;
+        gap: 10px;
+        padding: 0 14px 14px;
+      }
+      .recipes .actions button {
+        flex: 1;
+        padding: 16px;
+        border-radius: var(--r-md);
+        border: none;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .recipes .actions .save {
+        background: var(--paper);
+        color: var(--ink);
+      }
+      .recipes .actions .build {
+        background: var(--shoyu);
+        color: var(--cream);
+        flex: 1.4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .recipes .actions .build .arr {
+        font-size: 16px;
+        color: var(--apricot);
+      }
+      .recipes .chat {
+        margin: 0 14px 14px;
+        padding: 14px 16px;
+        background: var(--paper);
+        border-radius: var(--r-md);
+        border: 1.5px solid var(--persimmon);
+      }
+      .recipes .chat-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--ink-2);
+        margin-bottom: 6px;
+      }
+      .recipes .chat-input {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 0;
+      }
+      .recipes .chat-input .arr {
+        color: var(--persimmon);
+        font-size: 14px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .recipes .chat-input input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--ink);
+      }
+      .recipes .chat-hint {
+        font-size: 10px;
+        color: var(--ink-3);
+        margin-top: 2px;
+        font-weight: 500;
+      }
+      .recipes .foot {
+        text-align: center;
+        padding: 8px 16px 18px;
+        font-size: 10px;
+        color: var(--ink-3);
+        font-weight: 500;
+      }
+      .recipes .foot .dot {
+        color: var(--persimmon);
+        margin: 0 6px;
+      }
+
+      /* ========== gallery component instances ========== */
+      .g-tag {
+        font-size: 10.5px;
+        font-weight: 600;
+        padding: 5px 10px;
+        border-radius: 99px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .g-tag.have {
+        background: var(--jade-soft);
+        color: var(--jade);
+      }
+      .g-tag.buy {
+        background: var(--persimmon-soft);
+        color: var(--persimmon);
+      }
+      .g-tag::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+      .g-tag.have::before {
+        background: var(--jade);
+      }
+      .g-tag.buy::before {
+        background: var(--persimmon);
+      }
+
+      .g-chip {
+        background: var(--cream-deep);
+        padding: 5px 11px;
+        border-radius: 99px;
+        font-size: 10.5px;
+        font-weight: 600;
+        color: var(--ink-2);
+      }
+      .g-chip b {
+        color: var(--jade);
+      }
+
+      .g-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--shoyu);
+        color: var(--cream);
+        padding: 5px 11px;
+        border-radius: 99px;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+      }
+      .g-eyebrow .leaf {
+        color: var(--apricot);
+      }
+
+      .g-dish-id {
+        display: inline-block;
+        font-size: 9.5px;
+        font-weight: 700;
+        color: var(--persimmon);
+        letter-spacing: 0.12em;
+        background: var(--persimmon-soft);
+        padding: 3px 8px;
+        border-radius: 99px;
+      }
+
+      .g-swap-pill {
+        background: var(--cream-deep);
+        color: var(--ink);
+        border: none;
+        border-radius: 99px;
+        padding: 7px 14px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-family: var(--sans);
+      }
+      .g-btn-save {
+        background: var(--paper);
+        color: var(--ink);
+        border: none;
+        padding: 14px 24px;
+        border-radius: var(--r-md);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: var(--sans);
+      }
+      .g-btn-build {
+        background: var(--shoyu);
+        color: var(--cream);
+        border: none;
+        padding: 14px 24px;
+        border-radius: var(--r-md);
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--sans);
+      }
+      .g-btn-build .arr {
+        color: var(--apricot);
+        font-size: 16px;
+      }
+
+      .g-alt-pick {
+        background: var(--shoyu);
+        color: var(--cream);
+        border: none;
+        border-radius: 99px;
+        width: 34px;
+        height: 34px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .g-info {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--cream-deep);
+        color: var(--ink-2);
+        font-size: 9px;
+        font-weight: 700;
+        text-align: center;
+        line-height: 14px;
+      }
+
+      .g-swap-tag {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--persimmon);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .g-swap-tag .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--persimmon);
+        display: inline-block;
+        animation: pulse 1.8s ease-in-out infinite;
+      }
+
+      /* code blocks for component snippets */
+      pre.code {
+        background: #1f1a14;
+        color: #e8dfc5;
+        padding: 14px 16px;
+        border-radius: var(--r-sm);
+        font-family: var(--mono);
+        font-size: 11px;
+        line-height: 1.55;
+        overflow-x: auto;
+        margin-top: 10px;
+      }
+      pre.code .tag {
+        color: #f9c784;
+      }
+      pre.code .attr {
+        color: #c9dccf;
+      }
+      pre.code .str {
+        color: #fdd9c2;
+      }
+      pre.code .com {
+        color: #6a5d42;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="doc">
+      <header class="doc-head">
+        <div class="kicker">Smart Grocery Assistant · Design Reference</div>
+        <h1>Soft Bento</h1>
+        <p class="deck">
+          A modern, bilingual-forward design system for the SGA mobile app.
+          Cream paper surfaces, rounded bento blocks, jade and persimmon
+          accents. This document is the single source of truth for visual
+          decisions and is intended as reference context for Claude Code during
+          implementation.
+        </p>
+        <div class="meta">
+          <span>Direction <b>Soft Bento</b></span>
+          <span>Version <b>0.1</b></span>
+          <span>Updated <b>2026-04-07</b></span>
+          <span>Owner <b>@iDako7</b></span>
+          <span>Reference screen <b>Recipes</b></span>
+        </div>
+      </header>
+
+      <nav class="toc">
+        <span class="toc-label">Contents</span>
+        <a href="#principles"><span class="n">01</span>Principles</a>
+        <a href="#tokens"><span class="n">02</span>Tokens</a>
+        <a href="#typography"><span class="n">03</span>Typography</a>
+        <a href="#components"><span class="n">04</span>Components</a>
+        <a href="#bilingual"><span class="n">05</span>Bilingual rules</a>
+        <a href="#screen"><span class="n">06</span>Recipes screen</a>
+        <a href="#handoff"><span class="n">07</span>Handoff notes</a>
+      </nav>
+
+      <!-- ========== 01 PRINCIPLES ========== -->
+      <section id="principles">
+        <div class="sec-head">
+          <div class="num">01</div>
+          <h2>Principles</h2>
+          <p class="lead">
+            Four rules that govern every visual decision in Soft Bento. When in
+            doubt, defer to these.
+          </p>
+        </div>
+        <div class="prose">
+          <ul>
+            <li>
+              <b>Calm modernism, not minimalism.</b> Generous rounded surfaces,
+              soft cream backgrounds, breathing room. The mood is contemporary
+              Tokyo/Vancouver crossover branding — warm, considered, not stark.
+            </li>
+            <li>
+              <b>Semantic color discipline.</b> Jade means <i>have</i>.
+              Persimmon means <i>buy</i> (and primary accent). Apricot means
+              <i>alternative / secondary action surface</i>. Shoyu (near-black)
+              means <i>commit / primary button</i>. Don't use these colors
+              decoratively — every appearance carries meaning.
+            </li>
+            <li>
+              <b>One type system.</b> DM Sans for Latin, Noto Sans SC for CJK.
+              No serifs anywhere. JetBrains Mono only for terse
+              cooking-instruction reference blocks (Saved Recipe, Saved Plan
+              detail).
+            </li>
+            <li>
+              <b>Bilingual is a first-class state, not a toggle.</b> Chinese
+              names for dishes appear inline with English at all times.
+              Functional UI (buttons, labels, hints) stays in English only. See
+              §5.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ========== 02 TOKENS ========== -->
+      <section id="tokens">
+        <div class="sec-head">
+          <div class="num">02</div>
+          <h2>Color tokens</h2>
+          <p class="lead">
+            All colors used in Soft Bento. Names are casual on purpose — they're
+            part of the design voice. The role column is the source of truth for
+            when to use each.
+          </p>
+        </div>
+
+        <h3 class="sub">Surfaces</h3>
+        <div class="token-grid">
+          <div class="swatch">
+            <div class="chip" style="background: #f5efe4"></div>
+            <div class="info">
+              <div class="name">--cream</div>
+              <div class="hex">#f5efe4</div>
+              <div class="role">Phone background, app shell</div>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background: #fbf7ee"></div>
+            <div class="info">
+              <div class="name">--paper</div>
+              <div class="hex">#fbf7ee</div>
+              <div class="role">Bento card surfaces</div>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background: #ece4d2"></div>
+            <div class="info">
+              <div class="name">--cream-deep</div>
+              <div class="hex">#ece4d2</div>
+              <div class="role">Subtle dividers, secondary chips, hover</div>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background: #fff9ec"></div>
+            <div class="info">
+              <div class="name">--tofu</div>
+              <div class="hex">#fff9ec</div>
+              <div class="role">
+                Nested cards (alt cards inside the alts panel)
+              </div>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background: #1a1410"></div>
+            <div class="info">
+              <div class="name">--shoyu</div>
+              <div class="hex">#1a1410</div>
+              <div class="role">Primary CTA, eyebrow badge background</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="sub">Ink (text)</h3>
+        <div class="token-grid">
+          <div class="swatch">
+            <div class="chip" style="background: #221f1a"></div>
+            <div class="info">
+              <div class="name">--ink</div>
+              <div class="hex">#221f1a</div>
+              <div class="role">Primary text, headings</div>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background: #544c3f"></div>
+            <div class="info">
+              <div class="name">--ink-2</div>
+              <div class="hex">#544c3f</div>
+              <div class="role">Body, deck, secondary text</div>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background: #8a8270"></div>
+            <div class="info">
+              <div class="name">--ink-3</div>
+              <div class="hex">#8a8270</div>
+              <div class="role">Tertiary, meta, hints, CJK subtitles</div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="sub">Semantic accents</h3>
+        <div class="token-grid">
+          <div class="swatch">
+            <div class="chip" style="background: #3d7158"></div>
+            <div class="info">
+              <div class="name">--jade</div>
+              <div class="hex">#3d7158</div>
+              <div class="role">"Have" — ingredients on hand</div>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background: #c9dccf"></div>
+            <div class="info">
+              <div class="name">--jade-soft</div>
+              <div class="hex">#c9dccf</div>
+              <div class="role">"Have" pill background</div>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background: #e25822"></div>
+            <div class="info">
+              <div class="name">--persimmon</div>
+              <div class="hex">#e25822</div>
+              <div class="role">"Buy" + primary accent + swap state</div>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background: #fdd9c2"></div>
+            <div class="info">
+              <div class="name">--persimmon-soft</div>
+              <div class="hex">#fdd9c2</div>
+              <div class="role">"Buy" pill background, dish ID pill bg</div>
+            </div>
+          </div>
+          <div class="swatch">
+            <div class="chip" style="background: #f9c784"></div>
+            <div class="info">
+              <div class="name">--apricot</div>
+              <div class="hex">#f9c784</div>
+              <div class="role">
+                Alternatives panel gradient, decorative orbs
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="sub">Radius scale</h3>
+        <div class="scale-row">
+          <div class="label">--r-lg</div>
+          <div class="val">24px</div>
+          <div class="vis radius" style="border-radius: 24px"></div>
+          <div
+            style="font-size: 11px; color: var(--doc-ink-3); margin-left: 12px"
+          >
+            Bento cards (header, dish, alts)
+          </div>
+        </div>
+        <div class="scale-row">
+          <div class="label">--r-md</div>
+          <div class="val">16px</div>
+          <div
+            class="vis radius"
+            style="border-radius: 16px; width: 48px; height: 48px"
+          ></div>
+          <div
+            style="font-size: 11px; color: var(--doc-ink-3); margin-left: 12px"
+          >
+            Buttons, alt cards, browse, chat
+          </div>
+        </div>
+        <div class="scale-row">
+          <div class="label">--r-sm</div>
+          <div class="val">10px</div>
+          <div
+            class="vis radius"
+            style="border-radius: 10px; width: 36px; height: 36px"
+          ></div>
+          <div
+            style="font-size: 11px; color: var(--doc-ink-3); margin-left: 12px"
+          >
+            Inner accents (rare)
+          </div>
+        </div>
+        <div class="scale-row">
+          <div class="label">pill</div>
+          <div class="val">99px</div>
+          <div
+            class="vis"
+            style="width: 80px; height: 24px; border-radius: 99px"
+          ></div>
+          <div
+            style="font-size: 11px; color: var(--doc-ink-3); margin-left: 12px"
+          >
+            Tags, chips, eyebrow, dish ID, swap pill
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== 03 TYPOGRAPHY ========== -->
+      <section id="typography">
+        <div class="sec-head">
+          <div class="num">03</div>
+          <h2>Typography</h2>
+          <p class="lead">
+            Two faces, one mono. Sans for everything functional, CJK for Chinese
+            characters, mono only for reference cooking instructions.
+          </p>
+        </div>
+
+        <div class="type-row">
+          <div class="meta-col">
+            <b>Display H1</b>DM Sans 700<br />27px / 1.1<br />letter-spacing
+            -.02em
+          </div>
+          <div
+            class="sample"
+            style="
+              font-weight: 700;
+              font-size: 27px;
+              line-height: 1.1;
+              letter-spacing: -0.02em;
+            "
+          >
+            Your meal <span style="color: var(--persimmon)">plan</span>.
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="meta-col">
+            <b>Dish name</b>DM Sans 600<br />16px / 1.25<br />letter-spacing
+            -.01em
+          </div>
+          <div
+            class="sample"
+            style="
+              font-weight: 600;
+              font-size: 16px;
+              line-height: 1.25;
+              letter-spacing: -0.01em;
+            "
+          >
+            Korean BBQ Pork Belly
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="meta-col">
+            <b>Dish name CJK</b>Noto Sans SC 500<br />13px<br />letter-spacing
+            .02em
+          </div>
+          <div
+            class="sample cjk"
+            style="
+              font-weight: 500;
+              font-size: 13px;
+              letter-spacing: 0.02em;
+              color: var(--ink-3);
+            "
+          >
+            韩式烤五花肉
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="meta-col">
+            <b>Alt card name</b>DM Sans 600<br />15px / 1.2
+          </div>
+          <div
+            class="sample"
+            style="font-weight: 600; font-size: 15px; line-height: 1.2"
+          >
+            Asian Slaw
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="meta-col">
+            <b>Body / deck</b>DM Sans 400<br />13px / 1.5
+          </div>
+          <div
+            class="sample"
+            style="
+              font-weight: 400;
+              font-size: 13px;
+              line-height: 1.5;
+              color: var(--ink-2);
+            "
+          >
+            Three dishes for BBQ weekend — fills your veggie gap.
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="meta-col"><b>Meta / hints</b>DM Sans 500<br />11px</div>
+          <div
+            class="sample"
+            style="font-weight: 500; font-size: 11px; color: var(--ink-3)"
+          >
+            Gochujang · Grill · 30 min
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="meta-col">
+            <b>Label / eyebrow</b>DM Sans 600/700<br />10px<br />letter-spacing
+            .12em<br />uppercase
+          </div>
+          <div
+            class="sample"
+            style="
+              font-weight: 700;
+              font-size: 10px;
+              letter-spacing: 0.12em;
+              text-transform: uppercase;
+              color: var(--persimmon);
+            "
+          >
+            DISH ONE
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="meta-col">
+            <b>Number badge</b>DM Sans 800<br />28px / 1<br />letter-spacing
+            -.02em
+          </div>
+          <div
+            class="sample"
+            style="
+              font-weight: 800;
+              font-size: 28px;
+              line-height: 1;
+              letter-spacing: -0.02em;
+              color: var(--cream-deep);
+            "
+          >
+            01
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="meta-col">
+            <b>Mono reference</b>JetBrains Mono 400<br />12px / 1.6<br />only
+            for cooking instructions
+          </div>
+          <div
+            class="sample"
+            style="font-family: var(--mono); font-size: 12px; line-height: 1.6"
+          >
+            Marinade 30 min: 2 tbsp gochujang, 1 tbsp soy
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== 04 COMPONENTS ========== -->
+      <section id="components">
+        <div class="sec-head">
+          <div class="num">04</div>
+          <h2>Component gallery</h2>
+          <p class="lead">
+            All reusable pieces from the Recipes screen, isolated. Each carries
+            its class name and a usage note. New components for other screens
+            (PCV row, checklist, sidebar, etc.) will be added as those screens
+            are designed.
+          </p>
+        </div>
+
+        <!-- Eyebrow badge -->
+        <div class="comp">
+          <div class="comp-head">
+            <div class="comp-name">Eyebrow badge</div>
+            <div class="comp-class">.eyebrow</div>
+          </div>
+          <div class="comp-stage">
+            <span class="g-eyebrow"
+              ><span class="leaf">✶</span> Saturday's Plan</span
+            >
+          </div>
+          <div class="comp-note">
+            Shoyu background, cream text, apricot leaf accent. Used once per
+            screen, top of the header bento, to set context.
+          </div>
+        </div>
+
+        <!-- Dish ID pill -->
+        <div class="comp">
+          <div class="comp-head">
+            <div class="comp-name">Dish ID pill</div>
+            <div class="comp-class">.dish-id</div>
+          </div>
+          <div class="comp-stage">
+            <span class="g-dish-id">DISH ONE</span>
+            <span class="g-dish-id">DISH TWO</span>
+            <span class="g-dish-id">DISH THREE</span>
+          </div>
+          <div class="comp-note">
+            Persimmon-soft background, persimmon text, uppercase. Anchors each
+            dish card.
+          </div>
+        </div>
+
+        <!-- Stat chips -->
+        <div class="comp">
+          <div class="comp-head">
+            <div class="comp-name">Stat chip</div>
+            <div class="comp-class">.stat-chips span</div>
+          </div>
+          <div class="comp-stage">
+            <span class="g-chip"><b>3</b> dishes</span>
+            <span class="g-chip">serves <b>8</b></span>
+            <span class="g-chip">~<b>60</b> min</span>
+          </div>
+          <div class="comp-note">
+            Cream-deep background. Numerical highlight in jade. Used for
+            at-a-glance summary stats.
+          </div>
+        </div>
+
+        <!-- Ingredient tag pills -->
+        <div class="comp">
+          <div class="comp-head">
+            <div class="comp-name">Ingredient pill</div>
+            <div class="comp-class">.tag.have / .tag.buy</div>
+          </div>
+          <div class="comp-stage">
+            <span class="g-tag have">have · pork belly</span>
+            <span class="g-tag have">have · buns</span>
+            <span class="g-tag buy">buy · gochujang</span>
+            <span class="g-tag buy">buy · cheese</span>
+          </div>
+          <div class="comp-note">
+            Jade for owned ingredients, persimmon for items to buy. The leading
+            dot reinforces the semantic. Never mix colors — semantic discipline
+            is the rule.
+          </div>
+        </div>
+
+        <!-- Info button -->
+        <div class="comp">
+          <div class="comp-head">
+            <div class="comp-name">Info button</div>
+            <div class="comp-class">.info</div>
+          </div>
+          <div class="comp-stage">
+            <span class="g-info">i</span>
+          </div>
+          <div class="comp-note">
+            14px round, cream-deep background. Inline next to dish names. Opens
+            a bottom sheet with bilingual name + flavor description.
+          </div>
+        </div>
+
+        <!-- Swap pill -->
+        <div class="comp">
+          <div class="comp-head">
+            <div class="comp-name">Swap pill button</div>
+            <div class="comp-class">.swap-pill</div>
+          </div>
+          <div class="comp-stage">
+            <button class="g-swap-pill">
+              try another <span style="font-size: 13px">↺</span>
+            </button>
+          </div>
+          <div class="comp-note">
+            Cream-deep background, ink text. Footer of every default dish card.
+            Tapping triggers the swap state and pre-fills the chat input.
+          </div>
+        </div>
+
+        <!-- Swap state tag -->
+        <div class="comp">
+          <div class="comp-head">
+            <div class="comp-name">Swap state tag</div>
+            <div class="comp-class">.swap-tag</div>
+          </div>
+          <div class="comp-stage">
+            <span class="g-swap-tag"><span class="dot"></span>swapping</span>
+          </div>
+          <div class="comp-note">
+            Persimmon, uppercase, with pulsing dot. Replaces the swap pill in
+            the dish footer when the card is in the swapping state. Pulse
+            animation: 1.8s ease-in-out infinite.
+          </div>
+        </div>
+
+        <!-- Alt pick button -->
+        <div class="comp">
+          <div class="comp-head">
+            <div class="comp-name">Alt pick button</div>
+            <div class="comp-class">.alt-pick</div>
+          </div>
+          <div class="comp-stage">
+            <button class="g-alt-pick">→</button>
+          </div>
+          <div class="comp-note">
+            34×34 round, shoyu background, cream arrow. Sits on the right edge
+            of each alt card. Hover state: persimmon background.
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="comp">
+          <div class="comp-head">
+            <div class="comp-name">Action buttons</div>
+            <div class="comp-class">.actions .save / .build</div>
+          </div>
+          <div class="comp-stage">
+            <button class="g-btn-save">Save plan</button>
+            <button class="g-btn-build">
+              Build list <span class="arr">→</span>
+            </button>
+          </div>
+          <div class="comp-note">
+            Save = paper background, ink text (secondary). Build = shoyu
+            background, cream text, apricot arrow (primary, slightly wider via
+            flex:1.4). Always paired in this order.
+          </div>
+        </div>
+
+        <!-- Component snippet sample -->
+        <div class="comp">
+          <div class="comp-head">
+            <div class="comp-name">Sample markup — dish card</div>
+            <div class="comp-class">reference snippet</div>
+          </div>
+          <pre class="code">
+&lt;article class="dish"&gt;
+  &lt;span class="dish-num"&gt;01&lt;/span&gt;
+  &lt;div class="dish-id"&gt;DISH ONE&lt;/div&gt;
+  &lt;h3 class="dish-name"&gt;Korean BBQ Pork Belly&lt;span class="info"&gt;i&lt;/span&gt;&lt;/h3&gt;
+  &lt;div class="dish-cjk"&gt;韩式烤五花肉&lt;/div&gt;
+  &lt;div class="dish-meta"&gt;
+    &lt;span&gt;Gochujang&lt;/span&gt;&lt;span class="pip"&gt;&lt;/span&gt;
+    &lt;span&gt;Grill&lt;/span&gt;&lt;span class="pip"&gt;&lt;/span&gt;
+    &lt;span&gt;30 min&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="tags"&gt;
+    &lt;span class="tag have"&gt;have · pork belly&lt;/span&gt;
+    &lt;span class="tag buy"&gt;buy · gochujang&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="dish-foot"&gt;
+    &lt;button class="swap-pill"&gt;try another ↺&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</pre
+          >
+        </div>
+      </section>
+
+      <!-- ========== 05 BILINGUAL ========== -->
+      <section id="bilingual">
+        <div class="sec-head">
+          <div class="num">05</div>
+          <h2>Bilingual rules</h2>
+          <p class="lead">
+            When CJK appears and when it doesn't. Translation is for cultural
+            information, not redundancy.
+          </p>
+        </div>
+        <div class="prose">
+          <p><b>CJK appears on:</b></p>
+          <ul>
+            <li>Dish names in dish cards (<code>.dish-cjk</code>)</li>
+            <li>Alternative names in the alts panel (<code>.alt-cjk</code>)</li>
+            <li>
+              Recipe titles in saved content (when those screens are designed)
+            </li>
+            <li>
+              Ingredient names <i>only</i> when culturally specific (e.g.,
+              五花肉 for pork belly when teaching the term)
+            </li>
+          </ul>
+          <p><b>CJK does NOT appear on:</b></p>
+          <ul>
+            <li>Functional buttons (Save plan, Build list, try another, →)</li>
+            <li>Section labels (try instead, A note to the agent)</li>
+            <li>Body copy / deck text</li>
+            <li>Stat chips, meta strings, hints</li>
+            <li>Status bar, footer</li>
+          </ul>
+          <p>
+            <b>Why:</b> bilingual users navigating English UI fluently don't
+            need every word translated. They need help with
+            <i>names of things they may not recognize</i>. Translating buttons
+            clutters the interface and patronizes the user. Translating dish
+            names is informative — it's how the two user groups (Vancouver
+            immigrants exploring Western food, locals exploring Asian food)
+            actually search and recognize.
+          </p>
+          <p>
+            <b>Font fallback:</b> the <code>--cjk</code> stack is
+            <code>'Noto Sans SC', 'DM Sans', sans-serif</code>. Latin characters
+            inside CJK strings render in Noto Sans SC (which has full Latin
+            coverage), so mixed strings look consistent. Don't manually swap
+            fonts mid-string.
+          </p>
+        </div>
+      </section>
+
+      <!-- ========== 06 SCREEN ========== -->
+      <section id="screen">
+        <div class="sec-head">
+          <div class="num">06</div>
+          <h2>Recipes screen</h2>
+          <p class="lead">
+            The canonical reference render. Use this as the visual quality bar
+            when implementing other screens — they should feel like they belong
+            to this same family.
+          </p>
+        </div>
+
+        <div class="render-stage">
+          <div class="phone recipes">
+            <div class="bar">
+              <span>9:41</span>
+              <span class="lang"><b>EN</b><span>·</span><span>中</span></span>
+              <span>SGA</span>
+            </div>
+            <header class="header">
+              <div class="header-inner">
+                <div class="eyebrow">
+                  <span class="leaf">✶</span> Saturday's Plan
+                </div>
+                <h1>Your meal <span class="em">plan</span>.</h1>
+                <p class="deck">
+                  Three dishes for <b>BBQ weekend</b> — fills your veggie gap,
+                  leans on what you already have.
+                </p>
+                <div class="stat-chips">
+                  <span><b>3</b> dishes</span>
+                  <span>serves <b>8</b></span>
+                  <span>~<b>60</b> min</span>
+                </div>
+              </div>
+            </header>
+            <article class="dish">
+              <span class="dish-num">01</span>
+              <div class="dish-id">DISH ONE</div>
+              <h3 class="dish-name">
+                Korean BBQ Pork Belly<span class="info">i</span>
+              </h3>
+              <div class="dish-cjk">韩式烤五花肉</div>
+              <div class="dish-meta">
+                <span>Gochujang</span><span class="pip"></span>
+                <span>Grill</span><span class="pip"></span>
+                <span>30 min</span>
+              </div>
+              <div class="tags">
+                <span class="tag have">have · pork belly</span>
+                <span class="tag buy">buy · gochujang</span>
+              </div>
+              <div class="dish-foot">
+                <button class="swap-pill">
+                  try another <span class="arr">↺</span>
+                </button>
+              </div>
+            </article>
+            <article class="dish swapping">
+              <span class="dish-num">02</span>
+              <div class="dish-id">DISH TWO</div>
+              <h3 class="dish-name">
+                Grilled Corn &amp; Cucumber Salad<span class="info">i</span>
+              </h3>
+              <div class="dish-cjk">烤玉米黄瓜沙拉</div>
+              <div class="dish-meta">
+                <span>Side</span><span class="pip"></span> <span>Grill</span
+                ><span class="pip"></span>
+                <span>15 min</span>
+              </div>
+              <div class="dish-foot">
+                <span class="swap-tag"><span class="dot"></span>swapping</span>
+              </div>
+            </article>
+            <div class="alts">
+              <div class="alts-head">
+                <div class="alts-label">try instead</div>
+              </div>
+              <div class="alt-card">
+                <div class="alt-info">
+                  <div class="alt-name">Asian Slaw</div>
+                  <div class="alt-cjk">亚式凉拌卷心菜</div>
+                  <div class="alt-sub">Crunchy, tangy · 10 min</div>
+                </div>
+                <button class="alt-pick">→</button>
+              </div>
+              <div class="alt-card">
+                <div class="alt-info">
+                  <div class="alt-name">Grilled Veggie Skewers</div>
+                  <div class="alt-cjk">烤蔬菜串</div>
+                  <div class="alt-sub">Zucchini, pepper · 20 min</div>
+                </div>
+                <button class="alt-pick">→</button>
+              </div>
+              <div class="keep-row">
+                <span class="ring"></span>
+                <span>or keep the original</span>
+              </div>
+            </div>
+            <article class="dish">
+              <span class="dish-num">03</span>
+              <div class="dish-id">DISH THREE</div>
+              <h3 class="dish-name">
+                Classic Smash Burgers<span class="info">i</span>
+              </h3>
+              <div class="dish-cjk">经典手压汉堡</div>
+              <div class="dish-meta">
+                <span>Cast iron</span><span class="pip"></span>
+                <span>15 min</span>
+              </div>
+              <div class="tags">
+                <span class="tag have">have · patties</span>
+                <span class="tag have">have · buns</span>
+                <span class="tag buy">buy · cheese</span>
+                <span class="tag buy">buy · lettuce</span>
+              </div>
+              <div class="dish-foot">
+                <button class="swap-pill">
+                  try another <span class="arr">↺</span>
+                </button>
+              </div>
+            </article>
+            <div class="browse">
+              <a href="#">Browse the full library<span class="arr">→</span></a>
+            </div>
+            <div class="actions">
+              <button class="save">Save plan</button>
+              <button class="build">
+                Build list <span class="arr">→</span>
+              </button>
+            </div>
+            <div class="chat">
+              <div class="chat-label">A note to the agent</div>
+              <div class="chat-input">
+                <span class="arr">›</span>
+                <input
+                  type="text"
+                  value="Suggest a different side for dish 02"
+                />
+              </div>
+              <div class="chat-hint">Edit to refine, or send as written</div>
+            </div>
+            <div class="foot">
+              Smart Grocery <span class="dot">·</span> Vancouver
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== 07 HANDOFF ========== -->
+      <section id="handoff">
+        <div class="sec-head">
+          <div class="num">07</div>
+          <h2>Handoff notes</h2>
+          <p class="lead">
+            Instructions for Claude Code or any developer building from this
+            reference.
+          </p>
+        </div>
+        <div class="prose">
+          <p><b>Implementation order.</b> Build in stages, validate at each:</p>
+          <ul>
+            <li>
+              <b>Stage 1 — static HTML/CSS.</b> Generate the 6 remaining screens
+              (Home, Clarify, Grocery, Saved Plan, Saved Recipe, Saved List) as
+              static HTML using only the tokens, components, and rules in this
+              document. No JS, no framework. Quick visual review pass.
+            </li>
+            <li>
+              <b>Stage 2 — React/TS components.</b> Convert validated HTML into
+              typed React components with mock props. Still no backend.
+            </li>
+            <li>
+              <b>Stage 3 — mock data + state machine.</b> Wire the IDLE →
+              LOADING → STREAMING → COMPLETE states from
+              <code>architecture-spec-v2.md</code> §11 with hardcoded responses.
+              Validate full click-through.
+            </li>
+            <li>
+              <b>Stage 4 — real AI layer.</b> Connect to <code>/chat</code> SSE
+              endpoint with typed event handling per
+              <code>ai-layer-architecture-v2.md</code> §3.
+            </li>
+          </ul>
+
+          <p><b>What to copy from this doc:</b></p>
+          <ul>
+            <li>
+              The full <code>:root</code> CSS variable block (§2 colors + §3
+              type stacks). Copy as-is.
+            </li>
+            <li>
+              Component class names exactly as shown — they're the contract
+              between screens.
+            </li>
+            <li>The Recipes render as the visual quality bar.</li>
+          </ul>
+
+          <p><b>What NOT to do:</b></p>
+          <ul>
+            <li>
+              Don't introduce new font families. DM Sans + Noto Sans SC +
+              JetBrains Mono is the complete set.
+            </li>
+            <li>
+              Don't introduce new colors outside the token list. If a screen
+              needs a new accent, add it to this doc first.
+            </li>
+            <li>Don't translate functional UI to Chinese. See §5.</li>
+            <li>
+              Don't use serifs anywhere — Soft Bento is fundamentally modern.
+            </li>
+            <li>
+              Don't swap semantic colors (jade ≠ persimmon). They carry meaning.
+            </li>
+          </ul>
+
+          <p>
+            <b>New components needed for other screens</b> (to design when
+            reaching each):
+          </p>
+          <ul>
+            <li>
+              <b>PCV category row</b> (Clarify) — status icon (ok/warn/bad) +
+              label + items text
+            </li>
+            <li><b>Quick-start chip</b> (Home) — pill with template label</li>
+            <li>
+              <b>Fridge recall banner</b> (Home) — soft callout with dismiss
+            </li>
+            <li>
+              <b>Checklist row</b> (Grocery, Saved List) — checkbox + item + sub
+              + remove
+            </li>
+            <li>
+              <b>Store section header</b> (Grocery, Saved List) — small caps
+              label
+            </li>
+            <li>
+              <b>Expandable recipe row</b> (Saved Plan) — tap-to-reveal cooking
+              steps
+            </li>
+            <li>
+              <b>Recipe detail block</b> (Saved Plan, Saved Recipe) — JetBrains
+              Mono terse instructions
+            </li>
+            <li>
+              <b>Sidebar menu</b> (Home overlay) — three-section saved content
+              list
+            </li>
+          </ul>
+
+          <p><b>Reference files:</b></p>
+          <ul>
+            <li>
+              <code>wireframe-v2.html</code> — structure and interaction source
+              of truth (follow faithfully, restyle visually)
+            </li>
+            <li>
+              <code>product-spec-v2.md</code> — what each screen does and why
+            </li>
+            <li>
+              <code>architecture-spec-v2.md</code> §11 — frontend architecture
+              and state machine
+            </li>
+            <li>
+              <code>ai-layer-architecture-v2.md</code> §3 — SSE event types for
+              stage 4
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
