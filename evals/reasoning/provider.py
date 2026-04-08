@@ -47,9 +47,20 @@ def call_api(prompt: str, options: dict, context: dict) -> dict:
     try:
         result = run_agent(prompt, profile=profile, model=model)
         output = result.model_dump()
-        # Estimate cost: Sonnet 4.6 via OpenRouter = $3/M input, $15/M output
-        input_cost = result.input_tokens * 3.0 / 1_000_000
-        output_cost = result.output_tokens * 15.0 / 1_000_000
+        # Estimate cost based on model
+        model_name = model or ""
+        cost_rates = {
+            "gpt-5.4-mini": (0.30, 1.25),
+            "claude-sonnet-4-6": (3.0, 15.0),
+        }
+        input_rate, output_rate = next(
+            (r for k, r in cost_rates.items() if k in model_name),
+            (3.0, 15.0),  # default fallback
+        )
+        if not any(k in model_name for k in cost_rates):
+            print(f"[provider] Warning: unknown model '{model_name}', using default cost rates")
+        input_cost = result.input_tokens * input_rate / 1_000_000
+        output_cost = result.output_tokens * output_rate / 1_000_000
         total_cost = input_cost + output_cost
 
         return {

@@ -61,7 +61,6 @@ A sidebar (hamburger menu from Home) manages saved content, organized into three
 The entry point for every session. Clean and focused on starting.
 
 - **Text input** — freeform: "BBQ for 8 people" or "I have leftover chicken wings"
-- **Fridge recall banner** — dismissible prompt based on purchase history: "You bought chicken wings at Costco on Tuesday. Still have some?"
 - **Quick-start chips** — pre-built session templates ("Weekend BBQ," "Weeknight meals," "Use my leftovers") that pre-populate input and jump to Clarify. These also serve as onboarding — users learn what the app does by tapping one.
 
 No chat input on this screen.
@@ -163,7 +162,6 @@ One list with store sections (not separate lists per store). Editable:
 
 ## 9. Open Questions
 
-- **OQ-1: Fridge recall mechanism.** How aggressively to prompt based on purchase history. Deferred to prototyping.
 - **OQ-2: KB seed strategy.** How many recipes and products to index initially, which cuisines to prioritize first.
 - **OQ-3: Model selection.** Mid-tier non-reasoning model likely needed for the agent's structural complexity. Depends on further evaluation.
 - **OQ-4: Extremely vague input.** Minimum information threshold before the system can generate useful suggestions. Deferred to user testing.

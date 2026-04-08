@@ -24,6 +24,8 @@
 | ADR-13 | Magic Link + JWT Authentication | Decided | New |
 | ADR-14 | Single VPS + Docker Compose Deployment | Decided | New |
 | ADR-15 | Multi-Dimensional Flavor Tags for Variety Matching | Decided | New |
+| ADR-16 | Frontend Stack: React + Vite + shadcn/ui + Tailwind + Bun | Decided | New |
+| ADR-17 | Screen-Agnostic API Design | Decided | New |
 
 ---
 
@@ -145,7 +147,7 @@
 
 **Decision:** Server-Sent Events for the `/chat` endpoint response stream.
 
-**Why:** SSE is unidirectional (server → client), matching the data flow exactly. Client sends via POST, server streams back. No connection upgrade negotiation. Native browser `EventSource` API. Works through most proxies and CDNs without special configuration.
+**Why:** SSE wire format is unidirectional (server → client), matching the data flow exactly. Client sends via POST, server streams back the response in SSE format (`event:`, `data:`, `\n\n`). Frontend reads via `fetch()` + `ReadableStream` (not the native `EventSource` API, which is GET-only and can't send a request body). Works through most proxies and CDNs without special configuration.
 
 **Why not alternatives:**
 
@@ -153,6 +155,8 @@
 - *Polling:* Wrong model for a stream of typed events. Too frequent wastes requests during idle; too infrequent misses updates during 5–15s tool-use loops.
 
 **Trade-off:** SSE connections are long-lived. Server must handle drops gracefully — `done` event carries status field (`"complete"` | `"partial"`) so frontend knows whether to show a retry prompt.
+
+> **Update (Phase 2 planning):** Clarified transport mechanism. The SSE *wire format* is the decision; the *transport* is streaming fetch (`POST` → `ReadableStream`), not the native browser `EventSource` API (which is GET-only and can't send a request body). This is the standard pattern for AI chat endpoints (OpenAI, Anthropic).
 
 ---
 
@@ -311,6 +315,8 @@ VPS
 
 **Trade-off:** Single VPS is a single point of failure. Acceptable for validation — no SLA commitments. When user load justifies it, horizontal scaling is straightforward: stateless app containers behind a load balancer, shared PostgreSQL.
 
+> **Phase 3 target:** AWS (ECS/Fargate for backend containers, RDS for managed PostgreSQL, ALB for SSE-compatible load balancing, S3 + CloudFront for frontend). The Docker Compose service structure maps directly to ECS task definitions — no architectural rework needed.
+
 ---
 
 ## ADR-15: Multi-Dimensional Flavor Tags for Variety Matching
@@ -328,6 +334,37 @@ VPS
 **Trade-off:** Tags must be manually curated per recipe — no reliable automated tagging exists. Vocabulary stored as a flat expandable list, so adding descriptors requires no schema migration, only KB updates.
 
 > **Origin:** Inspired by CookWell's recipe categorization. See commit `fbc2e14`.
+
+---
+
+## ADR-16: Frontend Stack — React + Vite + shadcn/ui + Tailwind + Bun
+
+**Decision:** Use React + TypeScript with Vite as the build tool, Bun as the package manager, shadcn/ui for component primitives, and Tailwind CSS for styling. Design tokens from the Soft Bento design system are mapped into the Tailwind configuration.
+
+**Why:** Solo developer needs to minimize frontend time while maintaining quality. shadcn/ui provides accessible, well-structured component primitives (Card, Button, Dialog, Input) that can be customized via Tailwind. Bun replaces npm with 10-30x faster installs. Tailwind's utility-first approach maps naturally to extracting design tokens from the Soft Bento reference into `tailwind.config.ts`. No meta-framework (Next.js) needed — the app is a client-side SPA with no SSR requirements.
+
+**Why not alternatives:**
+
+- *Next.js:* Adds SSR complexity and a redundant server layer when FastAPI is already the backend. SSE proxying through Next.js adds friction.
+- *Vue/Svelte:* Smaller ecosystems. No mobile path equivalent to React Native.
+- *Expo (React Native for web):* Web output quality is noticeably worse than native web. Design system wouldn't translate to React Native's StyleSheet model.
+
+**Trade-off:** shadcn/ui components are copied into the project (not installed as a package), which means manual updates. Acceptable given the small component surface area (< 15 components).
+
+---
+
+## ADR-17: Screen-Agnostic API Design
+
+**Decision:** The backend emits all relevant typed SSE events regardless of which screen the frontend is showing. The `screen` field in the `/chat` request body is a context hint (used for context compression and logging), not a directive for which event types to emit. The frontend decides what to render based on its current screen state.
+
+**Why:** Different clients may render the same data differently. A web SPA shows 4 sequential screens; a future mobile app might combine Clarify and Recipes into one view. Coupling event emission to screen identity forces every new client to match the web's screen model. Screen-agnostic events let the backend focus on *what data exists* while each client decides *how to present it*.
+
+**Why not alternatives:**
+
+- *Screen-coupled emission (backend decides which events to send per screen):* Simpler backend logic — only emit `pcsv_update` on Clarify screen, only `recipe_card` on Recipes screen. But locks the API to one client's screen model. Adding a mobile client with different screen boundaries requires backend changes.
+- *Separate endpoints per screen:* V1 approach. Already rejected in ADR-5.
+
+**Trade-off:** Frontend receives events it may not render on the current screen. Marginal bandwidth cost — typed SSE events are small (< 1KB each). The reducer simply ignores events that don't map to the current screen's state slots.
 
 ---
 
