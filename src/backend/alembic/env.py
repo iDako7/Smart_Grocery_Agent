@@ -11,9 +11,11 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Override sqlalchemy.url from DATABASE_URL env var
+# Replace asyncpg driver with psycopg2 for Alembic (sync migrations)
 database_url = os.getenv("DATABASE_URL", "")
 if not database_url:
     raise RuntimeError("DATABASE_URL environment variable is not set")
+database_url = database_url.replace("+asyncpg", "+psycopg2")
 config.set_main_option("sqlalchemy.url", database_url)
 
 # WT2 will set this to their metadata for autogenerate support
