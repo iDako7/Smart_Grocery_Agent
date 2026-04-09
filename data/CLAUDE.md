@@ -5,8 +5,8 @@
 - `scripts/` — migration scripts (JSON → SQLite)
 - `contracts/kb_schema.sql` — SQLite DDL (may propose changes via PR to `main`)
 
-## Imports
-- Nothing
+## Imports (read-only)
+- `contracts/kb_schema.sql` — SQLite DDL (migration target schema reference)
 
 ## Must not edit
 - `prototype/` — read-only reference

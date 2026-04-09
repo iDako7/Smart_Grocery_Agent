@@ -21,8 +21,8 @@ services:
       dockerfile: src/backend/Dockerfile.dev
     volumes:
       - ./src/backend:/app
-      - ./src/ai:/ai
-      - ./contracts:/contracts
+      - ./src/ai:/app/ai
+      - ./contracts:/app/contracts
     ports:
       - "8000:8000"
     env_file: .env

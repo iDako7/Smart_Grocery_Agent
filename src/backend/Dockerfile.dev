@@ -10,7 +10,8 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen
 
 # Set Python path so contracts and ai modules are importable
-ENV PYTHONPATH="/contracts:/ai:${PYTHONPATH}"
+# Mounted as /app/contracts and /app/ai in docker-compose.yml
+ENV PYTHONPATH="/app:${PYTHONPATH}"
 
 EXPOSE 8000
 
