@@ -32,11 +32,11 @@ ALLOWED_TABLES: frozenset = frozenset({
 # Expected counts derived from source data at migration time.
 # All keys must be members of ALLOWED_TABLES (asserted at module load time below).
 EXPECTED_COUNTS = {
-    "recipes": 70,
-    "pcsv_mappings": 378,
+    "recipes": 120,
+    "pcsv_mappings": 564,
     "products": 6401,
     "substitutions": 20,
-    "glossary": 409,
+    "glossary": 595,
 }
 
 # Module-load assertion: every EXPECTED_COUNTS key must be in ALLOWED_TABLES.

@@ -1,125 +1,3572 @@
 [
-  {"en": "chicken wings", "zh": "鸡翅", "category": "ingredient", "notes": ""},
-  {"en": "chicken thigh", "zh": "鸡腿肉", "category": "ingredient", "notes": ""},
-  {"en": "chicken breast", "zh": "鸡胸肉", "category": "ingredient", "notes": ""},
-  {"en": "chicken", "zh": "鸡肉", "category": "ingredient", "notes": ""},
-  {"en": "pork belly", "zh": "五花肉", "category": "ingredient", "notes": ""},
-  {"en": "pork", "zh": "猪肉", "category": "ingredient", "notes": ""},
-  {"en": "ground beef", "zh": "牛肉碎", "category": "ingredient", "notes": ""},
-  {"en": "beef", "zh": "牛肉", "category": "ingredient", "notes": ""},
-  {"en": "beef sirloin", "zh": "西冷牛排", "category": "ingredient", "notes": ""},
-  {"en": "steak", "zh": "牛排", "category": "ingredient", "notes": ""},
-  {"en": "bacon", "zh": "培根", "category": "ingredient", "notes": ""},
-  {"en": "burger patties", "zh": "汉堡肉饼", "category": "ingredient", "notes": ""},
-  {"en": "egg", "zh": "鸡蛋", "category": "ingredient", "notes": ""},
-  {"en": "cheese", "zh": "奶酪", "category": "ingredient", "notes": ""},
-  {"en": "pecorino romano", "zh": "佩科里诺罗马诺奶酪", "category": "ingredient", "notes": "Italian hard cheese used in pasta dishes"},
-  {"en": "shrimp", "zh": "虾", "category": "ingredient", "notes": ""},
-  {"en": "salmon", "zh": "三文鱼", "category": "ingredient", "notes": ""},
-  {"en": "chickpeas", "zh": "鹰嘴豆", "category": "ingredient", "notes": ""},
-  {"en": "beans", "zh": "豆类", "category": "ingredient", "notes": ""},
-  {"en": "tofu", "zh": "豆腐", "category": "ingredient", "notes": ""},
-  {"en": "rice", "zh": "大米", "category": "ingredient", "notes": ""},
-  {"en": "white rice", "zh": "白米饭", "category": "ingredient", "notes": ""},
-  {"en": "brown rice", "zh": "糙米", "category": "ingredient", "notes": ""},
-  {"en": "jasmine rice", "zh": "茉莉香米", "category": "ingredient", "notes": ""},
-  {"en": "spaghetti", "zh": "意大利面", "category": "ingredient", "notes": ""},
-  {"en": "pasta", "zh": "意面", "category": "ingredient", "notes": ""},
-  {"en": "noodles", "zh": "面条", "category": "ingredient", "notes": ""},
-  {"en": "bread", "zh": "面包", "category": "ingredient", "notes": ""},
-  {"en": "burger buns", "zh": "汉堡包", "category": "ingredient", "notes": ""},
-  {"en": "tortilla", "zh": "玉米饼", "category": "ingredient", "notes": "Thin flatbread used in Mexican cuisine"},
-  {"en": "potato", "zh": "土豆", "category": "ingredient", "notes": "Also called 马铃薯 (mǎlíngshu)"},
-  {"en": "sweet potato", "zh": "红薯", "category": "ingredient", "notes": ""},
-  {"en": "corn", "zh": "玉米", "category": "ingredient", "notes": ""},
-  {"en": "corn on the cob", "zh": "玉米棒", "category": "ingredient", "notes": ""},
-  {"en": "bok choy", "zh": "青菜", "category": "ingredient", "notes": "Also 白菜 (bái cài); baby bok choy is 小青菜"},
-  {"en": "cabbage", "zh": "卷心菜", "category": "ingredient", "notes": ""},
-  {"en": "lettuce", "zh": "生菜", "category": "ingredient", "notes": ""},
-  {"en": "spinach", "zh": "菠菜", "category": "ingredient", "notes": ""},
-  {"en": "broccoli", "zh": "西兰花", "category": "ingredient", "notes": ""},
-  {"en": "broccolini", "zh": "嫩茎花椰菜", "category": "ingredient", "notes": "Slender variety of broccoli"},
-  {"en": "cucumber", "zh": "黄瓜", "category": "ingredient", "notes": ""},
-  {"en": "tomato", "zh": "西红柿", "category": "ingredient", "notes": "Also called 番茄 (fānqié)"},
-  {"en": "onion", "zh": "洋葱", "category": "ingredient", "notes": ""},
-  {"en": "green onions", "zh": "葱", "category": "ingredient", "notes": "Also called scallions or spring onions"},
-  {"en": "garlic", "zh": "大蒜", "category": "ingredient", "notes": ""},
-  {"en": "ginger", "zh": "姜", "category": "ingredient", "notes": ""},
-  {"en": "carrots", "zh": "胡萝卜", "category": "ingredient", "notes": ""},
-  {"en": "zucchini", "zh": "西葫芦", "category": "ingredient", "notes": "Also called courgette"},
-  {"en": "bean sprouts", "zh": "豆芽", "category": "ingredient", "notes": ""},
-  {"en": "peas", "zh": "豌豆", "category": "ingredient", "notes": ""},
-  {"en": "mushrooms", "zh": "蘑菇", "category": "ingredient", "notes": ""},
-  {"en": "bell pepper", "zh": "灯笼椒", "category": "ingredient", "notes": "Also called capsicum; comes in red, yellow, green"},
-  {"en": "thai basil", "zh": "泰国罗勒", "category": "ingredient", "notes": "Different from Italian basil; has anise flavor"},
-  {"en": "basil", "zh": "罗勒", "category": "ingredient", "notes": ""},
-  {"en": "cilantro", "zh": "香菜", "category": "ingredient", "notes": "Also called coriander leaf"},
-  {"en": "thai chilies", "zh": "泰国辣椒", "category": "ingredient", "notes": "Small and very spicy"},
-  {"en": "pickles", "zh": "腌黄瓜", "category": "ingredient", "notes": ""},
-  {"en": "asparagus", "zh": "芦笋", "category": "ingredient", "notes": ""},
-  {"en": "kale", "zh": "羽衣甘蓝", "category": "ingredient", "notes": "Dark leafy green; common in Western health food"},
-  {"en": "celery", "zh": "芹菜", "category": "ingredient", "notes": ""},
-  {"en": "soy sauce", "zh": "酱油", "category": "ingredient", "notes": ""},
-  {"en": "oyster sauce", "zh": "蚝油", "category": "ingredient", "notes": ""},
-  {"en": "fish sauce", "zh": "鱼露", "category": "ingredient", "notes": "Common in Thai and Vietnamese cooking"},
-  {"en": "gochujang", "zh": "韩国辣椒酱", "category": "ingredient", "notes": "Korean fermented chili paste"},
-  {"en": "gochugaru", "zh": "韩国辣椒粉", "category": "ingredient", "notes": "Korean red pepper flakes"},
-  {"en": "teriyaki sauce", "zh": "照烧汁", "category": "ingredient", "notes": "Sweet Japanese glaze"},
-  {"en": "sesame oil", "zh": "芝麻油", "category": "ingredient", "notes": "Used as a finishing oil, not for high-heat cooking"},
-  {"en": "rice vinegar", "zh": "米醋", "category": "ingredient", "notes": ""},
-  {"en": "mirin", "zh": "味醂", "category": "ingredient", "notes": "Japanese sweet rice wine for cooking"},
-  {"en": "mustard", "zh": "芥末酱", "category": "ingredient", "notes": ""},
-  {"en": "apple cider vinegar", "zh": "苹果醋", "category": "ingredient", "notes": ""},
-  {"en": "garam masala", "zh": "印度综合香料", "category": "ingredient", "notes": "Warm spice blend used in Indian cooking"},
-  {"en": "cumin", "zh": "孜然", "category": "ingredient", "notes": ""},
-  {"en": "coriander", "zh": "芫荽粉", "category": "ingredient", "notes": "Ground coriander seed; different from cilantro leaf"},
-  {"en": "turmeric", "zh": "姜黄", "category": "ingredient", "notes": "Yellow spice; used in Indian and Southeast Asian cooking"},
-  {"en": "black pepper", "zh": "黑胡椒", "category": "ingredient", "notes": ""},
-  {"en": "honey", "zh": "蜂蜜", "category": "ingredient", "notes": ""},
-  {"en": "sriracha", "zh": "是拉差辣椒酱", "category": "ingredient", "notes": "Thai-American hot sauce"},
-  {"en": "hoisin sauce", "zh": "海鲜酱", "category": "ingredient", "notes": "Sweet, thick Chinese dipping and cooking sauce"},
-  {"en": "chili oil", "zh": "辣椒油", "category": "ingredient", "notes": ""},
-  {"en": "mayo", "zh": "蛋黄酱", "category": "ingredient", "notes": "Short for mayonnaise"},
-  {"en": "ketchup", "zh": "番茄酱", "category": "ingredient", "notes": ""},
-  {"en": "bbq sauce", "zh": "烧烤酱", "category": "ingredient", "notes": ""},
-  {"en": "olive oil", "zh": "橄榄油", "category": "ingredient", "notes": ""},
-  {"en": "vegetable oil", "zh": "植物油", "category": "ingredient", "notes": ""},
-  {"en": "Korean BBQ Pork Belly", "zh": "韩式烤五花肉", "category": "dish_name", "notes": ""},
-  {"en": "Classic Smash Burgers", "zh": "经典压扁汉堡", "category": "dish_name", "notes": ""},
-  {"en": "Korean Cucumber Salad", "zh": "韩式凉拌黄瓜", "category": "dish_name", "notes": "Also known as Oi-Muchim"},
-  {"en": "Grilled Corn with Butter", "zh": "烤玉米", "category": "dish_name", "notes": ""},
-  {"en": "Thai-Style Beef with Basil and Chilies", "zh": "泰式罗勒辣椒牛肉", "category": "dish_name", "notes": ""},
-  {"en": "Gochujang Steak Bowl", "zh": "辣酱牛排饭碗", "category": "dish_name", "notes": ""},
-  {"en": "Teriyaki Chicken Wings", "zh": "照烧鸡翅", "category": "dish_name", "notes": ""},
-  {"en": "Chicken Congee", "zh": "鸡肉粥", "category": "dish_name", "notes": "Also called rice porridge"},
-  {"en": "Chicken and Bok Choy Stir-Fry", "zh": "鸡肉炒青菜", "category": "dish_name", "notes": ""},
-  {"en": "Chicken and Ginger Stir Fry", "zh": "姜丝炒鸡", "category": "dish_name", "notes": ""},
-  {"en": "Restaurant-Style Chicken Fried Rice", "zh": "饭店炒饭", "category": "dish_name", "notes": ""},
-  {"en": "Crispy Braised Chicken Thighs with Cabbage and Bacon", "zh": "脆皮焖鸡腿配卷心菜培根", "category": "dish_name", "notes": ""},
-  {"en": "Bibimbap", "zh": "韩式拌饭", "category": "dish_name", "notes": "Korean rice bowl with mixed toppings"},
-  {"en": "Channa Masala", "zh": "印度鹰嘴豆咖喱", "category": "dish_name", "notes": "Indian spiced chickpea dish"},
-  {"en": "Cacio e Pepe", "zh": "胡椒芝士意面", "category": "dish_name", "notes": "Italian cheese and pepper pasta"},
-  {"en": "stir-fry", "zh": "炒", "category": "cooking_term", "notes": "High-heat, fast cooking in a wok or pan"},
-  {"en": "braise", "zh": "焖", "category": "cooking_term", "notes": "Slow cook in liquid, partially covered"},
-  {"en": "simmer", "zh": "小火炖", "category": "cooking_term", "notes": "Cook gently just below boiling"},
-  {"en": "grill", "zh": "烤", "category": "cooking_term", "notes": "Cook over direct heat"},
-  {"en": "bake", "zh": "烘焙", "category": "cooking_term", "notes": "Cook in oven with dry heat"},
-  {"en": "pan-fry", "zh": "煎", "category": "cooking_term", "notes": "Fry in a small amount of oil in a pan"},
-  {"en": "boil", "zh": "煮", "category": "cooking_term", "notes": ""},
-  {"en": "deep-fry", "zh": "炸", "category": "cooking_term", "notes": "Submerge food in hot oil"},
-  {"en": "steam", "zh": "蒸", "category": "cooking_term", "notes": ""},
-  {"en": "roast", "zh": "烤", "category": "cooking_term", "notes": "Cook in oven, often uncovered at high heat"},
-  {"en": "marinate", "zh": "腌制", "category": "cooking_term", "notes": "Soak food in seasoned liquid before cooking"},
-  {"en": "blanch", "zh": "焯水", "category": "cooking_term", "notes": "Brief boil then cool in ice water"},
-  {"en": "sear", "zh": "煎至上色", "category": "cooking_term", "notes": "High-heat browning of surface for flavor and texture"},
-  {"en": "aisle", "zh": "货架走道", "category": "grocery_term", "notes": "Corridor between product shelves in a store"},
-  {"en": "bulk", "zh": "散装", "category": "grocery_term", "notes": "Sold by weight without individual packaging; also refers to large-quantity purchases like Costco"},
-  {"en": "frozen section", "zh": "冷冻区", "category": "grocery_term", "notes": "Freezer aisle in grocery store"},
-  {"en": "produce section", "zh": "果蔬区", "category": "grocery_term", "notes": "Fresh fruits and vegetables area"},
-  {"en": "meat counter", "zh": "肉类柜台", "category": "grocery_term", "notes": "Fresh meat section, often with staff to assist"},
-  {"en": "deli", "zh": "熟食区", "category": "grocery_term", "notes": "Pre-cooked meats, cheeses, prepared foods"},
-  {"en": "pantry", "zh": "食品储物柜", "category": "grocery_term", "notes": "Storage area for dry and canned goods"},
-  {"en": "package", "zh": "包装", "category": "grocery_term", "notes": ""},
-  {"en": "organic", "zh": "有机", "category": "grocery_term", "notes": "Grown without synthetic pesticides or fertilizers"},
-  {"en": "on sale", "zh": "特价", "category": "grocery_term", "notes": "Discounted price"}
+  {
+    "en": "chicken wings",
+    "zh": "鸡翅",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken thigh",
+    "zh": "鸡腿肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken breast",
+    "zh": "鸡胸肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken",
+    "zh": "鸡肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pork belly",
+    "zh": "五花肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pork",
+    "zh": "猪肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "ground beef",
+    "zh": "牛肉碎",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "beef",
+    "zh": "牛肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "beef sirloin",
+    "zh": "西冷牛排",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "steak",
+    "zh": "牛排",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bacon",
+    "zh": "培根",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "burger patties",
+    "zh": "汉堡肉饼",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "egg",
+    "zh": "鸡蛋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cheese",
+    "zh": "奶酪",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pecorino romano",
+    "zh": "佩科里诺罗马诺奶酪",
+    "category": "ingredient",
+    "notes": "Italian hard cheese used in pasta dishes"
+  },
+  {
+    "en": "shrimp",
+    "zh": "虾",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "salmon",
+    "zh": "三文鱼",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chickpeas",
+    "zh": "鹰嘴豆",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "beans",
+    "zh": "豆类",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "tofu",
+    "zh": "豆腐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "rice",
+    "zh": "大米",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "white rice",
+    "zh": "白米饭",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "brown rice",
+    "zh": "糙米",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "jasmine rice",
+    "zh": "茉莉香米",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "spaghetti",
+    "zh": "意大利面",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pasta",
+    "zh": "意面",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "noodles",
+    "zh": "面条",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bread",
+    "zh": "面包",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "burger buns",
+    "zh": "汉堡包",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "tortilla",
+    "zh": "玉米饼",
+    "category": "ingredient",
+    "notes": "Thin flatbread used in Mexican cuisine"
+  },
+  {
+    "en": "potato",
+    "zh": "土豆",
+    "category": "ingredient",
+    "notes": "Also called 马铃薯 (mǎlíngshu)"
+  },
+  {
+    "en": "sweet potato",
+    "zh": "红薯",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "corn",
+    "zh": "玉米",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "corn on the cob",
+    "zh": "玉米棒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bok choy",
+    "zh": "青菜",
+    "category": "ingredient",
+    "notes": "Also 白菜 (bái cài); baby bok choy is 小青菜"
+  },
+  {
+    "en": "cabbage",
+    "zh": "卷心菜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "lettuce",
+    "zh": "生菜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "spinach",
+    "zh": "菠菜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "broccoli",
+    "zh": "西兰花",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "broccolini",
+    "zh": "嫩茎花椰菜",
+    "category": "ingredient",
+    "notes": "Slender variety of broccoli"
+  },
+  {
+    "en": "cucumber",
+    "zh": "黄瓜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "tomato",
+    "zh": "西红柿",
+    "category": "ingredient",
+    "notes": "Also called 番茄 (fānqié)"
+  },
+  {
+    "en": "onion",
+    "zh": "洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "green onions",
+    "zh": "葱",
+    "category": "ingredient",
+    "notes": "Also called scallions or spring onions"
+  },
+  {
+    "en": "garlic",
+    "zh": "大蒜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "ginger",
+    "zh": "姜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "carrots",
+    "zh": "胡萝卜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "zucchini",
+    "zh": "西葫芦",
+    "category": "ingredient",
+    "notes": "Also called courgette"
+  },
+  {
+    "en": "bean sprouts",
+    "zh": "豆芽",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "peas",
+    "zh": "豌豆",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "mushrooms",
+    "zh": "蘑菇",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bell pepper",
+    "zh": "灯笼椒",
+    "category": "ingredient",
+    "notes": "Also called capsicum; comes in red, yellow, green"
+  },
+  {
+    "en": "thai basil",
+    "zh": "泰国罗勒",
+    "category": "ingredient",
+    "notes": "Different from Italian basil; has anise flavor"
+  },
+  {
+    "en": "basil",
+    "zh": "罗勒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cilantro",
+    "zh": "香菜",
+    "category": "ingredient",
+    "notes": "Also called coriander leaf"
+  },
+  {
+    "en": "thai chilies",
+    "zh": "泰国辣椒",
+    "category": "ingredient",
+    "notes": "Small and very spicy"
+  },
+  {
+    "en": "pickles",
+    "zh": "腌黄瓜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "asparagus",
+    "zh": "芦笋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "kale",
+    "zh": "羽衣甘蓝",
+    "category": "ingredient",
+    "notes": "Dark leafy green; common in Western health food"
+  },
+  {
+    "en": "celery",
+    "zh": "芹菜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "soy sauce",
+    "zh": "酱油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "oyster sauce",
+    "zh": "蚝油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "fish sauce",
+    "zh": "鱼露",
+    "category": "ingredient",
+    "notes": "Common in Thai and Vietnamese cooking"
+  },
+  {
+    "en": "gochujang",
+    "zh": "韩国辣椒酱",
+    "category": "ingredient",
+    "notes": "Korean fermented chili paste"
+  },
+  {
+    "en": "gochugaru",
+    "zh": "韩国辣椒粉",
+    "category": "ingredient",
+    "notes": "Korean red pepper flakes"
+  },
+  {
+    "en": "teriyaki sauce",
+    "zh": "照烧汁",
+    "category": "ingredient",
+    "notes": "Sweet Japanese glaze"
+  },
+  {
+    "en": "sesame oil",
+    "zh": "芝麻油",
+    "category": "ingredient",
+    "notes": "Used as a finishing oil, not for high-heat cooking"
+  },
+  {
+    "en": "rice vinegar",
+    "zh": "米醋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "mirin",
+    "zh": "味醂",
+    "category": "ingredient",
+    "notes": "Japanese sweet rice wine for cooking"
+  },
+  {
+    "en": "mustard",
+    "zh": "芥末酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "apple cider vinegar",
+    "zh": "苹果醋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "garam masala",
+    "zh": "印度综合香料",
+    "category": "ingredient",
+    "notes": "Warm spice blend used in Indian cooking"
+  },
+  {
+    "en": "cumin",
+    "zh": "孜然",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "coriander",
+    "zh": "芫荽粉",
+    "category": "ingredient",
+    "notes": "Ground coriander seed; different from cilantro leaf"
+  },
+  {
+    "en": "turmeric",
+    "zh": "姜黄",
+    "category": "ingredient",
+    "notes": "Yellow spice; used in Indian and Southeast Asian cooking"
+  },
+  {
+    "en": "black pepper",
+    "zh": "黑胡椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "honey",
+    "zh": "蜂蜜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sriracha",
+    "zh": "是拉差辣椒酱",
+    "category": "ingredient",
+    "notes": "Thai-American hot sauce"
+  },
+  {
+    "en": "hoisin sauce",
+    "zh": "海鲜酱",
+    "category": "ingredient",
+    "notes": "Sweet, thick Chinese dipping and cooking sauce"
+  },
+  {
+    "en": "chili oil",
+    "zh": "辣椒油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "mayo",
+    "zh": "蛋黄酱",
+    "category": "ingredient",
+    "notes": "Short for mayonnaise"
+  },
+  {
+    "en": "ketchup",
+    "zh": "番茄酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bbq sauce",
+    "zh": "烧烤酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "olive oil",
+    "zh": "橄榄油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "vegetable oil",
+    "zh": "植物油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "Korean BBQ Pork Belly",
+    "zh": "韩式烤五花肉",
+    "category": "dish_name",
+    "notes": ""
+  },
+  {
+    "en": "Classic Smash Burgers",
+    "zh": "经典压扁汉堡",
+    "category": "dish_name",
+    "notes": ""
+  },
+  {
+    "en": "Korean Cucumber Salad",
+    "zh": "韩式凉拌黄瓜",
+    "category": "dish_name",
+    "notes": "Also known as Oi-Muchim"
+  },
+  {
+    "en": "Grilled Corn with Butter",
+    "zh": "烤玉米",
+    "category": "dish_name",
+    "notes": ""
+  },
+  {
+    "en": "Thai-Style Beef with Basil and Chilies",
+    "zh": "泰式罗勒辣椒牛肉",
+    "category": "dish_name",
+    "notes": ""
+  },
+  {
+    "en": "Gochujang Steak Bowl",
+    "zh": "辣酱牛排饭碗",
+    "category": "dish_name",
+    "notes": ""
+  },
+  {
+    "en": "Teriyaki Chicken Wings",
+    "zh": "照烧鸡翅",
+    "category": "dish_name",
+    "notes": ""
+  },
+  {
+    "en": "Chicken Congee",
+    "zh": "鸡肉粥",
+    "category": "dish_name",
+    "notes": "Also called rice porridge"
+  },
+  {
+    "en": "Chicken and Bok Choy Stir-Fry",
+    "zh": "鸡肉炒青菜",
+    "category": "dish_name",
+    "notes": ""
+  },
+  {
+    "en": "Chicken and Ginger Stir Fry",
+    "zh": "姜丝炒鸡",
+    "category": "dish_name",
+    "notes": ""
+  },
+  {
+    "en": "Restaurant-Style Chicken Fried Rice",
+    "zh": "饭店炒饭",
+    "category": "dish_name",
+    "notes": ""
+  },
+  {
+    "en": "Crispy Braised Chicken Thighs with Cabbage and Bacon",
+    "zh": "脆皮焖鸡腿配卷心菜培根",
+    "category": "dish_name",
+    "notes": ""
+  },
+  {
+    "en": "Bibimbap",
+    "zh": "韩式拌饭",
+    "category": "dish_name",
+    "notes": "Korean rice bowl with mixed toppings"
+  },
+  {
+    "en": "Channa Masala",
+    "zh": "印度鹰嘴豆咖喱",
+    "category": "dish_name",
+    "notes": "Indian spiced chickpea dish"
+  },
+  {
+    "en": "Cacio e Pepe",
+    "zh": "胡椒芝士意面",
+    "category": "dish_name",
+    "notes": "Italian cheese and pepper pasta"
+  },
+  {
+    "en": "stir-fry",
+    "zh": "炒",
+    "category": "cooking_term",
+    "notes": "High-heat, fast cooking in a wok or pan"
+  },
+  {
+    "en": "braise",
+    "zh": "焖",
+    "category": "cooking_term",
+    "notes": "Slow cook in liquid, partially covered"
+  },
+  {
+    "en": "simmer",
+    "zh": "小火炖",
+    "category": "cooking_term",
+    "notes": "Cook gently just below boiling"
+  },
+  {
+    "en": "grill",
+    "zh": "烤",
+    "category": "cooking_term",
+    "notes": "Cook over direct heat"
+  },
+  {
+    "en": "bake",
+    "zh": "烘焙",
+    "category": "cooking_term",
+    "notes": "Cook in oven with dry heat"
+  },
+  {
+    "en": "pan-fry",
+    "zh": "煎",
+    "category": "cooking_term",
+    "notes": "Fry in a small amount of oil in a pan"
+  },
+  {
+    "en": "boil",
+    "zh": "煮",
+    "category": "cooking_term",
+    "notes": ""
+  },
+  {
+    "en": "deep-fry",
+    "zh": "炸",
+    "category": "cooking_term",
+    "notes": "Submerge food in hot oil"
+  },
+  {
+    "en": "steam",
+    "zh": "蒸",
+    "category": "cooking_term",
+    "notes": ""
+  },
+  {
+    "en": "roast",
+    "zh": "烤",
+    "category": "cooking_term",
+    "notes": "Cook in oven, often uncovered at high heat"
+  },
+  {
+    "en": "marinate",
+    "zh": "腌制",
+    "category": "cooking_term",
+    "notes": "Soak food in seasoned liquid before cooking"
+  },
+  {
+    "en": "blanch",
+    "zh": "焯水",
+    "category": "cooking_term",
+    "notes": "Brief boil then cool in ice water"
+  },
+  {
+    "en": "sear",
+    "zh": "煎至上色",
+    "category": "cooking_term",
+    "notes": "High-heat browning of surface for flavor and texture"
+  },
+  {
+    "en": "aisle",
+    "zh": "货架走道",
+    "category": "grocery_term",
+    "notes": "Corridor between product shelves in a store"
+  },
+  {
+    "en": "bulk",
+    "zh": "散装",
+    "category": "grocery_term",
+    "notes": "Sold by weight without individual packaging; also refers to large-quantity purchases like Costco"
+  },
+  {
+    "en": "frozen section",
+    "zh": "冷冻区",
+    "category": "grocery_term",
+    "notes": "Freezer aisle in grocery store"
+  },
+  {
+    "en": "produce section",
+    "zh": "果蔬区",
+    "category": "grocery_term",
+    "notes": "Fresh fruits and vegetables area"
+  },
+  {
+    "en": "meat counter",
+    "zh": "肉类柜台",
+    "category": "grocery_term",
+    "notes": "Fresh meat section, often with staff to assist"
+  },
+  {
+    "en": "deli",
+    "zh": "熟食区",
+    "category": "grocery_term",
+    "notes": "Pre-cooked meats, cheeses, prepared foods"
+  },
+  {
+    "en": "pantry",
+    "zh": "食品储物柜",
+    "category": "grocery_term",
+    "notes": "Storage area for dry and canned goods"
+  },
+  {
+    "en": "package",
+    "zh": "包装",
+    "category": "grocery_term",
+    "notes": ""
+  },
+  {
+    "en": "organic",
+    "zh": "有机",
+    "category": "grocery_term",
+    "notes": "Grown without synthetic pesticides or fertilizers"
+  },
+  {
+    "en": "on sale",
+    "zh": "特价",
+    "category": "grocery_term",
+    "notes": "Discounted price"
+  },
+  {
+    "en": "agave syrup",
+    "zh": "龙舌兰糖浆",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "aleppo pepper",
+    "zh": "阿勒颇辣椒",
+    "category": "ingredient",
+    "notes": "土耳其/叙利亚产红辣椒片，微辣带果香"
+  },
+  {
+    "en": "all-purpose flour",
+    "zh": "中筋面粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "allspice, ground",
+    "zh": "多香果粉",
+    "category": "ingredient",
+    "notes": "也叫牙买加胡椒"
+  },
+  {
+    "en": "almonds, blanched",
+    "zh": "去皮杏仁",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "anaheim peppers",
+    "zh": "安纳海姆辣椒",
+    "category": "ingredient",
+    "notes": "微辣青椒，常用于墨西哥菜"
+  },
+  {
+    "en": "ancho chiles",
+    "zh": "安丘干辣椒",
+    "category": "ingredient",
+    "notes": "干燥的波布拉诺辣椒，微辣带甜"
+  },
+  {
+    "en": "ancho peppers",
+    "zh": "安丘辣椒",
+    "category": "ingredient",
+    "notes": "同 ancho chiles"
+  },
+  {
+    "en": "arborio rice",
+    "zh": "意大利烩饭米",
+    "category": "ingredient",
+    "notes": "短粒米，淀粉含量高，适合做意式烩饭"
+  },
+  {
+    "en": "arepa choclo",
+    "zh": "甜玉米饼",
+    "category": "ingredient",
+    "notes": "哥伦比亚甜玉米饼，用预制玉米面团制作"
+  },
+  {
+    "en": "arugula",
+    "zh": "芝麻菜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "asafetida",
+    "zh": "阿魏",
+    "category": "ingredient",
+    "notes": "印度常用香料，有类似蒜葱的味道"
+  },
+  {
+    "en": "asian pear",
+    "zh": "亚洲梨",
+    "category": "ingredient",
+    "notes": "也叫水晶梨、丰水梨"
+  },
+  {
+    "en": "avocados",
+    "zh": "牛油果",
+    "category": "ingredient",
+    "notes": "也叫鳄梨"
+  },
+  {
+    "en": "baguettes",
+    "zh": "法棍面包",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "baking powder",
+    "zh": "泡打粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bamboo shoots",
+    "zh": "竹笋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "basmati rice",
+    "zh": "巴斯马蒂香米",
+    "category": "ingredient",
+    "notes": "印度长粒香米"
+  },
+  {
+    "en": "basmati rice, cooked",
+    "zh": "熟巴斯马蒂香米",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bay leaves",
+    "zh": "月桂叶",
+    "category": "ingredient",
+    "notes": "也叫香叶"
+  },
+  {
+    "en": "beef bouillon paste",
+    "zh": "浓缩牛肉高汤膏",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "beef broth",
+    "zh": "牛肉高汤",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "beef broth or water",
+    "zh": "牛肉高汤或清水",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "beef cheeks",
+    "zh": "牛脸肉",
+    "category": "ingredient",
+    "notes": "适合慢炖，肉质软嫩"
+  },
+  {
+    "en": "beef chuck",
+    "zh": "牛肩肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "beef tallow",
+    "zh": "牛油",
+    "category": "ingredient",
+    "notes": "牛脂肪提炼的油脂"
+  },
+  {
+    "en": "beef tallow, cold",
+    "zh": "冷牛油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "belgian ale",
+    "zh": "比利时啤酒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bell peppers",
+    "zh": "甜椒",
+    "category": "ingredient",
+    "notes": "也叫灯笼椒、彩椒"
+  },
+  {
+    "en": "birds eye green chilies",
+    "zh": "小米辣",
+    "category": "ingredient",
+    "notes": "泰国常用的小青辣椒，非常辣"
+  },
+  {
+    "en": "black cardamom",
+    "zh": "黑豆蔻",
+    "category": "ingredient",
+    "notes": "烟熏味较重，与绿豆蔻不同"
+  },
+  {
+    "en": "black pepper, freshly cracked",
+    "zh": "现磨黑胡椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "black pepper, freshly ground",
+    "zh": "现磨黑胡椒粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "black peppercorns",
+    "zh": "黑胡椒粒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bok choy, blanched",
+    "zh": "焯水青菜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bonito flakes",
+    "zh": "木鱼花",
+    "category": "ingredient",
+    "notes": "也叫柴鱼片，日式高汤基础食材"
+  },
+  {
+    "en": "bread crumbs",
+    "zh": "面包糠",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "broth",
+    "zh": "高汤",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "brown sugar",
+    "zh": "红糖",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "buckwheat flour",
+    "zh": "荞麦粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "butter",
+    "zh": "黄油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cashews",
+    "zh": "腰果",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cayenne pepper",
+    "zh": "卡宴辣椒粉",
+    "category": "ingredient",
+    "notes": "红辣椒粉，较辣"
+  },
+  {
+    "en": "cheddar",
+    "zh": "切达奶酪",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cherry tomatoes, halved",
+    "zh": "小番茄（对半切）",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken bouillon",
+    "zh": "鸡精",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken breasts",
+    "zh": "鸡胸肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken broth",
+    "zh": "鸡汤",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken carcass",
+    "zh": "鸡骨架",
+    "category": "ingredient",
+    "notes": "用于熬汤"
+  },
+  {
+    "en": "chicken drumsticks",
+    "zh": "鸡腿",
+    "category": "ingredient",
+    "notes": "带骨鸡小腿"
+  },
+  {
+    "en": "chicken or shrimp",
+    "zh": "鸡肉或虾",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken skins",
+    "zh": "鸡皮",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken thighs",
+    "zh": "鸡腿肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken thighs, boneless",
+    "zh": "去骨鸡腿肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken thighs, boneless, skinless",
+    "zh": "去骨去皮鸡腿肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken thighs, deboned",
+    "zh": "去骨鸡腿肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chili garlic paste",
+    "zh": "蒜蓉辣酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chili oil w/ fermented soybeans",
+    "zh": "豆豉辣油",
+    "category": "ingredient",
+    "notes": "如老干妈风味豆豉"
+  },
+  {
+    "en": "chili powder",
+    "zh": "辣椒粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chinese black vinegar",
+    "zh": "陈醋",
+    "category": "ingredient",
+    "notes": "如镇江香醋"
+  },
+  {
+    "en": "chinese broccoli",
+    "zh": "芥蓝",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chinese broccoli, blanched",
+    "zh": "焯水芥蓝",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chinese five spice",
+    "zh": "五香粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chipotles in adobo",
+    "zh": "烟熏辣椒酱",
+    "category": "ingredient",
+    "notes": "墨西哥烟熏干辣椒浸在番茄酱汁中"
+  },
+  {
+    "en": "chives",
+    "zh": "细香葱",
+    "category": "ingredient",
+    "notes": "西式细香葱，非韭菜"
+  },
+  {
+    "en": "chuck roast",
+    "zh": "牛肩肉块",
+    "category": "ingredient",
+    "notes": "适合慢炖"
+  },
+  {
+    "en": "cilantro, roughly chopped",
+    "zh": "香菜（粗切）",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cinnamon sticks",
+    "zh": "肉桂棒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "coconut",
+    "zh": "椰子",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "coconut cream",
+    "zh": "浓椰浆",
+    "category": "ingredient",
+    "notes": "比椰奶更浓稠"
+  },
+  {
+    "en": "coconut flakes",
+    "zh": "椰子片",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "coconut milk",
+    "zh": "椰奶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "comte",
+    "zh": "孔泰奶酪",
+    "category": "ingredient",
+    "notes": "法国硬质奶酪"
+  },
+  {
+    "en": "cooked chicken, shredded",
+    "zh": "手撕熟鸡肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cooking oil",
+    "zh": "食用油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cooking oil or butter",
+    "zh": "食用油或黄油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cooking oil or ghee",
+    "zh": "食用油或酥油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "coriander seeds, whole",
+    "zh": "整粒芫荽籽",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "corn tortillas",
+    "zh": "玉米薄饼",
+    "category": "ingredient",
+    "notes": "墨西哥玉米饼"
+  },
+  {
+    "en": "cornstarch",
+    "zh": "玉米淀粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cornstarch slurry",
+    "zh": "水淀粉",
+    "category": "ingredient",
+    "notes": "玉米淀粉加水调成的芡汁"
+  },
+  {
+    "en": "cotija cheese",
+    "zh": "科蒂哈奶酪",
+    "category": "ingredient",
+    "notes": "墨西哥咸味硬奶酪，类似帕尔马干酪"
+  },
+  {
+    "en": "crayfish powder",
+    "zh": "虾粉",
+    "category": "ingredient",
+    "notes": "西非料理常用调味粉"
+  },
+  {
+    "en": "crema",
+    "zh": "墨西哥酸奶油",
+    "category": "ingredient",
+    "notes": "比美式酸奶油更稀薄"
+  },
+  {
+    "en": "cubeb tail pepper",
+    "zh": "荜澄茄",
+    "category": "ingredient",
+    "notes": "也叫尾胡椒，印尼产香料"
+  },
+  {
+    "en": "cucumbers",
+    "zh": "黄瓜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cumin seeds",
+    "zh": "孜然粒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cumin, freshly ground",
+    "zh": "现磨孜然粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cumin, ground",
+    "zh": "孜然粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "curry powder",
+    "zh": "咖喱粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "dark soy sauce",
+    "zh": "老抽",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "diced tomatoes",
+    "zh": "番茄丁",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "dijon mustard",
+    "zh": "第戎芥末酱",
+    "category": "ingredient",
+    "notes": "法式芥末酱"
+  },
+  {
+    "en": "dried chinese red chiles",
+    "zh": "干红辣椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "dried dill",
+    "zh": "干莳萝",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "dried mint",
+    "zh": "干薄荷",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "dried oregano",
+    "zh": "干牛至",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "dried parsley",
+    "zh": "干欧芹",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "dried polenta",
+    "zh": "干玉米糊粉",
+    "category": "ingredient",
+    "notes": "意大利粗磨玉米粉"
+  },
+  {
+    "en": "dried pomegranate seeds",
+    "zh": "干石榴籽",
+    "category": "ingredient",
+    "notes": "中东/南亚料理用作酸味调料"
+  },
+  {
+    "en": "dried shrimp",
+    "zh": "虾米",
+    "category": "ingredient",
+    "notes": "也叫虾干、开洋"
+  },
+  {
+    "en": "dried thyme",
+    "zh": "干百里香",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "egg yolks",
+    "zh": "蛋黄",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "eggs",
+    "zh": "鸡蛋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "eggs, beaten",
+    "zh": "打散的鸡蛋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "eggs, hard boiled",
+    "zh": "水煮蛋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "eggs, hard-boiled",
+    "zh": "水煮蛋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "eggs, soft boiled",
+    "zh": "溏心蛋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "emmental",
+    "zh": "艾蒙塔尔奶酪",
+    "category": "ingredient",
+    "notes": "瑞士大孔奶酪"
+  },
+  {
+    "en": "english cut short ribs",
+    "zh": "英式切牛小排",
+    "category": "ingredient",
+    "notes": "横切带骨牛小排"
+  },
+  {
+    "en": "epazote leaves",
+    "zh": "土荆芥叶",
+    "category": "ingredient",
+    "notes": "墨西哥香草，常配豆类烹饪"
+  },
+  {
+    "en": "fennel seeds",
+    "zh": "茴香籽",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "fenugreek leaves",
+    "zh": "葫芦巴叶",
+    "category": "ingredient",
+    "notes": "印度菜常用香草"
+  },
+  {
+    "en": "feta",
+    "zh": "菲达奶酪",
+    "category": "ingredient",
+    "notes": "希腊咸味白奶酪"
+  },
+  {
+    "en": "feta, crumbled",
+    "zh": "碎菲达奶酪",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "flaky salt",
+    "zh": "片状海盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "flank, skirt, or flatiron steak",
+    "zh": "牛腹肉、裙边肉或板腱牛排",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "flat iron steak",
+    "zh": "板腱牛排",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "flat rice noodles",
+    "zh": "河粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "flour",
+    "zh": "面粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "flour tortillas",
+    "zh": "面粉薄饼",
+    "category": "ingredient",
+    "notes": "墨西哥面饼"
+  },
+  {
+    "en": "french fries",
+    "zh": "薯条",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "fresh basil",
+    "zh": "新鲜罗勒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "fresh ginger",
+    "zh": "生姜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "fresh mint",
+    "zh": "新鲜薄荷",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "fresh oregano",
+    "zh": "新鲜牛至",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "fresh rosemary",
+    "zh": "新鲜迷迭香",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "fresh thyme, picked",
+    "zh": "新鲜百里香叶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "frozen fries",
+    "zh": "冷冻薯条",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "frozen peas",
+    "zh": "冷冻豌豆",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "galangal root",
+    "zh": "南姜",
+    "category": "ingredient",
+    "notes": "也叫高良姜，泰餐常用"
+  },
+  {
+    "en": "garlic powder",
+    "zh": "蒜粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "golden raisins",
+    "zh": "金色葡萄干",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "grain bread",
+    "zh": "杂粮面包",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "granulated garlic",
+    "zh": "蒜粒粉",
+    "category": "ingredient",
+    "notes": "比蒜粉颗粒更粗"
+  },
+  {
+    "en": "greek yogurt, plain",
+    "zh": "原味希腊酸奶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "green bell peppers",
+    "zh": "青椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "green cabbage",
+    "zh": "圆白菜",
+    "category": "ingredient",
+    "notes": "也叫卷心菜、包菜"
+  },
+  {
+    "en": "green chilies",
+    "zh": "青辣椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "green chilies, rough chopped",
+    "zh": "粗切青辣椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "green enchilada sauce",
+    "zh": "绿色卷饼酱",
+    "category": "ingredient",
+    "notes": "墨西哥绿辣椒酱，用于淋卷饼"
+  },
+  {
+    "en": "ground beef, 80/20",
+    "zh": "牛肉馅（八成瘦）",
+    "category": "ingredient",
+    "notes": "80%瘦肉20%脂肪"
+  },
+  {
+    "en": "ground cinnamon",
+    "zh": "肉桂粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "ground coriander",
+    "zh": "芫荽粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "ground ginger",
+    "zh": "姜粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "ground lamb",
+    "zh": "羊肉馅",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "ground pork",
+    "zh": "猪肉馅",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "gruyere",
+    "zh": "格鲁耶尔奶酪",
+    "category": "ingredient",
+    "notes": "瑞士硬质奶酪"
+  },
+  {
+    "en": "guajillo peppers",
+    "zh": "瓜希约干辣椒",
+    "category": "ingredient",
+    "notes": "墨西哥常用干辣椒，微辣"
+  },
+  {
+    "en": "guanciale",
+    "zh": "猪脸颊肉",
+    "category": "ingredient",
+    "notes": "意大利腌猪颊肉，正宗培根蛋面用"
+  },
+  {
+    "en": "habanero peppers",
+    "zh": "哈瓦那辣椒",
+    "category": "ingredient",
+    "notes": "极辣辣椒"
+  },
+  {
+    "en": "ham",
+    "zh": "火腿",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "harissa paste",
+    "zh": "哈里萨辣酱",
+    "category": "ingredient",
+    "notes": "北非辣椒酱"
+  },
+  {
+    "en": "harissa powder",
+    "zh": "哈里萨辣椒粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "heavy cream",
+    "zh": "淡奶油",
+    "category": "ingredient",
+    "notes": "也叫重奶油，脂肪含量约36%"
+  },
+  {
+    "en": "hoisin",
+    "zh": "海鲜酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "hominy, cooked",
+    "zh": "熟玉米粒",
+    "category": "ingredient",
+    "notes": "碱处理过的大颗玉米粒，墨西哥玉米粥用"
+  },
+  {
+    "en": "hot sauce",
+    "zh": "辣酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "iceberg lettuce",
+    "zh": "球生菜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "jalapenos",
+    "zh": "墨西哥辣椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "jollof spice mix",
+    "zh": "杰洛夫饭香料",
+    "category": "ingredient",
+    "notes": "西非焗饭专用混合香料"
+  },
+  {
+    "en": "kashmiri chili powder",
+    "zh": "克什米尔辣椒粉",
+    "category": "ingredient",
+    "notes": "色泽鲜红但不太辣，主要用于调色"
+  },
+  {
+    "en": "kasoori methi",
+    "zh": "干葫芦巴叶",
+    "category": "ingredient",
+    "notes": "印度菜提香用，黄油鸡必用香料"
+  },
+  {
+    "en": "kewpie mayo",
+    "zh": "丘比蛋黄酱",
+    "category": "ingredient",
+    "notes": "日式蛋黄酱，口感更浓郁"
+  },
+  {
+    "en": "kofta spice mix",
+    "zh": "烤肉丸香料",
+    "category": "ingredient",
+    "notes": "中东烤肉丸专用混合香料"
+  },
+  {
+    "en": "kombu",
+    "zh": "昆布",
+    "category": "ingredient",
+    "notes": "日式海带，用于熬制高汤"
+  },
+  {
+    "en": "lamb shoulder",
+    "zh": "羊肩肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "lamb stew meat",
+    "zh": "羊肉块",
+    "category": "ingredient",
+    "notes": "适合炖煮的羊肉"
+  },
+  {
+    "en": "lavash bread",
+    "zh": "拉瓦什薄饼",
+    "category": "ingredient",
+    "notes": "中东薄面饼"
+  },
+  {
+    "en": "lee kum kee black pepper sauce",
+    "zh": "李锦记黑椒汁",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "lemon juice",
+    "zh": "柠檬汁",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "lemon zest",
+    "zh": "柠檬皮碎",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "lemongrass",
+    "zh": "香茅",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "lemons",
+    "zh": "柠檬",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "lemons, juice",
+    "zh": "柠檬汁",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "lemons, wedges",
+    "zh": "柠檬角",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "light soy sauce",
+    "zh": "生抽",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "lime juice",
+    "zh": "青柠汁",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "lime zest",
+    "zh": "青柠皮碎",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "limes",
+    "zh": "青柠",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "limes, wedges",
+    "zh": "青柠角",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "lo mein noodles",
+    "zh": "捞面",
+    "category": "ingredient",
+    "notes": "中式蛋面"
+  },
+  {
+    "en": "low-fat sour cream",
+    "zh": "低脂酸奶油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "low-moisture mozzarella",
+    "zh": "低水分马苏里拉奶酪",
+    "category": "ingredient",
+    "notes": "适合焗烤，拉丝效果好"
+  },
+  {
+    "en": "mace",
+    "zh": "肉豆蔻皮",
+    "category": "ingredient",
+    "notes": "肉豆蔻外层的红色薄膜，味道较温和"
+  },
+  {
+    "en": "maggi seasoning",
+    "zh": "美极鲜酱油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "makrut lime leaves",
+    "zh": "柠檬叶",
+    "category": "ingredient",
+    "notes": "泰国青柠叶，泰式咖喱必用"
+  },
+  {
+    "en": "mashed potatoes",
+    "zh": "土豆泥",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "mayonnaise",
+    "zh": "蛋黄酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "mexican rice",
+    "zh": "墨西哥风味米饭",
+    "category": "ingredient",
+    "notes": "番茄味调味米饭"
+  },
+  {
+    "en": "milk",
+    "zh": "牛奶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "monterrey jack cheese",
+    "zh": "蒙特雷杰克奶酪",
+    "category": "ingredient",
+    "notes": "美式半软奶酪，易融化"
+  },
+  {
+    "en": "msg",
+    "zh": "味精",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "muhammara",
+    "zh": "穆哈玛拉酱",
+    "category": "ingredient",
+    "notes": "中东红椒核桃蘸酱"
+  },
+  {
+    "en": "mustard oil",
+    "zh": "芥末油",
+    "category": "ingredient",
+    "notes": "印度菜常用烹饪油"
+  },
+  {
+    "en": "mustard seeds",
+    "zh": "芥末籽",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "naan",
+    "zh": "馕",
+    "category": "ingredient",
+    "notes": "印度烤饼"
+  },
+  {
+    "en": "neutral oil",
+    "zh": "中性油",
+    "category": "ingredient",
+    "notes": "如菜籽油、葵花籽油等无明显味道的油"
+  },
+  {
+    "en": "non stick cooking spray",
+    "zh": "防粘喷雾油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "nutmeg",
+    "zh": "肉豆蔻",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "onion powder",
+    "zh": "洋葱粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "onions",
+    "zh": "洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "onions, quartered",
+    "zh": "洋葱（切四瓣）",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "palm sugar",
+    "zh": "棕榈糖",
+    "category": "ingredient",
+    "notes": "东南亚常用甜味剂"
+  },
+  {
+    "en": "paneer",
+    "zh": "印度奶酪",
+    "category": "ingredient",
+    "notes": "印度鲜奶酪，不融化，可煎可炖"
+  },
+  {
+    "en": "panko bread crumbs",
+    "zh": "日式面包糠",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "paprika",
+    "zh": "甜椒粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "paratha flatbreads",
+    "zh": "印度千层饼",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "parmesan",
+    "zh": "帕尔马干酪",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "parmigiano reggiano",
+    "zh": "帕玛森干酪",
+    "category": "ingredient",
+    "notes": "意大利原产帕尔马干酪"
+  },
+  {
+    "en": "parsley",
+    "zh": "欧芹",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pasta water, reserved",
+    "zh": "煮面水",
+    "category": "ingredient",
+    "notes": "含淀粉的煮面水，用于乳化酱汁"
+  },
+  {
+    "en": "peanut butter",
+    "zh": "花生酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "peanuts",
+    "zh": "花生",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "peppercorns",
+    "zh": "胡椒粒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pickled carrots",
+    "zh": "腌胡萝卜",
+    "category": "ingredient",
+    "notes": "越南三明治常用配菜"
+  },
+  {
+    "en": "pickled onions",
+    "zh": "腌洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pide",
+    "zh": "土耳其船形面包",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pinto beans",
+    "zh": "斑豆",
+    "category": "ingredient",
+    "notes": "墨西哥菜常用豆类"
+  },
+  {
+    "en": "pita bread",
+    "zh": "皮塔饼",
+    "category": "ingredient",
+    "notes": "中东口袋面饼"
+  },
+  {
+    "en": "plum tomatoes",
+    "zh": "罗马番茄",
+    "category": "ingredient",
+    "notes": "也叫李子番茄，肉厚汁少"
+  },
+  {
+    "en": "poblano peppers",
+    "zh": "波布拉诺辣椒",
+    "category": "ingredient",
+    "notes": "墨西哥大青椒，微辣"
+  },
+  {
+    "en": "ponzu",
+    "zh": "柚子醋酱油",
+    "category": "ingredient",
+    "notes": "日式柑橘酱油"
+  },
+  {
+    "en": "poppy seeds",
+    "zh": "罂粟籽",
+    "category": "ingredient",
+    "notes": "烘焙用，合法食用调料"
+  },
+  {
+    "en": "pork chops, boneless",
+    "zh": "去骨猪排",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pork shoulder",
+    "zh": "猪肩肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pork shoulder, boneless",
+    "zh": "去骨猪肩肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "potato starch",
+    "zh": "马铃薯淀粉",
+    "category": "ingredient",
+    "notes": "也叫土豆淀粉"
+  },
+  {
+    "en": "purple cabbage, thinly shaved",
+    "zh": "紫甘蓝丝",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "quesito",
+    "zh": "奎西托奶酪",
+    "category": "ingredient",
+    "notes": "拉美白软奶酪"
+  },
+  {
+    "en": "queso fresco",
+    "zh": "墨西哥鲜奶酪",
+    "category": "ingredient",
+    "notes": "新鲜白色软奶酪"
+  },
+  {
+    "en": "radishes",
+    "zh": "小红萝卜",
+    "category": "ingredient",
+    "notes": "西式水萝卜"
+  },
+  {
+    "en": "ramen noodles",
+    "zh": "拉面",
+    "category": "ingredient",
+    "notes": "日式碱水面"
+  },
+  {
+    "en": "red bell peppers",
+    "zh": "红甜椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "red curry paste",
+    "zh": "红咖喱酱",
+    "category": "ingredient",
+    "notes": "泰式红咖喱酱"
+  },
+  {
+    "en": "red onions",
+    "zh": "紫洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "red pepper flakes",
+    "zh": "红辣椒片",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "red wine",
+    "zh": "红酒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "refried black beans",
+    "zh": "炒黑豆泥",
+    "category": "ingredient",
+    "notes": "墨西哥菜常见配菜"
+  },
+  {
+    "en": "rice, cooked",
+    "zh": "熟米饭",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "roma tomatoes",
+    "zh": "罗马番茄",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "rosemary",
+    "zh": "迷迭香",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "roti flatbreads",
+    "zh": "印度薄饼",
+    "category": "ingredient",
+    "notes": "全麦印度烤饼"
+  },
+  {
+    "en": "sake",
+    "zh": "清酒",
+    "category": "ingredient",
+    "notes": "日本米酒，用于烹饪"
+  },
+  {
+    "en": "salsa verde",
+    "zh": "绿莎莎酱",
+    "category": "ingredient",
+    "notes": "墨西哥绿番茄辣酱"
+  },
+  {
+    "en": "salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sambal",
+    "zh": "参巴辣酱",
+    "category": "ingredient",
+    "notes": "东南亚辣酱"
+  },
+  {
+    "en": "scallions",
+    "zh": "葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "scallions, whites",
+    "zh": "葱白",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "scotch bonnets",
+    "zh": "苏格兰帽椒",
+    "category": "ingredient",
+    "notes": "加勒比海极辣辣椒，类似哈瓦那辣椒"
+  },
+  {
+    "en": "serrano peppers",
+    "zh": "塞拉诺辣椒",
+    "category": "ingredient",
+    "notes": "墨西哥小辣椒，比墨西哥辣椒更辣"
+  },
+  {
+    "en": "shallots",
+    "zh": "小葱头",
+    "category": "ingredient",
+    "notes": "也叫红葱头"
+  },
+  {
+    "en": "shaoxing wine",
+    "zh": "绍兴料酒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "short-grain rice, steamed",
+    "zh": "蒸短粒米饭",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "smoked paprika",
+    "zh": "烟熏甜椒粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sour cream",
+    "zh": "酸奶油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "spaghetti, bronze cut",
+    "zh": "铜模意面",
+    "category": "ingredient",
+    "notes": "铜模挤压，表面粗糙更易挂酱"
+  },
+  {
+    "en": "star anise",
+    "zh": "八角",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sugar",
+    "zh": "糖",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sumac",
+    "zh": "苏麻克",
+    "category": "ingredient",
+    "notes": "中东酸味香料粉，紫红色"
+  },
+  {
+    "en": "tamarind puree",
+    "zh": "罗望子酱",
+    "category": "ingredient",
+    "notes": "也叫酸角酱，酸甜味"
+  },
+  {
+    "en": "thai chili flakes",
+    "zh": "泰式辣椒碎",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "thyme",
+    "zh": "百里香",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "tomatillos",
+    "zh": "绿番茄",
+    "category": "ingredient",
+    "notes": "墨西哥酸浆果，非未熟番茄"
+  },
+  {
+    "en": "tomato paste",
+    "zh": "番茄膏",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "tomatoes",
+    "zh": "番茄",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "tomatoes, canned or fresh",
+    "zh": "番茄（罐头或新鲜）",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "tonkatsu sauce",
+    "zh": "炸猪排酱",
+    "category": "ingredient",
+    "notes": "日式浓厚甜辣酱"
+  },
+  {
+    "en": "tortilla chips",
+    "zh": "玉米片",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "turmeric powder",
+    "zh": "姜黄粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "turmeric powder, ground",
+    "zh": "姜黄粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "vinegar",
+    "zh": "醋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "water",
+    "zh": "水",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "water, cold",
+    "zh": "冷水",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "white fish of choice",
+    "zh": "白肉鱼",
+    "category": "ingredient",
+    "notes": "如鳕鱼、鲈鱼等"
+  },
+  {
+    "en": "white onions",
+    "zh": "白洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "white pepper",
+    "zh": "白胡椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "whole cloves",
+    "zh": "整粒丁香",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "whole milk yogurt",
+    "zh": "全脂酸奶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "whole peeled tomatoes",
+    "zh": "整颗去皮番茄",
+    "category": "ingredient",
+    "notes": "通常为罐头装"
+  },
+  {
+    "en": "yellow onion",
+    "zh": "黄洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "yellow squash",
+    "zh": "黄南瓜",
+    "category": "ingredient",
+    "notes": "也叫黄色西葫芦"
+  },
+  {
+    "en": "yogurt",
+    "zh": "酸奶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "yogurt, plain",
+    "zh": "原味酸奶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "yukon gold potatoes",
+    "zh": "黄金土豆",
+    "category": "ingredient",
+    "notes": "黄肉土豆，口感绵密"
+  },
+  {
+    "en": "za'atar",
+    "zh": "扎塔尔香料",
+    "category": "ingredient",
+    "notes": "中东混合香料，含百里香、芝麻和苏麻克"
+  },
+  {
+    "en": "adobo seasoning",
+    "zh": "阿多波调味粉",
+    "category": "ingredient",
+    "notes": "菲律宾/拉美风味综合调味料，含蒜粉、洋葱粉、黑胡椒等"
+  },
+  {
+    "en": "applesauce",
+    "zh": "苹果酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "aromatics",
+    "zh": "香料底料",
+    "category": "ingredient",
+    "notes": "泛指葱姜蒜等提香食材"
+  },
+  {
+    "en": "aromatics: garlic",
+    "zh": "蒜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "aromatics: herbs",
+    "zh": "香草",
+    "category": "ingredient",
+    "notes": "泛指西式烹饪用香草，如百里香、迷迭香等"
+  },
+  {
+    "en": "aromatics: shallots",
+    "zh": "红葱头",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "asian rice noodles",
+    "zh": "亚洲米粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "baby broccoli",
+    "zh": "嫩茎西兰花",
+    "category": "ingredient",
+    "notes": "又称西兰花苗，比普通西兰花茎更细长"
+  },
+  {
+    "en": "baking spray",
+    "zh": "烘焙喷雾油",
+    "category": "ingredient",
+    "notes": "含油脂和面粉的防粘喷雾"
+  },
+  {
+    "en": "baladi salad: aleppo pepper",
+    "zh": "阿勒颇辣椒粉",
+    "category": "ingredient",
+    "notes": "叙利亚产微辣红椒粉，果香浓郁"
+  },
+  {
+    "en": "baladi salad: cucumbers, roughly diced",
+    "zh": "黄瓜（粗切丁）",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "baladi salad: cumin",
+    "zh": "孜然粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "baladi salad: lemon juice",
+    "zh": "柠檬汁",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "baladi salad: olive oil",
+    "zh": "橄榄油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "baladi salad: onions",
+    "zh": "洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "baladi salad: salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "baladi salad: tomatoes, roughly diced",
+    "zh": "番茄（粗切丁）",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "beef kofta kebabs: ground beef, 80/20",
+    "zh": "牛肉馅（肥瘦比80/20）",
+    "category": "ingredient",
+    "notes": "80%瘦肉20%脂肪"
+  },
+  {
+    "en": "beef kofta kebabs: lemon juice",
+    "zh": "柠檬汁",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "beef kofta kebabs: onions",
+    "zh": "洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "beef kofta kebabs: salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "beef kofta kebabs: za'atar",
+    "zh": "扎塔尔香料",
+    "category": "ingredient",
+    "notes": "中东综合香料，含百里香、芝麻、苏木等"
+  },
+  {
+    "en": "black beans",
+    "zh": "黑豆",
+    "category": "ingredient",
+    "notes": "墨西哥菜常用的黑色芸豆"
+  },
+  {
+    "en": "black sesame seeds",
+    "zh": "黑芝麻",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "braised beef",
+    "zh": "炖牛肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bread flour",
+    "zh": "高筋面粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bread of choice: bakery sub roll",
+    "zh": "潜艇面包",
+    "category": "ingredient",
+    "notes": "长条形白面包卷"
+  },
+  {
+    "en": "bread of choice: hoagie rolls",
+    "zh": "霍吉面包卷",
+    "category": "ingredient",
+    "notes": "费城风格长面包卷，类似潜艇面包"
+  },
+  {
+    "en": "bread of choice: sesame roll",
+    "zh": "芝麻面包卷",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "bread roll",
+    "zh": "面包卷",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cajun seasoning",
+    "zh": "卡津调味粉",
+    "category": "ingredient",
+    "notes": "美国路易斯安那州风味混合香料"
+  },
+  {
+    "en": "cheese of choice: american cheese",
+    "zh": "美式芝士片",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cheese of choice: cheddar",
+    "zh": "切达芝士",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cheese of choice: cheese wiz",
+    "zh": "芝士酱",
+    "category": "ingredient",
+    "notes": "美式罐装流质芝士酱"
+  },
+  {
+    "en": "cheese of choice: cooper sharp",
+    "zh": "库珀夏普芝士",
+    "category": "ingredient",
+    "notes": "费城特色白色美式芝士，风味浓郁"
+  },
+  {
+    "en": "chicken components: black pepper",
+    "zh": "黑胡椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken components: chicken",
+    "zh": "鸡肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken components: neutral oil",
+    "zh": "中性油",
+    "category": "ingredient",
+    "notes": "如菜籽油、葵花籽油等无强烈味道的食用油"
+  },
+  {
+    "en": "chicken components: salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken stock",
+    "zh": "鸡汤",
+    "category": "ingredient",
+    "notes": "又称鸡高汤"
+  },
+  {
+    "en": "chicken stock or water",
+    "zh": "鸡汤或清水",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chicken, grilled",
+    "zh": "烤鸡肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chile pepper of choice",
+    "zh": "辣椒（自选品种）",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chili crisp oil",
+    "zh": "辣椒脆油",
+    "category": "ingredient",
+    "notes": "又称辣椒酱、油辣子，如老干妈风味"
+  },
+  {
+    "en": "chinese celery",
+    "zh": "中国芹菜",
+    "category": "ingredient",
+    "notes": "又称香芹，比西芹细小，味更浓"
+  },
+  {
+    "en": "chinese chives",
+    "zh": "韭菜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chinese red chili flakes",
+    "zh": "中式辣椒碎",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "chorizo",
+    "zh": "西班牙辣肠",
+    "category": "ingredient",
+    "notes": "又称乔利佐，可指西班牙或墨西哥风味香肠"
+  },
+  {
+    "en": "cooked chicken",
+    "zh": "熟鸡肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cooked rice",
+    "zh": "熟米饭",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cream biscuits: chives",
+    "zh": "细香葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "cream biscuits: flour, self-rising",
+    "zh": "自发粉",
+    "category": "ingredient",
+    "notes": "已含泡打粉和盐的面粉"
+  },
+  {
+    "en": "cream biscuits: heavy cream",
+    "zh": "浓奶油",
+    "category": "ingredient",
+    "notes": "脂肪含量约36%以上的淡奶油"
+  },
+  {
+    "en": "deglazing liquid: broth",
+    "zh": "高汤（收锅底用）",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "dried pasta",
+    "zh": "干意面",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "edamame",
+    "zh": "毛豆",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "fresh mozzarella",
+    "zh": "新鲜马苏里拉芝士",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "fresh sage",
+    "zh": "新鲜鼠尾草",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "fresh thyme",
+    "zh": "新鲜百里香",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "furikake rice seasoning",
+    "zh": "日式拌饭料",
+    "category": "ingredient",
+    "notes": "又称海苔香松"
+  },
+  {
+    "en": "greek yogurt",
+    "zh": "希腊酸奶",
+    "category": "ingredient",
+    "notes": "质地浓稠的过滤酸奶"
+  },
+  {
+    "en": "green plantains",
+    "zh": "绿色大蕉",
+    "category": "ingredient",
+    "notes": "未成熟的烹饪用芭蕉，需煮熟食用"
+  },
+  {
+    "en": "green thai chile",
+    "zh": "泰国青辣椒",
+    "category": "ingredient",
+    "notes": "又称鸟眼椒，辣度高"
+  },
+  {
+    "en": "ground harissa",
+    "zh": "哈里萨辣椒粉",
+    "category": "ingredient",
+    "notes": "北非风味辣椒粉"
+  },
+  {
+    "en": "gyoza wrappers",
+    "zh": "饺子皮",
+    "category": "ingredient",
+    "notes": "日式饺子皮，比中式饺子皮薄"
+  },
+  {
+    "en": "herbs",
+    "zh": "香草",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "hoagie rolls",
+    "zh": "霍吉面包卷",
+    "category": "ingredient",
+    "notes": "费城风格长面包卷"
+  },
+  {
+    "en": "hot cherry peppers",
+    "zh": "辣味樱桃椒",
+    "category": "ingredient",
+    "notes": "圆形红色小辣椒，微辣"
+  },
+  {
+    "en": "hot italian sausages, de-cased",
+    "zh": "去衣辣味意式香肠",
+    "category": "ingredient",
+    "notes": "去除肠衣后使用"
+  },
+  {
+    "en": "hummus",
+    "zh": "鹰嘴豆泥",
+    "category": "ingredient",
+    "notes": "中东传统酱料"
+  },
+  {
+    "en": "italian sausage",
+    "zh": "意式香肠",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "jumbo shrimp, shell on",
+    "zh": "带壳大虾",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "kosher salt",
+    "zh": "粗盐",
+    "category": "ingredient",
+    "notes": "犹太洁食认证粗粒盐，北美厨房常用"
+  },
+  {
+    "en": "lager beer",
+    "zh": "拉格啤酒",
+    "category": "ingredient",
+    "notes": "淡色窖藏啤酒"
+  },
+  {
+    "en": "lettuce, shredded",
+    "zh": "生菜丝",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "meat, cooked & chopped",
+    "zh": "熟肉丁",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "mozzarella pearls",
+    "zh": "马苏里拉芝士球",
+    "category": "ingredient",
+    "notes": "小颗粒球状新鲜马苏里拉"
+  },
+  {
+    "en": "napa cabbage",
+    "zh": "大白菜",
+    "category": "ingredient",
+    "notes": "又称娃娃菜（小棵品种）"
+  },
+  {
+    "en": "other bento components: havarti",
+    "zh": "哈瓦蒂芝士",
+    "category": "ingredient",
+    "notes": "丹麦产半软芝士，口感细腻"
+  },
+  {
+    "en": "other bento components: hot & sweet peppers",
+    "zh": "甜辣椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "other bento components: hummus",
+    "zh": "鹰嘴豆泥",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "other bento components: lettuce",
+    "zh": "生菜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "other bento components: olives",
+    "zh": "橄榄",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "other bento components: pita bread",
+    "zh": "皮塔饼",
+    "category": "ingredient",
+    "notes": "中东口袋面饼"
+  },
+  {
+    "en": "other bento components: tomatoes",
+    "zh": "番茄",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pasta water",
+    "zh": "煮面水",
+    "category": "ingredient",
+    "notes": "含淀粉的煮意面水，用于调酱汁浓度"
+  },
+  {
+    "en": "peruvian style green sauce: cilantro",
+    "zh": "香菜",
+    "category": "ingredient",
+    "notes": "又称芫荽"
+  },
+  {
+    "en": "peruvian style green sauce: jalapeños",
+    "zh": "墨西哥辣椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "peruvian style green sauce: lime juice",
+    "zh": "青柠汁",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "peruvian style green sauce: mayonnaise",
+    "zh": "蛋黄酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "peruvian style green sauce: olive oil",
+    "zh": "橄榄油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "peruvian style green sauce: yogurt",
+    "zh": "酸奶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pickled ginger",
+    "zh": "腌姜",
+    "category": "ingredient",
+    "notes": "日式寿司常用的甜醋渍嫩姜片"
+  },
+  {
+    "en": "pickled jalapeños",
+    "zh": "腌墨西哥辣椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pita components: feta",
+    "zh": "菲达芝士",
+    "category": "ingredient",
+    "notes": "希腊产白色咸味软芝士"
+  },
+  {
+    "en": "pita components: hummus",
+    "zh": "鹰嘴豆泥",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pita components: lemon juice",
+    "zh": "柠檬汁",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pita components: pickled beets",
+    "zh": "腌甜菜根",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pita components: pita bread",
+    "zh": "皮塔饼",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "pita components: red onions",
+    "zh": "紫洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "poblano hot sauce",
+    "zh": "波布拉诺辣酱",
+    "category": "ingredient",
+    "notes": "用墨西哥波布拉诺辣椒制成，辣度温和"
+  },
+  {
+    "en": "queso de freir",
+    "zh": "煎炸芝士",
+    "category": "ingredient",
+    "notes": "多米尼加/拉美白色硬芝士，加热不融化"
+  },
+  {
+    "en": "queso fresco, crumbled",
+    "zh": "新鲜白芝士碎",
+    "category": "ingredient",
+    "notes": "墨西哥风味软质白芝士"
+  },
+  {
+    "en": "raw vegetables",
+    "zh": "生蔬菜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "red thai chiles",
+    "zh": "泰国红辣椒",
+    "category": "ingredient",
+    "notes": "又称朝天椒，辣度高"
+  },
+  {
+    "en": "rice paper wrapper",
+    "zh": "越南米纸",
+    "category": "ingredient",
+    "notes": "又称春卷皮，泡水后变软"
+  },
+  {
+    "en": "roasted peppers",
+    "zh": "烤甜椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "russet potatoes",
+    "zh": "褐皮土豆",
+    "category": "ingredient",
+    "notes": "淀粉含量高，适合烤和炸"
+  },
+  {
+    "en": "salami",
+    "zh": "萨拉米",
+    "category": "ingredient",
+    "notes": "意式风干发酵肉肠"
+  },
+  {
+    "en": "sausage gravy: black pepper",
+    "zh": "黑胡椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sausage gravy: butter",
+    "zh": "黄油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sausage gravy: flour, all-purpose",
+    "zh": "中筋面粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sausage gravy: milk, whole",
+    "zh": "全脂牛奶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sausage gravy: onions",
+    "zh": "洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sausage gravy: salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sausage gravy: sausage, breakfast",
+    "zh": "早餐肉肠",
+    "category": "ingredient",
+    "notes": "美式碎肉肠，不带肠衣"
+  },
+  {
+    "en": "sautéed vegetables",
+    "zh": "炒蔬菜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "seasoned beef: cooking oil",
+    "zh": "食用油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "seasoned beef: cumin",
+    "zh": "孜然",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "seasoned beef: flank, skirt, or flatiron steak",
+    "zh": "牛腹肉/裙带牛排/板腱牛排",
+    "category": "ingredient",
+    "notes": "三种经济实惠的牛排部位可选"
+  },
+  {
+    "en": "seasoned beef: salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "seaweed handroll sheets",
+    "zh": "手卷海苔",
+    "category": "ingredient",
+    "notes": "大片方形海苔，用于卷制手卷寿司"
+  },
+  {
+    "en": "sesame seeds",
+    "zh": "芝麻",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sesame seeds, toasted",
+    "zh": "熟芝麻",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "shaved beef: chuck roast",
+    "zh": "刨薄牛肩肉",
+    "category": "ingredient",
+    "notes": "冷冻后刨成薄片的牛肩肉"
+  },
+  {
+    "en": "shaved beef: salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "shiitake mushrooms",
+    "zh": "香菇",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "shokupan",
+    "zh": "日式吐司",
+    "category": "ingredient",
+    "notes": "又称生吐司，质地柔软绵密"
+  },
+  {
+    "en": "shrimp, poached",
+    "zh": "白灼虾",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "skim milk",
+    "zh": "脱脂牛奶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "snow peas",
+    "zh": "荷兰豆",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "steak of choice",
+    "zh": "牛排（自选部位）",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sushi rice",
+    "zh": "寿司米",
+    "category": "ingredient",
+    "notes": "短粒粳米，煮熟后拌寿司醋"
+  },
+  {
+    "en": "sweated onions: cooking oil",
+    "zh": "食用油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sweated onions: salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "sweated onions: white onions",
+    "zh": "白洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "szechuan peppercorns",
+    "zh": "花椒",
+    "category": "ingredient",
+    "notes": "四川花椒，有独特麻味"
+  },
+  {
+    "en": "thai black soy sauce",
+    "zh": "泰式黑酱油",
+    "category": "ingredient",
+    "notes": "又称老抽，颜色深味甜，用于上色"
+  },
+  {
+    "en": "the meat: black pepper",
+    "zh": "黑胡椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "the meat: cooking oil",
+    "zh": "食用油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "the meat: pork chops",
+    "zh": "猪排",
+    "category": "ingredient",
+    "notes": "带骨或去骨猪排"
+  },
+  {
+    "en": "the meat: salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "thickener: butter, cold",
+    "zh": "冷黄油",
+    "category": "ingredient",
+    "notes": "冰冷黄油块，用于增稠酱汁"
+  },
+  {
+    "en": "thickener: cornstarch slurry",
+    "zh": "水淀粉",
+    "category": "ingredient",
+    "notes": "玉米淀粉加水调成的勾芡液"
+  },
+  {
+    "en": "thickener: mustard",
+    "zh": "芥末酱",
+    "category": "ingredient",
+    "notes": "西式黄芥末酱，兼作乳化增稠"
+  },
+  {
+    "en": "toppings: almonds, whole or sliced",
+    "zh": "杏仁（整粒或切片）",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "toppings: feta, crumbled",
+    "zh": "菲达芝士碎",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "toppings: hot sauce",
+    "zh": "辣酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "toppings: parsley, roughly chopped",
+    "zh": "欧芹碎",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "toppings: pomegranate seeds",
+    "zh": "石榴籽",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "toppings: red onions",
+    "zh": "紫洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "toppings: yogurt",
+    "zh": "酸奶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "tuna, sushi grade",
+    "zh": "刺身级金枪鱼",
+    "category": "ingredient",
+    "notes": "可生食级别的新鲜金枪鱼"
+  },
+  {
+    "en": "vite ramen",
+    "zh": "Vite高蛋白速食拉面",
+    "category": "ingredient",
+    "notes": "美国品牌高蛋白方便面"
+  },
+  {
+    "en": "wakame seaweed",
+    "zh": "裙带菜",
+    "category": "ingredient",
+    "notes": "常用于味噌汤和海藻沙拉"
+  },
+  {
+    "en": "white cheddar powder",
+    "zh": "白切达芝士粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "white rice, leftover",
+    "zh": "隔夜白米饭",
+    "category": "ingredient",
+    "notes": "冷藏过的米饭更适合炒饭"
+  },
+  {
+    "en": "white sauce: black pepper",
+    "zh": "黑胡椒",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "white sauce: fresh dill",
+    "zh": "新鲜莳萝",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "white sauce: mayonnaise",
+    "zh": "蛋黄酱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "white sauce: yogurt",
+    "zh": "酸奶",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "white vinegar",
+    "zh": "白醋",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "white wine",
+    "zh": "白葡萄酒",
+    "category": "ingredient",
+    "notes": "烹饪用干白葡萄酒"
+  },
+  {
+    "en": "whole wheat spaghetti",
+    "zh": "全麦意面",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "wide rice noodles",
+    "zh": "宽河粉",
+    "category": "ingredient",
+    "notes": "泰式炒河粉常用"
+  },
+  {
+    "en": "worcestershire sauce",
+    "zh": "伍斯特酱",
+    "category": "ingredient",
+    "notes": "又称辣酱油、李派林酱"
+  },
+  {
+    "en": "yellow rice: basmati rice",
+    "zh": "巴斯马蒂长粒米",
+    "category": "ingredient",
+    "notes": "印度/中东常用香米"
+  },
+  {
+    "en": "yellow rice: chicken bouillon",
+    "zh": "鸡汤块",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "yellow rice: chicken bouillon powder",
+    "zh": "鸡精粉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "yellow rice: cooking oil",
+    "zh": "食用油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "yellow rice: garlic",
+    "zh": "蒜",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "yellow rice: onions",
+    "zh": "洋葱",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "yellow rice: salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "yellow rice: turmeric powder",
+    "zh": "姜黄粉",
+    "category": "ingredient",
+    "notes": "给米饭上色的天然黄色香料"
+  },
+  {
+    "en": "yellow rice: water",
+    "zh": "清水",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "za'atar chicken: chicken breasts",
+    "zh": "鸡胸肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "za'atar chicken: cooking oil",
+    "zh": "食用油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "za'atar chicken: salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "za'atar chicken: za'atar",
+    "zh": "扎塔尔香料",
+    "category": "ingredient",
+    "notes": "中东综合香料"
+  },
+  {
+    "en": "za'atar spiced chicken: chicken breasts",
+    "zh": "鸡胸肉",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "za'atar spiced chicken: cooking oil",
+    "zh": "食用油",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "za'atar spiced chicken: cumin",
+    "zh": "孜然",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "za'atar spiced chicken: garam masala",
+    "zh": "印度综合香料",
+    "category": "ingredient",
+    "notes": "又称加拉姆马萨拉"
+  },
+  {
+    "en": "za'atar spiced chicken: salt",
+    "zh": "盐",
+    "category": "ingredient",
+    "notes": ""
+  },
+  {
+    "en": "za'atar spiced chicken: sumac",
+    "zh": "苏木粉",
+    "category": "ingredient",
+    "notes": "中东酸味香料，呈紫红色"
+  },
+  {
+    "en": "za'atar spiced chicken: za'atar",
+    "zh": "扎塔尔香料",
+    "category": "ingredient",
+    "notes": "中东综合香料，含百里香、芝麻、苏木等"
+  }
 ]
