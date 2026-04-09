@@ -27,7 +27,6 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 
 **Done (2026-04-08).** Contracts directory scaffolded: `tool_schemas.py`, `sse_events.py`, `api_types.py`, `kb_schema.sql`, `pg_schema.sql`, `CHANGELOG.md`. See `docs/archive/phase-2-architecture-session.jsonl` for architecture session.
 
-
 | File              | Contents                                                                                                         | Source                                                                |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | `tool_schemas.py` | Pydantic models for 7 tool inputs/outputs                                                                        | Evolved from `prototype/schema.py` + `prototype/tools/definitions.py` |
@@ -37,9 +36,7 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 | `pg_schema.sql`   | PostgreSQL DDL (sessions, users/profiles, saved content)                                                         | Architecture spec §7 + §9                                             |
 | `CHANGELOG.md`    | Dated one-liners for breaking contract changes                                                                   | Empty at creation                                                     |
 
-
 **Contract freeze protocol:** Once a contract file is marked `# Status: frozen`, only additive, non-breaking changes are allowed (new optional fields, new event types, new endpoints). Breaking changes (rename, type change, field removal) require a PR to `main` with a `CHANGELOG.md` entry; all worktrees must rebase before continuing.
-
 
 | Contract          | Freezes when                           | Blocks                                        |
 | ----------------- | -------------------------------------- | --------------------------------------------- |
@@ -49,8 +46,7 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 | `api_types.py`    | WT2 has all endpoints scaffolded       | WT3 Stage 4 (frontend needs API types)        |
 | `pg_schema.sql`   | WT2 has PostgreSQL integration working | Only WT2 consumes it                          |
 
-
-### 0.3 Project scaffolding
+### 0.3 Project scaffolding ✓
 
 - `docker-compose.yml` — PostgreSQL + placeholder FastAPI service (so all worktrees develop against real Postgres)
 - Frontend project init: Vite + React + TS + Bun + Tailwind + shadcn/ui
@@ -128,13 +124,11 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 
 ## Sync Points
 
-
 | Sync point          | What must be true                       | Who's blocked                                 |
 | ------------------- | --------------------------------------- | --------------------------------------------- |
 | WT1 merged          | SQLite schema + seeded data on `main`   | WT2 (tool handlers need SQLite)               |
 | SSE contract frozen | `contracts/sse_events.py` stable        | WT3 Stage 3 (state machine needs event types) |
 | WT2 merged          | Backend running, `/chat` endpoint works | Phase 2.2 (Frontend Stage 4)                  |
-
 
 ---
 
@@ -195,4 +189,3 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 - **API contracts:** [Evil Martians — API Contracts and Everything I Wish I Knew](https://evilmartians.com/chronicles/api-contracts-and-everything-i-wish-i-knew-a-frontend-survival-guide) — why shared schemas beat ad-hoc coordination
 - **Parallel worktree patterns:** [Mastering Git Worktrees with Claude Code](https://medium.com/@dtunai/mastering-git-worktrees-with-claude-code-parallel-development-workflow-41dc91e645fe) — per-worktree CLAUDE.md, rebase protocol, practical limits
 - **Parallel agent development:** [Mastering Parallel Agent Development in Claude Code](https://claudelab.net/en/articles/claude-code/claude-code-parallel-development-mastery) — orchestrator pattern, 3-5 worktree sweet spot
-
