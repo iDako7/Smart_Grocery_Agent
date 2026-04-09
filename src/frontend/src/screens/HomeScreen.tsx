@@ -1,0 +1,95 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import { QuickStartChip } from "@/components/quick-start-chip";
+import { Sidebar } from "@/components/sidebar";
+import { useScenario } from "@/context/scenario-context";
+
+const QUICK_STARTS = ["Weekend BBQ", "Weeknight meals", "Use my leftovers"];
+
+export function HomeScreen() {
+  const navigate = useNavigate();
+  const { scenario } = useScenario();
+  const { mealPlans: MOCK_MEAL_PLANS, savedRecipes: MOCK_SAVED_RECIPES, groceryLists: MOCK_GROCERY_LISTS } =
+    scenario.sidebar;
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  function handleQuickStart() {
+    navigate("/clarify");
+  }
+
+  return (
+    <div data-testid="screen-home" className="min-h-screen bg-cream flex flex-col">
+      {/* Status bar */}
+      <div className="flex justify-between items-center px-[22px] pt-3 pb-1 text-[11px] font-semibold text-ink-2">
+        <span>9:41</span>
+        <span>SGA</span>
+      </div>
+
+      {/* Nav bar */}
+      <div className="flex justify-between items-center px-[18px] pt-2 pb-0.5">
+        <button
+          type="button"
+          aria-label="Open menu"
+          onClick={() => setSidebarOpen(true)}
+          className="text-[18px] text-ink-2 cursor-pointer p-2 min-w-[36px] min-h-[36px] flex items-center justify-center leading-none bg-transparent border-none"
+        >
+          ☰
+        </button>
+        <span className="text-[13px] font-semibold text-ink">Smart Grocery</span>
+        <span className="w-9" aria-hidden="true" />
+      </div>
+
+      {/* Hero card */}
+      <div className="mx-3.5 mt-2.5 px-5 py-[18px] bg-paper rounded-2xl relative overflow-hidden">
+        {/* Decorative radial gradient */}
+        <div
+          aria-hidden="true"
+          className="absolute -top-5 -right-5 w-[120px] h-[120px] rounded-full pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle, var(--color-apricot) 0%, transparent 70%)",
+            opacity: 0.3,
+          }}
+        />
+        <div className="relative z-[1]">
+          <h2 className="text-[20px] font-bold tracking-tight text-ink leading-[1.15]">
+            What are you <span className="text-persimmon">planning</span>?
+          </h2>
+          <p className="mt-1.5 text-[13px] text-ink-2 leading-[1.4]">
+            Tell me what you have, or what you're cooking this week.
+          </p>
+          <input
+            type="text"
+            placeholder="BBQ for 8, or I have leftover chicken..."
+            className="w-full mt-3.5 px-3.5 py-3 border-[1.5px] border-cream-deep rounded-md bg-tofu font-sans text-[14px] text-ink outline-none placeholder:text-ink-3 focus:border-ink-3 min-h-[44px]"
+          />
+        </div>
+      </div>
+
+      {/* Quick start */}
+      <div className="px-3.5 pt-3 pb-1 text-[12px] font-medium text-ink-3">
+        Quick start
+      </div>
+      <div className="flex flex-wrap gap-2 px-3.5 pb-4">
+        {QUICK_STARTS.map((label) => (
+          <QuickStartChip key={label} label={label} onClick={handleQuickStart} />
+        ))}
+      </div>
+
+      {/* Footer */}
+      <div className="text-center px-4 pt-3 pb-[22px] text-[10px] text-ink-3 font-medium mt-auto">
+        Smart Grocery <span className="text-persimmon mx-[5px]">·</span> Vancouver
+      </div>
+
+      {/* Sidebar */}
+      <Sidebar
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        mealPlans={MOCK_MEAL_PLANS}
+        savedRecipes={MOCK_SAVED_RECIPES}
+        groceryLists={MOCK_GROCERY_LISTS}
+        onItemClick={() => setSidebarOpen(false)}
+      />
+    </div>
+  );
+}
