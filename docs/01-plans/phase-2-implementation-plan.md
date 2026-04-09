@@ -21,9 +21,11 @@ Phase 2 delivers a workable full-stack web app running locally. Development uses
 
 **Done (2026-04-07).** Model set to `openai/gpt-5.4-mini`. 5 vegetarian recipes added. 12/14 eval pass rate. See `phase-1c-handoff.md`.
 
-### 0.2 Draft `contracts/` directory
+### 0.2 Draft `contracts/` directory ✓
 
 Shared schemas that all worktrees import. Contract changes go as small PRs to `main` — no implementation mixed in.
+
+**Done (2026-04-08).** Contracts directory scaffolded: `tool_schemas.py`, `sse_events.py`, `api_types.py`, `kb_schema.sql`, `pg_schema.sql`, `CHANGELOG.md`. See `docs/archive/phase-2-architecture-session.jsonl` for architecture session.
 
 
 | File              | Contents                                                                                                         | Source                                                                |

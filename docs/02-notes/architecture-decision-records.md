@@ -26,6 +26,7 @@
 | ADR-15 | Multi-Dimensional Flavor Tags for Variety Matching | Decided | New |
 | ADR-16 | Frontend Stack: React + Vite + shadcn/ui + Tailwind + Bun | Decided | New |
 | ADR-17 | Screen-Agnostic API Design | Decided | New |
+| ADR-18 | SQLAlchemy 2.0 Core (async) + asyncpg + Alembic, No Full ORM | Decided | Phase 0.3 planning |
 
 ---
 
@@ -365,6 +366,22 @@ VPS
 - *Separate endpoints per screen:* V1 approach. Already rejected in ADR-5.
 
 **Trade-off:** Frontend receives events it may not render on the current screen. Marginal bandwidth cost — typed SSE events are small (< 1KB each). The reducer simply ignores events that don't map to the current screen's state slots.
+
+---
+
+## ADR-18: SQLAlchemy 2.0 Core (async) + asyncpg + Alembic, No Full ORM
+
+**Decision:** Use SQLAlchemy 2.0 in Core (query-builder) mode with asyncpg driver and Alembic for migrations. No ORM relationship mapping.
+
+**Why:** Full ORM relationship mapping adds complexity (lazy loads, relationship declarations, session management) with no benefit for a flat PostgreSQL schema (3–5 tables, mostly JSON columns). Core-mode gives typed query building and async support via asyncpg (fastest PG driver for Python), plus Alembic for migrations. Pydantic models in `contracts/` remain the single source of truth — no SQLModel double-model problem.
+
+**Why not alternatives:**
+
+- *Full SQLAlchemy ORM:* Relationship mapping overkill for 4 simple tables; session/lazy-load complexity for no gain.
+- *SQLModel:* Pydantic + SQLAlchemy combined, but conflicts with the existing `contracts/` Pydantic models as source of truth. Async story still rough.
+- *Raw asyncpg:* Simpler, but SQL strings everywhere and no migration story without adding another tool.
+
+**Trade-off:** SQLAlchemy Core requires slightly more boilerplate per query than ORM. Acceptable given schema simplicity.
 
 ---
 

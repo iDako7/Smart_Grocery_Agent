@@ -6,3 +6,10 @@ __pycache__/
 *.egg-info/
 last_result.json
 evals/reasoning/results*.json
+
+# Frontend
+node_modules/
+dist/
+
+# Docker
+postgres_data/
