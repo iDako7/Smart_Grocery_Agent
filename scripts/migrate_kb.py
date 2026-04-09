@@ -138,6 +138,11 @@ def migrate(db_path: Path = None, data_dir: Path = None) -> Path:
 
         conn.commit()
     except Exception:
+        # Explicitly roll back any partial writes before closing the connection.
+        # sqlite3 would discard the transaction on close anyway, but the
+        # explicit call makes the intent unambiguous and is robust against
+        # future changes to the connection lifecycle.
+        conn.rollback()
         try:
             db_path.unlink(missing_ok=True)
         except OSError:

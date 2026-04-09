@@ -261,5 +261,85 @@ class TestGlossaryTable(MigrateTestBase):
             self.assertEqual(count, 0, f"Found NULL {col} values in glossary")
 
 
+class TestMigrateErrorRollback(unittest.TestCase):
+    """migrate() must call conn.rollback() explicitly when a load step raises.
+
+    Issue: migrate_kb.py:140-145 — the except block deletes the output file
+    but does not explicitly call conn.rollback() before the connection closes.
+    Explicit rollback makes the intent clear and is robust against any future
+    change that removes autocommit behaviour.
+    """
+
+    def test_rollback_called_on_load_error(self):
+        """conn.rollback() must be called when a load function raises."""
+        import sqlite3
+        import tempfile
+        import unittest.mock as mock
+        from scripts.migrate_kb import migrate
+
+        tmp = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
+        tmp.close()
+        db_path = Path(tmp.name)
+
+        rollback_called = []
+
+        class TrackingConnection:
+            """Thin proxy around sqlite3.Connection that records rollback() calls."""
+
+            def __init__(self, real_conn):
+                self._real = real_conn
+
+            def rollback(self):
+                rollback_called.append(True)
+                self._real.rollback()
+
+            def __getattr__(self, name):
+                return getattr(self._real, name)
+
+        original_connect = sqlite3.connect
+
+        def patched_connect(path, *args, **kwargs):
+            return TrackingConnection(original_connect(path, *args, **kwargs))
+
+        boom = RuntimeError("simulated load failure")
+
+        with mock.patch("scripts.migrate_kb.sqlite3.connect", side_effect=patched_connect), \
+             mock.patch("scripts.migrate_kb._load_recipes", side_effect=boom):
+            with self.assertRaises(RuntimeError):
+                migrate(db_path=db_path)
+
+        self.assertTrue(
+            rollback_called,
+            "conn.rollback() was not called when a load step raised an exception",
+        )
+        # Cleanup (file may already be deleted by the except block)
+        db_path.unlink(missing_ok=True)
+
+    def test_db_file_deleted_on_error(self):
+        """The partial DB file must be removed when migration fails mid-way."""
+        import unittest.mock as mock
+        from scripts.migrate_kb import migrate
+
+        tmp = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
+        tmp.close()
+        db_path = Path(tmp.name)
+
+        with mock.patch("scripts.migrate_kb._load_recipes",
+                        side_effect=RuntimeError("boom")):
+            with self.assertRaises(RuntimeError):
+                migrate(db_path=db_path)
+
+        self.assertFalse(db_path.exists(), "Partial DB file was not cleaned up after error")
+
+    def test_source_code_contains_explicit_rollback(self):
+        """The migrate() source must contain an explicit conn.rollback() call."""
+        source = (PROJECT_ROOT / "scripts" / "migrate_kb.py").read_text()
+        self.assertIn(
+            "conn.rollback()",
+            source,
+            "migrate_kb.py must contain an explicit conn.rollback() in the error path",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

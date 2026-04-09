@@ -18,7 +18,19 @@ DEFAULT_DB_PATH = DATA_DIR / "kb.sqlite"
 
 CheckResult = namedtuple("CheckResult", ["name", "passed", "detail"])
 
-# Expected counts derived from source data at migration time
+# Explicit whitelist of table names that may appear in f-string SQL queries.
+# Trust boundary: only names in this set are ever interpolated into SQL.
+# Any table name not present here will raise ValueError before query execution.
+ALLOWED_TABLES: frozenset = frozenset({
+    "recipes",
+    "pcsv_mappings",
+    "products",
+    "substitutions",
+    "glossary",
+})
+
+# Expected counts derived from source data at migration time.
+# All keys must be members of ALLOWED_TABLES (asserted at module load time below).
 EXPECTED_COUNTS = {
     "recipes": 20,
     "pcsv_mappings": 95,
@@ -27,10 +39,26 @@ EXPECTED_COUNTS = {
     "glossary": 123,
 }
 
+# Module-load assertion: every EXPECTED_COUNTS key must be in ALLOWED_TABLES.
+# This catches accidental drift between the two constants during development.
+assert set(EXPECTED_COUNTS.keys()) <= ALLOWED_TABLES, (
+    "EXPECTED_COUNTS contains table names not in ALLOWED_TABLES: "
+    f"{set(EXPECTED_COUNTS.keys()) - ALLOWED_TABLES}"
+)
+
 
 def _check_row_counts(conn: sqlite3.Connection) -> list:
     results = []
     for table, expected in EXPECTED_COUNTS.items():
+        # Safety check: table name must be in the explicit whitelist before
+        # being interpolated into SQL.  EXPECTED_COUNTS keys are controlled
+        # by this module, but we validate defensively to prevent any future
+        # mutation (e.g. from tests or calling code) from reaching sqlite.
+        if table not in ALLOWED_TABLES:
+            raise ValueError(
+                f"Table name '{table}' is not in ALLOWED_TABLES; "
+                "refusing to interpolate into SQL query."
+            )
         actual = conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
         passed = actual == expected
         results.append(CheckResult(

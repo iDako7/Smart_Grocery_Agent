@@ -138,5 +138,66 @@ class TestValidateRunnable(unittest.TestCase):
         self.assertIn('if __name__ == "__main__"', source)
 
 
+class TestTableNameWhitelist(unittest.TestCase):
+    """EXPECTED_COUNTS keys must be whitelisted before use in f-string SQL.
+
+    Issue: validate_kb.py:34 builds a query via f"SELECT COUNT(*) FROM {table}".
+    The fix must ensure every key in EXPECTED_COUNTS is a member of an explicit
+    ALLOWED_TABLES set, raising ValueError for any name not in that set.
+    """
+
+    def test_allowed_tables_constant_exists(self):
+        """ALLOWED_TABLES set must be defined in validate_kb module."""
+        import scripts.validate_kb as vmod
+        self.assertTrue(
+            hasattr(vmod, "ALLOWED_TABLES"),
+            "validate_kb must expose an ALLOWED_TABLES constant",
+        )
+
+    def test_allowed_tables_covers_expected_counts_keys(self):
+        """Every key in EXPECTED_COUNTS must appear in ALLOWED_TABLES."""
+        import scripts.validate_kb as vmod
+        for table in vmod.EXPECTED_COUNTS:
+            self.assertIn(
+                table,
+                vmod.ALLOWED_TABLES,
+                f"Table '{table}' in EXPECTED_COUNTS is not in ALLOWED_TABLES",
+            )
+
+    def test_check_row_counts_rejects_unknown_table(self):
+        """_check_row_counts must raise ValueError for a table not in ALLOWED_TABLES."""
+        import sqlite3
+        import scripts.validate_kb as vmod
+
+        conn = sqlite3.connect(":memory:")
+        conn.execute("CREATE TABLE legit (id INTEGER)")
+
+        bad_key = "'; DROP TABLE legit; --"
+        original = dict(vmod.EXPECTED_COUNTS)
+        try:
+            # Replace EXPECTED_COUNTS with only the bad key so the guard fires
+            # immediately — before any real table is queried.
+            vmod.EXPECTED_COUNTS.clear()
+            vmod.EXPECTED_COUNTS[bad_key] = 0
+            with self.assertRaises(ValueError):
+                vmod._check_row_counts(conn)
+        finally:
+            # Restore original EXPECTED_COUNTS regardless of outcome
+            vmod.EXPECTED_COUNTS.clear()
+            vmod.EXPECTED_COUNTS.update(original)
+            conn.close()
+
+    def test_allowed_tables_contains_only_safe_identifiers(self):
+        """Every name in ALLOWED_TABLES must be a simple alphanumeric/underscore identifier."""
+        import re
+        import scripts.validate_kb as vmod
+        for name in vmod.ALLOWED_TABLES:
+            self.assertRegex(
+                name,
+                r"^[A-Za-z_][A-Za-z0-9_]*$",
+                f"ALLOWED_TABLES entry '{name}' is not a safe SQL identifier",
+            )
+
+
 if __name__ == "__main__":
     unittest.main()
