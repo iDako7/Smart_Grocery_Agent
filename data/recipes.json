@@ -8,17 +8,74 @@
     "cuisine": "Korean",
     "cooking_method": "grill",
     "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "spicy",
+      "smoky",
+      "umami",
+      "sweet"
+    ],
     "serves": 4,
     "ingredients": [
-      {"name": "pork belly", "amount": "2 lbs", "pcsv": ["protein"]},
-      {"name": "gochujang", "amount": "3 tbsp", "pcsv": ["sauce"]},
-      {"name": "soy sauce", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "sesame oil", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "garlic", "amount": "4 cloves", "pcsv": ["veggie"]},
-      {"name": "ginger", "amount": "1 inch", "pcsv": ["veggie"]},
-      {"name": "sugar", "amount": "1 tbsp", "pcsv": []},
-      {"name": "green onions", "amount": "4 stalks", "pcsv": ["veggie"]},
-      {"name": "sesame seeds", "amount": "1 tbsp", "pcsv": []}
+      {
+        "name": "pork belly",
+        "amount": "2 lbs",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "gochujang",
+        "amount": "3 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "sesame oil",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "4 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "ginger",
+        "amount": "1 inch",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "sugar",
+        "amount": "1 tbsp",
+        "pcsv": []
+      },
+      {
+        "name": "green onions",
+        "amount": "4 stalks",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "sesame seeds",
+        "amount": "1 tbsp",
+        "pcsv": []
+      }
     ],
     "instructions": "Slice pork belly 1/4 inch thick. Mix gochujang, soy sauce, sesame oil, minced garlic, grated ginger, sugar. Marinate 30 min (or overnight). Grill over high heat 2-3 min per side until charred. Garnish with green onions and sesame seeds.",
     "is_ai_generated": false
@@ -32,17 +89,72 @@
     "cuisine": "American",
     "cooking_method": "grill",
     "time_minutes": 20,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "savory",
+      "smoky"
+    ],
     "serves": 4,
     "ingredients": [
-      {"name": "ground beef", "amount": "1 lb", "pcsv": ["protein"]},
-      {"name": "burger buns", "amount": "4", "pcsv": ["carb"]},
-      {"name": "cheese", "amount": "4 slices", "pcsv": ["protein"]},
-      {"name": "lettuce", "amount": "4 leaves", "pcsv": ["veggie"]},
-      {"name": "tomato", "amount": "1 large", "pcsv": ["veggie"]},
-      {"name": "onion", "amount": "1 small", "pcsv": ["veggie"]},
-      {"name": "pickles", "amount": "to taste", "pcsv": ["veggie"]},
-      {"name": "salt", "amount": "to taste", "pcsv": []},
-      {"name": "pepper", "amount": "to taste", "pcsv": []}
+      {
+        "name": "ground beef",
+        "amount": "1 lb",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "burger buns",
+        "amount": "4",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "cheese",
+        "amount": "4 slices",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "lettuce",
+        "amount": "4 leaves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "tomato",
+        "amount": "1 large",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "onion",
+        "amount": "1 small",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "pickles",
+        "amount": "to taste",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "pepper",
+        "amount": "to taste",
+        "pcsv": []
+      }
     ],
     "instructions": "Divide beef into 4 balls. Heat grill or cast iron to high. Place ball on surface, smash flat with spatula. Season with salt and pepper. Cook 2 min until edges crisp, flip. Add cheese on flip, cook 1 min. Serve on toasted buns with toppings.",
     "is_ai_generated": false
@@ -56,17 +168,71 @@
     "cuisine": "Korean",
     "cooking_method": "raw",
     "time_minutes": 15,
+    "effort_level": "quick",
+    "flavor_tags": [
+      "spicy",
+      "tangy",
+      "fresh"
+    ],
     "serves": 4,
     "ingredients": [
-      {"name": "cucumber", "amount": "2 large", "pcsv": ["veggie"]},
-      {"name": "rice vinegar", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "sesame oil", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "gochugaru", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "garlic", "amount": "2 cloves", "pcsv": ["veggie"]},
-      {"name": "sugar", "amount": "1 tsp", "pcsv": []},
-      {"name": "salt", "amount": "1 tsp", "pcsv": []},
-      {"name": "sesame seeds", "amount": "1 tsp", "pcsv": []},
-      {"name": "green onions", "amount": "2 stalks", "pcsv": ["veggie"]}
+      {
+        "name": "cucumber",
+        "amount": "2 large",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "rice vinegar",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "sesame oil",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "gochugaru",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "sugar",
+        "amount": "1 tsp",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "1 tsp",
+        "pcsv": []
+      },
+      {
+        "name": "sesame seeds",
+        "amount": "1 tsp",
+        "pcsv": []
+      },
+      {
+        "name": "green onions",
+        "amount": "2 stalks",
+        "pcsv": [
+          "veggie"
+        ]
+      }
     ],
     "instructions": "Slice cucumbers thin, salt and drain 10 min, squeeze out water. Toss with rice vinegar, sesame oil, gochugaru, minced garlic, sugar. Garnish with sesame seeds and sliced green onions. Serve cold.",
     "is_ai_generated": false
@@ -80,12 +246,37 @@
     "cuisine": "American",
     "cooking_method": "grill",
     "time_minutes": 15,
+    "effort_level": "quick",
+    "flavor_tags": [
+      "smoky",
+      "buttery",
+      "sweet"
+    ],
     "serves": 8,
     "ingredients": [
-      {"name": "corn on the cob", "amount": "8 ears", "pcsv": ["carb", "veggie"]},
-      {"name": "butter", "amount": "4 tbsp", "pcsv": []},
-      {"name": "salt", "amount": "to taste", "pcsv": []},
-      {"name": "pepper", "amount": "to taste", "pcsv": []}
+      {
+        "name": "corn on the cob",
+        "amount": "8 ears",
+        "pcsv": [
+          "carb",
+          "veggie"
+        ]
+      },
+      {
+        "name": "butter",
+        "amount": "4 tbsp",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "pepper",
+        "amount": "to taste",
+        "pcsv": []
+      }
     ],
     "instructions": "Shuck corn. Grill over medium-high direct heat, turning every 2 min, until charred in spots (8-10 min total). Brush with butter, season with salt and pepper.",
     "is_ai_generated": false
@@ -99,17 +290,73 @@
     "cuisine": "Thai",
     "cooking_method": "stir-fry",
     "time_minutes": 25,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "spicy",
+      "umami",
+      "aromatic"
+    ],
     "serves": 4,
     "ingredients": [
-      {"name": "beef sirloin", "amount": "1 lb", "pcsv": ["protein"]},
-      {"name": "thai basil", "amount": "2 cups", "pcsv": ["veggie"]},
-      {"name": "thai chilies", "amount": "4-6", "pcsv": ["veggie"]},
-      {"name": "garlic", "amount": "6 cloves", "pcsv": ["veggie"]},
-      {"name": "fish sauce", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "soy sauce", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "palm sugar", "amount": "1 tbsp", "pcsv": []},
-      {"name": "rice", "amount": "for serving", "pcsv": ["carb"]},
-      {"name": "vegetable oil", "amount": "2 tbsp", "pcsv": []}
+      {
+        "name": "beef sirloin",
+        "amount": "1 lb",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "thai basil",
+        "amount": "2 cups",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "thai chilies",
+        "amount": "4-6",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "6 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "fish sauce",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "palm sugar",
+        "amount": "1 tbsp",
+        "pcsv": []
+      },
+      {
+        "name": "rice",
+        "amount": "for serving",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "2 tbsp",
+        "pcsv": []
+      }
     ],
     "instructions": "Pound chilies, garlic, and palm sugar into rough paste. Slice beef thin against the grain. Heat wok smoking hot, sear beef in batches 1 min per side. Remove. Add paste to wok, cook 30 sec. Return beef, add fish sauce and soy sauce. Toss until glaze forms and sauce is nearly dry. Add basil, toss until wilted. Serve over rice.",
     "is_ai_generated": false
@@ -123,17 +370,75 @@
     "cuisine": "Korean",
     "cooking_method": "pan-fry",
     "time_minutes": 30,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "spicy",
+      "umami",
+      "savory"
+    ],
     "serves": 2,
     "ingredients": [
-      {"name": "beef sirloin", "amount": "12 oz", "pcsv": ["protein"]},
-      {"name": "rice", "amount": "1 cup", "pcsv": ["carb"]},
-      {"name": "gochujang", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "soy sauce", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "sesame oil", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "cucumber", "amount": "1", "pcsv": ["veggie"]},
-      {"name": "green onions", "amount": "3 stalks", "pcsv": ["veggie"]},
-      {"name": "sesame seeds", "amount": "1 tbsp", "pcsv": []},
-      {"name": "egg", "amount": "2", "pcsv": ["protein"]}
+      {
+        "name": "beef sirloin",
+        "amount": "12 oz",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "rice",
+        "amount": "1 cup",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "gochujang",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "sesame oil",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "cucumber",
+        "amount": "1",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "green onions",
+        "amount": "3 stalks",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "sesame seeds",
+        "amount": "1 tbsp",
+        "pcsv": []
+      },
+      {
+        "name": "egg",
+        "amount": "2",
+        "pcsv": [
+          "protein"
+        ]
+      }
     ],
     "instructions": "Cook rice. Mix gochujang, soy sauce, sesame oil for glaze. Sear steak in hot pan 3 min per side for medium-rare. Rest 5 min, slice thin. Fry eggs sunny-side up. Assemble bowls: rice, sliced steak, sliced cucumber, fried egg. Drizzle glaze, top with green onions and sesame seeds.",
     "is_ai_generated": false
@@ -147,16 +452,66 @@
     "cuisine": "Japanese",
     "cooking_method": "bake",
     "time_minutes": 50,
+    "effort_level": "long",
+    "flavor_tags": [
+      "sweet",
+      "umami",
+      "savory"
+    ],
     "serves": 4,
     "ingredients": [
-      {"name": "chicken wings", "amount": "2 lbs", "pcsv": ["protein"]},
-      {"name": "soy sauce", "amount": "1/4 cup", "pcsv": ["sauce"]},
-      {"name": "mirin", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "sugar", "amount": "2 tbsp", "pcsv": []},
-      {"name": "ginger", "amount": "1 inch", "pcsv": ["veggie"]},
-      {"name": "garlic", "amount": "2 cloves", "pcsv": ["veggie"]},
-      {"name": "green onions", "amount": "2 stalks", "pcsv": ["veggie"]},
-      {"name": "sesame seeds", "amount": "1 tbsp", "pcsv": []}
+      {
+        "name": "chicken wings",
+        "amount": "2 lbs",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "1/4 cup",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "mirin",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "sugar",
+        "amount": "2 tbsp",
+        "pcsv": []
+      },
+      {
+        "name": "ginger",
+        "amount": "1 inch",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "green onions",
+        "amount": "2 stalks",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "sesame seeds",
+        "amount": "1 tbsp",
+        "pcsv": []
+      }
     ],
     "instructions": "Pat wings dry, season with salt. Bake at 425F on wire rack 20 min per side until crispy. Simmer soy sauce, mirin, sugar, grated ginger, minced garlic until syrupy (5 min). Toss crispy wings in glaze. Garnish with green onions and sesame seeds.",
     "is_ai_generated": false
@@ -170,16 +525,66 @@
     "cuisine": "Chinese",
     "cooking_method": "simmer",
     "time_minutes": 60,
+    "effort_level": "long",
+    "flavor_tags": [
+      "mild",
+      "comforting",
+      "savory"
+    ],
     "serves": 4,
     "ingredients": [
-      {"name": "chicken wings", "amount": "1 lb", "pcsv": ["protein"]},
-      {"name": "rice", "amount": "1 cup", "pcsv": ["carb"]},
-      {"name": "ginger", "amount": "2 inches", "pcsv": ["veggie"]},
-      {"name": "green onions", "amount": "4 stalks", "pcsv": ["veggie"]},
-      {"name": "soy sauce", "amount": "to taste", "pcsv": ["sauce"]},
-      {"name": "sesame oil", "amount": "drizzle", "pcsv": ["sauce"]},
-      {"name": "white pepper", "amount": "to taste", "pcsv": []},
-      {"name": "salt", "amount": "to taste", "pcsv": []}
+      {
+        "name": "chicken wings",
+        "amount": "1 lb",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "rice",
+        "amount": "1 cup",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "ginger",
+        "amount": "2 inches",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "green onions",
+        "amount": "4 stalks",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "to taste",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "sesame oil",
+        "amount": "drizzle",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "white pepper",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      }
     ],
     "instructions": "Bring 8 cups water to boil with chicken wings and sliced ginger. Skim scum, simmer 30 min. Remove wings, shred meat, discard bones. Add rice to broth, simmer 25-30 min, stirring occasionally, until thick and creamy. Return shredded chicken. Season with soy sauce, white pepper, salt. Serve topped with green onions, sesame oil drizzle.",
     "is_ai_generated": false
@@ -193,17 +598,73 @@
     "cuisine": "Chinese",
     "cooking_method": "stir-fry",
     "time_minutes": 20,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "umami",
+      "savory",
+      "mild"
+    ],
     "serves": 3,
     "ingredients": [
-      {"name": "chicken wings", "amount": "1 lb", "pcsv": ["protein"]},
-      {"name": "bok choy", "amount": "4 heads baby", "pcsv": ["veggie"]},
-      {"name": "garlic", "amount": "3 cloves", "pcsv": ["veggie"]},
-      {"name": "ginger", "amount": "1 inch", "pcsv": ["veggie"]},
-      {"name": "soy sauce", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "oyster sauce", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "rice", "amount": "for serving", "pcsv": ["carb"]},
-      {"name": "vegetable oil", "amount": "2 tbsp", "pcsv": []},
-      {"name": "cornstarch", "amount": "1 tsp", "pcsv": []}
+      {
+        "name": "chicken wings",
+        "amount": "1 lb",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "bok choy",
+        "amount": "4 heads baby",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "3 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "ginger",
+        "amount": "1 inch",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "oyster sauce",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "rice",
+        "amount": "for serving",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "2 tbsp",
+        "pcsv": []
+      },
+      {
+        "name": "cornstarch",
+        "amount": "1 tsp",
+        "pcsv": []
+      }
     ],
     "instructions": "Separate wings at joints, or use boneless thigh meat. Halve bok choy lengthwise. Heat wok smoking hot, sear chicken 3 min until golden. Add garlic and ginger, 30 sec. Add bok choy stems first (1 min), then leaves (30 sec). Add soy sauce, oyster sauce. Thicken with cornstarch slurry if needed. Serve over rice.",
     "is_ai_generated": false
@@ -217,17 +678,75 @@
     "cuisine": "Asian",
     "cooking_method": "stir-fry",
     "time_minutes": 25,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "tangy",
+      "savory"
+    ],
     "serves": 2,
     "ingredients": [
-      {"name": "chicken thigh", "amount": "1 lb", "pcsv": ["protein"]},
-      {"name": "ginger", "amount": "2 inches", "pcsv": ["veggie"]},
-      {"name": "garlic", "amount": "3 cloves", "pcsv": ["veggie"]},
-      {"name": "soy sauce", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "rice vinegar", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "honey", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "broccoli", "amount": "1 cup", "pcsv": ["veggie"]},
-      {"name": "rice", "amount": "for serving", "pcsv": ["carb"]},
-      {"name": "vegetable oil", "amount": "2 tbsp", "pcsv": []}
+      {
+        "name": "chicken thigh",
+        "amount": "1 lb",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "ginger",
+        "amount": "2 inches",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "3 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "rice vinegar",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "honey",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "broccoli",
+        "amount": "1 cup",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "rice",
+        "amount": "for serving",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "2 tbsp",
+        "pcsv": []
+      }
     ],
     "instructions": "Slice chicken thigh into strips. Julienne ginger, mince garlic. Heat wok high, sear chicken 3 min. Add ginger and garlic, 30 sec. Add broccoli, stir-fry 2 min. Add soy sauce, rice vinegar, honey. Toss until glazed. Serve over rice.",
     "is_ai_generated": false
@@ -241,18 +760,82 @@
     "cuisine": "Chinese",
     "cooking_method": "stir-fry",
     "time_minutes": 20,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "smoky",
+      "umami",
+      "savory"
+    ],
     "serves": 3,
     "ingredients": [
-      {"name": "chicken thigh", "amount": "8 oz", "pcsv": ["protein"]},
-      {"name": "rice", "amount": "3 cups cooked, day-old", "pcsv": ["carb"]},
-      {"name": "egg", "amount": "2", "pcsv": ["protein"]},
-      {"name": "soy sauce", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "sesame oil", "amount": "1 tsp", "pcsv": ["sauce"]},
-      {"name": "green onions", "amount": "3 stalks", "pcsv": ["veggie"]},
-      {"name": "garlic", "amount": "2 cloves", "pcsv": ["veggie"]},
-      {"name": "peas", "amount": "1/2 cup", "pcsv": ["veggie"]},
-      {"name": "carrots", "amount": "1 small, diced", "pcsv": ["veggie"]},
-      {"name": "vegetable oil", "amount": "3 tbsp", "pcsv": []}
+      {
+        "name": "chicken thigh",
+        "amount": "8 oz",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "rice",
+        "amount": "3 cups cooked, day-old",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "egg",
+        "amount": "2",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "sesame oil",
+        "amount": "1 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "green onions",
+        "amount": "3 stalks",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "peas",
+        "amount": "1/2 cup",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "carrots",
+        "amount": "1 small, diced",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "3 tbsp",
+        "pcsv": []
+      }
     ],
     "instructions": "Dice chicken, season with salt. Heat wok smoking hot, scramble eggs, remove. Sear chicken until golden. Add garlic, carrots, peas, stir-fry 1 min. Add cold rice, press flat against wok, let char 30 sec, toss. Repeat. Add soy sauce and sesame oil. Return eggs, toss. Top with green onions.",
     "is_ai_generated": false
@@ -266,18 +849,78 @@
     "cuisine": "American",
     "cooking_method": "braise",
     "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "tangy",
+      "savory",
+      "smoky"
+    ],
     "serves": 4,
     "ingredients": [
-      {"name": "chicken thigh", "amount": "4 bone-in", "pcsv": ["protein"]},
-      {"name": "bacon", "amount": "4 strips", "pcsv": ["protein"]},
-      {"name": "cabbage", "amount": "1/2 head", "pcsv": ["veggie"]},
-      {"name": "onion", "amount": "1 medium", "pcsv": ["veggie"]},
-      {"name": "garlic", "amount": "3 cloves", "pcsv": ["veggie"]},
-      {"name": "mustard", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "chicken broth", "amount": "1 cup", "pcsv": []},
-      {"name": "apple cider vinegar", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "salt", "amount": "to taste", "pcsv": []},
-      {"name": "pepper", "amount": "to taste", "pcsv": []}
+      {
+        "name": "chicken thigh",
+        "amount": "4 bone-in",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "bacon",
+        "amount": "4 strips",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "cabbage",
+        "amount": "1/2 head",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "onion",
+        "amount": "1 medium",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "3 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "mustard",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "chicken broth",
+        "amount": "1 cup",
+        "pcsv": []
+      },
+      {
+        "name": "apple cider vinegar",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "pepper",
+        "amount": "to taste",
+        "pcsv": []
+      }
     ],
     "instructions": "Season thighs, sear skin-down in oven-safe skillet 8 min until very crispy. Flip 2 min, remove. Cook bacon until crisp, chop. Saute onion and garlic in bacon fat. Add cabbage, mustard, vinegar, broth. Nestle thighs skin-up on cabbage. Braise in 350F oven 20 min. Skin stays crispy above the liquid.",
     "is_ai_generated": false
@@ -291,19 +934,91 @@
     "cuisine": "Korean",
     "cooking_method": "mixed",
     "time_minutes": 40,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "spicy",
+      "umami",
+      "savory"
+    ],
     "serves": 2,
     "ingredients": [
-      {"name": "ground beef", "amount": "8 oz", "pcsv": ["protein"]},
-      {"name": "rice", "amount": "2 cups cooked", "pcsv": ["carb"]},
-      {"name": "egg", "amount": "2", "pcsv": ["protein"]},
-      {"name": "spinach", "amount": "2 cups", "pcsv": ["veggie"]},
-      {"name": "carrots", "amount": "1, julienned", "pcsv": ["veggie"]},
-      {"name": "zucchini", "amount": "1, sliced", "pcsv": ["veggie"]},
-      {"name": "bean sprouts", "amount": "1 cup", "pcsv": ["veggie"]},
-      {"name": "gochujang", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "soy sauce", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "sesame oil", "amount": "2 tsp", "pcsv": ["sauce"]},
-      {"name": "garlic", "amount": "2 cloves", "pcsv": ["veggie"]}
+      {
+        "name": "ground beef",
+        "amount": "8 oz",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "rice",
+        "amount": "2 cups cooked",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "egg",
+        "amount": "2",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "spinach",
+        "amount": "2 cups",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "carrots",
+        "amount": "1, julienned",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "zucchini",
+        "amount": "1, sliced",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "bean sprouts",
+        "amount": "1 cup",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "gochujang",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "sesame oil",
+        "amount": "2 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      }
     ],
     "instructions": "Cook rice. Season and cook ground beef with soy sauce, garlic, sesame oil. Blanch spinach and bean sprouts separately, season with sesame oil and salt. Saute carrots and zucchini. Fry eggs sunny-side up. Assemble bowls: rice base, arrange toppings in sections, fried egg center. Serve with gochujang on side. Mix everything together before eating.",
     "is_ai_generated": false
@@ -317,21 +1032,102 @@
     "cuisine": "Indian",
     "cooking_method": "simmer",
     "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "spicy",
+      "aromatic",
+      "earthy"
+    ],
     "serves": 4,
     "ingredients": [
-      {"name": "chickpeas", "amount": "2 cans (15 oz)", "pcsv": ["protein", "carb"]},
-      {"name": "onion", "amount": "2 large", "pcsv": ["veggie"]},
-      {"name": "tomato", "amount": "1 can (14 oz)", "pcsv": ["veggie"]},
-      {"name": "garlic", "amount": "6 cloves", "pcsv": ["veggie"]},
-      {"name": "ginger", "amount": "2 inches", "pcsv": ["veggie"]},
-      {"name": "garam masala", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "cumin", "amount": "1 tsp", "pcsv": ["sauce"]},
-      {"name": "coriander", "amount": "1 tsp", "pcsv": ["sauce"]},
-      {"name": "turmeric", "amount": "1/2 tsp", "pcsv": ["sauce"]},
-      {"name": "lemon", "amount": "1", "pcsv": []},
-      {"name": "cilantro", "amount": "for garnish", "pcsv": ["veggie"]},
-      {"name": "rice", "amount": "for serving", "pcsv": ["carb"]},
-      {"name": "vegetable oil", "amount": "3 tbsp", "pcsv": []}
+      {
+        "name": "chickpeas",
+        "amount": "2 cans (15 oz)",
+        "pcsv": [
+          "protein",
+          "carb"
+        ]
+      },
+      {
+        "name": "onion",
+        "amount": "2 large",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "tomato",
+        "amount": "1 can (14 oz)",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "6 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "ginger",
+        "amount": "2 inches",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "garam masala",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "cumin",
+        "amount": "1 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "coriander",
+        "amount": "1 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "turmeric",
+        "amount": "1/2 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "lemon",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "for garnish",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "rice",
+        "amount": "for serving",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "3 tbsp",
+        "pcsv": []
+      }
     ],
     "instructions": "Saute onions with pinch of baking soda until deeply caramelized (10 min). Add garlic, ginger, cook 1 min. Add spices, bloom in oil 30 sec. Add tomatoes, simmer 5 min. Add drained chickpeas, 1 cup water. Simmer 20 min until thick. Squeeze lemon, garnish with cilantro. Serve over rice.",
     "is_ai_generated": false
@@ -345,13 +1141,45 @@
     "cuisine": "Italian",
     "cooking_method": "boil",
     "time_minutes": 20,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "peppery",
+      "cheesy",
+      "rich"
+    ],
     "serves": 2,
     "ingredients": [
-      {"name": "spaghetti", "amount": "8 oz", "pcsv": ["carb"]},
-      {"name": "pecorino romano", "amount": "4 oz, finely grated", "pcsv": ["protein"]},
-      {"name": "black pepper", "amount": "2 tsp, freshly cracked", "pcsv": ["sauce"]},
-      {"name": "olive oil", "amount": "2 tbsp", "pcsv": []},
-      {"name": "salt", "amount": "to taste", "pcsv": []}
+      {
+        "name": "spaghetti",
+        "amount": "8 oz",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "pecorino romano",
+        "amount": "4 oz, finely grated",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "black pepper",
+        "amount": "2 tsp, freshly cracked",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "olive oil",
+        "amount": "2 tbsp",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      }
     ],
     "instructions": "Cook spaghetti in a 12-inch skillet with just enough water to cover. Infuse olive oil with black pepper in a separate pan over low heat. When pasta is al dente, transfer with tongs to pepper oil (reserve pasta water). Toss off heat, adding pecorino gradually with splashes of pasta water until creamy emulsion forms. Serve immediately with extra cheese and pepper.",
     "is_ai_generated": false
@@ -365,20 +1193,94 @@
     "cuisine": "Chinese",
     "cooking_method": "stir-fry",
     "time_minutes": 25,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "spicy",
+      "numbing",
+      "umami"
+    ],
     "serves": 4,
     "ingredients": [
-      {"name": "tofu", "amount": "1 lb firm, cubed", "pcsv": ["protein"]},
-      {"name": "mushrooms", "amount": "8 oz, finely diced", "pcsv": ["veggie"]},
-      {"name": "soy sauce", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "doubanjiang", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "sichuan peppercorn", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "garlic", "amount": "4 cloves", "pcsv": ["veggie"]},
-      {"name": "ginger", "amount": "1 inch", "pcsv": ["veggie"]},
-      {"name": "green onions", "amount": "4 stalks", "pcsv": ["veggie"]},
-      {"name": "sesame oil", "amount": "1 tsp", "pcsv": ["sauce"]},
-      {"name": "cornstarch", "amount": "1 tbsp", "pcsv": []},
-      {"name": "rice", "amount": "for serving", "pcsv": ["carb"]},
-      {"name": "vegetable oil", "amount": "2 tbsp", "pcsv": []}
+      {
+        "name": "tofu",
+        "amount": "1 lb firm, cubed",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "mushrooms",
+        "amount": "8 oz, finely diced",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "doubanjiang",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "sichuan peppercorn",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "4 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "ginger",
+        "amount": "1 inch",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "green onions",
+        "amount": "4 stalks",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "sesame oil",
+        "amount": "1 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "cornstarch",
+        "amount": "1 tbsp",
+        "pcsv": []
+      },
+      {
+        "name": "rice",
+        "amount": "for serving",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "2 tbsp",
+        "pcsv": []
+      }
     ],
     "instructions": "Cube tofu, blanch in salted water 2 min, drain. Heat oil in wok, cook diced mushrooms until browned (5 min). Add doubanjiang, stir 1 min until oil turns red. Add garlic, ginger, cook 30 sec. Add soy sauce, 1 cup water, bring to simmer. Slide in tofu, simmer 5 min. Thicken with cornstarch slurry. Toast and grind Sichuan peppercorn, sprinkle on top. Finish with sesame oil and green onions. Serve over rice.",
     "is_ai_generated": false
@@ -392,18 +1294,80 @@
     "cuisine": "Chinese",
     "cooking_method": "stir-fry",
     "time_minutes": 20,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "umami",
+      "mild",
+      "tangy"
+    ],
     "serves": 3,
     "ingredients": [
-      {"name": "tofu", "amount": "14 oz firm, pressed and cubed", "pcsv": ["protein"]},
-      {"name": "bok choy", "amount": "4 heads baby", "pcsv": ["veggie"]},
-      {"name": "garlic", "amount": "3 cloves", "pcsv": ["veggie"]},
-      {"name": "ginger", "amount": "1 inch", "pcsv": ["veggie"]},
-      {"name": "soy sauce", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "rice vinegar", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "sesame oil", "amount": "1 tsp", "pcsv": ["sauce"]},
-      {"name": "cornstarch", "amount": "1 tsp", "pcsv": []},
-      {"name": "rice", "amount": "for serving", "pcsv": ["carb"]},
-      {"name": "vegetable oil", "amount": "2 tbsp", "pcsv": []}
+      {
+        "name": "tofu",
+        "amount": "14 oz firm, pressed and cubed",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "bok choy",
+        "amount": "4 heads baby",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "3 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "ginger",
+        "amount": "1 inch",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "rice vinegar",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "sesame oil",
+        "amount": "1 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "cornstarch",
+        "amount": "1 tsp",
+        "pcsv": []
+      },
+      {
+        "name": "rice",
+        "amount": "for serving",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "2 tbsp",
+        "pcsv": []
+      }
     ],
     "instructions": "Press tofu 15 min, cut into triangles. Heat oil in wok smoking hot, pan-fry tofu until golden on all sides (5 min). Remove. Add garlic and ginger, 30 sec. Add bok choy stems (1 min), then leaves (30 sec). Return tofu. Add soy sauce, rice vinegar. Thicken with cornstarch slurry if needed. Finish with sesame oil. Serve over rice.",
     "is_ai_generated": false
@@ -417,21 +1381,103 @@
     "cuisine": "Indian",
     "cooking_method": "pan-fry",
     "time_minutes": 35,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "earthy",
+      "spicy"
+    ],
     "serves": 4,
     "ingredients": [
-      {"name": "potato", "amount": "2 large, cubed", "pcsv": ["carb"]},
-      {"name": "cauliflower", "amount": "1 small head, florets", "pcsv": ["veggie"]},
-      {"name": "onion", "amount": "1 large", "pcsv": ["veggie"]},
-      {"name": "tomato", "amount": "2 medium", "pcsv": ["veggie"]},
-      {"name": "garlic", "amount": "4 cloves", "pcsv": ["veggie"]},
-      {"name": "ginger", "amount": "1 inch", "pcsv": ["veggie"]},
-      {"name": "turmeric", "amount": "1 tsp", "pcsv": ["sauce"]},
-      {"name": "cumin", "amount": "1 tsp", "pcsv": ["sauce"]},
-      {"name": "coriander", "amount": "1 tsp", "pcsv": ["sauce"]},
-      {"name": "garam masala", "amount": "1 tsp", "pcsv": ["sauce"]},
-      {"name": "cilantro", "amount": "for garnish", "pcsv": ["veggie"]},
-      {"name": "rice", "amount": "for serving", "pcsv": ["carb"]},
-      {"name": "vegetable oil", "amount": "3 tbsp", "pcsv": []}
+      {
+        "name": "potato",
+        "amount": "2 large, cubed",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "cauliflower",
+        "amount": "1 small head, florets",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "onion",
+        "amount": "1 large",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "tomato",
+        "amount": "2 medium",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "4 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "ginger",
+        "amount": "1 inch",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "turmeric",
+        "amount": "1 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "cumin",
+        "amount": "1 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "coriander",
+        "amount": "1 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "garam masala",
+        "amount": "1 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "cilantro",
+        "amount": "for garnish",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "rice",
+        "amount": "for serving",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "3 tbsp",
+        "pcsv": []
+      }
     ],
     "instructions": "Parboil potato cubes 5 min, drain. Heat oil, add cumin seeds until they pop. Add onion, cook 5 min. Add garlic, ginger, cook 1 min. Add turmeric, coriander, garam masala, stir 30 sec. Add tomatoes, cook 3 min. Add potato and cauliflower, stir to coat. Cover and cook 15 min on medium-low, stirring occasionally, until fork-tender. Garnish with cilantro. Serve with rice.",
     "is_ai_generated": false
@@ -445,18 +1491,82 @@
     "cuisine": "Chinese",
     "cooking_method": "stir-fry",
     "time_minutes": 15,
+    "effort_level": "quick",
+    "flavor_tags": [
+      "smoky",
+      "umami",
+      "savory"
+    ],
     "serves": 3,
     "ingredients": [
-      {"name": "rice", "amount": "3 cups cooked, day-old", "pcsv": ["carb"]},
-      {"name": "egg", "amount": "2", "pcsv": ["protein"]},
-      {"name": "soy sauce", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "sesame oil", "amount": "1 tsp", "pcsv": ["sauce"]},
-      {"name": "green onions", "amount": "3 stalks", "pcsv": ["veggie"]},
-      {"name": "garlic", "amount": "2 cloves", "pcsv": ["veggie"]},
-      {"name": "carrots", "amount": "1 small, diced", "pcsv": ["veggie"]},
-      {"name": "peas", "amount": "1/2 cup", "pcsv": ["veggie"]},
-      {"name": "bok choy", "amount": "2 heads baby, chopped", "pcsv": ["veggie"]},
-      {"name": "vegetable oil", "amount": "3 tbsp", "pcsv": []}
+      {
+        "name": "rice",
+        "amount": "3 cups cooked, day-old",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "egg",
+        "amount": "2",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "sesame oil",
+        "amount": "1 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "green onions",
+        "amount": "3 stalks",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "carrots",
+        "amount": "1 small, diced",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "peas",
+        "amount": "1/2 cup",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "bok choy",
+        "amount": "2 heads baby, chopped",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "3 tbsp",
+        "pcsv": []
+      }
     ],
     "instructions": "Heat wok smoking hot. Scramble eggs, break into pieces, remove. Add oil, stir-fry garlic 15 sec. Add carrots, peas, bok choy stems, cook 2 min. Add cold rice, press flat against wok, let char 30 sec, toss. Repeat. Add soy sauce, sesame oil. Return eggs, add bok choy leaves, toss until wilted. Top with green onions.",
     "is_ai_generated": false
@@ -470,20 +1580,98 @@
     "cuisine": "Korean",
     "cooking_method": "mixed",
     "time_minutes": 40,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "spicy",
+      "umami",
+      "savory"
+    ],
     "serves": 2,
     "ingredients": [
-      {"name": "tofu", "amount": "8 oz firm, sliced", "pcsv": ["protein"]},
-      {"name": "rice", "amount": "2 cups cooked", "pcsv": ["carb"]},
-      {"name": "egg", "amount": "2", "pcsv": ["protein"]},
-      {"name": "spinach", "amount": "2 cups", "pcsv": ["veggie"]},
-      {"name": "carrots", "amount": "1, julienned", "pcsv": ["veggie"]},
-      {"name": "zucchini", "amount": "1, sliced", "pcsv": ["veggie"]},
-      {"name": "bean sprouts", "amount": "1 cup", "pcsv": ["veggie"]},
-      {"name": "mushrooms", "amount": "4 oz, sliced", "pcsv": ["veggie"]},
-      {"name": "gochujang", "amount": "2 tbsp", "pcsv": ["sauce"]},
-      {"name": "soy sauce", "amount": "1 tbsp", "pcsv": ["sauce"]},
-      {"name": "sesame oil", "amount": "2 tsp", "pcsv": ["sauce"]},
-      {"name": "garlic", "amount": "2 cloves", "pcsv": ["veggie"]}
+      {
+        "name": "tofu",
+        "amount": "8 oz firm, sliced",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "rice",
+        "amount": "2 cups cooked",
+        "pcsv": [
+          "carb"
+        ]
+      },
+      {
+        "name": "egg",
+        "amount": "2",
+        "pcsv": [
+          "protein"
+        ]
+      },
+      {
+        "name": "spinach",
+        "amount": "2 cups",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "carrots",
+        "amount": "1, julienned",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "zucchini",
+        "amount": "1, sliced",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "bean sprouts",
+        "amount": "1 cup",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "mushrooms",
+        "amount": "4 oz, sliced",
+        "pcsv": [
+          "veggie"
+        ]
+      },
+      {
+        "name": "gochujang",
+        "amount": "2 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "soy sauce",
+        "amount": "1 tbsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "sesame oil",
+        "amount": "2 tsp",
+        "pcsv": [
+          "sauce"
+        ]
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": [
+          "veggie"
+        ]
+      }
     ],
     "instructions": "Pan-fry tofu slices in sesame oil until golden on both sides. Blanch spinach and bean sprouts separately, season with sesame oil, garlic, salt. Saute carrots, zucchini, and mushrooms separately. Fry eggs sunny-side up. Assemble bowls: rice base, arrange tofu and vegetables in sections, fried egg center. Serve with gochujang on side. Mix everything together before eating.",
     "is_ai_generated": false

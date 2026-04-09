@@ -1,0 +1,2 @@
+# Treat the SQLite KB as a binary blob so git never attempts text diffs on it.
+data/kb.sqlite binary
