@@ -14,12 +14,14 @@ dependencies = [
     "pyjwt[crypto]>=2.9",
     "python-dotenv>=1.0",
     "aiosqlite>=0.21",
+    "rapidfuzz>=3.0",
+    "openai>=1.0",
 ]
 
 [dependency-groups]
 dev = [
     "pytest>=8.0",
-    "pytest-asyncio>=0.25",
+    "pytest-asyncio>=0.25,<1.0",
     "httpx>=0.28",
     "psycopg2-binary>=2.9",
 ]

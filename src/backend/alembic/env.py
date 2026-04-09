@@ -18,8 +18,9 @@ if not database_url:
 database_url = database_url.replace("+asyncpg", "+psycopg2")
 config.set_main_option("sqlalchemy.url", database_url)
 
-# WT2 will set this to their metadata for autogenerate support
-target_metadata = None
+from src.backend.db.tables import metadata as app_metadata
+
+target_metadata = app_metadata
 
 
 def run_migrations_offline() -> None:
