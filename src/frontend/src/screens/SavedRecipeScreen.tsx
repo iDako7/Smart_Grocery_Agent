@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router";
 import { ChatInput } from "@/components/chat-input";
 import { useScenario } from "@/context/scenario-context";
 
 export function SavedRecipeScreen() {
+  const navigate = useNavigate();
   const { scenario } = useScenario();
   const { name, nameCjk, deckText, cookingMethodPill, sourcePill, recipeText: RECIPE_TEXT } =
     scenario.savedRecipe;
@@ -27,10 +30,20 @@ export function SavedRecipeScreen() {
 
   return (
     <div data-testid="screen-saved-recipe" className="min-h-screen bg-cream flex flex-col">
-      {/* Status bar */}
-      <div className="flex justify-between items-center px-[22px] pt-3 pb-1 text-[11px] font-semibold text-ink-2">
-        <span>9:41</span>
-        <span>SGA</span>
+      {/* Nav bar */}
+      <div data-testid="saved-recipe-nav" className="flex justify-between items-center px-[14px] pt-3 pb-1">
+        <button type="button" aria-label="Go back" onClick={() => navigate(-1)}
+          className="flex items-center justify-center min-w-[36px] min-h-[44px] text-ink-2 hover:text-ink transition-colors bg-transparent border-none cursor-pointer">
+          <ArrowLeft size={20} />
+        </button>
+        <span className="text-[11px] font-semibold text-ink-2">SGA</span>
+        <button type="button" onClick={isEditing ? handleSave : handleEdit}
+          aria-label={isEditing ? "Save changes" : "Edit recipe"}
+          className={`border-none rounded-full px-4 py-2 text-[11px] font-semibold cursor-pointer font-sans min-h-[34px] ${
+            isEditing ? "bg-persimmon-soft text-persimmon" : "bg-cream-deep text-ink"
+          }`}>
+          {isEditing ? "Done" : "Edit"}
+        </button>
       </div>
 
       {/* Recipe card */}
@@ -56,21 +69,6 @@ export function SavedRecipeScreen() {
           <span className="bg-cream-deep text-ink-2 px-3 py-[5px] rounded-full text-[10.5px] font-semibold">
             {sourcePill}
           </span>
-        </div>
-
-        {/* Toolbar */}
-        <div className="flex justify-end px-[18px] py-1.5 border-t border-t-[0.5px] border-t-cream-deep">
-          <button
-            type="button"
-            onClick={handleEdit}
-            className={`border-none rounded-full px-4 py-2 text-[11px] font-semibold cursor-pointer font-sans min-h-[34px] ${
-              isEditing
-                ? "bg-persimmon-soft text-persimmon"
-                : "bg-cream-deep text-ink"
-            }`}
-          >
-            {isEditing ? "Done" : "Edit"}
-          </button>
         </div>
 
         {/* View mode */}

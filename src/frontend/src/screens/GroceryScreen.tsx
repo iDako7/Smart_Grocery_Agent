@@ -1,15 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import { ArrowLeft, X } from "lucide-react";
 import { StepProgress } from "@/components/step-progress";
 import { ChecklistRow } from "@/components/checklist-row";
 import { StoreSection } from "@/components/store-section";
 import { useScenario } from "@/context/scenario-context";
 
 export function GroceryScreen() {
+  const navigate = useNavigate();
   const { scenario } = useScenario();
   const GROCERY_ITEMS = scenario.groceryItems;
-  const AISLE_GROUPS = scenario.aisleGroups;
   const { eyebrow, deckText } = scenario.groceryHeader;
-  const [view, setView] = useState<"store" | "aisle">("store");
   const [checked, setChecked] = useState<Set<string>>(new Set());
 
   function handleToggle(id: string) {
@@ -29,10 +30,25 @@ export function GroceryScreen() {
 
   return (
     <div data-testid="screen-grocery" className="min-h-screen bg-cream flex flex-col">
-      {/* Status bar */}
-      <div className="flex justify-between items-center px-[22px] pt-3 pb-1 text-[11px] font-semibold text-ink-2">
-        <span>9:41</span>
-        <span>SGA</span>
+      {/* Nav bar */}
+      <div className="flex justify-between items-center px-[14px] pt-3 pb-1">
+        <button
+          type="button"
+          aria-label="Go back"
+          onClick={() => navigate("/recipes")}
+          className="flex items-center justify-center min-w-[36px] min-h-[44px] text-ink-2 hover:text-ink transition-colors bg-transparent border-none cursor-pointer"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <span className="text-[11px] font-semibold text-ink-2">SGA</span>
+        <button
+          type="button"
+          aria-label="Cancel"
+          onClick={() => navigate("/")}
+          className="flex items-center justify-center min-w-[36px] min-h-[44px] text-ink-2 hover:text-ink transition-colors bg-transparent border-none cursor-pointer"
+        >
+          <X size={18} />
+        </button>
       </div>
 
       {/* Step progress */}
@@ -69,91 +85,33 @@ export function GroceryScreen() {
         </div>
       </div>
 
-      {/* Sort toggle */}
-      <div className="flex mx-3.5 mb-2 bg-cream-deep rounded-full p-[3px]">
-        <button
-          type="button"
-          onClick={() => setView("store")}
-          className={`flex-1 py-[7px] text-center text-[11px] font-semibold rounded-full cursor-pointer border-none font-sans min-h-[34px] transition-all ${
-            view === "store"
-              ? "bg-paper text-ink shadow-sm"
-              : "bg-transparent text-ink-3"
-          }`}
-        >
-          By store
-        </button>
-        <button
-          type="button"
-          onClick={() => setView("aisle")}
-          className={`flex-1 py-[7px] text-center text-[11px] font-semibold rounded-full cursor-pointer border-none font-sans min-h-[34px] transition-all ${
-            view === "aisle"
-              ? "bg-paper text-ink shadow-sm"
-              : "bg-transparent text-ink-3"
-          }`}
-        >
-          By aisle
-        </button>
-      </div>
-
-      {/* Store view */}
-      {view === "store" && (
-        <>
-          <StoreSection storeName="COSTCO">
-            {costcoItems.map((item) => (
-              <ChecklistRow
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                subtitle={item.subtitle}
-                aisle={item.aisle}
-                checked={checked.has(item.id)}
-                onToggle={handleToggle}
-              />
-            ))}
-          </StoreSection>
-          <StoreSection storeName="COMMUNITY MARKET">
-            {marketItems.map((item) => (
-              <ChecklistRow
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                subtitle={item.subtitle}
-                aisle={item.aisle}
-                checked={checked.has(item.id)}
-                onToggle={handleToggle}
-              />
-            ))}
-          </StoreSection>
-        </>
-      )}
-
-      {/* Aisle view */}
-      {view === "aisle" && (
-        <>
-          {AISLE_GROUPS.map((group) => {
-            const items = GROCERY_ITEMS.filter((i) => i.aisle === group.aisle);
-            return (
-              <StoreSection
-                key={group.aisle}
-                storeName={group.name.toUpperCase()}
-                variant="aisle"
-                storeHint={group.hint}
-              >
-                {items.map((item) => (
-                  <ChecklistRow
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    subtitle={item.subtitle}
-                    checked={checked.has(item.id)}
-                    onToggle={handleToggle}
-                  />
-                ))}
-              </StoreSection>
-            );
-          })}
-        </>
-      )}
+      {/* Store view — rendered unconditionally */}
+      <StoreSection storeName="COSTCO">
+        {costcoItems.map((item) => (
+          <ChecklistRow
+            key={item.id}
+            id={item.id}
+            name={item.name}
+            subtitle={item.subtitle}
+            aisle={item.aisle}
+            checked={checked.has(item.id)}
+            onToggle={handleToggle}
+          />
+        ))}
+      </StoreSection>
+      <StoreSection storeName="COMMUNITY MARKET">
+        {marketItems.map((item) => (
+          <ChecklistRow
+            key={item.id}
+            id={item.id}
+            name={item.name}
+            subtitle={item.subtitle}
+            aisle={item.aisle}
+            checked={checked.has(item.id)}
+            onToggle={handleToggle}
+          />
+        ))}
+      </StoreSection>
 
       {/* Save list button */}
       <button

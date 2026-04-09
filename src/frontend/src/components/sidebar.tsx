@@ -5,11 +5,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-interface SidebarItem {
+export interface SidebarItem {
   id: string;
   name: string;
   meta: string;
 }
+
+export type SidebarItemType = "plan" | "recipe" | "list";
 
 interface SidebarProps {
   open: boolean;
@@ -17,16 +19,17 @@ interface SidebarProps {
   mealPlans: SidebarItem[];
   savedRecipes: SidebarItem[];
   groceryLists: SidebarItem[];
-  onItemClick?: (id: string) => void;
+  onItemClick?: (id: string, type: SidebarItemType) => void;
 }
 
 interface SectionProps {
   title: string;
   items: SidebarItem[];
-  onItemClick?: (id: string) => void;
+  type: SidebarItemType;
+  onItemClick?: (id: string, type: SidebarItemType) => void;
 }
 
-function SidebarSection({ title, items, onItemClick }: SectionProps) {
+function SidebarSection({ title, items, type, onItemClick }: SectionProps) {
   return (
     <div className="pt-3 pb-1 border-t border-t-cream-deep">
       <div className="px-5 pb-2 text-[10px] font-bold tracking-[0.12em] uppercase text-ink-3">
@@ -36,7 +39,7 @@ function SidebarSection({ title, items, onItemClick }: SectionProps) {
         <button
           type="button"
           key={item.id}
-          onClick={() => onItemClick?.(item.id)}
+          onClick={() => onItemClick?.(item.id, type)}
           className="block w-full text-left px-5 py-2.5 cursor-pointer min-h-[44px] hover:bg-cream transition-colors bg-transparent border-none"
         >
           <span className="block text-[14px] font-semibold text-ink">{item.name}</span>
@@ -76,9 +79,9 @@ export function Sidebar({
           </button>
         </SheetHeader>
 
-        <SidebarSection title="Meal plans" items={mealPlans} onItemClick={onItemClick} />
-        <SidebarSection title="Saved recipes" items={savedRecipes} onItemClick={onItemClick} />
-        <SidebarSection title="Grocery lists" items={groceryLists} onItemClick={onItemClick} />
+        <SidebarSection title="Meal plans" items={mealPlans} type="plan" onItemClick={onItemClick} />
+        <SidebarSection title="Saved recipes" items={savedRecipes} type="recipe" onItemClick={onItemClick} />
+        <SidebarSection title="Grocery lists" items={groceryLists} type="list" onItemClick={onItemClick} />
       </SheetContent>
     </Sheet>
   );

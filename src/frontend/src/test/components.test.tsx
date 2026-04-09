@@ -6,6 +6,65 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 // ---------------------------------------------------------------------------
+// Mock @base-ui/react/menu so DropdownMenu renders inline (no portal)
+// ---------------------------------------------------------------------------
+vi.mock("@base-ui/react/menu", async () => {
+  const React = await import("react");
+  const { useState } = React;
+  function MenuRoot({ children }: { children: React.ReactNode }) {
+    const [open, setOpen] = useState(false);
+    return (
+      <div data-testid="menu-root">
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            return React.cloneElement(child as React.ReactElement<{ onToggle?: () => void; open?: boolean }>, {
+              onToggle: () => setOpen((v) => !v),
+              open,
+            });
+          }
+          return child;
+        })}
+      </div>
+    );
+  }
+  function MenuTrigger({ children, onToggle }: { children: React.ReactNode; onToggle?: () => void }) {
+    return React.cloneElement(children as React.ReactElement<{ onClick?: () => void }>, { onClick: onToggle });
+  }
+  function MenuPortal({ children }: { children: React.ReactNode }) {
+    return <>{children}</>;
+  }
+  function MenuPositioner({ children }: { children: React.ReactNode }) {
+    return <>{children}</>;
+  }
+  function MenuPopup({ children, open }: { children: React.ReactNode; open?: boolean }) {
+    return open ? <div role="menu">{children}</div> : null;
+  }
+  function MenuItem({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+    return <div role="menuitem" onClick={onClick} style={{ cursor: "pointer" }}>{children}</div>;
+  }
+  return {
+    Menu: {
+      Root: MenuRoot,
+      Trigger: MenuTrigger,
+      Portal: MenuPortal,
+      Positioner: MenuPositioner,
+      Popup: MenuPopup,
+      Item: MenuItem,
+      Group: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      GroupLabel: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+      Separator: () => <hr />,
+      SubmenuRoot: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      SubmenuTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      CheckboxItem: ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => <div role="menuitem" onClick={onClick}>{children}</div>,
+      CheckboxItemIndicator: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      RadioGroup: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      RadioItem: ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => <div role="menuitem" onClick={onClick}>{children}</div>,
+      RadioItemIndicator: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    },
+  };
+});
+
+// ---------------------------------------------------------------------------
 // Mock @base-ui/react/dialog so Sheet renders inline (no portal)
 // ---------------------------------------------------------------------------
 vi.mock("@base-ui/react/dialog", async () => {
@@ -311,12 +370,13 @@ describe("Sidebar", () => {
     expect(screen.getByText("Smart Grocery")).toBeInTheDocument();
   });
 
-  it("calls onItemClick with item id when item clicked", async () => {
+  it("calls onItemClick with item id and type when item clicked", async () => {
     const user = userEvent.setup();
     const onItemClick = vi.fn();
     render(<Sidebar {...defaultProps} onItemClick={onItemClick} />);
     await user.click(screen.getByText("Week 1"));
-    expect(onItemClick).toHaveBeenCalledWith("1");
+    // Sidebar now passes (id, type) so callers can build the correct route
+    expect(onItemClick).toHaveBeenCalledWith("1", "plan");
   });
 });
 
@@ -440,12 +500,27 @@ describe("RecipeCard", () => {
     expect(screen.getByText("30 min")).toBeInTheDocument();
   });
 
-  it("calls onSwap when swap button clicked", async () => {
+  it("does NOT render an overflow menu trigger button", () => {
+    render(<RecipeCard {...defaultProps} />);
+    expect(screen.queryByLabelText("Recipe options")).not.toBeInTheDocument();
+  });
+
+  it("renders Try another as a visible pill button", () => {
+    render(<RecipeCard {...defaultProps} />);
+    expect(screen.getByText(/try another/i)).toBeInTheDocument();
+  });
+
+  it("calls onSwap when Try another pill is clicked", async () => {
     const user = userEvent.setup();
     const onSwap = vi.fn();
     render(<RecipeCard {...defaultProps} onSwap={onSwap} />);
-    await user.click(screen.getByText(/try another/));
+    await user.click(screen.getByText(/try another/i));
     expect(onSwap).toHaveBeenCalledOnce();
+  });
+
+  it("hides Try another pill when isSwapping", () => {
+    render(<RecipeCard {...defaultProps} isSwapping={true} />);
+    expect(screen.queryByText(/try another/i)).not.toBeInTheDocument();
   });
 
   it("calls onInfoClick when info button clicked", async () => {
@@ -456,15 +531,15 @@ describe("RecipeCard", () => {
     expect(onInfoClick).toHaveBeenCalledOnce();
   });
 
-  it("shows SWAPPING state when isSwapping=true", () => {
+  it("shows SWAPPING state when isSwapping=true (no Try another pill)", () => {
     render(<RecipeCard {...defaultProps} isSwapping={true} />);
     expect(screen.getByText("SWAPPING")).toBeInTheDocument();
-    expect(screen.queryByText(/try another/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/try another/i)).not.toBeInTheDocument();
   });
 
-  it("shows swap button when isSwapping=false", () => {
+  it("shows Try another pill when isSwapping=false", () => {
     render(<RecipeCard {...defaultProps} isSwapping={false} />);
-    expect(screen.getByText(/try another/)).toBeInTheDocument();
+    expect(screen.getByText(/try another/i)).toBeInTheDocument();
     expect(screen.queryByText("SWAPPING")).not.toBeInTheDocument();
   });
 

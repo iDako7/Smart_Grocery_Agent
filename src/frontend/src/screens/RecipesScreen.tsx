@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { ArrowLeft, X } from "lucide-react";
 import { StepProgress } from "@/components/step-progress";
 import { RecipeCard } from "@/components/recipe-card";
 import { SwapPanel } from "@/components/swap-panel";
@@ -33,15 +34,29 @@ export function RecipesScreen() {
 
   return (
     <div data-testid="screen-recipes" className="min-h-screen bg-cream flex flex-col">
-      {/* Status / lang bar */}
-      <div className="flex justify-between items-center px-[22px] pt-3.5 text-[11px] font-semibold text-ink-2">
-        <span>9:41</span>
+      {/* Nav bar */}
+      <div className="flex justify-between items-center px-[14px] pt-3 pb-1">
+        <button
+          type="button"
+          aria-label="Go back"
+          onClick={() => navigate("/clarify")}
+          className="flex items-center justify-center min-w-[36px] min-h-[44px] text-ink-2 hover:text-ink transition-colors bg-transparent border-none cursor-pointer"
+        >
+          <ArrowLeft size={20} />
+        </button>
         <span className="bg-paper px-[9px] py-[3px] rounded-full text-[10px] flex gap-1.5 items-center">
           <b className="text-ink">EN</b>
           <span className="text-ink-3 font-normal">·</span>
           <span className="text-ink-3 font-normal">中</span>
         </span>
-        <span>SGA</span>
+        <button
+          type="button"
+          aria-label="Cancel"
+          onClick={() => navigate("/")}
+          className="flex items-center justify-center min-w-[36px] min-h-[44px] text-ink-2 hover:text-ink transition-colors bg-transparent border-none cursor-pointer"
+        >
+          <X size={18} />
+        </button>
       </div>
 
       {/* Step progress */}

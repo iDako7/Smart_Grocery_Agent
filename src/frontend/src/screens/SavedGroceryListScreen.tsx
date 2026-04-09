@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router";
 import { ChecklistRow } from "@/components/checklist-row";
 import { StoreSection } from "@/components/store-section";
 import { useScenario } from "@/context/scenario-context";
@@ -11,6 +13,7 @@ type ListItem = {
 };
 
 export function SavedGroceryListScreen() {
+  const navigate = useNavigate();
   const { scenario } = useScenario();
   const { name, savedDate, items: INITIAL_ITEMS } = scenario.savedGroceryList;
   const [items, setItems] = useState<ListItem[]>(INITIAL_ITEMS);
@@ -64,10 +67,15 @@ export function SavedGroceryListScreen() {
 
   return (
     <div data-testid="screen-saved-grocery-list" className="min-h-screen bg-cream flex flex-col">
-      {/* Status bar */}
-      <div className="flex justify-between items-center px-[22px] pt-3 pb-1 text-[11px] font-semibold text-ink-2">
-        <span>9:41</span>
-        <span>SGA</span>
+      {/* Nav bar */}
+      <div className="flex justify-between items-center px-[14px] pt-3 pb-1">
+        <button type="button" aria-label="Go back" onClick={() => navigate(-1)}
+          className="flex items-center justify-center min-w-[36px] min-h-[44px] text-ink-2 hover:text-ink transition-colors bg-transparent border-none cursor-pointer">
+          <ArrowLeft size={20} />
+        </button>
+        <span className="text-[11px] font-semibold text-ink-2">SGA</span>
+        {/* spacer for alignment */}
+        <div aria-hidden="true" className="min-w-[36px]" />
       </div>
 
       {/* Header card */}

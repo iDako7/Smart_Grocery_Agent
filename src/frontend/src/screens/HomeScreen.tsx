@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { QuickStartChip } from "@/components/quick-start-chip";
-import { Sidebar } from "@/components/sidebar";
+import { Sidebar, type SidebarItemType } from "@/components/sidebar";
 import { useScenario } from "@/context/scenario-context";
 
 const QUICK_STARTS = ["Weekend BBQ", "Weeknight meals", "Use my leftovers"];
@@ -15,6 +15,12 @@ export function HomeScreen() {
 
   function handleQuickStart() {
     navigate("/clarify");
+  }
+
+  function handleSidebarItemClick(id: string, type: SidebarItemType) {
+    setSidebarOpen(false);
+    const routePrefix = type === "plan" ? "/saved/plan" : type === "recipe" ? "/saved/recipe" : "/saved/list";
+    navigate(`${routePrefix}/${id}`);
   }
 
   return (
@@ -88,7 +94,7 @@ export function HomeScreen() {
         mealPlans={MOCK_MEAL_PLANS}
         savedRecipes={MOCK_SAVED_RECIPES}
         groceryLists={MOCK_GROCERY_LISTS}
-        onItemClick={() => setSidebarOpen(false)}
+        onItemClick={handleSidebarItemClick}
       />
     </div>
   );

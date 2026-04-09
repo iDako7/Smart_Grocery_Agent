@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { ArrowLeft, X } from "lucide-react";
 import { StepProgress } from "@/components/step-progress";
 import { PcvBadge } from "@/components/pcv-badge";
 import { ChatInput } from "@/components/chat-input";
@@ -46,10 +47,25 @@ export function ClarifyScreen() {
 
   return (
     <div data-testid="screen-clarify" className="min-h-screen bg-cream flex flex-col">
-      {/* Status bar */}
-      <div className="flex justify-between items-center px-[22px] pt-3 pb-1 text-[11px] font-semibold text-ink-2">
-        <span>9:41</span>
-        <span>SGA</span>
+      {/* Nav bar */}
+      <div className="flex justify-between items-center px-[14px] pt-3 pb-1">
+        <button
+          type="button"
+          aria-label="Go back"
+          onClick={() => navigate("/")}
+          className="flex items-center justify-center min-w-[36px] min-h-[44px] text-ink-2 hover:text-ink transition-colors bg-transparent border-none cursor-pointer"
+        >
+          <ArrowLeft size={20} />
+        </button>
+        <span className="text-[11px] font-semibold text-ink-2">SGA</span>
+        <button
+          type="button"
+          aria-label="Cancel"
+          onClick={() => navigate("/")}
+          className="flex items-center justify-center min-w-[36px] min-h-[44px] text-ink-2 hover:text-ink transition-colors bg-transparent border-none cursor-pointer"
+        >
+          <X size={18} />
+        </button>
       </div>
 
       {/* Step progress */}

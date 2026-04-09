@@ -7,6 +7,65 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 
 // ---------------------------------------------------------------------------
+// Mock @base-ui/react/menu so DropdownMenu renders inline (no portal)
+// ---------------------------------------------------------------------------
+vi.mock("@base-ui/react/menu", async () => {
+  const React = await import("react");
+  const { useState } = React;
+  function MenuRoot({ children }: { children: React.ReactNode }) {
+    const [open, setOpen] = useState(false);
+    return (
+      <div data-testid="menu-root">
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            return React.cloneElement(child as React.ReactElement<{ onToggle?: () => void; open?: boolean }>, {
+              onToggle: () => setOpen((v) => !v),
+              open,
+            });
+          }
+          return child;
+        })}
+      </div>
+    );
+  }
+  function MenuTrigger({ children, onToggle }: { children: React.ReactNode; onToggle?: () => void }) {
+    return React.cloneElement(children as React.ReactElement<{ onClick?: () => void }>, { onClick: onToggle });
+  }
+  function MenuPortal({ children }: { children: React.ReactNode }) {
+    return <>{children}</>;
+  }
+  function MenuPositioner({ children }: { children: React.ReactNode }) {
+    return <>{children}</>;
+  }
+  function MenuPopup({ children, open }: { children: React.ReactNode; open?: boolean }) {
+    return open ? <div role="menu">{children}</div> : null;
+  }
+  function MenuItem({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+    return <div role="menuitem" onClick={onClick} style={{ cursor: "pointer" }}>{children}</div>;
+  }
+  return {
+    Menu: {
+      Root: MenuRoot,
+      Trigger: MenuTrigger,
+      Portal: MenuPortal,
+      Positioner: MenuPositioner,
+      Popup: MenuPopup,
+      Item: MenuItem,
+      Group: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      GroupLabel: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+      Separator: () => <hr />,
+      SubmenuRoot: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      SubmenuTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      CheckboxItem: ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => <div role="menuitem" onClick={onClick}>{children}</div>,
+      CheckboxItemIndicator: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      RadioGroup: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      RadioItem: ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => <div role="menuitem" onClick={onClick}>{children}</div>,
+      RadioItemIndicator: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+    },
+  };
+});
+
+// ---------------------------------------------------------------------------
 // Mock @base-ui/react/dialog so Sheet renders inline (no portal)
 // ---------------------------------------------------------------------------
 vi.mock("@base-ui/react/dialog", async () => {
@@ -362,35 +421,36 @@ describe("RecipesScreen", () => {
     expect(screen.getByText(/Build list/i)).toBeInTheDocument();
   });
 
-  it("shows SwapPanel when swap button clicked", async () => {
+  it("shows SwapPanel when Try another pill clicked", async () => {
     const user = userEvent.setup();
     renderWithRouter(<RecipesScreen />);
-    const swapBtns = screen.getAllByText(/try another/i);
-    await user.click(swapBtns[0]);
+    // Click "Try another" pill directly on the first recipe card
+    const tryButtons = screen.getAllByText(/try another/i);
+    await user.click(tryButtons[0]);
     expect(screen.getByText("TRY INSTEAD")).toBeInTheDocument();
   });
 
   it("shows Asian Slaw in swap alternatives", async () => {
     const user = userEvent.setup();
     renderWithRouter(<RecipesScreen />);
-    const swapBtns = screen.getAllByText(/try another/i);
-    await user.click(swapBtns[0]);
+    const tryButtons = screen.getAllByText(/try another/i);
+    await user.click(tryButtons[0]);
     expect(screen.getByText("Asian Slaw")).toBeInTheDocument();
   });
 
   it("shows Grilled Veggie Skewers in swap alternatives", async () => {
     const user = userEvent.setup();
     renderWithRouter(<RecipesScreen />);
-    const swapBtns = screen.getAllByText(/try another/i);
-    await user.click(swapBtns[0]);
+    const tryButtons = screen.getAllByText(/try another/i);
+    await user.click(tryButtons[0]);
     expect(screen.getByText("Grilled Veggie Skewers")).toBeInTheDocument();
   });
 
   it("hides SwapPanel when keep original clicked", async () => {
     const user = userEvent.setup();
     renderWithRouter(<RecipesScreen />);
-    const swapBtns = screen.getAllByText(/try another/i);
-    await user.click(swapBtns[0]);
+    const tryButtons = screen.getAllByText(/try another/i);
+    await user.click(tryButtons[0]);
     await user.click(screen.getByText(/keep the original/i));
     expect(screen.queryByText("TRY INSTEAD")).not.toBeInTheDocument();
   });
@@ -440,22 +500,24 @@ describe("GroceryScreen", () => {
     expect(screen.getByText(/8 items/i)).toBeInTheDocument();
   });
 
-  it("renders By store toggle option", () => {
+  it("does NOT render a By store toggle button", () => {
     renderWithRouter(<GroceryScreen />);
-    expect(screen.getByText("By store")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /by store/i })).not.toBeInTheDocument();
+    expect(screen.queryByText("By store")).not.toBeInTheDocument();
   });
 
-  it("renders By aisle toggle option", () => {
+  it("does NOT render a By aisle toggle button", () => {
     renderWithRouter(<GroceryScreen />);
-    expect(screen.getByText("By aisle")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /by aisle/i })).not.toBeInTheDocument();
+    expect(screen.queryByText("By aisle")).not.toBeInTheDocument();
   });
 
-  it("shows Costco section by default", () => {
+  it("shows Costco section directly without clicking anything", () => {
     renderWithRouter(<GroceryScreen />);
     expect(screen.getByText("COSTCO")).toBeInTheDocument();
   });
 
-  it("shows Community Market section by default", () => {
+  it("shows Community Market section directly without clicking anything", () => {
     renderWithRouter(<GroceryScreen />);
     expect(screen.getByText("COMMUNITY MARKET")).toBeInTheDocument();
   });
@@ -475,27 +537,14 @@ describe("GroceryScreen", () => {
     expect(screen.getAllByText(/Cucumber/i).length).toBeGreaterThan(0);
   });
 
-  it("switches to aisle view when By aisle clicked", async () => {
-    const user = userEvent.setup();
+  it("does NOT render PRODUCE aisle section (aisle view removed)", () => {
     renderWithRouter(<GroceryScreen />);
-    await user.click(screen.getByText("By aisle"));
-    expect(screen.getByText("PRODUCE")).toBeInTheDocument();
-  });
-
-  it("shows Dairy section in aisle view", async () => {
-    const user = userEvent.setup();
-    renderWithRouter(<GroceryScreen />);
-    await user.click(screen.getByText("By aisle"));
-    expect(screen.getByText("DAIRY")).toBeInTheDocument();
-  });
-
-  it("switches back to store view when By store clicked", async () => {
-    const user = userEvent.setup();
-    renderWithRouter(<GroceryScreen />);
-    await user.click(screen.getByText("By aisle"));
-    await user.click(screen.getByText("By store"));
-    expect(screen.getByText("COSTCO")).toBeInTheDocument();
     expect(screen.queryByText("PRODUCE")).not.toBeInTheDocument();
+  });
+
+  it("does NOT render DAIRY aisle section (aisle view removed)", () => {
+    renderWithRouter(<GroceryScreen />);
+    expect(screen.queryByText("DAIRY")).not.toBeInTheDocument();
   });
 
   it("toggles item checked state", async () => {
@@ -525,6 +574,16 @@ describe("SavedMealPlanScreen", () => {
   it("renders the screen container", () => {
     renderWithRouter(<SavedMealPlanScreen />, "/saved/plan/1");
     expect(screen.getByTestId("screen-saved-meal-plan")).toBeInTheDocument();
+  });
+
+  it("renders a back button in the nav bar", () => {
+    renderWithRouter(<SavedMealPlanScreen />, "/saved/plan/1");
+    expect(screen.getByLabelText("Go back")).toBeInTheDocument();
+  });
+
+  it("renders SGA text in the nav bar", () => {
+    renderWithRouter(<SavedMealPlanScreen />, "/saved/plan/1");
+    expect(screen.getByText("SGA")).toBeInTheDocument();
   });
 
   it("renders the eyebrow saved date", () => {
@@ -589,6 +648,30 @@ describe("SavedRecipeScreen", () => {
   it("renders the screen container", () => {
     renderWithRouter(<SavedRecipeScreen />, "/saved/recipe/1");
     expect(screen.getByTestId("screen-saved-recipe")).toBeInTheDocument();
+  });
+
+  it("renders a back button in the nav bar", () => {
+    renderWithRouter(<SavedRecipeScreen />, "/saved/recipe/1");
+    expect(screen.getByLabelText("Go back")).toBeInTheDocument();
+  });
+
+  it("renders SGA text in the nav bar", () => {
+    renderWithRouter(<SavedRecipeScreen />, "/saved/recipe/1");
+    expect(screen.getByText("SGA")).toBeInTheDocument();
+  });
+
+  it("renders Edit button in the nav bar (top-right)", () => {
+    renderWithRouter(<SavedRecipeScreen />, "/saved/recipe/1");
+    // Edit should be inside the nav bar, not in a separate toolbar
+    const navBar = screen.getByTestId("saved-recipe-nav");
+    expect(navBar.querySelector("button")).toBeTruthy();
+    expect(screen.getByText("Edit")).toBeInTheDocument();
+  });
+
+  it("does not render a separate toolbar section for Edit", () => {
+    renderWithRouter(<SavedRecipeScreen />, "/saved/recipe/1");
+    // The old toolbar div between header and content should not exist
+    expect(screen.queryByTestId("recipe-toolbar")).not.toBeInTheDocument();
   });
 
   it("renders recipe name", () => {
@@ -681,6 +764,16 @@ describe("SavedGroceryListScreen", () => {
     expect(
       screen.getByTestId("screen-saved-grocery-list")
     ).toBeInTheDocument();
+  });
+
+  it("renders a back button in the nav bar", () => {
+    renderWithRouter(<SavedGroceryListScreen />, "/saved/list/1");
+    expect(screen.getByLabelText("Go back")).toBeInTheDocument();
+  });
+
+  it("renders SGA text in the nav bar", () => {
+    renderWithRouter(<SavedGroceryListScreen />, "/saved/list/1");
+    expect(screen.getByText("SGA")).toBeInTheDocument();
   });
 
   it("renders the header eyebrow", () => {

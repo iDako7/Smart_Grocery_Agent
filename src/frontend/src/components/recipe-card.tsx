@@ -1,3 +1,4 @@
+import { RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ORDINALS = ["ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT", "NINE", "TEN"];
@@ -119,10 +120,10 @@ export function RecipeCard({
           <button
             type="button"
             onClick={onSwap}
-            className="bg-cream-deep text-ink border-none rounded-full px-4 py-2 text-[11px] font-semibold cursor-pointer flex items-center gap-[5px] min-h-[34px] hover:bg-cream transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-[6px] rounded-full bg-cream-deep text-ink-2 text-[10.5px] font-semibold border-none cursor-pointer hover:bg-cream transition-colors min-h-[30px]"
           >
-            try another
-            <span aria-hidden="true" className="text-[13px] leading-none">↺</span>
+            <RefreshCw size={12} />
+            Try another
           </button>
         )}
       </div>
