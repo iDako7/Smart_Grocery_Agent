@@ -1,0 +1,5351 @@
+{
+  "department": "meat_seafood",
+  "scrape_date": "2026-04-09",
+  "store": {
+    "storeId": "1982",
+    "name": "Save-On-Foods Langley"
+  },
+  "product_count": 534,
+  "products": [
+    {
+      "productId": "00062639359812",
+      "name": "Western Family - Thick Cut Bacon Sliced",
+      "size": "1 kg",
+      "brandName": "Western Family",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639359812.jpg",
+      "available": true
+    },
+    {
+      "productId": "00059620726722",
+      "name": "Mitchell's - Heritage Thick Sliced Bacon",
+      "size": "1 kg",
+      "brandName": "Mitchell's",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00059620726722.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639348908",
+      "name": "Western Family - Natural Bacon Sliced",
+      "size": "375 g",
+      "brandName": "Western Family",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639348908.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639288556",
+      "name": "Western Family - Naturally Hardwood Smoked Bacon Slices",
+      "size": "375 g",
+      "brandName": "Western Family",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639288556.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639288563",
+      "name": "Western Family - Naturally Hardwood Smoked Bacon Thick Sliced",
+      "size": "375 g",
+      "brandName": "Western Family",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639288563.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639339623",
+      "name": "Western Family - Hardwood Smoked Bacon Thick Sliced",
+      "size": "500 g",
+      "brandName": "Western Family",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639339623.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639340698",
+      "name": "Western Family - Naturally Hardwood Smoked Bacon Less Salt",
+      "size": "375 g",
+      "brandName": "Western Family",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639340698.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100375362",
+      "name": "Maple Leaf - Natural Bacon, Lazy Maple",
+      "size": "375 g",
+      "brandName": "Maple Leaf",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100375362.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100375942",
+      "name": "SCHNEIDERS - Hickory Smoked Bacon, 50% Less Salt",
+      "size": "375 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100375942.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100219406",
+      "name": "Maple Leaf - Original Natural Bacon",
+      "size": "375 g",
+      "brandName": "Maple Leaf",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100219406.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639349561",
+      "name": "Western Family - Signature Maple Flavour Thick Sliced Bacon",
+      "size": "500 g",
+      "brandName": "Western Family",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639349561.jpg",
+      "available": true
+    },
+    {
+      "productId": "00065822980800",
+      "name": "Butterball - Turkey Bacon, Original",
+      "size": "375 g",
+      "brandName": "Butterball",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00065822980800.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393800236",
+      "name": "Harvest - Bacon - Thick Sliced",
+      "size": "1 kg",
+      "brandName": "Harvest",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393800236.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393800205",
+      "name": "Harvest - Thick Sliced Bacon",
+      "size": "500 g",
+      "brandName": "Harvest",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393800205.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100275631",
+      "name": "SCHNEIDERS - Hickory Smoked Bacon, Thick Cut",
+      "size": "375 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100275631.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393800366",
+      "name": "Harvest - Hickory Bacon - Thick Sliced",
+      "size": "500 g",
+      "brandName": "Harvest",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393800366.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100888008",
+      "name": "Maple Leaf - Ready Crisp Natural Bacon Slices, Original Fully Cooked",
+      "size": "65 g",
+      "brandName": "Maple Leaf",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100888008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100287245",
+      "name": "Save-On-Foods - Greenfield Thick Cut Bacon",
+      "size": "375 g",
+      "brandName": "Save-On-Foods",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100287245.jpg",
+      "available": true
+    },
+    {
+      "productId": "00226494000009",
+      "name": "Save-On-Foods - Bacon wrapped Jalepeno Poppers",
+      "size": "1 lb",
+      "brandName": "Save-On-Foods",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00226494000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100375256",
+      "name": "Mitchell's - Bacon, Family-4 Pack,",
+      "size": "1.5 kg",
+      "brandName": "Mitchell's",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100375256.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100888053",
+      "name": "Maple Leaf - Ready Crisp Natural Bacon Slices, Fully Cooked 40% Less Salt",
+      "size": "65 g",
+      "brandName": "Maple Leaf",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100888053.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393800120",
+      "name": "Harvest - Sliced Back Bacon",
+      "size": "250 g",
+      "brandName": "Harvest",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393800120.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100251154",
+      "name": "Greenfield Natural Meat Co. - Bacon Sliced",
+      "size": "375 g",
+      "brandName": "Greenfield Natural Meat Co.",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100251154.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100375898",
+      "name": "SCHNEIDERS - Hickory Smoked Bacon, Classic Cut",
+      "size": "375 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100375898.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100006204",
+      "name": "Maple Leaf - Ready Crisp Natural Bacon Pieces, Fully Cooked",
+      "size": "85 g",
+      "brandName": "Maple Leaf",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100006204.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639373689",
+      "name": "Western Family - Signature Black Pepper Sliced Bacon",
+      "size": "500 g",
+      "brandName": "Western Family",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639373689.jpg",
+      "available": true
+    },
+    {
+      "productId": "00228467000009",
+      "name": "Save-On-Foods - Bacon Wrapped Cheese Perogies",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00228467000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100452063",
+      "name": "Campfire - Campfire Bacon",
+      "size": "375 g",
+      "brandName": "Campfire",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100452063.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100427924",
+      "name": "SCHNEIDERS - Real Bacon Crumbles",
+      "size": "300 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100427924.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100427931",
+      "name": "SCHNEIDERS - Fully Cooked Bacon Strips",
+      "size": "100 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100427931.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639371296",
+      "name": "Western Family - Signature Applewood Smoked Bacon",
+      "size": "500 g",
+      "brandName": "Western Family",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639371296.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639378592",
+      "name": "Western Family - Sausage Strips Sweet and Smokey",
+      "size": "1",
+      "brandName": "Western Family",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639378592.jpg",
+      "available": true
+    },
+    {
+      "productId": "00067714000849",
+      "name": "Maple Lodge Farms - Chicken Bacon Style",
+      "size": "375 g",
+      "brandName": "Maple Lodge Farms",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00067714000849.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057459251590",
+      "name": "Olymel - Maple Flavour Bacon Slices",
+      "size": "375 g",
+      "brandName": "Olymel",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057459251590.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057459251576",
+      "name": "Olymel - Original Bacon Slices",
+      "size": "375 g",
+      "brandName": "Olymel",
+      "category": "Bacon",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057459251576.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290061000006",
+      "name": "Western Canadian - Ground Beef Regular",
+      "size": "529 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290061000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00270483000006",
+      "name": "Western Canadian - Lean Ground Beef, Fine Grind",
+      "size": "1.36 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00270483000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639375195",
+      "name": "Western Canadian - Ground Beef, Fresh",
+      "size": "454 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639375195.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639374877",
+      "name": "Western Family - Regular Ground Beef",
+      "size": "454 g",
+      "brandName": "Western Family",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639374877.jpg",
+      "available": true
+    },
+    {
+      "productId": "00056364902603",
+      "name": "Western Canadian - Lean Ground Beef",
+      "size": "454 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00056364902603.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290081000000",
+      "name": "Western Canadian - Ground Beef Extra Lean",
+      "size": "0.93 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290081000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290080000001",
+      "name": "Western Canadian - Ground Beef Extra Lean",
+      "size": "500 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290080000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639375201",
+      "name": "Western Canadian - Extra Lean Ground Beef",
+      "size": "454 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639375201.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290066000001",
+      "name": "Save-On-Foods - Lean Ground Beef, Fresh",
+      "size": "529 g",
+      "brandName": "Save-On-Foods",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290066000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639374891",
+      "name": "Western Family - Extra Lean Ground Beef",
+      "size": "454 g",
+      "brandName": "Western Family",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639374891.jpg",
+      "available": true
+    },
+    {
+      "productId": "00627843600268",
+      "name": "Western Canadian - Keto Reg Ground Beef",
+      "size": "454 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00627843600268.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639374907",
+      "name": "Western Family - Medium Ground Beef & Pork",
+      "size": "454 g",
+      "brandName": "Western Family",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639374907.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639374884",
+      "name": "Western Family - Lean Ground Beef",
+      "size": "454 g",
+      "brandName": "Western Family",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639374884.jpg",
+      "available": true
+    },
+    {
+      "productId": "00815311006234",
+      "name": "Top Grass Cattle Company - Lean Ground Beef Grass Fed",
+      "size": "454 g",
+      "brandName": "Top Grass Cattle Company",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00815311006234.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290123000005",
+      "name": "Western Canadian - Beef Bones 2in",
+      "size": "1 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290123000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00773748093411",
+      "name": "MCF - Chopped Beef Suet",
+      "size": "500 g",
+      "brandName": "MCF",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00773748093411.jpg",
+      "available": true
+    },
+    {
+      "productId": "00288564000005",
+      "name": "Western Canadian - GF Rbeye Rst Product Of Australia",
+      "size": "2 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00288564000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00236234000008",
+      "name": "Western Canadian - V/P TP Sirloin Tip Marinating Steak AAA CDN",
+      "size": "840 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00236234000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00296785000001",
+      "name": "Western Canadian - Stir Fry Beef AAA CDN",
+      "size": "250 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00296785000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294728000002",
+      "name": "Western Canadian - Stir Fry Beef AAA CDN",
+      "size": "250 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294728000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00271510000006",
+      "name": "Save-On-Foods - Hot Honey Jalapeno Butter Medallions",
+      "size": "15 g",
+      "brandName": "Save-On-Foods",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00213190000006",
+      "name": "Save-On-Foods - Striploin Roast Beef, Fresh Grass Fed",
+      "size": "1.1 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00213190000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00695676006014",
+      "name": "The Keg - Beef Burgers",
+      "size": "680 g",
+      "brandName": "The Keg",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00695676006014.jpg",
+      "available": true
+    },
+    {
+      "productId": "00267169000009",
+      "name": "Western Canadian - Boneless Beef Stew OW AAA CDN",
+      "size": "200 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00267169000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00242839000008",
+      "name": "Western Canadian - Boneless Beef Stew OW AAA CDN",
+      "size": "400 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00242839000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00247112000003",
+      "name": "Western Canadian - Inside Round Rouladn OW AAA CDN",
+      "size": "540 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00247112000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00279839000004",
+      "name": "Western Canadian - Boneless Stewing Beef AAA, Family Pack",
+      "size": "810 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00279839000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639351915",
+      "name": "Western Family - Beef Pot Roast In Gravy",
+      "size": "550 g",
+      "brandName": "Western Family",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639351915.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294727000003",
+      "name": "Western Canadian - V/P Top Sirloin Steak AAA CDN",
+      "size": "1.5 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294727000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294643000002",
+      "name": "Western Canadian - Boneless Beef Stew AAA CDN",
+      "size": "260 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294643000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00212593000002",
+      "name": "Western Canadian - V/P Top Sirlon Grill Steak OW AAA CDN",
+      "size": "1.5 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00212593000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00282342000003",
+      "name": "Western Canadian - RC Top Sirloin AAA CDN",
+      "size": "400 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00282342000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00215361000006",
+      "name": "Save-On-Foods - Smokey BBQ Jumbo Beef Kebob",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00256690000008",
+      "name": "N/A - Beef Meaty Back Rib",
+      "size": "1 lb",
+      "brandName": "N/A",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00273573000009",
+      "name": "Save-On-Foods - Maui Beef Kabob",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00273573000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00226477000002",
+      "name": "Western Canadian - Top Sirloin Grilling Steak OW AAA CDN",
+      "size": "500 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00226477000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00228211000002",
+      "name": "Save-On-Foods - Pepperfic Beef Kabob",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00228211000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "02117900000004",
+      "name": "Western Canadian - Pepperific Rib Eye Grilling Steak",
+      "size": "400 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/02117900000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00241104000002",
+      "name": "Rachels - Corned Beef Brisket",
+      "size": "1 lb",
+      "brandName": "Rachels",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00241104000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294760000008",
+      "name": "Save-On-Foods - Outside Round Oven Beef Roast AAA",
+      "size": "1.51 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294760000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00248504000007",
+      "name": "Western Canadian - Meaty Beef Back Ribs AAA CDN",
+      "size": "2 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00248504000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639373702",
+      "name": "Western Family - Beef Mini Tacos",
+      "size": "360 g",
+      "brandName": "Western Family",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639373702.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294655000007",
+      "name": "Western Canadian - Boneless Blade Beef Pot Roast AAA",
+      "size": "1.47 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294655000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "02159270000000",
+      "name": "Western Canadian - Tomahawk Prime Rib Beef Steak",
+      "size": "1.4 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/02159270000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "02137430000008",
+      "name": "Western Canadian - Tomahawk Prime Rib Steak",
+      "size": "1.14 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/02137430000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "02172150000006",
+      "name": "Western Canadian - Rancher' Choice Beef Tenderloin Steak AAA",
+      "size": "400 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/02172150000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00248661000001",
+      "name": "Western Canadian - OW Sirloin Tip Mrnat Steak AAA CDN",
+      "size": "500 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00248661000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00260521000006",
+      "name": "Western Canadian - V/P Boneless Beef Blade Simmer Steak OW AAA CDN",
+      "size": "850 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00260521000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00221169000001",
+      "name": "Western Canadian - Grass Fed Ribeye Steak, Product Of Australia",
+      "size": "1 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00221169000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00272503000003",
+      "name": "Western Canadian - T Bone Grilling Steak OW AAA CDN",
+      "size": "460 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00272503000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00606299193500",
+      "name": "Save-On-Foods - Original Maui Beef Ribs",
+      "size": "800 g",
+      "brandName": "Save-On-Foods",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00288574000002",
+      "name": "Western Canadian - F/P Bone In Rib Grill Steak OW AAA CDN",
+      "size": "930 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00288574000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "02124910000009",
+      "name": "Western Canadian - R/C K/R Ribeye Steaks AAA CDN",
+      "size": "400 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/02124910000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00231817000000",
+      "name": "Save-On-Foods - Striploin Beef Steak, Fresh Grass Fed",
+      "size": "950 g",
+      "brandName": "Save-On-Foods",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00231817000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00883353006345",
+      "name": "TOP GRASS - Beef Rib Eye Steak",
+      "size": "255 g",
+      "brandName": "TOP GRASS",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00883353006345.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294723000007",
+      "name": "Western Canadian - V/P Striploin Steak AAA CDN",
+      "size": "950 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294723000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294748000006",
+      "name": "Save-On-Foods - Inside Round Beef Roast AAA",
+      "size": "1.34 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294748000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294740000004",
+      "name": "Western Canadian - Sirloin Tip Beef Oven Roast AAA",
+      "size": "2.3 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294740000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "02185100000001",
+      "name": "Western Canadian - R/C K/R Striploin Steak AAA CDN",
+      "size": "400 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/02185100000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294698000002",
+      "name": "Western Canadian - Rib Eye Beef Steak AAA, Family Pack",
+      "size": "800 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294698000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00883353006352",
+      "name": "TOP GRASS - Beef Striploin Steak",
+      "size": "255 g",
+      "brandName": "TOP GRASS",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00883353006352.jpg",
+      "available": true
+    },
+    {
+      "productId": "00289374000001",
+      "name": "Western Canadian - Striploin Grilling Steak OW AAA CDN",
+      "size": "1 lb",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "02186770000001",
+      "name": "Western Canadian - Beef Tenderloin Grill Steak OW AAA CDN",
+      "size": "440 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/02186770000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294660000009",
+      "name": "Western Canadian - V/P Boneless Blade Steak AAA CDN",
+      "size": "850 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294660000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "02120660000009",
+      "name": "Western Canadian - Top Sirloin Roast AAA CDN",
+      "size": "1.44 kg",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/02120660000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00262485000009",
+      "name": "Western Canadian - Boneless Rib Eye Grill Steak OW AAA CDN",
+      "size": "400 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00262485000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00230822000005",
+      "name": "Western Canadian - VP Eye Of Rnd Marint Steak OW AAA CDN",
+      "size": "800 g",
+      "brandName": "Western Canadian",
+      "category": "Beef & Veal",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00230822000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292289000004",
+      "name": "Western Canadian - Turkey Drumsticks, Fresh",
+      "size": "770 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292289000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00288887000003",
+      "name": "Western Canadian - Turkey Thigh & Drumstick (Hind Quarter), Fresh",
+      "size": "790 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00288887000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292294000006",
+      "name": "Save-On-Foods - Turkey Thighs,  Boneless Skinless Fresh",
+      "size": "375 g",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292294000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292607000006",
+      "name": "Save-On-Foods - Chicken Breast Halves Back Attached, Fresh",
+      "size": "1.09 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292607000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639358464",
+      "name": "Western Family - Chicken Drumstick Seasoned",
+      "size": "3 kg",
+      "brandName": "Western Family",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639358464.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292624000003",
+      "name": "Save-On-Foods - Chicken Thighs Boneless and Skinless, Value Pack",
+      "size": "750 g",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292624000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292240000005",
+      "name": "Save-On-Foods - Turkey Necks, Fresh",
+      "size": "1.81 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292240000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00065822470158",
+      "name": "Butterball - Boneless Turkey Breast",
+      "size": "1.2 kg",
+      "brandName": "Butterball",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00065822470158.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292281000002",
+      "name": "Western Canadian - Ground Turkey Breast,  Fresh",
+      "size": "365 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292281000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00271692000009",
+      "name": "Western Canadian - Chicken Drumsticks, Fresh",
+      "size": "1.7 kg",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00271692000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00219329000008",
+      "name": "Western Canadian - Chicken Drumsticks Fresh",
+      "size": "1.7 kg",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00219329000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292621000006",
+      "name": "Western Canadian - Chicken Drumsticks, Skin On, Fresh",
+      "size": "556 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292621000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292370000005",
+      "name": "Save-On-Foods - Chicken Livers, Fresh",
+      "size": "440 g",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292370000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292249000006",
+      "name": "Western Canadian - Lean Ground Chicken Breast",
+      "size": "300 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292249000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292286000007",
+      "name": "Western Canadian - Turkey Ground Thigh , Extra Lean",
+      "size": "422 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292286000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292285000008",
+      "name": "Save-On-Foods - Fresh Turkey Hind Quarter",
+      "size": "800 g",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292285000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00065822460197",
+      "name": "Butterball - Stuffed Boneless Turkey Breast",
+      "size": "1.2 kg",
+      "brandName": "Butterball",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00065822460197.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292631000003",
+      "name": "Western Canadian - Chicken Drumettes, Fresh",
+      "size": "480 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292631000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00261977000008",
+      "name": "Save-On-Foods - Chicken Breast Boneless- Garlic Butter & Herbs",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00261977000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00231170000006",
+      "name": "Save-On-Foods - Chicken Breast Boneless - Ginger Lime",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00231170000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00271504000005",
+      "name": "Western Canadian - Turkey Breast Cutlets",
+      "size": "350 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00271504000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292628000009",
+      "name": "Save-On-Foods - Chicken Thighs Boneless, Skinless, Fresh",
+      "size": "425 g",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292628000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00231883000003",
+      "name": "Western Canadian - Ground Turkey Breast, Fresh, Value Pack",
+      "size": "700 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00231883000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00234591000006",
+      "name": "Rossdown - Organic Whole Chicken, Frozen",
+      "size": "2.1 kg",
+      "brandName": "Rossdown",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00234591000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00297455000000",
+      "name": "Save-On-Foods - Chicken Breast Boneless - Mango Chili",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00297455000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292518000003",
+      "name": "Save-On-Foods - Chicken Thighs Skin On & Bone In, Family Pack",
+      "size": "1.13 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292518000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00259535000003",
+      "name": "Save-On-Foods - Rosemary Garlic Boneless Chicken Breast",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00274348000002",
+      "name": "Rossdown - Organic Chicken Breast - Boneless & Skinless",
+      "size": "450 g",
+      "brandName": "Rossdown",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00274348000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00233901000002",
+      "name": "Save-On-Foods - Chicken Breast & Thigh Boneless - Combo Pack",
+      "size": "800 g",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00180509500420",
+      "name": "Save-On-Foods - Oven Roasted Carved Chicken Breast",
+      "size": "300 g",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00180509500420.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292104000004",
+      "name": "Butterball - Whole Turkey  Stuffed 5-7kg",
+      "size": "6 kg",
+      "brandName": "Butterball",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292104000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00061951096757",
+      "name": "Hallmark Farms - Hallmark Fine Textrd Chicken Breast",
+      "size": "450 g",
+      "brandName": "Hallmark Farms",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00061951096757.jpg",
+      "available": true
+    },
+    {
+      "productId": "00224566000001",
+      "name": "Hallmark Farms - Hallmark Fine Textrd Chicken Breast",
+      "size": "1",
+      "brandName": "Hallmark Farms",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00224566000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292005000004",
+      "name": "Butterball - Whole Turkey, Frozen 3-5kg",
+      "size": "4 kg",
+      "brandName": "Butterball",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292005000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00267863000008",
+      "name": "Save-On-Foods - Caribbean Jerk Chicken Breast Boneless",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00267863000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00060629919367",
+      "name": "Save-On-Foods - Original Maui Chicken Thigh",
+      "size": "600 g",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00060629919367.jpg",
+      "available": true
+    },
+    {
+      "productId": "00628000600725",
+      "name": "Rossdown - Meal Starters - Lemon Citrus Chicken Breast",
+      "size": "350 g",
+      "brandName": "Rossdown",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00628000600725.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292108000000",
+      "name": "Butterball - Whole Turkey Stuffed 7-9kg",
+      "size": "8 kg",
+      "brandName": "Butterball",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292108000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00061951103769",
+      "name": "Chicken Breasts - Thin Sliced - Free Run",
+      "size": "1",
+      "brandName": "Chicken Breasts",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00061951103769.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292010000006",
+      "name": "Butterball - Whole Turkey, Frozen 5-7kg",
+      "size": "6 kg",
+      "brandName": "Butterball",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292010000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00267746000002",
+      "name": "Western Canadian - V/P Back Attached Chicken Legs",
+      "size": "1.56 kg",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00267746000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00247877000003",
+      "name": "Save-On-Foods - Teriyaki Chicken Breast Boneless",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00247877000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292015000001",
+      "name": "Butterball - Whole Turkey, Frozen 7-9kg",
+      "size": "9 kg",
+      "brandName": "Butterball",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292015000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292601000002",
+      "name": "Save-On-Foods - Whole Frying Chicken, Twin Pack",
+      "size": "3.6 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292601000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00252250000006",
+      "name": "Western Canadian - Chicken Breast Boneless Skinless, Fresh",
+      "size": "800 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00252250000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292295000005",
+      "name": "Western Canadian - Fresh Turkey Breast Fillet",
+      "size": "375 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292295000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00628000600732",
+      "name": "Rossdown - Meal Starters - Black Garlic Chicken Breast",
+      "size": "350 g",
+      "brandName": "Rossdown",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00628000600732.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292288000005",
+      "name": "Save On Foods - Turkey Wings Fresh",
+      "size": "450 g",
+      "brandName": "Save On Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292288000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00260758000008",
+      "name": "Rossdown - Organic Whole Frying Chicken, Fresh",
+      "size": "2 kg",
+      "brandName": "Rossdown",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00260758000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00274891000009",
+      "name": "Save-On-Foods - Whole Frying Chicken - Twin Pack, Fresh",
+      "size": "2.5 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00274891000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00258886000007",
+      "name": "Save-On-Foods - Chicken Legs Back Attached Skin On, Warehouse Pack",
+      "size": "1.75 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00258886000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292614000006",
+      "name": "Save-On-Foods - Chicken Breast Boneless Skinless, Fresh",
+      "size": "500 g",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292614000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292600000003",
+      "name": "Save-On-Foods - Whole Frying Chicken",
+      "size": "1.49 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292600000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00283304000000",
+      "name": "Save-On-Foods - Butter Chicken Skinless Thighs - Bone In",
+      "size": "1 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00283304000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00239614000001",
+      "name": "Save-On-Foods - Chicken Breast Boneless - Souvlaki",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00239614000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00258953000008",
+      "name": "Western Family - Buttered Young Turkey Whole, Seasoned 5-7Kg",
+      "size": "6 kg",
+      "brandName": "Western Family",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00258953000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00270820000003",
+      "name": "Save-On-Foods - Turkey Breast Roast, Fresh",
+      "size": "1 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00270820000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292523000005",
+      "name": "Save-On-Foods - Chicken Split Wings, Fresh, Family Pack",
+      "size": "812 g",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292523000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292622000005",
+      "name": "Western Canadian - Chicken Thighs Skin On Bone In, Fresh",
+      "size": "680 g",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292622000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00296367000009",
+      "name": "Save-On-Foods - Maui Chicken Thighs",
+      "size": "1 lb",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00296367000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00239365000008",
+      "name": "Save-On-Foods - Red Wine & Shallot Chicken Breast Boneless",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00239365000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00276097000005",
+      "name": "Only Goodness - Raised Without Antibiotics - Chicken Drumsticks Skin On",
+      "size": "600 g",
+      "brandName": "Only Goodness",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00276097000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00263229000002",
+      "name": "Save-On-Foods - Boneless Skinless Chicken Breast, Warehouse Pack",
+      "size": "1.25 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00263229000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00777262503609",
+      "name": "Maple Leaf - Prime Chicken Breasts, Boneless Skinless",
+      "size": "1",
+      "brandName": "Maple Leaf",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00777262503609.jpg",
+      "available": true
+    },
+    {
+      "productId": "00248289000001",
+      "name": "Only Goodness - Raised Without Antibiotics - Chicken Thighs Boneless Skinless, Family Pack",
+      "size": "950 g",
+      "brandName": "Only Goodness",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00248289000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00236538000001",
+      "name": "Only Goodness - Raised Without Antibiotics - Chicken Breast Boneless Skinless",
+      "size": "430 g",
+      "brandName": "Only Goodness",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00236538000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292300000006",
+      "name": "Turkey - Whole Fresh Grade A 3-5 Kgs",
+      "size": "4 kg",
+      "brandName": "Turkey",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292300000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00255387000000",
+      "name": "Save-On-Foods - Garlic Butter & Herbs Chicken Breast Kabob",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00255387000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00065822480157",
+      "name": "Butterball - White Dark Turkey Roast",
+      "size": "1.2 kg",
+      "brandName": "Butterball",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00065822480157.jpg",
+      "available": true
+    },
+    {
+      "productId": "00210801000004",
+      "name": "Turkey - BB Seas Fresh Turkey 5-7kg",
+      "size": "6 kg",
+      "brandName": "Turkey",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00292522000006",
+      "name": "Save-On-Foods - Split Chicken Wings, Fresh",
+      "size": "500 g",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292522000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00283940000006",
+      "name": "Western Canadian - Split Chicken Wings Value Pack",
+      "size": "1.19 kg",
+      "brandName": "Western Canadian",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00283940000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00276588000002",
+      "name": "Only Goodness - Raised Without Antibiotics Chicken Breast Boneless Skinless, Family Pack",
+      "size": "830 g",
+      "brandName": "Only Goodness",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00276588000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00243783000007",
+      "name": "Only Goodness - Raised Without Antibiotics - Chicken Thighs Boneless, Skinless",
+      "size": "420 g",
+      "brandName": "Only Goodness",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00243783000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00263999000004",
+      "name": "Only Goodness - Raised Without Antibiotics  - Chicken Thighs, Skin On Bone In, Family Pack",
+      "size": "1.05 kg",
+      "brandName": "Only Goodness",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00263999000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292311000002",
+      "name": "Turkey - Whole Fresh Grade A 8kg and Up",
+      "size": "10 kg",
+      "brandName": "Turkey",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292311000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00256187000009",
+      "name": "Save-On-Foods - Chicken Breast Kabob, Citrus Lemon",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00256187000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100286408",
+      "name": "Maple Leaf - Natural Shredded Chicken",
+      "size": "250 g",
+      "brandName": "Maple Leaf",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100286408.jpg",
+      "available": true
+    },
+    {
+      "productId": "00265365000007",
+      "name": "Save-On-Foods - Buffalo Masala Split Wings",
+      "size": "1 lb",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00265365000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00248376000006",
+      "name": "Save-On-Foods - Chicken Breast Kabob, Smoky BBQ",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00248376000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00256353000000",
+      "name": "Save-On-Foods - Chicken Breast Kabob, Caribbean Jerk",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00256353000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00243886000003",
+      "name": "Save-On-Foods - Chicken Thigh Kabobs, Souvlaki",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Chicken & Turkey",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00243886000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294562000008",
+      "name": "Cod - Fillets Wild, Previously Frozen",
+      "size": "150 g",
+      "brandName": "Cod",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294562000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292498000000",
+      "name": "Save-On-Foods - Fresh Pacific Rockfish",
+      "size": "175 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292498000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00272231000009",
+      "name": "Save-On-Foods - Fresh Pacific Rockfish",
+      "size": "150 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00272231000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00251936000002",
+      "name": "Cod - Previous Frozen, Ling, Ocean Wise",
+      "size": "200 g",
+      "brandName": "Cod",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00251936000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00236071000001",
+      "name": "Swordfish - Previously Frozen, Whole Loin",
+      "size": "250 g",
+      "brandName": "Swordfish",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00236071000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294561000009",
+      "name": "Sole - Wild Fresh Fillets",
+      "size": "250 g",
+      "brandName": "Sole",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294561000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00205017000009",
+      "name": "Halibut - Fresh Skin On Halibut Fillets, Wild",
+      "size": "500 g",
+      "brandName": "Halibut",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00205017000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290760000000",
+      "name": "Save-On-Foods - Steelhead Trout Fillets, Fresh",
+      "size": "900 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290760000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00280360000005",
+      "name": "Save-On-Foods - Steelhead Trout Fillets, Fresh",
+      "size": "250 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00280360000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00226248000002",
+      "name": "Ahi Tuna - Previously Frozen",
+      "size": "250 g",
+      "brandName": "Ahi Tuna",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00226248000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00221530000005",
+      "name": "Save-On-Foods - Imitation Cr Flake Pollock",
+      "size": "100 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00232803000004",
+      "name": "Save-On-Foods - WP Fresh Pacific Rockfish",
+      "size": "100 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00232803000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00285064000009",
+      "name": "Salmon - Farmed Atlantic Salmon Fillet",
+      "size": "250 g",
+      "brandName": "Salmon",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00285064000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00216016000006",
+      "name": "Save-On-Foods - Atlantic Salmon Farmed Warehouse Pack",
+      "size": "1 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00216016000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290300000002",
+      "name": "Save-On-Foods - Signature Mediterranean Sockeye Burger",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290300000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00260684000004",
+      "name": "Save-On-Foods - Wild Fresh Sole Fillets",
+      "size": "180 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00260684000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00061362800004",
+      "name": "CLOVER LEAF - Crab Delectables Leg Style",
+      "size": "227 g",
+      "brandName": "CLOVER LEAF",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00061362800004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00257246000008",
+      "name": "Save-On-Foods - Sockeye Salmon Fillet, Warehouse Pack",
+      "size": "600 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00257246000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00061362803005",
+      "name": "CLOVER LEAF - Crab Delectables Flake Style",
+      "size": "227 g",
+      "brandName": "CLOVER LEAF",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00061362803005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00234026000007",
+      "name": "Save-On-Foods - Wild Sockeye Salmon Fillets",
+      "size": "450 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00234026000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292855000001",
+      "name": "Save-On-Foods - Signature Cajun Sockeye Burger",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292855000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00275714000008",
+      "name": "Save-On-Foods - Ahi Tuna Kebob",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00221567000009",
+      "name": "Save-On-Foods - Wild Sockeye Salmon Fillets, Previously Frozen",
+      "size": "200 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00221567000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00224122000001",
+      "name": "Save-On-Foods - Stuffed Sole Imitation Crab & Shrimp",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00224122000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00061362809007",
+      "name": "CLOVER LEAF - Lobster Delectables Flake",
+      "size": "227 g",
+      "brandName": "CLOVER LEAF",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00061362809007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00296770000009",
+      "name": "Save-On-Foods - Signature Lemon & Dill Sockeye Burger",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00296770000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292584000006",
+      "name": "Save-On-Foods - Wild Sockeye Salmon Fillets, Fresh",
+      "size": "375 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292584000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00211688000002",
+      "name": "Save-On-Foods - Atlantic Salmon Kabob Garlic Butter and Herb",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00211688000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00247016000000",
+      "name": "Save-On-Foods - Garlic Basa Kabob",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00247016000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00218255000007",
+      "name": "Save-On-Foods - Atlantic Salmon Kabob, Maui",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00218255000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00217990000006",
+      "name": "Save-On-Foods - Signature Teriyaki Sockeye Salmon Burger",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00217990000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00224034000007",
+      "name": "Save-On-Foods - Almond Crusted Sole",
+      "size": "100 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00263426000003",
+      "name": "Save-On-Foods - Prawn Skewer",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00263426000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055120101038",
+      "name": "Dutch Boy - Herring Tid-Bits in Wine Sauce",
+      "size": "250 g",
+      "brandName": "Dutch Boy",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055120101038.jpg",
+      "available": true
+    },
+    {
+      "productId": "00222955000007",
+      "name": "Save-On-Foods - Viet Lemon Grass Basa Kebobs",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00062639375553",
+      "name": "Western Family - Lemon & Herb Breaded Basa Burgers",
+      "size": "4",
+      "brandName": "Western Family",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639375553.jpg",
+      "available": true
+    },
+    {
+      "productId": "00236759000002",
+      "name": "Save-On-Foods - Maple Bacon Atlantic Salmon Kabob",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00215204000002",
+      "name": "Save-On-Foods - Viet Lemon Grass Ahi Tuna Kebob",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00214416000008",
+      "name": "Save-On-Foods - Atlantic Salmon Kabob Mango Chili",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00214416000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00285672000002",
+      "name": "Save-On-Foods - Hot Smoked Maple Strips Atlantic Salmon",
+      "size": "100 g",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00286920000003",
+      "name": "Save-On-Foods - Mango Chili Basa Kabob",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00286920000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055120101052",
+      "name": "Dutch Boy - Herring Snack",
+      "size": "250 g",
+      "brandName": "Dutch Boy",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055120101052.jpg",
+      "available": true
+    },
+    {
+      "productId": "00223723000007",
+      "name": "Save-On-Foods - Garlic Butter & Herb Prawn Skewer",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00223723000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00254638000004",
+      "name": "Garlic & Red Pepper - Hot Smoked Socleye Nugget",
+      "size": "100 g",
+      "brandName": "Garlic & Red Pepper",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00254638000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00258586000000",
+      "name": "Tilapia - Coconut Crust Tilapia",
+      "size": "300 g",
+      "brandName": "Tilapia",
+      "category": "Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00258586000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639367947",
+      "name": "Western Family - Prime Rib Beef Meatballs",
+      "size": "680 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639367947.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639291518",
+      "name": "Western Family - Boneless Skinless Chicken Breast, Frozen",
+      "size": "3 kg",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639291518.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639368784",
+      "name": "Western Family - Beef Burgers",
+      "size": "10",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639368784.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639363079",
+      "name": "Western Family - Cracked Pepper & Sea Salt Chicken Wings",
+      "size": "750 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639363079.jpg",
+      "available": true
+    },
+    {
+      "productId": "00069094635819",
+      "name": "PINTY'S - Chicken Wings Honey & Garlic",
+      "size": "720 g",
+      "brandName": "PINTY'S",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00069094635819.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639363710",
+      "name": "Western Family - Stuffed Chicken Breast Breaded, Ham & Swiss Cheese",
+      "size": "6",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639363710.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639367916",
+      "name": "Western Family - Italian Style Beef Meatballs",
+      "size": "680 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639367916.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639375966",
+      "name": "Western Family - Spanakopita",
+      "size": "340 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639375966.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639368067",
+      "name": "Only Goodness - Beef Burgers",
+      "size": "720 g",
+      "brandName": "Only Goodness",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639368067.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639363062",
+      "name": "Western Family - Tavern Style Chicken Wings - Honey Garlic",
+      "size": "750 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639363062.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639354213",
+      "name": "Western Family - Prime Rib Burgers",
+      "size": "6",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639354213.jpg",
+      "available": true
+    },
+    {
+      "productId": "00069094634867",
+      "name": "PINTY'S - Lemon & Pepper Chicken Wings",
+      "size": "700 g",
+      "brandName": "PINTY'S",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00069094634867.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639374006",
+      "name": "Western Family - Popcorn Chicken Fully Cooked",
+      "size": "800 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639374006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639380984",
+      "name": "Western Family - Apple Pie & Pumpkin Spiced Wonton Pair, 12 Pieces",
+      "size": "216 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639380984.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639296476",
+      "name": "Western Family - Chicken Wings",
+      "size": "3 kg",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639296476.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639358303",
+      "name": "Western Family - Canadian Angus Beef Square Burgers",
+      "size": "6",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639358303.jpg",
+      "available": true
+    },
+    {
+      "productId": "00069094635833",
+      "name": "PINTY'S - Chicken Wings Salt & Pepper",
+      "size": "700 g",
+      "brandName": "PINTY'S",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00069094635833.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639363109",
+      "name": "Western Family - Tavern Style Chicken Wings - Barbecue",
+      "size": "750 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639363109.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639363970",
+      "name": "Western Family - Sirloin Beef Burgers",
+      "size": "852 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639363970.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639367954",
+      "name": "Western Family - Sirloin Beef Meatballs",
+      "size": "680 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639367954.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292118000007",
+      "name": "Save-On-Foods - Whole Turkey Frozen, Grade A,  9-11kg",
+      "size": "10 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292118000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100297824",
+      "name": "Maple Leaf - Prime Raised Without Antibiotics Chicken Meatballs",
+      "size": "700 g",
+      "brandName": "Maple Leaf",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100297824.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639363093",
+      "name": "Western Family - Tavern Style Chicken Wings - Teriyaki",
+      "size": "750 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639363093.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292114000001",
+      "name": "Save-On-Foods - Whole Turkey Frozen, Grade A 7 To 9 Kgs",
+      "size": "8 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292114000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00069094635901",
+      "name": "PINTY'S - Chicken Nuggets Gluten Free",
+      "size": "790 g",
+      "brandName": "PINTY'S",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00069094635901.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639367923",
+      "name": "Western Family - Lean Angus Beef Meatballs",
+      "size": "680 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639367923.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100451233",
+      "name": "Maple Leaf - Prime Raised Without Antibiotics, Chicken Cutlets - Broccoli & Cheddar",
+      "size": "568 g",
+      "brandName": "Maple Leaf",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100451233.jpg",
+      "available": true
+    },
+    {
+      "productId": "00069094635802",
+      "name": "PINTY'S - Buffalo Chicken Wings",
+      "size": "720 g",
+      "brandName": "PINTY'S",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00069094635802.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639376147",
+      "name": "Save-On-Foods - Carrot & Herb Potatoes",
+      "size": "1 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639376147.jpg",
+      "available": true
+    },
+    {
+      "productId": "00069094636236",
+      "name": "PINTY'S - Lemon & Fine Herbs Chicken Breasts",
+      "size": "600 g",
+      "brandName": "PINTY'S",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00069094636236.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639306199",
+      "name": "Western Family - Chicken Breast Burgers, 6 Pack",
+      "size": "852 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639306199.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100422820",
+      "name": "Maple Leaf - Prime Raised Without Antibiotics, Chicken Strips",
+      "size": "700 g",
+      "brandName": "Maple Leaf",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100422820.jpg",
+      "available": true
+    },
+    {
+      "productId": "00071007002250",
+      "name": "EL MONTEREY - Beef & Bean Burritos",
+      "size": "113 g",
+      "brandName": "EL MONTEREY",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00071007002250.jpg",
+      "available": true
+    },
+    {
+      "productId": "02123090000007",
+      "name": "Save-On-Foods - Whole Turkey Frozen Grade A 11kg & Up",
+      "size": "12 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/02123090000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00067714007923",
+      "name": "Zabiha Halal - Chicken Strips - Fully Cooked",
+      "size": "800 g",
+      "brandName": "Zabiha Halal",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00067714007923.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639362522",
+      "name": "Western Family - Chicken Burger",
+      "size": "800 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639362522.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639363116",
+      "name": "Western Family - Tavern Style Chicken Wings - Chili Lime",
+      "size": "750 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639363116.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639358297",
+      "name": "Western Family - Lean Angus Beef Burgers",
+      "size": "852 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639358297.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639363086",
+      "name": "Western Family - Tavern Style Chicken Wings - Hot Buffalo",
+      "size": "750 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639363086.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639364403",
+      "name": "Western Family - Mini Sausage Rolls",
+      "size": "500 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639364403.jpg",
+      "available": true
+    },
+    {
+      "productId": "00071007002243",
+      "name": "EL MONTEREY - Red Hot Beef Burritos",
+      "size": "113 g",
+      "brandName": "EL MONTEREY",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00071007002243.jpg",
+      "available": true
+    },
+    {
+      "productId": "00067714007916",
+      "name": "Zabiha Halal - Chicken Nuggets - Fully Cooked",
+      "size": "800 g",
+      "brandName": "Zabiha Halal",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00067714007916.jpg",
+      "available": true
+    },
+    {
+      "productId": "00069094635888",
+      "name": "PINTY'S - Boneless Chicken Thigh Chunks BBQ",
+      "size": "730 g",
+      "brandName": "PINTY'S",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00069094635888.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100451257",
+      "name": "Maple Leaf - Prime Raised Without Antibiotics, Chicken Cutlets - Ham & Mozzarella",
+      "size": "568 g",
+      "brandName": "Maple Leaf",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100451257.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100660901",
+      "name": "Maple Leaf - Prime Raised Without Antibiotics Dino Chicken Nuggets,",
+      "size": "700 g",
+      "brandName": "Maple Leaf",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100660901.jpg",
+      "available": true
+    },
+    {
+      "productId": "00249079000003",
+      "name": "Bacon & Caramelize - Stuffed Mushroom 35-40g",
+      "size": "1 lb",
+      "brandName": "Bacon & Caramelize",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00249079000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639336486",
+      "name": "Western Family - Honey Garlic Pork Back Ribs",
+      "size": "610 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639336486.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639381301",
+      "name": "Western Family - Tandoori Style Chicken Wings",
+      "size": "750 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639381301.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639367961",
+      "name": "Western Family - Swedish Meatballs",
+      "size": "680 g",
+      "brandName": "Western Family",
+      "category": "Frozen Meat",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639367961.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639361785",
+      "name": "Western Family - Seafood Medley",
+      "size": "300 g",
+      "brandName": "Western Family",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639361785.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639366360",
+      "name": "Western Family - Raw Black Tiger Shrimp, Medium Peeled Deveined Tail Off",
+      "size": "340 g",
+      "brandName": "Western Family",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639366360.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639365141",
+      "name": "Western Family - Small Scallops",
+      "size": "300 g",
+      "brandName": "Western Family",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639365141.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639371302",
+      "name": "Western Family - Tuna Steaks Boneless, 2-3 Portions",
+      "size": "340 g",
+      "brandName": "Western Family",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639371302.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639362072",
+      "name": "Western Family - Butterfly Crunchy Shrimp",
+      "size": "680 g",
+      "brandName": "Western Family",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639362072.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639362065",
+      "name": "Western Family - Butterfly Coconut Shrimp",
+      "size": "680 g",
+      "brandName": "Western Family",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639362065.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639374730",
+      "name": "Western Family - Tilapia Loins, 4-5 Portions",
+      "size": "400 g",
+      "brandName": "Western Family",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639374730.jpg",
+      "available": true
+    },
+    {
+      "productId": "00250331000006",
+      "name": "Save-On-Foods - Sablefish Fillets, Frozen",
+      "size": "300 g",
+      "brandName": "Save-On-Foods",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00250331000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639365202",
+      "name": "Western Family - Colossal Tiger Prawns",
+      "size": "228 g",
+      "brandName": "Western Family",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639365202.jpg",
+      "available": true
+    },
+    {
+      "productId": "00060629921988",
+      "name": "NORTHERN GLACIER - Clam Meat",
+      "size": "340 g",
+      "brandName": "NORTHERN GLACIER",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00060629921988.jpg",
+      "available": true
+    },
+    {
+      "productId": "00729926121124",
+      "name": "Lund's - California Squid, Frozen",
+      "size": "1 kg",
+      "brandName": "Lund's",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00729926121124.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639364717",
+      "name": "Western Family - Bacon Wrapped Scallop Medallions - Uncooked",
+      "size": "300 g",
+      "brandName": "Western Family",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639364717.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639372361",
+      "name": "Western Family - Garlic & Herb Jumbo Shrimp",
+      "size": "340 g",
+      "brandName": "Western Family",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639372361.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292539000006",
+      "name": "Salmon Village - Wild Sockeye Salmon Fillets, Frozen",
+      "size": "850 g",
+      "brandName": "Salmon Village",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292539000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684011125",
+      "name": "Save-On-Foods - Frozen Sockeye Salmon Fillet Cedar Plank",
+      "size": "454 g",
+      "brandName": "Save-On-Foods",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684011125.jpg",
+      "available": true
+    },
+    {
+      "productId": "00058897901825",
+      "name": "Tideal Forest - OW Broken Raw Peeled divined Black Tiger Shrimp",
+      "size": "340 g",
+      "brandName": "Tideal Forest",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00058897901825.jpg",
+      "available": true
+    },
+    {
+      "productId": "00296771000008",
+      "name": "O/W Raw P&D - White  Shrimp 41/50 Count",
+      "size": "100 g",
+      "brandName": "O/W Raw P&D",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00296771000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00731149114388",
+      "name": "Aqua Star - Snow Crab Clusters",
+      "size": "454 g",
+      "brandName": "Aqua Star",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00731149114388.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639375898",
+      "name": "Western Family - Signature Garden Blend Sockeye Salmon Burger",
+      "size": "4",
+      "brandName": "Western Family",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639375898.jpg",
+      "available": true
+    },
+    {
+      "productId": "00212262000005",
+      "name": "Prawn - Previously Frz Raw White Prawns Peeled & De-veined",
+      "size": "100 g",
+      "brandName": "Prawn",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00212262000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "04770173822889",
+      "name": "BANDI - Armenian Shish Kabob Spices",
+      "size": "35 g",
+      "brandName": "BANDI",
+      "category": "Frozen Seafood",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/04770173822889.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292190000001",
+      "name": "Hallmark - Rock Cornish Hen",
+      "size": "600 g",
+      "brandName": "Hallmark",
+      "category": "Game & Specialty Meats",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292190000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00065843948131",
+      "name": "LILYDALE - Chicken Sausage",
+      "size": "375 g",
+      "brandName": "LILYDALE",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00065843948131.jpg",
+      "available": true
+    },
+    {
+      "productId": "00065843948377",
+      "name": "LILYDALE - Turkey Sausage Maple Flavour",
+      "size": "375 g",
+      "brandName": "LILYDALE",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00065843948377.jpg",
+      "available": true
+    },
+    {
+      "productId": "00065843948124",
+      "name": "LILYDALE - Turkey Sausages",
+      "size": "375 g",
+      "brandName": "LILYDALE",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00065843948124.jpg",
+      "available": true
+    },
+    {
+      "productId": "00877135001048",
+      "name": "Stapleton Sausage Co. - Hot Italian Fennel Sausage",
+      "size": "400 g",
+      "brandName": "Stapleton Sausage Co.",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00877135001048.jpg",
+      "available": true
+    },
+    {
+      "productId": "00061951098843",
+      "name": "Hallmark - Turkey Sausage Bratwurst Uncooked",
+      "size": "450 g",
+      "brandName": "Hallmark",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00061951098843.jpg",
+      "available": true
+    },
+    {
+      "productId": "00295757000001",
+      "name": "Save-On-Foods - Chorizo Sausage",
+      "size": "345 g",
+      "brandName": "Save-On-Foods",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00295757000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00061951098447",
+      "name": "Hallmark - Turkey Sausage Mild Italian",
+      "size": "450 g",
+      "brandName": "Hallmark",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00061951098447.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782195347",
+      "name": "Johnsonville - Honey Garlic Flavoured Sausages",
+      "size": "500 g",
+      "brandName": "Johnsonville",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782195347.jpg",
+      "available": true
+    },
+    {
+      "productId": "00064359748471",
+      "name": "Freybe - Das Brat Bratwurst Sausage",
+      "size": "375 g",
+      "brandName": "Freybe",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00064359748471.jpg",
+      "available": true
+    },
+    {
+      "productId": "00295754000004",
+      "name": "Save-On-Foods - Italian Sausage, Mild",
+      "size": "345 g",
+      "brandName": "Save-On-Foods",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00295754000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00295764000001",
+      "name": "Save-On-Foods - Pork Sausage, Apple",
+      "size": "345 g",
+      "brandName": "Save-On-Foods",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00295764000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00296311000000",
+      "name": "Save-On-Foods - Honey Garlic Pork Sausage",
+      "size": "120 g",
+      "brandName": "Save-On-Foods",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00296311000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00295755000003",
+      "name": "Save-On-Foods - Asiago & Red Pepper Sausage, Fresh",
+      "size": "345 g",
+      "brandName": "Save-On-Foods",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00295755000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00877135001024",
+      "name": "Stapleton Sausage Co. - Pork & Apple Sausage",
+      "size": "400 g",
+      "brandName": "Stapleton Sausage Co.",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00877135001024.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782024715",
+      "name": "Johnsonville - Smoked Cheddar Cheese Sausages, 6 Pack",
+      "size": "375 g",
+      "brandName": "Johnsonville",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782024715.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100825522",
+      "name": "Maple Leaf - Natural Ground Pork Sausage Meat",
+      "size": "500 g",
+      "brandName": "Maple Leaf",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100825522.jpg",
+      "available": true
+    },
+    {
+      "productId": "00877135001031",
+      "name": "Stapleton Sausage Co. - Mild Italian Fennel Sausage",
+      "size": "400 g",
+      "brandName": "Stapleton Sausage Co.",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00877135001031.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782195422",
+      "name": "Johnsonville - Hot Italian Sausages",
+      "size": "500 g",
+      "brandName": "Johnsonville",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782195422.jpg",
+      "available": true
+    },
+    {
+      "productId": "00877135001017",
+      "name": "Stapleton Sausage Co. - German Bratwurst Sausage",
+      "size": "400 g",
+      "brandName": "Stapleton Sausage Co.",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00877135001017.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100242558",
+      "name": "Mitchells - Cheddar Sausage",
+      "size": "500 g",
+      "brandName": "Mitchells",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100242558.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393700505",
+      "name": "Harvest - Summer Sausage",
+      "size": "375 g",
+      "brandName": "Harvest",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393700505.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100604035",
+      "name": "Mitchells - Double Smoked Sausage",
+      "size": "500 g",
+      "brandName": "Mitchells",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100604035.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782015935",
+      "name": "Johnsonville - Italian Sausages with Basil",
+      "size": "500 g",
+      "brandName": "Johnsonville",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782015935.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782195507",
+      "name": "Johnsonville - Mild Italian Sausages",
+      "size": "500 g",
+      "brandName": "Johnsonville",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782195507.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782195774",
+      "name": "Johnsonville - Original Bratwurst Sausages",
+      "size": "500 g",
+      "brandName": "Johnsonville",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782195774.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782012897",
+      "name": "Johnsonville - Original Breakfast Sausages",
+      "size": "375 g",
+      "brandName": "Johnsonville",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782012897.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898113561",
+      "name": "GRIMMS - Grimms Double Smoked Ukrainian Sausage",
+      "size": "300 g",
+      "brandName": "GRIMMS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898113561.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782006575",
+      "name": "Johnsonville - Maple Flavour Breakfast Sausages",
+      "size": "375 g",
+      "brandName": "Johnsonville",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782006575.jpg",
+      "available": true
+    },
+    {
+      "productId": "00227141000007",
+      "name": "Western Canadian - English Banger Sausages",
+      "size": "500 g",
+      "brandName": "Western Canadian",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00227141000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00877135001055",
+      "name": "Stapleton Sausage Co. - Spanish Chorizo",
+      "size": "400 g",
+      "brandName": "Stapleton Sausage Co.",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00877135001055.jpg",
+      "available": true
+    },
+    {
+      "productId": "00067714008333",
+      "name": "Maple Lodge Farms - Ultimate Hot Dinner Chicken Sausage, Previously Frozen",
+      "size": "500 g",
+      "brandName": "Maple Lodge Farms",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00067714008333.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393700550",
+      "name": "Harvest - Farmer's Sausage Double Smoked with Cheese",
+      "size": "375 g",
+      "brandName": "Harvest",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393700550.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782024722",
+      "name": "Johnsonville - Smoked Polish Sausages, 6 Pack",
+      "size": "375 g",
+      "brandName": "Johnsonville",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782024722.jpg",
+      "available": true
+    },
+    {
+      "productId": "00262930000004",
+      "name": "Save-On-Foods - Pork Sausage, Maple Blueberry",
+      "size": "345 g",
+      "brandName": "Save-On-Foods",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00262930000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00056364183699",
+      "name": "Western Canadian - V/P Breakfast Sausage",
+      "size": "1",
+      "brandName": "Western Canadian",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00056364183699.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062000251882",
+      "name": "SCHNEIDERS - Naturally Smoked Ukrainian Garlic Sausage Ring",
+      "size": "300 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062000251882.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393700628",
+      "name": "Harvest - Double Smoked Farmer's Sausage - Twin Duo",
+      "size": "375 g",
+      "brandName": "Harvest",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393700628.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782013863",
+      "name": "Johnsonville - Brown Sugar & Honey Flavour Breakfast Sausages",
+      "size": "375 g",
+      "brandName": "Johnsonville",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782013863.jpg",
+      "available": true
+    },
+    {
+      "productId": "00074545100259",
+      "name": "Kam Yen Jan - Chinese Style Pork Sausages",
+      "size": "375 g",
+      "brandName": "Kam Yen Jan",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00074545100259.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062000138701",
+      "name": "SCHNEIDERS - Naturally Hardwood Smoked Classic Cheddar Sausage",
+      "size": "375 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062000138701.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057459628736",
+      "name": "Olymel - Old Fashioned Pork Sausages",
+      "size": "375 g",
+      "brandName": "Olymel",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057459628736.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782024593",
+      "name": "Johnsonville - Smoked Original Recipe Pork Sausages, 6 Pack",
+      "size": "375 g",
+      "brandName": "Johnsonville",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782024593.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062000138893",
+      "name": "SCHNEIDERS - Naturally Hardwood Smoked Classic Recipe Sausage",
+      "size": "375 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062000138893.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100183943",
+      "name": "SCHNEIDERS - Juicy Jumbos All Beef Wieners",
+      "size": "375 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100183943.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062000251875",
+      "name": "SCHNEIDERS - Naturally Smoked Ham Sausage Ring",
+      "size": "300 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062000251875.jpg",
+      "available": true
+    },
+    {
+      "productId": "00067714008326",
+      "name": "Maple Lodge Farms - Ultimate Mild Dinner Chicken Sausage, Previously Frozen",
+      "size": "500 g",
+      "brandName": "Maple Lodge Farms",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00067714008326.jpg",
+      "available": true
+    },
+    {
+      "productId": "00067714008296",
+      "name": "Maple Lodge Farms - Ultimate Original Chicken Breakfast Sausage, Previously Frozen",
+      "size": "375 g",
+      "brandName": "Maple Lodge Farms",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00067714008296.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639329464",
+      "name": "Western Family - Garlic Flavoured Sausage",
+      "size": "750 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639329464.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062000158068",
+      "name": "SCHNEIDERS - Juicy Jumbos Original Wieners",
+      "size": "450 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062000158068.jpg",
+      "available": true
+    },
+    {
+      "productId": "00067714008302",
+      "name": "Maple Lodge Farms - Ultimate Maple Chicken Breakfast Sausage, Previously Frozen",
+      "size": "375 g",
+      "brandName": "Maple Lodge Farms",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00067714008302.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100479916",
+      "name": "Maple Leaf - Natural Pork Breakfast Sausage, Fully Cooked",
+      "size": "300 g",
+      "brandName": "Maple Leaf",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100479916.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100240097",
+      "name": "SCHNEIDERS - Naturally Hardwood Smoked Savoury Garlic & Honey Sausage",
+      "size": "375 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100240097.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062000251851",
+      "name": "SCHNEIDERS - Naturally Smoked Kolbassa Sausage Ring",
+      "size": "300 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062000251851.jpg",
+      "available": true
+    },
+    {
+      "productId": "00293969000000",
+      "name": "Western Family - Hot Italian-Style Pork Sausage",
+      "size": "375 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00293969000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057459628668",
+      "name": "Olymel - Hot Italian Sausages",
+      "size": "450 g",
+      "brandName": "Olymel",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057459628668.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898113578",
+      "name": "GRIMMS - Kolbassa Sausage",
+      "size": "300 g",
+      "brandName": "GRIMMS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898113578.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898113585",
+      "name": "GRIMMS - Polish Sausage",
+      "size": "300 g",
+      "brandName": "GRIMMS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898113585.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639171940",
+      "name": "Western Family - Original Smokies",
+      "size": "450 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639171940.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898113608",
+      "name": "GRIMMS - Fine Garlic Sausage",
+      "size": "300 g",
+      "brandName": "GRIMMS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898113608.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898113554",
+      "name": "GRIMMS - Ham Garlic Sausage",
+      "size": "300 g",
+      "brandName": "GRIMMS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898113554.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639329341",
+      "name": "Western Family - Salami Sausage",
+      "size": "375 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639329341.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639171957",
+      "name": "Western Family - Cheddar Smokies",
+      "size": "450 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639171957.jpg",
+      "available": true
+    },
+    {
+      "productId": "00227027000008",
+      "name": "Western Family - Chorizo Pork Sausage",
+      "size": "375 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00227027000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898113615",
+      "name": "GRIMMS - Mennonite Style Farmers Sausage",
+      "size": "300 g",
+      "brandName": "GRIMMS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898113615.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639329365",
+      "name": "Western Family - Pepperoni Sausage Stick",
+      "size": "375 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639329365.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639329358",
+      "name": "Western Family - Summer Sausage Stick",
+      "size": "375 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639329358.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639375423",
+      "name": "Western Family - Bavarian Style Smokies",
+      "size": "500 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639375423.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100240103",
+      "name": "SCHNEIDERS - Smokies Sharp Cheddar",
+      "size": "900 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100240103.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100240301",
+      "name": "SCHNEIDERS - Smokies, Savoury Honey Garlic",
+      "size": "900 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100240301.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393600607",
+      "name": "Harvest - Barbecue Wieners",
+      "size": "500 g",
+      "brandName": "Harvest",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393600607.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393600065",
+      "name": "Harvest - Regular Wieners",
+      "size": "675 g",
+      "brandName": "Harvest",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393600065.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393600218",
+      "name": "Harvest - All Beef Wieners",
+      "size": "8",
+      "brandName": "Harvest",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393600218.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393600386",
+      "name": "Harvest - All Beef Wieners",
+      "size": "675 g",
+      "brandName": "Harvest",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393600386.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100000431",
+      "name": "Maple Leaf - Natural Top Dogs Original Hot Dogs",
+      "size": "375 g",
+      "brandName": "Maple Leaf",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100000431.jpg",
+      "available": true
+    },
+    {
+      "productId": "00284488000008",
+      "name": "Western Family - Mild Italian Style Pork Sausage",
+      "size": "375 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00284488000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100000448",
+      "name": "Maple Leaf - Natural Top Dogs Less Salt Hot Dogs",
+      "size": "375 g",
+      "brandName": "Maple Leaf",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100000448.jpg",
+      "available": true
+    },
+    {
+      "productId": "00065822978500",
+      "name": "Butterball - Turkey Franks - Gluten/Lactose Free",
+      "size": "8",
+      "brandName": "Butterball",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00065822978500.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100291334",
+      "name": "Maple Leaf - Natural Top Dogs BBQ Hot Dogs",
+      "size": "375 g",
+      "brandName": "Maple Leaf",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100291334.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639356910",
+      "name": "Western Family - Skin On Jumbo Hot Dog",
+      "size": "675 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639356910.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100240110",
+      "name": "SCHNEIDERS - Original Smokies",
+      "size": "900 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100240110.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393700857",
+      "name": "Harvest - Fully Cooked Bratwurst",
+      "size": "375 g",
+      "brandName": "Harvest",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393700857.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393701212",
+      "name": "Harvest - Jellied Headcheese",
+      "size": "500 g",
+      "brandName": "Harvest",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393701212.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393700413",
+      "name": "Harvest - Pepperoni Chub",
+      "size": "375 g",
+      "brandName": "Harvest",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393700413.jpg",
+      "available": true
+    },
+    {
+      "productId": "00057393700451",
+      "name": "Harvest - Salami",
+      "size": "375 g",
+      "brandName": "Harvest",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00057393700451.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100284497",
+      "name": "SCHNEIDERS - Original Recipe All Pork Wieners",
+      "size": "375 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100284497.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639356903",
+      "name": "Western Family - Original Wieners",
+      "size": "375 g",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639356903.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062000001562",
+      "name": "SCHNEIDERS - Original Recipe All Beef BBQ Size Wieners",
+      "size": "450 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062000001562.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639356897",
+      "name": "Western Family - All Beef Wieners",
+      "size": "10",
+      "brandName": "Western Family",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639356897.jpg",
+      "available": true
+    },
+    {
+      "productId": "00287488000009",
+      "name": "Portablo Mushroom - Italian Sausage & Cheddar Stuffed Portablo Mushroom",
+      "size": "1",
+      "brandName": "Portablo Mushroom",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00287488000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100251130",
+      "name": "Greenfield Natural Meat Co. - Jumbo Wieners",
+      "size": "375 g",
+      "brandName": "Greenfield Natural Meat Co.",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100251130.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100115852",
+      "name": "SCHNEIDERS - Original Recipe All Beef Wieners",
+      "size": "375 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100115852.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898151921",
+      "name": "GRIMMS - Sizzlin' Smokies Cheddar",
+      "size": "6",
+      "brandName": "GRIMMS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898151921.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898151938",
+      "name": "GRIMMS - Sizzlin' Smokies Cheddar with Bacon",
+      "size": "6",
+      "brandName": "GRIMMS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898151938.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898151907",
+      "name": "GRIMMS - Sizzlin' Smokies Original",
+      "size": "6",
+      "brandName": "GRIMMS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898151907.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898151952",
+      "name": "GRIMMS - Sizzlin' Smokies Spicy Jalapeno/ Mozzarella",
+      "size": "6",
+      "brandName": "GRIMMS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898151952.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100269579",
+      "name": "SCHNEIDERS - Juicy Jumbo Loaded Cheddar",
+      "size": "375 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100269579.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898151969",
+      "name": "GRIMMS - Sizzlin Wieners",
+      "size": "450 g",
+      "brandName": "GRIMMS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898151969.jpg",
+      "available": true
+    },
+    {
+      "productId": "00067714007640",
+      "name": "Maple Lodge Farms - Spicy Ultimate Chicken Frankfurters, 10 each",
+      "size": "900 g",
+      "brandName": "Maple Lodge Farms",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00067714007640.jpg",
+      "available": true
+    },
+    {
+      "productId": "00051270120752",
+      "name": "Legends Haul - Chorizo Verde Sausages",
+      "size": "344 g",
+      "brandName": "Legends Haul",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00051270120752.jpg",
+      "available": true
+    },
+    {
+      "productId": "00055898141625",
+      "name": "GRIMM'S - Yours Naturally Lean Turkey Pepperoni",
+      "size": "375 g",
+      "brandName": "GRIMM'S",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00055898141625.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100511555",
+      "name": "SCHNEIDERS - Cheddar Smokie",
+      "size": "175 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100511555.jpg",
+      "available": true
+    },
+    {
+      "productId": "00877135001079",
+      "name": "Stapleton Sausage Co. - Steak and Mushroom Sausage",
+      "size": "400 g",
+      "brandName": "Stapleton Sausage Co.",
+      "category": "Hot Dogs & Sausages",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00877135001079.jpg",
+      "available": true
+    },
+    {
+      "productId": "00280373000009",
+      "name": "New Zealand Spring Lamb - Frenched Lamb Rack",
+      "size": "500 g",
+      "brandName": "New Zealand Spring Lamb",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00280373000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00628912104069",
+      "name": "New Zealand - Spring Lamb Loin Chops",
+      "size": "350 g",
+      "brandName": "New Zealand",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00628912104069.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290417000001",
+      "name": "New Zealand - Spring Lamb Boneless Shoulder",
+      "size": "900 g",
+      "brandName": "New Zealand",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290417000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00221232000006",
+      "name": "Lamb - Boneless Lamb Legs",
+      "size": "1 lb",
+      "brandName": "Lamb",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00221232000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00270962000008",
+      "name": "Lamb - Frenched Lamb Racks",
+      "size": "1 lb",
+      "brandName": "Lamb",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00270962000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00224026000008",
+      "name": "Western Canadian - Boneless Lamb Legs Butterfly, Fresh",
+      "size": "285 g",
+      "brandName": "Western Canadian",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00224026000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00286918000008",
+      "name": "Western Canadian - Souvlaki Lamb Kabob 110-120g",
+      "size": "1",
+      "brandName": "Western Canadian",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00286918000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00279547000006",
+      "name": "Save-On-Foods - Lamb Shanks, Fresh",
+      "size": "1 lb",
+      "brandName": "Save-On-Foods",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00279547000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290400000001",
+      "name": "New Zealand - Spring Lamb Short Cut Lamb Leg",
+      "size": "2.4 kg",
+      "brandName": "New Zealand",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290400000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00628912104250",
+      "name": "New Zealand - Spring Lamb Boneless Stew Chunks",
+      "size": "1 kg",
+      "brandName": "New Zealand",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00628912104250.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290410000008",
+      "name": "New Zealand - Spring Lamb Shanks",
+      "size": "1 kg",
+      "brandName": "New Zealand",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290410000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00628912104168",
+      "name": "New Zealand - Lean Ground Lamb",
+      "size": "500 g",
+      "brandName": "New Zealand",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00628912104168.jpg",
+      "available": true
+    },
+    {
+      "productId": "00298376000001",
+      "name": "Lamb - XA Rosemary & Garlic Lamb Kabob 110-120",
+      "size": "1",
+      "brandName": "Lamb",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00298376000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00051270109412",
+      "name": "Legends Haul - Lamb Ground Grass Fed",
+      "size": "454 g",
+      "brandName": "Legends Haul",
+      "category": "Lamb",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00051270109412.jpg",
+      "available": true
+    },
+    {
+      "productId": "00810057290237",
+      "name": "Beyond Meat - Plant-Based Burger Patties",
+      "size": "6",
+      "brandName": "Beyond Meat",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00810057290237.jpg",
+      "available": true
+    },
+    {
+      "productId": "00850004207017",
+      "name": "Beyond Meat - Plant-Based Burger Patties",
+      "size": "226 g",
+      "brandName": "Beyond Meat",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00850004207017.jpg",
+      "available": true
+    },
+    {
+      "productId": "00842234400566",
+      "name": "Gardein - Supreme Plant-Based Bowls, Meatball Marinara",
+      "size": "255 g",
+      "brandName": "Gardein",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00842234400566.jpg",
+      "available": true
+    },
+    {
+      "productId": "00842234409965",
+      "name": "Gardein - Supreme Chicken Nuggets",
+      "size": "417 g",
+      "brandName": "Gardein",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00842234409965.jpg",
+      "available": true
+    },
+    {
+      "productId": "00638031612178",
+      "name": "Field Roast - Sausage Artisan Vegan",
+      "size": "368 g",
+      "brandName": "Field Roast",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00638031612178.jpg",
+      "available": true
+    },
+    {
+      "productId": "00810057290275",
+      "name": "Beyond Meat - Plant-Based Breakfast Sausage, Classic",
+      "size": "235 g",
+      "brandName": "Beyond Meat",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00810057290275.jpg",
+      "available": true
+    },
+    {
+      "productId": "00638031451685",
+      "name": "Field Roast - Plant-Based Shreds with Smoky BBQ Sauce",
+      "size": "298 g",
+      "brandName": "Field Roast",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00638031451685.jpg",
+      "available": true
+    },
+    {
+      "productId": "00850004207277",
+      "name": "Beyond Meat - Plant-Based Sausages Mild Italian",
+      "size": "400 g",
+      "brandName": "Beyond Meat",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00850004207277.jpg",
+      "available": true
+    },
+    {
+      "productId": "00850004207376",
+      "name": "Beyond Meat - Plant-Based Sausage, Hot Italian",
+      "size": "400 g",
+      "brandName": "Beyond Meat",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00850004207376.jpg",
+      "available": true
+    },
+    {
+      "productId": "00777744000015",
+      "name": "Big Mountain - The Original Veggie Burger, 4 Pack",
+      "size": "400 g",
+      "brandName": "Big Mountain",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00777744000015.jpg",
+      "available": true
+    },
+    {
+      "productId": "00842234409972",
+      "name": "Gardein - Supreme Chick'n Filets",
+      "size": "425 g",
+      "brandName": "Gardein",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00842234409972.jpg",
+      "available": true
+    },
+    {
+      "productId": "00810057290749",
+      "name": "Beyond Meat - Plant-Based Chicken Breaded Tenders",
+      "size": "226 g",
+      "brandName": "Beyond Meat",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00810057290749.jpg",
+      "available": true
+    },
+    {
+      "productId": "00211820000006",
+      "name": "Save-On-Foods - Flavoured Butters",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00638031612161",
+      "name": "Field Roast - Sausage Mexican Chipotle",
+      "size": "368 g",
+      "brandName": "Field Roast",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00638031612161.jpg",
+      "available": true
+    },
+    {
+      "productId": "00777744000060",
+      "name": "Big Mountain - Big Brat Veggie Links",
+      "size": "300 g",
+      "brandName": "Big Mountain",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00777744000060.jpg",
+      "available": true
+    },
+    {
+      "productId": "00278603000004",
+      "name": "Save-On-Foods - Souvlaki Grilling Vegetables",
+      "size": "1 lb",
+      "brandName": "Save-On-Foods",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00777744000107",
+      "name": "Big Mountain - Tofu Soy-Free",
+      "size": "340 g",
+      "brandName": "Big Mountain",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00777744000107.jpg",
+      "available": true
+    },
+    {
+      "productId": "00043454000417",
+      "name": "Lightlife - Smart Bacon Plant-Based",
+      "size": "142 g",
+      "brandName": "Lightlife",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00043454000417.jpg",
+      "available": true
+    },
+    {
+      "productId": "00777744000121",
+      "name": "Big Mountain - Smoked Soy-Free Tofu",
+      "size": "280 g",
+      "brandName": "Big Mountain",
+      "category": "Meat Alternatives",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00777744000121.jpg",
+      "available": true
+    },
+    {
+      "productId": "00255572000006",
+      "name": "Sugardale - Prestige Fully Cooked Hickory Smoked Honey Ham",
+      "size": "4 kg",
+      "brandName": "Sugardale",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00255572000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639329839",
+      "name": "Western Family - Honey Smoked Ham",
+      "size": "650 g",
+      "brandName": "Western Family",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639329839.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100479404",
+      "name": "SCHNEIDERS - Applewood Smoked Half Ham, Original",
+      "size": "700 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100479404.jpg",
+      "available": true
+    },
+    {
+      "productId": "00059620773214",
+      "name": "Mitchells - Smoked Honey Ham",
+      "size": "1 kg",
+      "brandName": "Mitchells",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00059620773214.jpg",
+      "available": true
+    },
+    {
+      "productId": "00232561000001",
+      "name": "Western Family - Signature Whole Ham",
+      "size": "5 kg",
+      "brandName": "Western Family",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00232561000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639329846",
+      "name": "Western Family - Old Fashioned Smoked Ham",
+      "size": "650 g",
+      "brandName": "Western Family",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639329846.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639329822",
+      "name": "Western Family - Black Forest Smoked Ham",
+      "size": "650 g",
+      "brandName": "Western Family",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639329822.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100479398",
+      "name": "SCHNEIDERS - 97% Fat Free Lower Sodium Smoked Ham",
+      "size": "700 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100479398.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100100339",
+      "name": "Mitchell's - Boneless Smoked Ham",
+      "size": "1.5 kg",
+      "brandName": "Mitchell's",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100100339.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100480233",
+      "name": "SCHNEIDERS - Applewood Smoked Brown Sugar Ham",
+      "size": "700 g",
+      "brandName": "SCHNEIDERS",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100480233.jpg",
+      "available": true
+    },
+    {
+      "productId": "00044200895080",
+      "name": "Cooks - Hickory Smoked Ham Steak",
+      "size": "454 g",
+      "brandName": "Cooks",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00044200895080.jpg",
+      "available": true
+    },
+    {
+      "productId": "00249760000008",
+      "name": "Harvest - Shoulder Smoked Pork Picnic",
+      "size": "4 kg",
+      "brandName": "Harvest",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00249760000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00291057000000",
+      "name": "Harvest - Smoked Pork Hock",
+      "size": "1 lb",
+      "brandName": "Harvest",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00291057000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00269047000002",
+      "name": "Sugardale - Smoked Ham Shank Portion",
+      "size": "3.6 kg",
+      "brandName": "Sugardale",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00269047000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639354343",
+      "name": "Western Family - Signature Old Fashioned Ham Steak",
+      "size": "250 g",
+      "brandName": "Western Family",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639354343.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639354350",
+      "name": "Western Family - Signature Black Forest Ham Steak",
+      "size": "250 g",
+      "brandName": "Western Family",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639354350.jpg",
+      "available": true
+    },
+    {
+      "productId": "00256062000001",
+      "name": "Cooks - Smoked Ham Shank Portion, Bone In",
+      "size": "3.5 kg",
+      "brandName": "Cooks",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00256062000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00059620699064",
+      "name": "Mitchell's - Whole Black Forest Ham",
+      "size": "1 kg",
+      "brandName": "Mitchell's",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00059620699064.jpg",
+      "available": true
+    },
+    {
+      "productId": "00247081000004",
+      "name": "Western Family - Signature Carving Ham Hardwood Smoked",
+      "size": "1 kg",
+      "brandName": "Western Family",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00247081000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100251147",
+      "name": "Greenfield Natural Meat Co. - Thick Sliced Smoked Ham",
+      "size": "500 g",
+      "brandName": "Greenfield Natural Meat Co.",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100251147.jpg",
+      "available": true
+    },
+    {
+      "productId": "00261568000004",
+      "name": "Western Canadian - Quarter Cut Pork Combo Pack",
+      "size": "0.8 kg",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00261568000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639354367",
+      "name": "Western Family - Signature Honey Ham Steak",
+      "size": "250 g",
+      "brandName": "Western Family",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639354367.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294859000001",
+      "name": "Western Canadian - Pork Roast Shoulder Blade, Boneless",
+      "size": "2 kg",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294859000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290004000001",
+      "name": "Western Canadian - Ground Pork Lean",
+      "size": "469 g",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290004000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00226798000002",
+      "name": "Western Canadian - Thick Cut Pork Chop",
+      "size": "1 lb",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00226798000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00214320000002",
+      "name": "Save-On-Foods - Twin Pack Pork Back Ribs Fresh , 2 Pack",
+      "size": "1.3 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00214320000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290752000001",
+      "name": "Save-On-Foods - Pork Tenderloin Whole, Fresh",
+      "size": "1.24 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290752000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294828000001",
+      "name": "Western Canadian - Pork Loin Chops, Boneless Value Pack",
+      "size": "984 g",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294828000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00229703000005",
+      "name": "Western Canadian - The Ultimate Tomohawk Pork Chop",
+      "size": "500 g",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00229703000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639385125",
+      "name": "Save-On-Foods - Pork Loin Chops Boneless, 2 Pack",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639385125.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290753000000",
+      "name": "Save-On-Foods - Pork Back Ribs, Fresh",
+      "size": "1.3 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290753000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00219290000007",
+      "name": "Western Canadian - Pork Back Ribs",
+      "size": "980 g",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00219290000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294821000008",
+      "name": "Western Family - Pork Loin Chops Center Cut, Value Pack",
+      "size": "1.2 kg",
+      "brandName": "Western Family",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294821000008.jpg",
+      "available": true
+    },
+    {
+      "productId": "00290785000009",
+      "name": "Save-On-Foods - Pork Back Ribs,  Frozen",
+      "size": "1.26 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00290785000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639378745",
+      "name": "Western Family - Korean Style Pork Back Ribs",
+      "size": "610 g",
+      "brandName": "Western Family",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639378745.jpg",
+      "available": true
+    },
+    {
+      "productId": "00293621000003",
+      "name": "Only Goodness - Raised Without Antibiotics Pork Back Ribs",
+      "size": "850 g",
+      "brandName": "Only Goodness",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00293621000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00222267000009",
+      "name": "Only Goodness - Raised Without Antibiotics - Pork Tenderloin",
+      "size": "400 g",
+      "brandName": "Only Goodness",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00222267000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00298537000000",
+      "name": "Save-On-Foods - Pork Chops, Boneless Fast Fry, Family Pack",
+      "size": "700 g",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00298537000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782001006",
+      "name": "Johnsonville - Mild Italian Ground Sausage Meat",
+      "size": "375 g",
+      "brandName": "Johnsonville",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782001006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00252095000001",
+      "name": "Save-On-Foods - Breaded Pork Cutlet W/ Parmesan",
+      "size": "300 g",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00252095000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00298910000009",
+      "name": "Save-On-Foods - Pork Schnitzel",
+      "size": "750 g",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00298910000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294811000001",
+      "name": "Western Canadian - Rib End Pork Loin Chops, Value Pack",
+      "size": "900 g",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294811000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294825000004",
+      "name": "Save-On-Foods - Pork Loin Chops Centre Cut Fast Fry, Fresh",
+      "size": "1 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294825000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00296345000007",
+      "name": "Save-On-Foods - Breaded Pork Cutlet",
+      "size": "500 g",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00296345000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294818000004",
+      "name": "Western Canadian - Pork Loin/Rib end Rack",
+      "size": "1.2 kg",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294818000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00265637000001",
+      "name": "Western Canadian - Boneless Pork Half Loins. Warehouse Pack",
+      "size": "1.9 kg",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00265637000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00262816000005",
+      "name": "Save-On-Foods - Breaded Pork Cutlet with Parmesan, Family Pack.",
+      "size": "500 g",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00262816000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00266436000001",
+      "name": "Only Goodness - Raised Without Antibiotics - Boneless Pork Loin Chops",
+      "size": "500 g",
+      "brandName": "Only Goodness",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00266436000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00292738000005",
+      "name": "Western Canadian - Pork Side Spareribs Sweet & Sour Cut",
+      "size": "1.6 kg",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292738000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00298289000006",
+      "name": "Save-On-Foods - Frozen Pork Belly",
+      "size": "5 kg",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00298289000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00228608000004",
+      "name": "Western Canadian - Pork Side Ribs Regular Cut Half COV",
+      "size": "1.5 kg",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00228608000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00695676006205",
+      "name": "The Keg - BBQ Pork Back Ribs",
+      "size": "700 g",
+      "brandName": "The Keg",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00695676006205.jpg",
+      "available": true
+    },
+    {
+      "productId": "00077782001013",
+      "name": "Johnsonville - Hot Italian Ground Sausage Meat",
+      "size": "375 g",
+      "brandName": "Johnsonville",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00077782001013.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294849000004",
+      "name": "Save-On-Foods - Pork Schnitzel Breaded, Fresh Family Pack",
+      "size": "750 g",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294849000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00279419000004",
+      "name": "Save-On-Foods - Pork Tenderloin Spicy Portuguese Rub",
+      "size": "1 lb",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00287353000004",
+      "name": "Western Canadian - Lean Ground Pork Chub, Value Pack",
+      "size": "1.36 kg",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00287353000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "02184070000004",
+      "name": "Save-On-Foods - Pork Belly Skin On Quarter Cut",
+      "size": "907 g",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/02184070000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00224051000004",
+      "name": "Olymel - Fresh Pork Tenderloin",
+      "size": "900 g",
+      "brandName": "Olymel",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00224051000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00063100134891",
+      "name": "Maple Leaf - Natural Pulled Pork Barbecue Sauce",
+      "size": "450 g",
+      "brandName": "Maple Leaf",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00063100134891.jpg",
+      "available": true
+    },
+    {
+      "productId": "00294842000001",
+      "name": "Western Canadian - Pork Butt Steak Fresh, Bone In Value Pack",
+      "size": "800 g",
+      "brandName": "Western Canadian",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00294842000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00249099000007",
+      "name": "Save-On-Foods - Boneless Sweet & Sour Cubed Pork",
+      "size": "250 g",
+      "brandName": "Save-On-Foods",
+      "category": "Pork & Ham",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00249099000007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00213751000001",
+      "name": "Save-On-Foods - Crab Cakes",
+      "size": "2.5 oz",
+      "brandName": "Save-On-Foods",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00213751000001.jpg",
+      "available": true
+    },
+    {
+      "productId": "00276151000002",
+      "name": "Save-On-Foods - Cooked 16-20 P&D Prawns",
+      "size": "100 g",
+      "brandName": "Save-On-Foods",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00276151000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00243270000008",
+      "name": "Save-On-Foods - Large Prawn & Sauce Appy 16-20 count",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00292454000006",
+      "name": "Save-On-Foods - Wild Shrimp Hand Peeled",
+      "size": "120 g",
+      "brandName": "Save-On-Foods",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00292454000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00059702131116",
+      "name": "7 Seas - Raw White Shrimp 41/50 Count",
+      "size": "908 g",
+      "brandName": "7 Seas",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00059702131116.jpg",
+      "available": true
+    },
+    {
+      "productId": "00235945000000",
+      "name": "Save-On-Foods - Prawn Cakes, Lemon Dill",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00235945000000.jpg",
+      "available": true
+    },
+    {
+      "productId": "00221592000005",
+      "name": "Save-On-Foods - Mango Chili Prawn Skewer",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00221592000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00288045000005",
+      "name": "Save-On-Foods - Chilean Hand Peeled Shrimp. Previously Frozen",
+      "size": "100 g",
+      "brandName": "Save-On-Foods",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00288045000005.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639378332",
+      "name": "Western Family - Thai Style Sweet Chili Shrimp, Peeled, Deveined Tail Off",
+      "size": "340 g",
+      "brandName": "Western Family",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639378332.jpg",
+      "available": true
+    },
+    {
+      "productId": "00295919000009",
+      "name": "Save-On-Foods - Raw Prawns Peeled & Devined",
+      "size": "100 g",
+      "brandName": "Save-On-Foods",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00295919000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00249889000002",
+      "name": "Atlantic - Lobster Tail",
+      "size": "454 g",
+      "brandName": "Atlantic",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00249889000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00219453000004",
+      "name": "Save-On-Foods - Bulk Raw Pacific White Peeled 60-70",
+      "size": "1",
+      "brandName": "Save-On-Foods",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": null,
+      "available": true
+    },
+    {
+      "productId": "00273804000006",
+      "name": "Save-On-Foods - West Coast Seafood Salad",
+      "size": "100 g",
+      "brandName": "Save-On-Foods",
+      "category": "Shrimp & Shell Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00273804000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00220420000002",
+      "name": "Smoked Salmon - Whiskey Flavoured Salmon Nuggets Peppered",
+      "size": "200 g",
+      "brandName": "Smoked Salmon",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00220420000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00236223000002",
+      "name": "Save-On-Foods - Whiskey Flavoured Salmon Nuggets Plain",
+      "size": "200 g",
+      "brandName": "Save-On-Foods",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00236223000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00224280000004",
+      "name": "Salmon - Tequila Lime Peppered Nuggets, Smoked",
+      "size": "200 g",
+      "brandName": "Salmon",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00224280000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00279297000004",
+      "name": "Thai - Chili Smoked Pink Salmon Nuggets",
+      "size": "100 g",
+      "brandName": "Thai",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00279297000004.jpg",
+      "available": true
+    },
+    {
+      "productId": "00257020000002",
+      "name": "Save-On-Foods - Smoked Sockeye Salmon Nuggets",
+      "size": "189 g",
+      "brandName": "Save-On-Foods",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00257020000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684001218",
+      "name": "Salmon Village - Whisky Wild Pink Smoked Salmon Nuggets",
+      "size": "150 g",
+      "brandName": "Salmon Village",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684001218.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684001195",
+      "name": "Salmon Village - Wild Sockeye Smoked Salmon Nuggets, Peppercorn",
+      "size": "150 g",
+      "brandName": "Salmon Village",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684001195.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684001317",
+      "name": "Salmon Village - Smoked Wild Sockeye, Lemon Pepper Sumac",
+      "size": "125 g",
+      "brandName": "Salmon Village",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684001317.jpg",
+      "available": true
+    },
+    {
+      "productId": "00217314000002",
+      "name": "Salmon - Tequila Lime Nuggets, Smoked",
+      "size": "200 g",
+      "brandName": "Salmon",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00217314000002.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684001171",
+      "name": "Salmon Village - Wild Smoked Salmon Nuggets",
+      "size": "150 g",
+      "brandName": "Salmon Village",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684001171.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684001188",
+      "name": "Salmon Village - Wild Sockeye Smoked Salmon, Maple",
+      "size": "150 g",
+      "brandName": "Salmon Village",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684001188.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684001201",
+      "name": "Salmon Village - Wild Pink Smoked Salmon Nuggets, Tequila Lime",
+      "size": "150 g",
+      "brandName": "Salmon Village",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684001201.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684001294",
+      "name": "Salmon Village - Korean Sesame Smoked Pink Salmon Nuggets",
+      "size": "150 g",
+      "brandName": "Salmon Village",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684001294.jpg",
+      "available": true
+    },
+    {
+      "productId": "00222669000003",
+      "name": "Korean - Sesame Pink Salmon Smoked Nuggets",
+      "size": "100 g",
+      "brandName": "Korean",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00222669000003.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639203733",
+      "name": "Western Family - Signature Alder Wood Smoked Wild Sockeye Salmon Lox",
+      "size": "85 g",
+      "brandName": "Western Family",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639203733.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684001287",
+      "name": "Salmon Village - Sweet Thai Chilli Smoked Pink Salmon Nuggets",
+      "size": "150 g",
+      "brandName": "Salmon Village",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684001287.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684001300",
+      "name": "Salmon Village - Smoked Wild Sockeye Salmon, Everything Bagel",
+      "size": "125 g",
+      "brandName": "Salmon Village",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684001300.jpg",
+      "available": true
+    },
+    {
+      "productId": "00627987308228",
+      "name": "SAVE DA SEA - Plant-based Smoked Salmon with Dill & Capers",
+      "size": "100 g",
+      "brandName": "SAVE DA SEA",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00627987308228.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684001270",
+      "name": "Salmon Village - Teriyaki Ginger Smoked Pink Salmon Nuggets",
+      "size": "150 g",
+      "brandName": "Salmon Village",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684001270.jpg",
+      "available": true
+    },
+    {
+      "productId": "00061362883007",
+      "name": "Imitation Crab - Paramount",
+      "size": "907 g",
+      "brandName": "Imitation Crab",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00061362883007.jpg",
+      "available": true
+    },
+    {
+      "productId": "00297442000006",
+      "name": "Save-On-Foods - Teriyaki Ginger Pink Salmon Nuggets",
+      "size": "100 g",
+      "brandName": "Save-On-Foods",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00297442000006.jpg",
+      "available": true
+    },
+    {
+      "productId": "00211742000009",
+      "name": "BBQ - Pink Salmon Smoked Nuggests",
+      "size": "100 g",
+      "brandName": "BBQ",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00211742000009.jpg",
+      "available": true
+    },
+    {
+      "productId": "00062639204396",
+      "name": "Western Family - Smoked Wild Sockeye Salmon",
+      "size": "227 g",
+      "brandName": "Western Family",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00062639204396.jpg",
+      "available": true
+    },
+    {
+      "productId": "00828684001263",
+      "name": "Salmon Village - West Coast BBQ Smoked Pink Salmon Nuggets",
+      "size": "150 g",
+      "brandName": "Salmon Village",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00828684001263.jpg",
+      "available": true
+    },
+    {
+      "productId": "00627591001164",
+      "name": "BC Coasteal - Cedar Grilling Plank",
+      "size": "1",
+      "brandName": "BC Coasteal",
+      "category": "Smoked & Cured Fish",
+      "retailerRef": "",
+      "imageUrl": "https://images.cdn.saveonfoods.com/cell/00627591001164.jpg",
+      "available": true
+    }
+  ]
+}

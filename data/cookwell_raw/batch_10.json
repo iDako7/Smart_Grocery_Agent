@@ -1,0 +1,291 @@
+[
+  {
+    "slug": "healthier-white-cheddar-mac-and-cheese",
+    "source_url": "https://www.cookwell.com/recipe/healthier-white-cheddar-mac-and-cheese",
+    "title": "Healthier White Cheddar Mac & Cheese",
+    "cook_time": "30 mins",
+    "servings": "2 servings",
+    "cuisine": "American",
+    "tags": ["Quick", "Easy"],
+    "ingredients": [
+      {"name": "White Cheddar Powder", "amount": "30 g"},
+      {"name": "Skim milk", "amount": "30 g"},
+      {"name": "Low-fat sour cream", "amount": "30 g"},
+      {"name": "Dried pasta", "amount": "170 g"},
+      {"name": "Salt", "amount": "to taste"},
+      {"name": "Chicken, grilled", "amount": "150 g"},
+      {"name": "Frozen peas", "amount": "100 g"}
+    ],
+    "instructions": "1. Boil the pasta: In a saucepot or wide pan, barely submerge the dried pasta with water and add a sprinkle of salt. Boil until most of the water has been absorbed by the pasta, and the pasta is al dente, about 12-13 minutes. This will concentrate the starch from the pasta and help create a sauce without needing extra butter and cheese.\n2. Make the sauce: Turn off the heat. To create the sauce, add the cheddar powder, milk, and sour cream and stir until creamy.\n3. Add ingredients & serve: Eat the mac as is, or add peas & chicken until warmed through. Enjoy.",
+    "nutrition": {
+      "calories": 965,
+      "protein_g": 65,
+      "fat_g": 14,
+      "carbs_g": 160
+    }
+  },
+  {
+    "slug": "steak-mushroom-and-asparagus-bowl",
+    "source_url": "https://www.cookwell.com/recipe/steak-mushroom-and-asparagus-bowl",
+    "title": "Steak, Mushroom, and Asparagus Bowl",
+    "cook_time": "30 mins",
+    "servings": "2 servings",
+    "cuisine": "Asian-Fusion",
+    "tags": ["Easy", "Quick"],
+    "ingredients": [
+      {"name": "Flank, skirt, or flatiron steak, cubed", "amount": "350 g"},
+      {"name": "Neutral oil", "amount": "a spoonful"},
+      {"name": "Salt", "amount": "to taste"},
+      {"name": "Soy sauce", "amount": "15 g"},
+      {"name": "Hoisin", "amount": "15 g"},
+      {"name": "Chili garlic paste", "amount": "15 g"},
+      {"name": "Sesame seeds, toasted", "amount": "5 g"},
+      {"name": "Shiitake mushrooms, thinly sliced", "amount": "5"},
+      {"name": "Garlic, thinly sliced", "amount": "2 cloves"},
+      {"name": "Asparagus, chopped", "amount": "1/2 bunch"},
+      {"name": "Neutral oil", "amount": "a drizzle"},
+      {"name": "Salt", "amount": "a sprinkle"},
+      {"name": "White rice, leftover", "amount": "as needed"},
+      {"name": "Sesame seeds, toasted", "amount": "as needed"},
+      {"name": "Pickled ginger", "amount": "as needed"},
+      {"name": "Scallions, thinly sliced", "amount": "as needed"},
+      {"name": "Kewpie mayo", "amount": "as needed"}
+    ],
+    "instructions": "1. Combine all sauce ingredients (soy sauce, hoisin, chili garlic paste, sesame seeds) until homogenous.\n2. Heat wok over high heat, add oil and garlic, bloom 20 seconds. Add mushrooms and asparagus with salt, stir fry 2 minutes, set aside.\n3. Heat wok until smoking, add oil, sear steak cubes 2 minutes per side, add sauce and cook 1 minute.\n4. Assemble bowl with rice, vegetables, sesame seeds, steak, and desired toppings.",
+    "nutrition": {
+      "calories": 895,
+      "protein_g": 19,
+      "fat_g": 40,
+      "carbs_g": 49
+    }
+  },
+  {
+    "slug": "nola-bbq-shrimp",
+    "source_url": "https://www.cookwell.com/recipe/nola-bbq-shrimp",
+    "title": "NOLA BBQ Shrimp",
+    "cook_time": "30 mins",
+    "servings": "3 servings",
+    "cuisine": "Cajun-Creole",
+    "tags": ["Easy", "Quick"],
+    "ingredients": [
+      {"name": "Jumbo shrimp, shell on", "amount": "450 g"},
+      {"name": "Butter", "amount": "55 g"},
+      {"name": "Garlic, thinly sliced", "amount": "6 cloves"},
+      {"name": "Rosemary", "amount": "2 sprigs"},
+      {"name": "Cajun seasoning", "amount": "a spoonful"},
+      {"name": "Salt", "amount": "to taste"},
+      {"name": "Black pepper", "amount": "to taste"},
+      {"name": "Lager beer", "amount": "240 g"},
+      {"name": "Worcestershire sauce", "amount": "a spoonful"},
+      {"name": "Hot sauce", "amount": "a drizzle"}
+    ],
+    "instructions": "1. Sear the shrimp: Heat pan over high heat. Add butter, then shrimp. Saute until shells color. Add garlic, rosemary, cajun seasoning; cook until fragrant with fond developing.\n2. Deglaze & reduce: Add Worcestershire, hot sauce, beer; scrape pan. Simmer 2-3 minutes to reduce.\n3. Finish sauce: Turn off heat. Stir in butter until emulsified, transforming broth from soupy to velvety. Taste and adjust seasoning.\n4. Garnish & serve: Sprinkle parsley. Ladle shrimp with broth into bowl; serve with parsley and French bread.",
+    "nutrition": {
+      "calories": 965,
+      "protein_g": 103,
+      "fat_g": 47,
+      "carbs_g": 19
+    }
+  },
+  {
+    "slug": "classic-french-omelette",
+    "source_url": "https://www.cookwell.com/recipe/classic-french-omelette",
+    "title": "Classic French Omelette",
+    "cook_time": "15 mins",
+    "servings": "1 serving",
+    "cuisine": "French",
+    "tags": ["Quick", "Level Up"],
+    "ingredients": [
+      {"name": "Eggs", "amount": "3"},
+      {"name": "Butter", "amount": "14 g"},
+      {"name": "Kosher salt", "amount": "1 g"},
+      {"name": "Chives", "amount": "for garnish"}
+    ],
+    "instructions": "1. Beat the eggs: Crack three eggs into a bowl, add a pinch of salt, and vigorously whisk with a fork. Pre-salting the eggs does not make them tough; it may help retain moisture through altered protein coagulation.\n2. Scramble the eggs: Set a nonstick pan over medium high heat. Once heated, add butter. Once melted and lightly bubbling, pour in eggs. Immediately begin whisking with a rubber spatula for 30-40 seconds until curds begin to set. Push curds into a rough disk shape and let bottom cook 5-10 seconds to set.\n3. Fold the omelette: Shake pan to loosen bottom. Tilt pan about 30 degrees and roll the nearest side halfway up the omelette. Continue rolling slowly and bump the back handle to loosen so it jumps to the pan edge.\n4. Finish the omelette & enjoy: Grab the pan handle with your hand, palm facing up. Hold a plate steady and tip the omelette onto it seam side down. Tuck edges underneath if misshapen. Optionally rub a little butter on the outside and sprinkle with chives.",
+    "nutrition": {
+      "calories": 315,
+      "protein_g": 19,
+      "fat_g": 26,
+      "carbs_g": 1
+    }
+  },
+  {
+    "slug": "chicken-with-rosemary-garlic-pan-sauce",
+    "source_url": "https://www.cookwell.com/recipe/chicken-with-rosemary-garlic-pan-sauce",
+    "title": "Chicken with Rosemary Garlic Pan Sauce",
+    "cook_time": "30 mins",
+    "servings": "2 servings",
+    "cuisine": "American",
+    "tags": ["Easy", "Quick"],
+    "ingredients": [
+      {"name": "Chicken breasts", "amount": "1"},
+      {"name": "Salt", "amount": "to taste"},
+      {"name": "Chicken stock", "amount": "200 g"},
+      {"name": "Rosemary, minced", "amount": "5 g"},
+      {"name": "Garlic, minced", "amount": "1 clove"},
+      {"name": "Cooking oil", "amount": "a drizzle"},
+      {"name": "Cornstarch slurry", "amount": "as needed"},
+      {"name": "Black pepper", "amount": "to taste"},
+      {"name": "Lemon juice", "amount": "to taste"}
+    ],
+    "instructions": "1. Thin chicken breast by slicing or pounding flat. Add salt to both sides. Optionally brine for 1+ hours.\n2. Heat pan over medium-high with oil. Sear chicken 1-2 minutes per side until browned. Cook to 155F/68C internal temperature, then rest.\n3. Add garlic and rosemary to bloom 30 seconds. Pour stock and deglaze pan. Reduce liquid by half (2-4 min). Add cornstarch slurry if needed. Season with pepper, lemon juice, and salt.\n4. Slice chicken on bias, spoon sauce over top. Serve with salad or roasted vegetables.",
+    "nutrition": {
+      "calories": 405,
+      "protein_g": 57,
+      "fat_g": 14,
+      "carbs_g": 11
+    }
+  },
+  {
+    "slug": "latkes",
+    "source_url": "https://www.cookwell.com/recipe/latkes",
+    "title": "Latkes",
+    "cook_time": "45 mins",
+    "servings": "4 servings",
+    "cuisine": "Jewish",
+    "tags": ["Easy"],
+    "ingredients": [
+      {"name": "Russet potatoes", "amount": "450 g"},
+      {"name": "Onions, grated", "amount": "1/2"},
+      {"name": "Eggs, beaten", "amount": "1"},
+      {"name": "Salt", "amount": "a sprinkle"},
+      {"name": "Cooking oil", "amount": "as needed"},
+      {"name": "Sour cream", "amount": "as desired"},
+      {"name": "Applesauce", "amount": "as desired"}
+    ],
+    "instructions": "1. Clean but don't peel your potatoes. Using a box grater or food processor, shred the potatoes. Drain by squeezing them into a colander, dish towel, or cheesecloth. Wring out a substantial amount of water.\n2. Add the dry potato shreds to a bowl, and gently mix together with the onions, egg, and a sprinkle of salt. It should loosely bind together.\n3. Heat a layer of oil in a pan. Add large spoonfuls of the potato mixture -- enough to flatten into a rough 3\" circle -- and fry until the bottom is golden brown and crispy. Flip each and brown the other side. Repeat with remaining mixture. Drain latkes on a wire rack or paper towel and immediately season with another sprinkle of salt. Serve with applesauce and/or sour cream for dipping.",
+    "nutrition": {
+      "calories": 549,
+      "protein_g": 16,
+      "fat_g": 19,
+      "carbs_g": 85
+    }
+  },
+  {
+    "slug": "mangu-and-los-tres-golpes",
+    "source_url": "https://www.cookwell.com/recipe/mangu-and-los-tres-golpes",
+    "title": "Mangu & 'Los Tres Golpes'",
+    "cook_time": "45 mins",
+    "servings": "1 serving",
+    "cuisine": "Dominican",
+    "tags": ["Level Up", "Curious"],
+    "ingredients": [
+      {"name": "Green plantains", "amount": "1"},
+      {"name": "Water", "amount": "as needed"},
+      {"name": "Butter", "amount": "a spoonful"},
+      {"name": "Salt", "amount": "to taste"},
+      {"name": "Queso de freir, sliced", "amount": "2-3 slices"},
+      {"name": "Salami, thinly sliced", "amount": "2-3 slices"},
+      {"name": "Eggs", "amount": "1-2"},
+      {"name": "Cooking oil", "amount": "a drizzle"},
+      {"name": "Pickled onions", "amount": "for garnish"}
+    ],
+    "instructions": "1. Boil the mangu: Peel plantains and add to pot with water. Bring to simmer and boil until completely softened.\n2. Mash the mangu: Transfer to bowl and mash with fork. Add butter and water, continue mashing until stiff texture. Taste and adjust salt.\n3. Fry los tres golpes: Fry cheese until browned on each side. Fry salami until lightly browned. Fry eggs to preference.\n4. Garnish & serve: Add mangu scoop to plate with fried cheese, salami, and eggs. Top with pickled onions.",
+    "nutrition": {
+      "calories": 894,
+      "protein_g": 38,
+      "fat_g": 64,
+      "carbs_g": 40
+    }
+  },
+  {
+    "slug": "homemade-chorizo-choripan-sandwich",
+    "source_url": "https://www.cookwell.com/recipe/homemade-chorizo-choripan-sandwich",
+    "title": "Homemade Chorizo Choripan Sandwich",
+    "cook_time": "30 mins",
+    "servings": "4-6 sandwiches",
+    "cuisine": "Argentinian",
+    "tags": ["Level Up"],
+    "ingredients": [
+      {"name": "Ground pork", "amount": "450 g"},
+      {"name": "Salt", "amount": "6 g"},
+      {"name": "Paprika", "amount": "a spoonful"},
+      {"name": "Dried oregano", "amount": "a spoonful"},
+      {"name": "Black pepper", "amount": "a spoonful"},
+      {"name": "Nutmeg", "amount": "a sprinkle"},
+      {"name": "Garlic, minced", "amount": "5-8 cloves"},
+      {"name": "Parsley, minced", "amount": "1 bunch"},
+      {"name": "Olive oil", "amount": "75 g"},
+      {"name": "Vinegar", "amount": "25 g"},
+      {"name": "Garlic, minced", "amount": "2 cloves"},
+      {"name": "Red pepper flakes", "amount": "a sprinkle"},
+      {"name": "Salt", "amount": "to taste"},
+      {"name": "Hoagie rolls", "amount": "4-6"}
+    ],
+    "instructions": "1. Mix the chorizo: In a large bowl, combine all chorizo components (ground pork, salt, paprika, oregano, black pepper, nutmeg, garlic) until well blended. Set aside. Optional: flatten mixture into freezer bags with perforation lines for portioning. Can cook directly from frozen. Yields 4-6 sandwiches.\n2. Make the chimichurri: Combine parsley and garlic in bowl with oil and vinegar until barely submerged. Adjust consistency as desired. Add red pepper flakes and salt; taste and season accordingly.\n3. Sear the chorizo: Heat pan/griddle on high. Shape chorizo to bread size and sear until well browned and lightly charred. Flip and continue cooking until done. Repeat as needed.\n4. Assemble the sandwich: Spread chimichurri inside opened bread roll. Add cooked patty, top with additional condiment, close. Optionally toast bread or wrap in foil.",
+    "nutrition": {
+      "calories": 562,
+      "protein_g": 17,
+      "fat_g": 35,
+      "carbs_g": 43
+    }
+  },
+  {
+    "slug": "tuna-poke-bowl",
+    "source_url": "https://www.cookwell.com/recipe/tuna-poke-bowl",
+    "title": "Tuna Poke Bowl",
+    "cook_time": "15 mins",
+    "servings": "2 servings",
+    "cuisine": "Hawaiian-Japanese",
+    "tags": ["High Protein", "Quick", "Level Up"],
+    "ingredients": [
+      {"name": "Tuna, sushi grade", "amount": "300 g"},
+      {"name": "Scallions, sliced", "amount": "2"},
+      {"name": "Wakame seaweed, chopped", "amount": "2 spoonfuls"},
+      {"name": "Red onions, sliced", "amount": "1/8"},
+      {"name": "Sesame seeds", "amount": "a sprinkle"},
+      {"name": "Soy sauce", "amount": "15 g"},
+      {"name": "Sesame oil", "amount": "10 g"},
+      {"name": "Rice vinegar", "amount": "5 g"},
+      {"name": "Sriracha", "amount": "5 g"},
+      {"name": "Water", "amount": "100 g"},
+      {"name": "Rice vinegar", "amount": "100 g"},
+      {"name": "Carrots, julienned", "amount": "1"},
+      {"name": "Serrano peppers, thinly sliced", "amount": "1"},
+      {"name": "Salt", "amount": "a sprinkle"},
+      {"name": "MSG", "amount": "a sprinkle"}
+    ],
+    "instructions": "1. Pickle the carrots: Add julienned carrots and sliced serrano peppers to a jar and pour over a mixture of boiling water, rice wine vinegar, and salt. Ready once cooled; gets more pickled over time. Store in fridge long-term.\n2. Cut the tuna & make the seasoning: Pat tuna dry, cut into strips roughly 1/2 inch wide, then cube. Set aside. Mix all seasoning sauce ingredients (soy sauce, sesame oil, rice vinegar, sriracha) until homogenous. Rehydrate wakame in boiling water, then chop.\n3. Marinate the tuna: Combine sauce with all seasoned tuna ingredients, coating everything. Marinate a few minutes.\n4. Assemble & serve: Optional: add warmed leftover rice to bowl. Add furikake seasoning sprinkle, then marinated tuna mixture. Top with pickled carrots and wakame seaweed.",
+    "nutrition": {
+      "calories": 523,
+      "protein_g": 78,
+      "fat_g": 12,
+      "carbs_g": 23
+    }
+  },
+  {
+    "slug": "lower-calorie-shrimp-fried-rice",
+    "source_url": "https://www.cookwell.com/recipe/lower-calorie-shrimp-fried-rice",
+    "title": "Lower Calorie Shrimp Fried Rice",
+    "cook_time": "1 hr",
+    "servings": "2-3 servings",
+    "cuisine": "Chinese",
+    "tags": ["Low Fat", "Stir Fry"],
+    "ingredients": [
+      {"name": "Rice", "amount": "150 g"},
+      {"name": "Water", "amount": "280 g"},
+      {"name": "Cooking oil", "amount": "20 g"},
+      {"name": "Eggs", "amount": "2"},
+      {"name": "Shrimp", "amount": "170 g"},
+      {"name": "Salt", "amount": "3 g"},
+      {"name": "Cornstarch", "amount": "2 g"},
+      {"name": "Baking spray", "amount": "for stir frying"},
+      {"name": "Garlic", "amount": "2 cloves"},
+      {"name": "Onions", "amount": "60 g"},
+      {"name": "Carrots", "amount": "80 g"},
+      {"name": "Mushrooms", "amount": "80 g"},
+      {"name": "Peas", "amount": "80 g"},
+      {"name": "Scallions", "amount": "1 stalk"},
+      {"name": "Soy sauce", "amount": "5 g"},
+      {"name": "Sugar", "amount": "4 g"},
+      {"name": "MSG", "amount": "3 g"}
+    ],
+    "instructions": "1. Steam the rice: Rinse rice, add to saucepan with water, boil then steam off heat 15-20 minutes until absorbed. Spread on plate to cool.\n2. Marinate the shrimp: Chop shrimp, mix with salt and cornstarch, marinate 15 minutes.\n3. Stir fry the shrimp: Heat wok, spray with cooking spray, add shrimp and cook 2-3 minutes until done, set aside.\n4. Stir fry the vegetables: Spray pan, bloom garlic 10-15 seconds, add onions and carrots for 60-90 seconds, add mushrooms 30 seconds, set aside.\n5. Fry the egg and rice: Add oil swirl to wok, cook beaten egg until curds set, add rice and stir 2-3 minutes until dry, season with sugar, soy sauce, and MSG.\n6. Combine and finish: Return shrimp and vegetables, add peas, stir 15-20 seconds, turn off heat, add scallions, mix and taste to adjust seasonings.",
+    "nutrition": {
+      "calories": 1068,
+      "protein_g": 54,
+      "fat_g": 16,
+      "carbs_g": 174
+    }
+  }
+]

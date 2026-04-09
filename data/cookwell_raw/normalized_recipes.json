@@ -1,0 +1,5059 @@
+[
+  {
+    "id": "r021",
+    "name": "Higher Protein Chicken Enchiladas Verdes",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/higher-protein-chicken-enchiladas",
+    "cuisine": "Mexican",
+    "cooking_method": "oven",
+    "time_minutes": 60,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "rich",
+      "savory"
+    ],
+    "serves": 8,
+    "ingredients": [
+      {
+        "name": "green enchilada sauce",
+        "amount": "~800 g (28-30 oz)",
+        "pcsv": []
+      },
+      {
+        "name": "poblano peppers",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "anaheim peppers",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "red onions",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "a handful",
+        "pcsv": []
+      },
+      {
+        "name": "cumin seeds",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "a drizzle",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "chicken breasts",
+        "amount": "700 g (1.5 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "granulated garlic",
+        "amount": "8 g",
+        "pcsv": []
+      },
+      {
+        "name": "flour tortillas",
+        "amount": "6-8",
+        "pcsv": []
+      },
+      {
+        "name": "monterrey jack cheese",
+        "amount": "~240 g (30 g per enchilada)",
+        "pcsv": []
+      },
+      {
+        "name": "low-fat sour cream",
+        "amount": "for garnish",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "for garnish",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Coat anaheim & poblano peppers in oil, sprinkle salt. Broil under high heat until skin blisters & chars. Flip peppers, broil other side until blistered & charred. Remove from oven, add to sealed container 5-10 minutes to trap steam & loosen skin. Once softened, peel charred skin, deseed & destem.\n2. Add green enchilada sauce, roasted peppers, cilantro, onion & cumin to blender or food processor. Blend until smooth. Taste & adjust salt as needed.\n3. Thinly slice chicken breast against grain into small pieces. Combine with salt, cumin, dried garlic & oil. Mix until evenly coated. Preheat griddle or pan over high heat until smoking. Add seasoned chicken in thin, even layer & sear undisturbed on one side until well browned. Flip chicken to finish cooking through. Remove from heat & set aside.\n4. Add ~80 g cooked chicken & ~30 g cheese in line down center of each tortilla. Roll each one, line up in baking pan. Cover with enchilada sauce (use as much or as little as desired) & optional extra sprinkle of cheese over top. At this point, cook right away or cover & store in fridge & bake later.\n5. Preheat oven to 375°F/190°C. Bake uncovered 10-20 minutes until warmed through & cheese melted & lightly browned. Serve warm & optionally garnish with sour cream & onions.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r022",
+    "name": "Bulgogi Beef Tacos",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/bulgogi-beef-tacos",
+    "cuisine": "Korean-Mexican",
+    "cooking_method": "pan-sear",
+    "time_minutes": 60,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "savory",
+      "spicy"
+    ],
+    "serves": 8,
+    "ingredients": [
+      {
+        "name": "flat iron steak",
+        "amount": "~700 g (~1.5 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "3 g",
+        "pcsv": []
+      },
+      {
+        "name": "soy sauce",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "honey",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "sesame oil",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "asian pear",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "shallots",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "scallions",
+        "amount": "4",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "a splash",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "for searing",
+        "pcsv": []
+      },
+      {
+        "name": "green cabbage",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "carrots",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "1\" knob",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "a handful",
+        "pcsv": []
+      },
+      {
+        "name": "rice vinegar",
+        "amount": "50 g",
+        "pcsv": []
+      },
+      {
+        "name": "sugar",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "msg",
+        "amount": "2 g",
+        "pcsv": []
+      },
+      {
+        "name": "kewpie mayo",
+        "amount": "60 g (1 part)",
+        "pcsv": []
+      },
+      {
+        "name": "gochujang",
+        "amount": "60 g (1 part)",
+        "pcsv": []
+      },
+      {
+        "name": "corn tortillas",
+        "amount": "6-10",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Thinly slice steak across the grain. Combine beef with salt, soy sauce, sesame oil, honey, grated pear, grated shallot, sliced scallions, and water. Mix thoroughly and refrigerate 30-60 minutes.\n2. Thinly slice cabbage, julienne carrots, mince ginger, and chop cilantro. Combine with salt, MSG, sugar, and rice vinegar. Mix and refrigerate until ready to use.\n3. Combine mayo, gochujang, and rice vinegar in a bowl. Mix until smooth and refrigerate.\n4. Heat stainless steel pan over high heat. Add oil and marinated beef, spread out and sear 5-6 minutes, stirring occasionally, until liquid evaporates and beef browns. Avoid overcrowding; cook in batches if needed.\n5. Warm tortillas. Add beef to each tortilla, drizzle with gochujang mayo, and top with pickled vegetables.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r023",
+    "name": "Carne Guisada",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/carne-guisada-ethan",
+    "cuisine": "Mexican",
+    "cooking_method": "braise",
+    "time_minutes": 270,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "savory",
+      "smoky"
+    ],
+    "serves": 8,
+    "ingredients": [
+      {
+        "name": "chuck roast",
+        "amount": "900 g / 2 lbs",
+        "pcsv": []
+      },
+      {
+        "name": "beef cheeks",
+        "amount": "900 g / 2 lbs",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "~15 g",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "a drizzle",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "green bell peppers",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "poblano peppers",
+        "amount": "1-2",
+        "pcsv": []
+      },
+      {
+        "name": "cumin",
+        "amount": "5 g / a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "chili powder",
+        "amount": "5 g / a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "smoked paprika",
+        "amount": "5 g / a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "fresh oregano",
+        "amount": "2 g / 1/2 spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "beef broth or water",
+        "amount": "Enough to submerge meat",
+        "pcsv": []
+      },
+      {
+        "name": "diced tomatoes",
+        "amount": "1 small can",
+        "pcsv": []
+      },
+      {
+        "name": "cornstarch slurry",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "mexican rice",
+        "amount": "for serving",
+        "pcsv": []
+      },
+      {
+        "name": "refried black beans",
+        "amount": "for serving",
+        "pcsv": []
+      },
+      {
+        "name": "flour tortillas",
+        "amount": "for serving",
+        "pcsv": []
+      },
+      {
+        "name": "queso fresco",
+        "amount": "for serving",
+        "pcsv": []
+      },
+      {
+        "name": "avocados",
+        "amount": "for serving",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Sweat the aromatic base: Add oil to coat pot bottom. Saute onion and peppers until translucent and softened. Add spices to bloom until fragrant. Remove aromatic base and set aside. Preheat oven to 300°F/150°C.\n2. Brown the beef: Increase heat to medium-high, add cubed meat, sprinkle with salt. Sear meat cubes until browned, in batches if needed for deeper flavor.\n3. Add braising liquid: Return aromatic base to pot. Add diced tomatoes and enough beef stock to barely submerge meat. Add bay leaf.\n4. Braise until tender: Cover and slide into preheated 300°F/150°C oven. After one hour, remove lid to encourage browning and evaporation. Braise 2-3 more hours until meat is completely tender and liquid has reduced.\n5. Thicken, finish, and serve: Return to stovetop. If liquid hasn't thickened into gravy, bring to simmer and add cornstarch slurry until desired texture. Taste and adjust seasoning. Serve with rice, beans, tortillas, queso fresco, and avocado.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r024",
+    "name": "Birria Braised Meat Framework",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/birria-braised-meat-framework",
+    "cuisine": "Mexican",
+    "cooking_method": "braise",
+    "time_minutes": 300,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "savory",
+      "smoky"
+    ],
+    "serves": 8,
+    "ingredients": [
+      {
+        "name": "lamb shoulder",
+        "amount": "3-5 lb",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "ancho chiles",
+        "amount": "3",
+        "pcsv": []
+      },
+      {
+        "name": "guajillo peppers",
+        "amount": "3",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "3",
+        "pcsv": []
+      },
+      {
+        "name": "star anise",
+        "amount": "2-3",
+        "pcsv": []
+      },
+      {
+        "name": "cinnamon sticks",
+        "amount": "1-2",
+        "pcsv": []
+      },
+      {
+        "name": "peppercorns",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "5",
+        "pcsv": []
+      },
+      {
+        "name": "tomatoes",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "yellow onion",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "broth",
+        "amount": "1000 g",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Cut meat into chunks and generously season with salt. In your braising vessel, add oil and sear the meat in batches until all sides develop color. Remove and set aside.\n2. Deseed dried chiles and peel onions/garlic. In batches, sear tomatoes & alliums until charred in rendered meat fat. Add chiles and dried spices, toast 30 seconds until fragrant. Add all reserved ingredients back to pot.\n3. Add enough broth to cover meat. Bring to simmer, partially cover, and braise on stove for 1-2 hours. Alternatively bake at 300°F/150°C if preferred.\n4. Remove whole spices from broth and discard. Fish out tomatoes, alliums, and chiles; blend with braising liquid until smooth. Pour back into broth. Continue braising meat 1-2 more hours until tender.\n5. After broth cools, remove and shred meat, picking out bones and connective tissue. Season with salt and refrigerate. Strain remaining liquid, season with salt, and reserve. Make tacos, quesadillas, tortas, or rice bowls. Use consome broth as a dip.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r025",
+    "name": "Tortilla Soup",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/tortilla-soup",
+    "cuisine": "Mexican",
+    "cooking_method": "fry",
+    "time_minutes": 60,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "rich",
+      "savory"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "chicken thighs",
+        "amount": "~454 g",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "ancho chiles",
+        "amount": "3",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "3 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "cumin seeds",
+        "amount": "3 g",
+        "pcsv": []
+      },
+      {
+        "name": "poblano peppers",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "chicken broth",
+        "amount": "~1800 g",
+        "pcsv": []
+      },
+      {
+        "name": "roma tomatoes",
+        "amount": "1-2",
+        "pcsv": []
+      },
+      {
+        "name": "corn tortillas",
+        "amount": "5-8",
+        "pcsv": []
+      },
+      {
+        "name": "avocados",
+        "amount": "for topping",
+        "pcsv": []
+      },
+      {
+        "name": "cheese",
+        "amount": "for topping",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "for topping",
+        "pcsv": []
+      },
+      {
+        "name": "limes",
+        "amount": "for topping",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Heat a thin layer of oil over high heat. Sear chicken thighs until browned on at least one side, but not cooked through. Remove from the pot. Add in onion & poblano, sauteing for a few minutes, then follow with garlic, cumin, and prepared ancho chiles. Saute until fragrant.\n2. Add the chicken thighs back in, the whole tomatoes, and the chicken broth, stirring to release any fond that glazed the bottom of the pan. Simmer for 20 minutes or until chicken is cooked through and tender.\n3. Bring 1-2 inches of frying oil to 375°F/190°C. In batches, add in tortilla strips to fry. Lightly agitate (to prevent sticking/burning) until most of the spattering has subsided (indicating the moisture has been fried off and the strips will be crispy). Using a spider or slotted spoon, remove strips and drain over a wire rack or paper towel, seasoning immediately with salt.\n4. Scoop out the tomatoes and now-rehydrated ancho chilies and add to a blender with a bit of the broth. Blend until smooth, and add back into the soup. Remove the chicken thighs and shred them with a couple of forks, and add them back into the soup. If using, add in black beans and or corn. Taste the broth and adjust the seasoning with salt, lime, or bouillon. Serve with the fried tortilla strips and other toppings of choice.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r026",
+    "name": "Chicken Chilaquiles Verdes",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/chicken-chilaquiles-verdes",
+    "cuisine": "Mexican",
+    "cooking_method": "braise",
+    "time_minutes": 20,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "herby",
+      "savory",
+      "spicy"
+    ],
+    "serves": 2,
+    "ingredients": [
+      {
+        "name": "salsa verde",
+        "amount": "~200 g",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "a handful",
+        "pcsv": []
+      },
+      {
+        "name": "chicken bouillon",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "cooked chicken, shredded",
+        "amount": "~100 g",
+        "pcsv": []
+      },
+      {
+        "name": "tortilla chips",
+        "amount": "~45 g",
+        "pcsv": []
+      },
+      {
+        "name": "greek yogurt, plain",
+        "amount": "~15 g",
+        "pcsv": []
+      },
+      {
+        "name": "red onions",
+        "amount": "to taste",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. In a blender or food processor, pulse together the salsa and cilantro with just enough water to thin it out into a smooth, pourable sauce. Blend in chicken bouillon until the sauce tastes seasoned with savory umami.\n2. Add the blended sauce to a saucepan and bring to a simmer over low heat. Allow it to lightly reduce for a few minutes, stirring occasionally. Meanwhile, warm up and shred your cooked chicken into small pieces. Gather or chop any remaining toppings.\n3. Turn off the heat on the saucepan. Add a serving of chips to a plate, then ladle over however much sauce you want. Top with shredded chicken, then garnish with the onions, cilantro, and yogurt to taste.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r027",
+    "name": "Green Pozole",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/green-pozole",
+    "cuisine": "Mexican",
+    "cooking_method": "braise",
+    "time_minutes": 150,
+    "effort_level": "long",
+    "flavor_tags": [
+      "herby",
+      "rich",
+      "savory",
+      "spicy"
+    ],
+    "serves": 6,
+    "ingredients": [
+      {
+        "name": "tomatillos",
+        "amount": "8-10",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "3-5 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "jalapenos",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "onions, quartered",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "a handful",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "pork shoulder",
+        "amount": "900 g / 2 lbs",
+        "pcsv": []
+      },
+      {
+        "name": "hominy, cooked",
+        "amount": "400 g / 28 oz can",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "~2000 g / 2 L",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "fresh oregano",
+        "amount": "2 spoonfuls",
+        "pcsv": []
+      },
+      {
+        "name": "cabbage",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "radishes",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "avocados",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "cotija cheese",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "lime juice",
+        "amount": "to taste",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Add a pot or pan over high heat. Add a drizzle of oil. Add the green base ingredients and saute on high heat until vegetables are softened and are starting to take on some color.\n2. Meanwhile, add the hominy, meat, and liquid broth ingredients to another pot. Bring to a simmer.\n3. Add the softened green base ingredients to a blender. Add a ladle or two of the liquid broth, and blend until completely smooth. Pass through a strainer and add to the simmering broth. Taste and adjust seasoning with salt & pepper. Pro Tip - For a thicker broth, you can blend pumpkin seeds or some of the hominy into the base.\n4. Simmer until the pork is tender and falling apart. Add more liquid to keep at a soupy consistency, if needed. Discard bay leaves, and ladle into bowls and garnish with desired toppings.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r028",
+    "name": "Make Ahead Carnitas",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/make-ahead-carnitas",
+    "cuisine": "Mexican",
+    "cooking_method": "braise",
+    "time_minutes": 105,
+    "effort_level": "long",
+    "flavor_tags": [
+      "savory",
+      "spicy"
+    ],
+    "serves": 1500,
+    "ingredients": [
+      {
+        "name": "pork shoulder, boneless",
+        "amount": "1500 g / 2-3 lbs",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "15 g / 1% by weight",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "as needed",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Cut the meat into small cubes (roughly 1 inch or 3 cm wide). Season evenly with salt. For precision, weigh pork chunks and add 1% salt by weight (e.g., 1500 g pork = 15 g salt). Add salted meat to braising pot.\n2. Fill pot with water to just barely cover pork pieces. Set on medium-high heat and bring to boil, then lower heat to medium-low for simmering.\n3. Let pork simmer uncovered, stirring occasionally, until liquid evaporates (usually at least 1 hour). Once water is gone, check texture: meat should pull apart easily with a fork. If still tough, add more water and continue simmering until tender.\n4. For immediate serving: Continue cooking pork chunks in rendered fat until lightly browned and crisp on all sides. Remove and shred. Serve with tacos and salsa. For later: Remove pork from pot, reserve rendered fat, and shred warm chunks with hands or forks. Alternatively, bash chunks with mortar and pestle. Store in fridge; sear with reserved fat when ready to serve.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r029",
+    "name": "Enchiladas Rojas",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/enchiladas-rojas",
+    "cuisine": "Mexican",
+    "cooking_method": "fry",
+    "time_minutes": 60,
+    "effort_level": "long",
+    "flavor_tags": [
+      "herby",
+      "rich",
+      "savory",
+      "spicy"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "ancho peppers",
+        "amount": "3-4",
+        "pcsv": []
+      },
+      {
+        "name": "chipotles in adobo",
+        "amount": "3-4",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2-3 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "chicken breasts",
+        "amount": "2 (~1 lb / 450 g)",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "epazote leaves",
+        "amount": "a handful",
+        "pcsv": []
+      },
+      {
+        "name": "corn tortillas",
+        "amount": "6-10",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "cotija cheese",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "crema",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "pickled onions",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "radishes",
+        "amount": "thinly sliced",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Place a pot of water on medium heat. Add a large pinch of salt, 1/4 of the onion, the epazote leaves, and the chicken breast. Let it simmer for 20-25 minutes until the chicken is cooked through. After cooking, allow the chicken to rest for 10 minutes. Then shred it and set it aside.\n2. Remove the seeds and stems from the dried chiles. Optionally, you can toast the chiles on a cast iron pan. Add the chiles to a small pot of water and simmer for 10 minutes or until they become soft. Afterward, set them aside without draining the water. In a blender, combine the hydrated chiles, garlic, another 1/4 piece of onion, and some of the chile water. Blend these ingredients until you achieve a smooth consistency. Add more water as necessary to ensure the sauce is fairly thin.\n3. In a pan over medium heat, add enough oil to cover the base. Add the sauce and reduce the heat to low. Saute the sauce for 10 minutes. In a separate pan, heat about an inch of oil. Lightly fry the tortillas on both sides until they just start to firm up.\n4. Coat the fried tortillas in hot sauce, fill with chicken, and place them on a platter. When serving, top the enchiladas with extra sauce and garnish with crema, cotija cheese, pickled onion, sliced radish, or any other toppings of your choice.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r030",
+    "name": "Panko Fish Tacos",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/panko-fish-tacos",
+    "cuisine": "Mexican",
+    "cooking_method": "fry",
+    "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "herby",
+      "savory",
+      "spicy",
+      "tangy"
+    ],
+    "serves": 8,
+    "ingredients": [
+      {
+        "name": "white fish of choice",
+        "amount": "454 g",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "flour",
+        "amount": "80 g",
+        "pcsv": []
+      },
+      {
+        "name": "cornstarch",
+        "amount": "40 g",
+        "pcsv": []
+      },
+      {
+        "name": "eggs, beaten",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "panko bread crumbs",
+        "amount": "100 g",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "lime zest",
+        "amount": "1 lime",
+        "pcsv": []
+      },
+      {
+        "name": "corn tortillas",
+        "amount": "6-8",
+        "pcsv": []
+      },
+      {
+        "name": "pickled onions",
+        "amount": "as desired",
+        "pcsv": []
+      },
+      {
+        "name": "hot sauce",
+        "amount": "as desired",
+        "pcsv": []
+      },
+      {
+        "name": "kewpie mayo",
+        "amount": "as desired",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "as desired",
+        "pcsv": []
+      },
+      {
+        "name": "limes",
+        "amount": "as desired",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Remove any bones from fish. Slice into large sticks matching tortilla size. Sprinkle salt evenly. Optionally dry brine in fridge for 1 hour or overnight.\n2. Place wok or dutch oven over medium heat and add oil about 2 inches high. Prepare three trays: one with cornstarch-flour mixture, one with beaten egg, one with panko bread crumbs. Coat fish in flour mixture, dip in egg, roll in panko bread crumbs and press to adhere.\n3. Verify oil temperature at 350°F/176°C. Slowly drop fish pieces into oil to brown. Don't overcrowd; fry in batches if needed. Fry 4-6 minutes, slightly agitating throughout.\n4. Transfer to wire rack lined with paper towels. Dab excess oil. Add sprinkle of salt, lime zest and juice. Serve on warm corn tortillas with hot sauce, cilantro, pickled onions, mayo, crema, slaw, or other preferred toppings.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r031",
+    "name": "Huevos Rancheros",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/huevos-rancheros",
+    "cuisine": "Mexican",
+    "cooking_method": "fry",
+    "time_minutes": 50,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "rich",
+      "savory"
+    ],
+    "serves": 6,
+    "ingredients": [
+      {
+        "name": "corn tortillas",
+        "amount": "4-6",
+        "pcsv": []
+      },
+      {
+        "name": "eggs",
+        "amount": "4-6",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "cotija cheese",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "pickled onions",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "plum tomatoes",
+        "amount": "~4 (350g)",
+        "pcsv": []
+      },
+      {
+        "name": "serrano peppers",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "3 cloves total",
+        "pcsv": []
+      },
+      {
+        "name": "white onions",
+        "amount": "1/8",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "lime juice",
+        "amount": "a splash",
+        "pcsv": []
+      },
+      {
+        "name": "pinto beans",
+        "amount": "1 28 oz can (800g)",
+        "pcsv": []
+      },
+      {
+        "name": "cumin seeds",
+        "amount": "a spoonful",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Turn oven to broil. Halve tomatoes and place cut-side down on baking sheet with serrano peppers and garlic clove. Broil until browning and charred. Transfer to blender with chiles and garlic; pulse until smooth but chunky. 2. Heat oil over medium-low heat. Add onion and sauté until translucent. Add blended mixture and salt. Cook stirring 5 minutes until reduced. Taste and adjust salt and lime juice. Store in jar if needed. 3. Drain pinto beans. Heat oil over medium, add cumin seeds and garlic cloves to bloom. Add beans and salt; simmer 2 minutes. Partially mash with fork to desired consistency. 4. Heat oil in pan over medium-high. Fry corn tortillas until crisp. Drain on paper towel. 5. Fry eggs sunny-side up in same pan and oil. 6. Reheat beans and salsa. Layer each tostada with beans, fried egg, salsa over whites, cheese, and cilantro. Serve with extra beans.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r032",
+    "name": "Colombian Style Shredded Chicken Arepa",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/colombian-style-shredded-chicken-arepa",
+    "cuisine": "Colombian",
+    "cooking_method": "pan-sear",
+    "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "comfort",
+      "herby",
+      "rich",
+      "savory"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "chicken breasts",
+        "amount": "2 (1 lb / 450 g)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "corn",
+        "amount": "1-2 cobs",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "1-2 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "a handful",
+        "pcsv": []
+      },
+      {
+        "name": "mayonnaise",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "lime juice",
+        "amount": "a squeeze",
+        "pcsv": []
+      },
+      {
+        "name": "hot sauce",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "arepa choclo",
+        "amount": "3-4",
+        "pcsv": []
+      },
+      {
+        "name": "quesito",
+        "amount": "to taste",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Butterfly or thin out the chicken breast into an even width and sprinkle salt on all sides. Preheat a pan over medium-high heat, add oil, and sear the chicken until the bottom releases and develops browning, then flip and continue searing until internal temperature reaches 155°F/68°C. Set aside to rest. 2. Cut kernels from corn cob and mix with minced cilantro, garlic, and mayo. Add lime juice, hot sauce, and salt to taste. Set aside. 3. Shred the cooked chicken with a fork to desired consistency. Toast the arepa in a pan on medium heat until warmed through and crispy on exterior. 4. Layer quesito cheese on the warm arepa, then top with shredded chicken, hot sauce, and corn salsa. Enjoy.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r033",
+    "name": "Rogan Josh",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/rogan-josh",
+    "cuisine": "Indian",
+    "cooking_method": "braise",
+    "time_minutes": 140,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "spicy"
+    ],
+    "serves": 6,
+    "ingredients": [
+      {
+        "name": "lamb stew meat",
+        "amount": "1000 g (~2 lbs)",
+        "pcsv": []
+      },
+      {
+        "name": "mustard oil",
+        "amount": "75 g (4-6 spoonfuls)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "cinnamon sticks",
+        "amount": "1 small stick",
+        "pcsv": []
+      },
+      {
+        "name": "mace",
+        "amount": "2 pieces",
+        "pcsv": []
+      },
+      {
+        "name": "black cardamom",
+        "amount": "2 pods",
+        "pcsv": []
+      },
+      {
+        "name": "nutmeg",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "whole cloves",
+        "amount": "3-4",
+        "pcsv": []
+      },
+      {
+        "name": "kashmiri chili powder",
+        "amount": "20 g (2 spoonfuls)",
+        "pcsv": []
+      },
+      {
+        "name": "cumin",
+        "amount": "10 g (a spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "fennel seeds",
+        "amount": "5 g (1/2 spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "garam masala",
+        "amount": "5 g (1/2 spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "ground ginger",
+        "amount": "3 g (1/4 spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "asafetida",
+        "amount": "2 g (a sprinkle)",
+        "pcsv": []
+      },
+      {
+        "name": "whole milk yogurt",
+        "amount": "~200 g (6-8 oz)",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "as needed (to cover braise)",
+        "pcsv": []
+      },
+      {
+        "name": "basmati rice",
+        "amount": "cooked",
+        "pcsv": []
+      },
+      {
+        "name": "roti flatbreads",
+        "amount": "or other flatbreads",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Add enough oil to generously coat the bottom of a heavy pot. Turn on heat to medium-high and add whole spices to the oil. Add cubed lamb and a light sprinkle of salt. As oil heats, spices will bloom and release aromas. While stirring occasionally, cook lamb/spice mixture about 5 minutes for light browning. 2. Meanwhile, mix yogurt and all ground spices until well combined. Once lamb and spices have cooked at least 5 minutes, add yogurt mixture to pot (be careful, it might sputter). Stir to combine and bring to a simmer. 3. Top with just enough water to barely submerge meat. Stir, return to light simmer, and partially cover. Braise 1-2 hours until lamb is completely tender (on stovetop or in 300°F/150°C oven). While braising, cook basmati rice or prep flatbreads. 4. Once lamb is tender, turn off heat. Taste and season with salt as needed. Optional: Add natural red food dye to deepen color. Serve warm over rice or with roti flatbreads.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r034",
+    "name": "35 Min Chicken Biryani",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/chicken-biryani",
+    "cuisine": "Indian",
+    "cooking_method": "fry",
+    "time_minutes": 35,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "spicy",
+      "tangy"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "chicken thighs",
+        "amount": "454 g",
+        "pcsv": []
+      },
+      {
+        "name": "yogurt",
+        "amount": "113 g",
+        "pcsv": []
+      },
+      {
+        "name": "black peppercorns",
+        "amount": "10",
+        "pcsv": []
+      },
+      {
+        "name": "whole cloves",
+        "amount": "5",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "1-inch piece",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "lemon juice",
+        "amount": "1/2 lemon",
+        "pcsv": []
+      },
+      {
+        "name": "ground cinnamon",
+        "amount": "a pinch",
+        "pcsv": []
+      },
+      {
+        "name": "ground coriander",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "cumin",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "poppy seeds",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "basmati rice",
+        "amount": "120 g",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "60 g",
+        "pcsv": []
+      },
+      {
+        "name": "milk",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "turmeric powder",
+        "amount": "6 g",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "3",
+        "pcsv": []
+      },
+      {
+        "name": "golden raisins",
+        "amount": "optional",
+        "pcsv": []
+      },
+      {
+        "name": "almonds, blanched",
+        "amount": "optional",
+        "pcsv": []
+      },
+      {
+        "name": "eggs, hard-boiled",
+        "amount": "optional",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Set a cast-iron skillet over medium heat and add vegetable oil. Slice half an onion into rings, add bay leaves and fry for 15 seconds. Toss in sliced onions and fry for 8-10 minutes until lightly browned. 2. Add marinade ingredients (except yogurt and chicken) to a food processor and pulse until smooth. Combine with yogurt and chicken in a bowl. 3. Remove half the fried onions and set aside. Add chicken and marinade to the skillet and simmer for 8 minutes until reduced by half. 4. Set a large pot of water to boil. Preheat oven to 300°F/148°C. 5. Add rice to boiling water and parboil for 8-10 minutes, then drain. Soak turmeric in warm milk. 6. Layer rice over chicken. Pour turmeric milk over rice in orange lines. Spoon onion-flavored oil and bay leaves over top. 7. Cover with aluminum foil and place lid to seal. Bake for 10-15 minutes until rice is fluffy. 8. Spoon onto plate and garnish with fried onions and optional toppings.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r035",
+    "name": "Restaurant-Style Butter Chicken",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/restaurant-style-butter-chicken",
+    "cuisine": "Indian",
+    "cooking_method": "braise",
+    "time_minutes": 60,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "rich",
+      "spicy"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "chicken thighs",
+        "amount": "~300 g / ~3/4 lb",
+        "pcsv": []
+      },
+      {
+        "name": "yogurt, plain",
+        "amount": "30 g / 2 spoonfuls",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "4 g / a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "chili powder",
+        "amount": "2 g / a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "cumin",
+        "amount": "2 g / a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "garam masala",
+        "amount": "2 g / a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "1/2 inch knob",
+        "pcsv": []
+      },
+      {
+        "name": "lime juice",
+        "amount": "1/2 lime",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "5 g / a drizzle",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil or butter",
+        "amount": "28 g / 2 spoonfuls",
+        "pcsv": []
+      },
+      {
+        "name": "tomatoes",
+        "amount": "400 g",
+        "pcsv": []
+      },
+      {
+        "name": "cashews",
+        "amount": "50 g",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/4 onion",
+        "pcsv": []
+      },
+      {
+        "name": "sugar",
+        "amount": "2 g / a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "turmeric powder",
+        "amount": "1 g / a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "heavy cream",
+        "amount": "45 g",
+        "pcsv": []
+      },
+      {
+        "name": "butter",
+        "amount": "28 g",
+        "pcsv": []
+      },
+      {
+        "name": "fenugreek leaves",
+        "amount": "2 g / a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "basmati rice, cooked",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "naan",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "for garnish",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Marinate the chicken: Chop chicken thighs into cubes and combine in a bowl with chili powder, cumin, garam masala, salt, garlic, ginger, lime, and yogurt. Mix and set aside for 15 minutes. 2. Sear the chicken: Heat cast iron on medium-high, add oil, sear chicken pieces until browned and cooked through. Remove and set aside. 3. Start the gravy: Heat fresh pan on medium, add oil or butter and onions, sauté 2-3 minutes. Add tomatoes, cashews, garlic, ginger, garam masala, chili powder, salt, turmeric, and water (about 1 cup). Simmer 10 minutes, stirring occasionally. 4. Blend & simmer: Pour sauce into food processor and pulse until smooth. Strain back into pan over medium heat. Add butter, heavy cream, and cooked chicken. Simmer 6-10 minutes until thickened to desired consistency. 5. Finish & serve: Crush fenugreek leaves and sprinkle over sauce. Taste and adjust with salt, spices, or butter as needed. Serve with rice, naan, or vegetables. Garnish with cilantro and optional heavy cream drizzle.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r036",
+    "name": "Keema Matar",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/keema-matar",
+    "cuisine": "Indian",
+    "cooking_method": "braise",
+    "time_minutes": 60,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "spicy",
+      "tangy"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "cooking oil",
+        "amount": "a drizzle (15 g)",
+        "pcsv": []
+      },
+      {
+        "name": "mustard seeds",
+        "amount": "a spoonful (5 g)",
+        "pcsv": []
+      },
+      {
+        "name": "cumin",
+        "amount": "a spoonful (5 g)",
+        "pcsv": []
+      },
+      {
+        "name": "black peppercorns",
+        "amount": "1/2 spoonful (3 g)",
+        "pcsv": []
+      },
+      {
+        "name": "turmeric powder",
+        "amount": "a spoonful (5 g)",
+        "pcsv": []
+      },
+      {
+        "name": "chili powder",
+        "amount": "a spoonful (5 g)",
+        "pcsv": []
+      },
+      {
+        "name": "garam masala",
+        "amount": "a sprinkle (2 g)",
+        "pcsv": []
+      },
+      {
+        "name": "whole cloves",
+        "amount": "2-3",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "ground cinnamon",
+        "amount": "1/2 stick",
+        "pcsv": []
+      },
+      {
+        "name": "roma tomatoes",
+        "amount": "2-3, grated",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/2, diced",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "a 1\" knob",
+        "pcsv": []
+      },
+      {
+        "name": "green chilies",
+        "amount": "2-3, minced",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "ground beef",
+        "amount": "450 g (2 parts)",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "200 g (1 part)",
+        "pcsv": []
+      },
+      {
+        "name": "frozen peas",
+        "amount": "200 g (1 part)",
+        "pcsv": []
+      },
+      {
+        "name": "lemon juice",
+        "amount": "a squeeze",
+        "pcsv": []
+      },
+      {
+        "name": "basmati rice",
+        "amount": "to preference, cooked",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "for garnish, roughly chopped",
+        "pcsv": []
+      },
+      {
+        "name": "roti flatbreads",
+        "amount": "to preference",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. If mustard seed, cumin seed, and peppercorns are whole, crush down in mortar and pestle or spice grinder. Leave cinnamon stick, cloves, and bay leaf whole to remove at end of cooking. Grate or finely dice tomatoes and set aside. Soften ground beef by mixing with about 50% water until smooth and clumps are broken up. 2. Set pan over medium heat, add drizzle of oil. Once hot, add cinnamon stick, cloves, bay leaf, ground peppercorns, mustard seed, and cumin. Bloom for 10-20 seconds until fragrant. Add remaining aromatics except tomato and sauté for 1-2 minutes until softened and fragrant. 3. Stir in remaining ground spices (chili powder, turmeric, garam masala) with sprinkle of salt and cook 30 seconds. Add grated tomatoes and reduce for 5 minutes. Deglaze with water if dry. 4. Turn heat to high, add ground meat with sprinkle of salt, break apart while simmering 8-10 minutes until cooked through and mixture thickens. 5. Turn heat to low, toss in peas and stir until cooked through. Turn off heat. Add lemon juice and final sprinkle of garam masala. Taste and adjust with salt, lemon, or spices. Serve with rice or flatbreads, garnish with cilantro.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r037",
+    "name": "Pakistani Chicken Karahi",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/pakistani-chicken-karahi",
+    "cuisine": "Pakistani",
+    "cooking_method": "pan-sear",
+    "time_minutes": 30,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "rich",
+      "spicy"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "chicken thighs, boneless, skinless",
+        "amount": "~450 g (~1 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil or ghee",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "a 1\" piece",
+        "pcsv": []
+      },
+      {
+        "name": "tomatoes, canned or fresh",
+        "amount": "3",
+        "pcsv": []
+      },
+      {
+        "name": "cumin, freshly ground",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "garam masala",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "kashmiri chili powder",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "ground coriander",
+        "amount": "1/2 part",
+        "pcsv": []
+      },
+      {
+        "name": "turmeric powder, ground",
+        "amount": "1/2 part",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper, freshly ground",
+        "amount": "1/2 part",
+        "pcsv": []
+      },
+      {
+        "name": "msg",
+        "amount": "1/8 part",
+        "pcsv": []
+      },
+      {
+        "name": "green chilies, rough chopped",
+        "amount": "5 small",
+        "pcsv": []
+      },
+      {
+        "name": "butter",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro, roughly chopped",
+        "amount": "a handful",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Dice chicken into 1\" cubes. Crush whole spices with mortar & pestle. Crush ginger & garlic into paste. Prep tomatoes by draining or grating. 2. Heat wok/pan on high, add oil. Add chicken with salt sprinkle, sear until lightly browned exterior but not fully cooked. 3. Add garlic-ginger paste, sauté 30 seconds. Add tomatoes, cook 5-10 minutes stirring until breaking down. Crush tomatoes with spatula. 4. Stir in all spices, reduce 5-10 minutes until thick, stirring frequently. 5. Add green chilies and butter if using. Reduce to desired thickness (thick and glossy). Taste and adjust seasoning with salt. 6. Turn off heat, add julienned ginger and cilantro. Toss once and serve with rice, roti, or flatbread.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r038",
+    "name": "Palak Paneer",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/palak-paneer",
+    "cuisine": "Indian",
+    "cooking_method": "braise",
+    "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "spicy"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "cooking oil",
+        "amount": "2 spoonfuls",
+        "pcsv": []
+      },
+      {
+        "name": "garam masala",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "kasoori methi",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "green chilies",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "tomatoes",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "spinach",
+        "amount": "450 g",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "paneer",
+        "amount": "450 g",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Set a pot over medium heat. Add oil and spices, bloom for 1 minute until fragrant. Add onion, garlic, and ginger, bloom another 1-2 minutes. Add chilies, tomato, and salt, continuing to sauté until tomato breaks down and releases juices to deglaze stuck bits. If anything threatens to burn, lower heat or add water. 2. Add spinach leaves and salt, sauté until barely wilted. Transfer entire contents to blender (or use immersion blender in pot). Add just enough water to blend until smooth, then pour back into pot. 3. Turn heat back on, add cubed paneer. Bring to light simmer and cook 1-2 minutes to heat through and absorb flavor. Taste and adjust salt as needed. Serve warm.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r039",
+    "name": "Chicken Kati Rolls",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/chicken-kati-rolls",
+    "cuisine": "Indian",
+    "cooking_method": "oven",
+    "time_minutes": 30,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "smoky",
+      "spicy"
+    ],
+    "serves": 6,
+    "ingredients": [
+      {
+        "name": "chicken thighs",
+        "amount": "6 (~2 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "10 g (two spoonfuls)",
+        "pcsv": []
+      },
+      {
+        "name": "msg",
+        "amount": "3 g (a sprinkle)",
+        "pcsv": []
+      },
+      {
+        "name": "lime juice",
+        "amount": "1/2 lime",
+        "pcsv": []
+      },
+      {
+        "name": "cumin",
+        "amount": "2 g (a sprinkle)",
+        "pcsv": []
+      },
+      {
+        "name": "kashmiri chili powder",
+        "amount": "1 g (a sprinkle)",
+        "pcsv": []
+      },
+      {
+        "name": "turmeric powder",
+        "amount": "3 g (1/2 spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper",
+        "amount": "5 g (a spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "4 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "1\" knob",
+        "pcsv": []
+      },
+      {
+        "name": "tomato paste",
+        "amount": "10 g (a spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "yogurt",
+        "amount": "50 g",
+        "pcsv": []
+      },
+      {
+        "name": "roma tomatoes",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "birds eye green chilies",
+        "amount": "5",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "a handful",
+        "pcsv": []
+      },
+      {
+        "name": "fresh mint",
+        "amount": "~15 leaves",
+        "pcsv": []
+      },
+      {
+        "name": "coconut",
+        "amount": "15 g (a spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "paratha flatbreads",
+        "amount": "4-6",
+        "pcsv": []
+      },
+      {
+        "name": "cucumbers",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "pickled onions",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "eggs",
+        "amount": "1 per wrap",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Bash peeled garlic cloves and ginger into rough paste using mortar and pestle. Cut chicken into small cubes and add to mixing bowl with salt, msg, lime juice, cumin, chili powder, turmeric, black pepper, garlic, ginger, tomato paste, and yogurt. Mix well to coat all pieces. Cover and marinate in fridge for at least one hour or overnight. 2. While chicken marinates, add lime juice, roma tomato, salt, green chiles, cilantro, mint leaves, and grated coconut to blender. Pulse until completely smooth. Thin with water as needed. Taste and adjust salt or citrus as needed. 3. Set oven to broil on high. Evenly space chicken pieces on baking sheet so none touch. Place under broiler for 8-10 minutes until charred pieces develop. Remove and flip once with spatula, then cook another couple minutes. Set aside. 4. Set pan over medium heat and add ghee or oil. Place frozen or fresh-made paratha and cook gently until golden brown and crispy on both sides. Optional: scramble one egg and pour on one side of golden brown paratha. Flip once and cook egg face down, then remove. 5. Spread spoonful or two of chutney on bottom followed by chicken serving. Garnish with pickled onions, sliced cucumber, and more chutney as needed. Optionally wrap in foil or parchment paper. Repeat with remaining rolls.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r040",
+    "name": "Chapli Kebab",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/chapli-kebab",
+    "cuisine": "Pakistani",
+    "cooking_method": "fry",
+    "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "spicy",
+      "tangy"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "ground beef",
+        "amount": "500 g (~1 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "dried pomegranate seeds",
+        "amount": "10 g (a spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "buckwheat flour",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "coriander seeds, whole",
+        "amount": "8 g (a spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "cumin, ground",
+        "amount": "2 g (a sprinkle)",
+        "pcsv": []
+      },
+      {
+        "name": "kashmiri chili powder",
+        "amount": "1 g (a sprinkle)",
+        "pcsv": []
+      },
+      {
+        "name": "garam masala",
+        "amount": "1 g (a sprinkle)",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "a handful",
+        "pcsv": []
+      },
+      {
+        "name": "beef tallow",
+        "amount": "for frying",
+        "pcsv": []
+      },
+      {
+        "name": "pita bread",
+        "amount": "4",
+        "pcsv": []
+      },
+      {
+        "name": "cucumbers",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "lemons, wedges",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "yogurt",
+        "amount": "to taste",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Add pomegranate seeds and coriander seeds to mortar & pestle. Gently crush to release aromas, keeping mostly intact for texture. Sprinkle in cumin, chili powder, and garam masala. 2. Add spice mix, ground beef, salt, diced onion, flour, and cilantro to bowl. Mix until well combined and meat becomes tacky. Form into flat patties about 4 inches and 1/2 inch thick. 3. In cast iron or stainless skillet, melt beef tallow to create thin layer. Heat on medium to 350°F/176°C until shimmering. Lay patties into hot fat and shallow fry until bottom is well browned and crispy. Flip and fry second side until cooked through. Drain on paper towel. Repeat with remaining patties. 4. Serve warm with toasted pita bread and fresh garnishes including cucumbers, yogurt, herbs, and lemon wedges.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r041",
+    "name": "Lemongrass Banh Mi",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/lemongrass-banh-mi",
+    "cuisine": "Vietnamese",
+    "cooking_method": "pan-sear",
+    "time_minutes": 30,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "fresh",
+      "herby",
+      "spicy"
+    ],
+    "serves": 1,
+    "ingredients": [
+      {
+        "name": "chicken breasts",
+        "amount": "450 g (~1 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "soy sauce",
+        "amount": "25 g",
+        "pcsv": []
+      },
+      {
+        "name": "ponzu",
+        "amount": "20 g",
+        "pcsv": []
+      },
+      {
+        "name": "fish sauce",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "sugar",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "thai chili flakes",
+        "amount": "3 g (a sprinkle)",
+        "pcsv": []
+      },
+      {
+        "name": "lemongrass",
+        "amount": "1 stalk",
+        "pcsv": []
+      },
+      {
+        "name": "shallots",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "pickled carrots",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "cucumbers",
+        "amount": "4-5 slices",
+        "pcsv": []
+      },
+      {
+        "name": "baguettes",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "1/2 bunch",
+        "pcsv": []
+      },
+      {
+        "name": "kewpie mayo",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "sriracha",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "maggi seasoning",
+        "amount": "a drizzle",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Thinly slice the lemongrass stalks. Chop the shallot. Add the lemongrass, shallot and remaining marinade components to a blender or food processor. Blend until well mixed and the shallots & lemongrass are finely diced. Add the marinade to the chicken and let it rest in the fridge for 30 minutes or up to overnight. Thin out the chicken into even thin pieces for more even cooking.\n2. Set a skillet over medium-high heat. Add a drizzle of oil. Add the chicken to the hot skillet and let it sear undisturbed for 3-5 minutes until browning starts to develop. Flip the chicken over and let it sear on the other side until it reaches 165°F/74°C.\n3. While the chicken is searing, thinly slice a cucumber into planks. Spread the kewpie mayo on the bottom of the baguette, followed by the sriracha. Then lay down the slices of cucumber, pickled carrots, and lastly cilantro.\n4. Once the chicken is finished searing, remove from the skillet and thinly slice it. Add half the chicken to the sandwich and drizzle with the maggi seasoning. Close the sandwich and wrap with parchment paper. Slice and enjoy!",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r042",
+    "name": "Spicy Thai Meatballs",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/spicy-thai-meatballs",
+    "cuisine": "Thai",
+    "cooking_method": "oven",
+    "time_minutes": 20,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "spicy",
+      "umami"
+    ],
+    "serves": 3,
+    "ingredients": [
+      {
+        "name": "birds eye green chilies",
+        "amount": "3-5",
+        "pcsv": []
+      },
+      {
+        "name": "thai basil",
+        "amount": "1 bunch",
+        "pcsv": []
+      },
+      {
+        "name": "shallots",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "ground pork",
+        "amount": "450 g (1 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "hoisin",
+        "amount": "25 g",
+        "pcsv": []
+      },
+      {
+        "name": "fish sauce",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "dark soy sauce",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "2 g",
+        "pcsv": []
+      },
+      {
+        "name": "white pepper",
+        "amount": "2 g",
+        "pcsv": []
+      },
+      {
+        "name": "msg",
+        "amount": "1 g",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "a splash",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Prep the aromatics: Chop the basil, dice the shallot and bird's eye chilis.\n2. Mix the meatballs: Preheat the oven to 450°F/232°C. In a large bowl, mix together the meatball components along with the aromatics. Mix until everything is evenly distributed.\n3. Form the meatballs & bake: Put a little water on your hands to prevent sticking. Form the meatballs into golf ball sized balls and place on a sheet pan. Roast in the oven for 15-20 minutes, or until browned and cooked through. Enjoy right away or store them in the fridge for later use.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r043",
+    "name": "Chicken Satay",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/chicken-satay",
+    "cuisine": "Southeast Asian",
+    "cooking_method": "grill",
+    "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "rich",
+      "savory",
+      "smoky"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "chicken thighs, boneless, skinless",
+        "amount": "454 g",
+        "pcsv": []
+      },
+      {
+        "name": "coconut cream",
+        "amount": "200 g",
+        "pcsv": []
+      },
+      {
+        "name": "red curry paste",
+        "amount": "100 g",
+        "pcsv": []
+      },
+      {
+        "name": "curry powder",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "peanut butter",
+        "amount": "3 parts",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "2 parts",
+        "pcsv": []
+      },
+      {
+        "name": "sugar",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "soy sauce",
+        "amount": "1/4 part",
+        "pcsv": []
+      },
+      {
+        "name": "vinegar",
+        "amount": "1/4 part",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. In a bowl or freezer bag, massage together all marinated chicken ingredients and set in the fridge for a few hours or overnight.\n2. Combine all peanut sauce ingredients until smooth. Taste and adjust as needed. This can be done in advance.\n3. When you are ready to cook, add a row of marinated chicken cubes to the skewers. Use a paper towel to remove excess marinade.\n4. Preheat a grill or pan to high, then sear the skewers until they are lightly charred on each side and the chicken is cooked through. Serve with the peanut sauce for dipping.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r044",
+    "name": "Street Pad Thai",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/street-pad-thai",
+    "cuisine": "Thai",
+    "cooking_method": "stir-fry",
+    "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "spicy",
+      "sweet"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "flat rice noodles",
+        "amount": "450 g (1 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "chicken or shrimp",
+        "amount": "227 g (1/2 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "bamboo shoots",
+        "amount": "100 g",
+        "pcsv": []
+      },
+      {
+        "name": "scallions",
+        "amount": "100 g",
+        "pcsv": []
+      },
+      {
+        "name": "dried shrimp",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "eggs",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "tamarind puree",
+        "amount": "75 g",
+        "pcsv": []
+      },
+      {
+        "name": "fish sauce",
+        "amount": "75 g",
+        "pcsv": []
+      },
+      {
+        "name": "palm sugar",
+        "amount": "50 g",
+        "pcsv": []
+      },
+      {
+        "name": "dark soy sauce",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "peanuts",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "limes, wedges",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "sriracha",
+        "amount": "to taste",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Soak the noodles in hot water according to package directions. Stir tamarind paste, fish sauce, palm sugar, and soy sauce until sugar dissolves.\n2. Set wok over high heat with oil. Sear protein until browned and cooked through. Remove and set aside. Add oil, crack in eggs, scramble until cooked, set aside with protein. Wipe wok.\n3. Drain noodles. Add oil to wok, add dried shrimp and bloom 30 seconds until fragrant. Add garlic and ginger, stir fry 15-30 seconds. Add noodles, reserved egg and protein, and sauce. Toss until coated.\n4. Add scallions and bamboo shoots in final minute. Taste and adjust with fish sauce, sugar, or lime. Serve with peanuts, lime wedges, and green onions.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r045",
+    "name": "Beef Rendang",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/beef-rendang",
+    "cuisine": "Malaysian",
+    "cooking_method": "braise",
+    "time_minutes": 270,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "rich",
+      "spicy"
+    ],
+    "serves": 5,
+    "ingredients": [
+      {
+        "name": "beef chuck",
+        "amount": "~ 3 lb",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "5 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "shallots",
+        "amount": "2-3",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "2 spoonfuls",
+        "pcsv": []
+      },
+      {
+        "name": "turmeric powder",
+        "amount": "2 spoonfuls",
+        "pcsv": []
+      },
+      {
+        "name": "galangal root",
+        "amount": "2 spoonfuls",
+        "pcsv": []
+      },
+      {
+        "name": "cumin",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "ground coriander",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "coconut flakes",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "coconut milk",
+        "amount": "~ 700 g",
+        "pcsv": []
+      },
+      {
+        "name": "lemongrass",
+        "amount": "2-3 stalks",
+        "pcsv": []
+      },
+      {
+        "name": "makrut lime leaves",
+        "amount": "2-3",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Generously season the meat chunks with salt on each side. Heat a Dutch oven or pot over medium-high heat and add the oil. Sear the beef in batches until well browned.\n2. In a mortar & pestle or food processor, puree aromatics into a rough paste. Add to the braising pot with the meat, making sure it's enough to coat each piece after mixing. Stir and saute the mixture until the paste starts to caramelize and cling to each piece. Sprinkle the ground spices over top.\n3. Add the whole lemongrass, lime leaves, and coconut milk - enough to just cover the meat. Cover the Dutch oven and pop into a 300°F/148°C oven to braise for 3-5 hours or until the meat is completely fork tender. Let it rest and cool out of the oven for at least an hour.\n4. Shred the meat to your desired consistency. Taste and adjust with more salt, if needed. Serve over rice!",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r046",
+    "name": "Filipino Adobo Braise",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/filipino-adobo-braise",
+    "cuisine": "Filipino",
+    "cooking_method": "braise",
+    "time_minutes": 105,
+    "effort_level": "long",
+    "flavor_tags": [
+      "herby",
+      "savory",
+      "tangy",
+      "umami"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "chicken thighs",
+        "amount": "3-4",
+        "pcsv": []
+      },
+      {
+        "name": "chicken drumsticks",
+        "amount": "3-4",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "a drizzle",
+        "pcsv": []
+      },
+      {
+        "name": "soy sauce",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "vinegar",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "a handful of cloves",
+        "pcsv": []
+      },
+      {
+        "name": "black peppercorns",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "a few",
+        "pcsv": []
+      },
+      {
+        "name": "rice",
+        "amount": "cooked",
+        "pcsv": []
+      },
+      {
+        "name": "scallions",
+        "amount": "for garnish, thinly sliced",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. In a heavy pot over medium heat, add the oil and sear all pieces of the chicken until all sides, especially the skin, are deeply browned.\n2. Add the garlic, peppercorns, and bay leaves. Stir and bloom them until aromatic, about 1 minute. Then, to prevent the aromatics from burning, add in the braising liquid. Add in the equal parts of water, soy sauce, and vinegar until everything is barely submerged.\n3. Bring the liquid to a simmer, partially cover, and braise for 1 hour or until the liquid has reduced by a third and the chicken is tender. During this time, cook the rice or anything else you'll want to serve the chicken with.\n4. Once the braise is finished, let it cool down for 15 minutes to an hour to let the meat rest. Then, this dish can be enjoyed immediately or stored in the fridge and reheated later. Serve the chicken over rice with a few spoonfuls of the sauce and scallions for garnish.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r047",
+    "name": "Lu Rou Fan",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/lu-rou-fan",
+    "cuisine": "Chinese",
+    "cooking_method": "fry",
+    "time_minutes": 150,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "savory",
+      "sweet"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "pork belly",
+        "amount": "750 g (~1.5 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "light soy sauce",
+        "amount": "50 g (1 part)",
+        "pcsv": []
+      },
+      {
+        "name": "shaoxing wine",
+        "amount": "50 g (1 part)",
+        "pcsv": []
+      },
+      {
+        "name": "sugar",
+        "amount": "25 g (~1 part)",
+        "pcsv": []
+      },
+      {
+        "name": "dark soy sauce",
+        "amount": "25 g (1/2 part)",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "shallots",
+        "amount": "3",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "6 slices",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "3 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "star anise",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "cinnamon sticks",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "chinese five spice",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "white pepper",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "short-grain rice, steamed",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "bok choy, blanched",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "chinese broccoli, blanched",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "eggs, hard boiled",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "scallions",
+        "amount": "as needed",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Add the chopped pork belly to a braising vessel (Dutch oven or heavy-bottom pot) and begin rendering the fat over medium heat.\n2. Add thinly sliced shallots to a small pan or pot and barely submerge in oil. Bring the heat up and fry until golden brown. Remove & drain shallots. Alternatively, add shallots directly to the pot with the pork belly and allow to shallow-fry in the rendering fat.\n3. Once the pork has rendered some of its fat and is beginning to take on some browning color, add the garlic, ginger slices, bay leaf, cinnamon stick, star anise, 5 spice powder, and white pepper. Stir to coat everything in the fat to bloom the aromatics for a minute or so.\n4. Add shaoxing wine, deglazing the bottom of the pan if there are any stuck browned bits forming. Add the light soy sauce, dark soy sauce, and sugar, then add just enough water to barely submerge the pork. Bring to a simmer.\n5. Partially cover and braise the pork until completely tender. You can do this on a low simmer on the stovetop, or move the pot into a 300°F/150°C oven for a more hands-off method. Depending on the cut of pork and how small you cut the pieces, it could take 1-3 hours until tender. Check periodically. As the pork cooks, you want the braising liquid to reduce into a sauce. If needed, uncover for faster evaporation and deeper browning.\n6. While the pork braises, prep your serving options of choice: Steam white rice, blanch bok choy or Chinese broccoli (gai lan) and hard boil the eggs. If desired, you can peel the hard boiled eggs then add them into the pork braise at the end of cooking so they absorb some of the sauce.\n7. When the pork is tender and the cooking liquid has reduced into a glaze, it's ready. Optionally remove whole spices, bay leaves, and ginger slices before serving. Spoon a portion over cooked white rice, serve with your choice of blanched greens, hard-boiled eggs, and scallions for garnish.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r048",
+    "name": "Higher Protein Chicken Lo Mein",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/higher-protein-chicken-lo-mein",
+    "cuisine": "Chinese",
+    "cooking_method": "stir-fry",
+    "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "savory",
+      "sweet"
+    ],
+    "serves": 3,
+    "ingredients": [
+      {
+        "name": "lo mein noodles",
+        "amount": "150 g (~1/3 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "chicken breasts",
+        "amount": "300 g (~2/3 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "light soy sauce",
+        "amount": "10 g (a splash)",
+        "pcsv": []
+      },
+      {
+        "name": "chicken bouillon",
+        "amount": "3 g (a sprinkle)",
+        "pcsv": []
+      },
+      {
+        "name": "sesame oil",
+        "amount": "3 g (a drizzle)",
+        "pcsv": []
+      },
+      {
+        "name": "shaoxing wine",
+        "amount": "10 g (a splash)",
+        "pcsv": []
+      },
+      {
+        "name": "oyster sauce",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "sugar",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "a splash",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "1 inch knob",
+        "pcsv": []
+      },
+      {
+        "name": "chinese broccoli",
+        "amount": "1/2 bunch",
+        "pcsv": []
+      },
+      {
+        "name": "yellow squash",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "bell peppers",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "red onions",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "bean sprouts",
+        "amount": "a handful",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Boil water and cook noodles to lower end of package instructions. Drain and set aside. Slice chicken into thin pieces.\n2. Add chicken to bowl with light soy sauce, chicken bouillon, sesame oil, and Shaoxing wine. Mix until coated.\n3. Combine light soy sauce, oyster sauce, sugar, chicken bouillon, and water. Mix until dissolved. Set aside.\n4. Heat oil in wok over high heat. Sear chicken until lightly browned and cooked through. Remove and set aside.\n5. Add garlic and ginger to bloom until fragrant. Stir-fry broccoli, squash, bell pepper, and onion until softened in batches.\n6. Add noodles and sauce, toss until glossy. Return chicken and combine. Add bean sprouts at end. Enjoy.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r049",
+    "name": "Cantonese Black Pepper Beef",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/cantonese-black-pepper-beef",
+    "cuisine": "Chinese",
+    "cooking_method": "stir-fry",
+    "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "herby",
+      "savory",
+      "spicy",
+      "sweet"
+    ],
+    "serves": 2,
+    "ingredients": [
+      {
+        "name": "flank, skirt, or flatiron steak",
+        "amount": "~225 g (~1/2 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "chinese black vinegar",
+        "amount": "10 g (a spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "sugar",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "lee kum kee black pepper sauce",
+        "amount": "50 g (3 spoonfuls)",
+        "pcsv": []
+      },
+      {
+        "name": "chili oil w/ fermented soybeans",
+        "amount": "10 g (a spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "soy sauce",
+        "amount": "10 g (a spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper",
+        "amount": "5 g (a spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "onion powder",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "garlic powder",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "msg",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "shallots",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "red bell peppers",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "cornstarch",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "a splash",
+        "pcsv": []
+      },
+      {
+        "name": "rice, cooked",
+        "amount": "as needed",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Thinly slice the steak into strips across the grain. Add all marinated beef ingredients to a bowl and mix until well coated. Set aside to marinate while you prepare the sauce or other ingredients.\n2. Add all black pepper sauce ingredients to a bowl and mix together until well combined. This sauce makes enough for 2 stir-fries and can be made ahead and stored in the fridge.\n3. Set a wok or large pan over high heat and add a drizzle of neutral oil. Quickly saute the garlic and shallots for 45 seconds or until fragrant. Add the onions and peppers and stir fry until slightly softened and browned. Remove the vegetable mixture from the pan and set aside in a bowl.\n4. Add another drizzle of oil to the wok. Once hot, add in the marinated beef slices and let those sizzle and brown on one side without moving. After 2 minutes, start moving it around, trying to get browning on all sides. Once the beef is browned and almost cooked through (but not overcooked), add the vegetables back in.\n5. Add about half of the black pepper sauce and stir it all together to spread the flavors around. If you want the dish to be saucier, you can add more at this point. Lastly, dial in the consistency of the sauce. Add a splash of cornstarch slurry and bring the sauce to a simmer. Check the thickness and repeat until you've reached your perfect consistency. Serve over cooked rice and enjoy.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r050",
+    "name": "Home Friendly General Tso's (Air Fried or Deep Fried)",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/home-friendly-general-tso-s-air-fried-or-deep-fried",
+    "cuisine": "Chinese",
+    "cooking_method": "deep-fry",
+    "time_minutes": 90,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "savory",
+      "spicy"
+    ],
+    "serves": 6,
+    "ingredients": [
+      {
+        "name": "chicken breasts",
+        "amount": "~2 lbs (cubed)",
+        "pcsv": []
+      },
+      {
+        "name": "eggs",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "soy sauce",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "chinese black vinegar",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "1\" knob (minced)",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves (minced)",
+        "pcsv": []
+      },
+      {
+        "name": "dried chinese red chiles",
+        "amount": "~5",
+        "pcsv": []
+      },
+      {
+        "name": "chicken broth",
+        "amount": "100 g",
+        "pcsv": []
+      },
+      {
+        "name": "brown sugar",
+        "amount": "40 g",
+        "pcsv": []
+      },
+      {
+        "name": "chili garlic paste",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "sesame oil",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "hoisin",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "cornstarch",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "flour",
+        "amount": "100 g",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "baking powder",
+        "amount": "3 g",
+        "pcsv": []
+      },
+      {
+        "name": "rice",
+        "amount": "cooked",
+        "pcsv": []
+      },
+      {
+        "name": "scallions",
+        "amount": "thinly sliced for garnish",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Marinate the chicken: Mix cubed chicken breasts with egg, soy sauce, and black vinegar in a bowl. Massage until well coated and set aside.\n2. Make the sauce: Toast aromatic base components (oil, ginger, garlic, chiles) in a pan over medium heat for 90 seconds. Add sauce ingredients and bring to boil, then simmer 3 minutes. Thicken with cornstarch slurry as desired and store in glass jar.\n3. Dredge the chicken: Combine all breading ingredients. Pour marinated chicken with liquid into dry ingredients and mix until coated.\n4. Option 1 - Air fried: Spray dredged chicken with oil, air fry at 400°F for 12 minutes, spritz again at 5-minute mark.\n5. Option 2 - Double deep fried: First fry at 325°F until cooked through. Cool or freeze. Second fry at 375°F for 2.5 minutes until crispy.\n6. Option 3 - Frozen and air fried: Air fry frozen nuggets at 400°F for 6 minutes until warmed and crisp.\n7. Sauce and serve: Warm sauce portion and toss with cooked chicken. Serve over rice, garnish with scallions.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r051",
+    "name": "Karaage: Japanese Fried Chicken",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/karaage-japanese-fried-chicken",
+    "cuisine": "Japanese",
+    "cooking_method": "fry",
+    "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "savory",
+      "spicy"
+    ],
+    "serves": 6,
+    "ingredients": [
+      {
+        "name": "chicken thighs, boneless",
+        "amount": "6 (900g / 2 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "3 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "1\" knob",
+        "pcsv": []
+      },
+      {
+        "name": "eggs, beaten",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "potato starch",
+        "amount": "20 g",
+        "pcsv": []
+      },
+      {
+        "name": "sake",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "soy sauce",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "sugar",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "flour",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "for frying",
+        "pcsv": []
+      },
+      {
+        "name": "rice vinegar",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "mirin",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "sriracha",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "sesame oil",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "scallions",
+        "amount": "a handful",
+        "pcsv": []
+      },
+      {
+        "name": "lemons",
+        "amount": "for serving",
+        "pcsv": []
+      },
+      {
+        "name": "kewpie mayo",
+        "amount": "for serving",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Cut chicken thighs across the length into roughly 1.5 inch strips, yielding 3-4 pieces per thigh. In a large mixing bowl, grate garlic and ginger, crack in egg and whisk. Add chicken pieces, starch, sake, soy sauce, sugar, and salt; mix until coated. Marinate for at least 15 minutes or overnight. 2. Add potato starch and flour to a large tray. Remove chicken pieces one by one and coat evenly with starch. Set up fry station with coated chicken on one side and wire rack over baking sheet on the other. 3. Place wok or Dutch oven over medium heat, add peanut oil to 2 inches up the side. Heat to 350°F/176°C. Meanwhile, slice scallions and grate ginger into a bowl, then add remaining sauce ingredients. 4. Working in batches, gently lower chicken into hot oil for first fry. Keep moving with slotted spoon until lightly golden brown, about 2-3 minutes. Place on wire rack to drain and rest. Repeat with remaining batches. 5. Skim oil for loose starch, then fry chicken in batches a second time until deeper golden brown and crispy, another 2-3 minutes. Optionally fry for 45 seconds more for extra crispiness. Serve with dipping sauce, kewpie mayo, and lemon slices.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r052",
+    "name": "Tonkatsu",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/tonkatsu",
+    "cuisine": "Japanese",
+    "cooking_method": "deep-fry",
+    "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "savory",
+      "spicy"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "pork chops, boneless",
+        "amount": "2-4 (1 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "flour",
+        "amount": "50 g",
+        "pcsv": []
+      },
+      {
+        "name": "cornstarch",
+        "amount": "25 g",
+        "pcsv": []
+      },
+      {
+        "name": "eggs",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "panko bread crumbs",
+        "amount": "50 g",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "for frying",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "cabbage",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "kewpie mayo",
+        "amount": "20 g",
+        "pcsv": []
+      },
+      {
+        "name": "soy sauce",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "sriracha",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "rice vinegar",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "carrots",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "a small knob",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "1 clove",
+        "pcsv": []
+      },
+      {
+        "name": "lemon zest",
+        "amount": "1/2 lemon",
+        "pcsv": []
+      },
+      {
+        "name": "tonkatsu sauce",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "lemons, wedges",
+        "amount": "as needed",
+        "pcsv": []
+      }
+    ],
+    "instructions": "Step 1: Make ginger garlic carrot slaw. Using a micro grater, grate ginger, garlic and peeled carrot into a bowl. Zest lemon and add mayo, rice vinegar, soy sauce, and sriracha. Mix and adjust seasoning. Toss with cabbage or save to spoon over top. Set aside. Step 2: Prepare & bread pork cutlets. Pound or slice boneless pork chops to roughly 3/4\" thick. Sprinkle salt evenly on both sides. Place wok over medium heat and add enough neutral oil for deep frying about 2 inches high. Set up three trays: cornstarch + flour in first, beaten egg in second, panko bread crumbs in third. Bread cutlets by coating in flour/starch mixture, then egg, then panko. Push down to ensure coating sticks. Step 3: Fry and serve. Verify oil temperature is 350°F/176°C using thermometer. Slowly drop cutlets into oil until golden brown, about 7-9 minutes, agitating occasionally. Move to paper towel on wire rack, dab excess oil, transfer to wire portion to prevent sogginess. Sprinkle salt after frying. Slice cutlets and serve with tonkatsu sauce and ginger carrot slaw.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r053",
+    "name": "Chicken Shoyu Ramen",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/chicken-shoyu-ramen",
+    "cuisine": "Japanese",
+    "cooking_method": "braise",
+    "time_minutes": 360,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "savory",
+      "umami"
+    ],
+    "serves": 8,
+    "ingredients": [
+      {
+        "name": "chicken carcass",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "2 parts",
+        "pcsv": []
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "large knob (3\" piece)",
+        "pcsv": []
+      },
+      {
+        "name": "soy sauce",
+        "amount": "300 g",
+        "pcsv": []
+      },
+      {
+        "name": "mirin",
+        "amount": "40 g",
+        "pcsv": []
+      },
+      {
+        "name": "kombu",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "bonito flakes",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "chicken skins",
+        "amount": "from 1 chicken",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "scallions, whites",
+        "amount": "1 bunch",
+        "pcsv": []
+      },
+      {
+        "name": "chicken thighs, deboned",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "ramen noodles",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "eggs, soft boiled",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "scallions",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "pickled onions",
+        "amount": "as needed",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Break a whole chicken down into pieces. Remove skin from breast, thighs, and legs for chicken oil. Remove bones from thighs; save backbone and wings for stock. Save thighs for chasu. 2. Set stockpot over scale and add thigh bones, backbones, and wings. Add 2x weight in water. Bring to boil on stovetop and skim scum. Simmer on stove or bake in 190°F/87°C oven for 5 hours. Prep remaining components. 3. Salt chicken thighs and dry brine in fridge for at least 1 hour. Preheat oven to 275°F/133°C. Roll thighs into tight logs and secure with butcher's twine. Roast until interior reaches 165°F/73°C. Wrap in plastic wrap and refrigerate. 4. Add reserved chicken skin and splash of water to cold pan. Set heat to medium-low and slowly render fat for 30-45 minutes. Skins should become golden brown and crisp. Remove chicken pieces. Toss in garlic cloves and green onion ends; cook 10 minutes until fragrant. Strain oil into container; store in fridge or freezer. 5. Combine soy sauce, kombu, and mirin in container over scale. Cover and cold steep in fridge for 6 hours to 2 days. Heat mixture to 160°F/71°C for 10 minutes. Remove kombu and add bonito flakes. Heat to 180°F/82°C for 10 minutes without boiling. Strain into jar or squeeze bottle; stores indefinitely. 6. Gently add eggs to boiling water; set timer for 6.5 minutes. Remove and place in ice water for 10 minutes. Gently peel shells and store in sealed container in fridge. 7. After 5 hours of broth cooking, add ginger and cook 1 more hour in oven to infuse. Strain soup into container. Optionally refrigerate overnight and skim fat in morning. Transfer to mason jars for 350 g servings; freeze extras. 8. When ready to serve, boil water and preheat ramen bowl with hot water. Slice chicken, scallions, and egg. Cook noodles per package recommendation. Add ~30 g tare to bowl bottom with spoonful of scallion oil and hot broth. Strain noodles immediately and add to bowl. Top with chicken, scallions, egg, pickled onions, or desired toppings. Slurp and enjoy.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r054",
+    "name": "Tomato & Egg Stir Fry",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/tomato-and-egg-stir-fry",
+    "cuisine": "Chinese",
+    "cooking_method": "stir-fry",
+    "time_minutes": 15,
+    "effort_level": "quick",
+    "flavor_tags": [
+      "savory",
+      "umami"
+    ],
+    "serves": 2,
+    "ingredients": [
+      {
+        "name": "eggs",
+        "amount": "2-5 eggs",
+        "pcsv": []
+      },
+      {
+        "name": "cornstarch",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "white pepper",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "soy sauce",
+        "amount": "a splash",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "a drizzle",
+        "pcsv": []
+      },
+      {
+        "name": "tomatoes",
+        "amount": "1-2 tomatoes",
+        "pcsv": []
+      },
+      {
+        "name": "ketchup",
+        "amount": "a squirt",
+        "pcsv": []
+      },
+      {
+        "name": "scallions",
+        "amount": "sliced",
+        "pcsv": []
+      },
+      {
+        "name": "rice",
+        "amount": "cooked",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Add seasonings to eggs and beat together until mixed. Mix cornstarch into eggs. To a wok or pan on high heat, add oil, then eggs. Scramble on high heat forming large curds. Before completely cooked, scrape into separate bowl. 2. Add tomatoes to pan and stir fry until softened. Optionally add a squirt of ketchup for extra sauce. 3. Return eggs to pan and lightly fold together with tomatoes. Serve over cooked rice and garnish with scallions.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r055",
+    "name": "Spaghetti & Meatballs",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/spaghetti-and-meatballs",
+    "cuisine": "American",
+    "cooking_method": "braise",
+    "time_minutes": 60,
+    "effort_level": "long",
+    "flavor_tags": [
+      "cheesy",
+      "herby",
+      "rich",
+      "savory"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "ground beef",
+        "amount": "227 g (1/2 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "ground pork",
+        "amount": "227 g (1/2 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "milk",
+        "amount": "62 g",
+        "pcsv": []
+      },
+      {
+        "name": "bread crumbs",
+        "amount": "40 g",
+        "pcsv": []
+      },
+      {
+        "name": "parmesan",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "parsley",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "fresh oregano",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "egg yolks",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "whole peeled tomatoes",
+        "amount": "794 g (1 large can)",
+        "pcsv": []
+      },
+      {
+        "name": "butter",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "olive oil",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "tomato paste",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "3 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "red pepper flakes",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "spaghetti",
+        "amount": "454 g (1 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "fresh basil",
+        "amount": "a handful",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Preheat oven to 400°F/204°C. 2. Combine all meatball ingredients in large bowl and mix until evenly combined. 3. Form around 9 large meatballs and place on sheet tray. 4. Roast until they reach 155°F/68°C. 5. Add butter and olive oil to pan over medium-high heat. 6. As butter melts, add garlic cloves followed by spices and let bloom for several seconds before adding tomato paste. 7. Stir sauce base together and add peeled tomatoes and onion. 8. Simmer covered for about 1 hour. 9. Remove onion from sauce and blend until smooth. 10. Taste and adjust seasonings, adding more tomato paste if sauce is too thin. 11. Boil noodles per package instructions until al dente. 12. Bring pan to medium heat and toss serving of noodles with spoonful of sauce and fresh basil. 13. Place pasta on plate and top with two meatballs and grated parmesan.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r056",
+    "name": "Basic Risotto with Parmesan",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/basic-risotto-with-parmesan",
+    "cuisine": "Italian",
+    "cooking_method": "braise",
+    "time_minutes": 30,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "herby",
+      "rich",
+      "savory"
+    ],
+    "serves": 2,
+    "ingredients": [
+      {
+        "name": "butter",
+        "amount": "28 g",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "arborio rice",
+        "amount": "120 g",
+        "pcsv": []
+      },
+      {
+        "name": "broth",
+        "amount": "120 g",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "240 g",
+        "pcsv": []
+      },
+      {
+        "name": "parmigiano reggiano",
+        "amount": "40 g",
+        "pcsv": []
+      },
+      {
+        "name": "parsley",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper",
+        "amount": "to taste",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Melt butter in pan over medium-low heat. Grate in onion and garlic cloves (or finely mince). Sauté for 1-2 minutes until softened and fragrant. 2. Add rice and stir to coat kernels in fat and lightly toast exterior. Add about 80% of cooking liquid (broth and water), reserving the rest. Turn heat to medium-high and bring to simmer. Stir once or twice, then reduce heat to low. Cover with lid and set timer for 10 minutes. 3. After 10 minutes, stir rice once or twice, cover, and set timer for another 10 minutes. 4. Test rice doneness. Add remaining cooking liquid as needed to reach desired consistency. Add more liquid for loose texture; use less or continue reducing for compact, sticky texture. 5. Stir in Parmigiano and remaining butter until creamy. Season with salt, black pepper, and fresh herbs to taste.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r057",
+    "name": "Fiery Carbonara",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/fiery-carbonara",
+    "cuisine": "Italian",
+    "cooking_method": "braise",
+    "time_minutes": 20,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "herby",
+      "rich",
+      "savory",
+      "spicy"
+    ],
+    "serves": 2,
+    "ingredients": [
+      {
+        "name": "water",
+        "amount": "150 g",
+        "pcsv": []
+      },
+      {
+        "name": "cornstarch",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "parmigiano reggiano",
+        "amount": "100 g",
+        "pcsv": []
+      },
+      {
+        "name": "olive oil",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "harissa paste",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "egg yolks",
+        "amount": "4",
+        "pcsv": []
+      },
+      {
+        "name": "lemons, juice",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "aleppo pepper",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "spaghetti, bronze cut",
+        "amount": "a serving",
+        "pcsv": []
+      },
+      {
+        "name": "pasta water, reserved",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "guanciale",
+        "amount": "a handful",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "cayenne pepper",
+        "amount": "a sprinkle",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Make stabilizing gel: add cornstarch and water to saucepan, mix until dissolved, heat to low while whisking to just below simmer. Starch should thicken; stir to remove clumps, turn off heat and set aside. 2. Combine cheese, egg yolk, lemon juice, harissa paste, aleppo, and salt. Pour in cornstarch gel and blend to create stable emulsion. Taste and adjust salt. Store in fridge up to 3-4 days. 3. Boil pot of salted water, add pasta, cook until slightly underdone (1-2 minutes less than package), reserve pasta water. 4. Cut guanciale into cubes, mince garlic. Add oil to pan, place guanciale cubes, heat medium-low until fat renders and guanciale is golden brown. Add garlic and cayenne, cook 1-2 minutes, turn off heat. Reserve spoonfuls for topping. Add 2-3 spoonfuls carbonara sauce to guanciale pan, mix until smooth, keep warm. 5. In new pan, add drained pasta and spoonfuls of aromatic-infused sauce. Slowly bring up temperature while tossing pasta. Can come to light simmer without breaking. 6. Serve pasta, finish with extra sauce, grated parm and reserved guanciale.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r058",
+    "name": "Chicken Parmesan",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/chicken-parmesan",
+    "cuisine": "American",
+    "cooking_method": "fry",
+    "time_minutes": 70,
+    "effort_level": "long",
+    "flavor_tags": [
+      "cheesy",
+      "herby",
+      "rich",
+      "savory"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "chicken breasts",
+        "amount": "4",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "panko bread crumbs",
+        "amount": "120 g",
+        "pcsv": []
+      },
+      {
+        "name": "flour",
+        "amount": "60 g",
+        "pcsv": []
+      },
+      {
+        "name": "eggs, beaten",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "parmigiano reggiano",
+        "amount": "28 g",
+        "pcsv": []
+      },
+      {
+        "name": "dried oregano",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "garlic powder",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "for frying",
+        "pcsv": []
+      },
+      {
+        "name": "whole peeled tomatoes",
+        "amount": "794 g",
+        "pcsv": []
+      },
+      {
+        "name": "olive oil",
+        "amount": "56 g",
+        "pcsv": []
+      },
+      {
+        "name": "celery",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "carrots",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "sugar",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "fresh basil",
+        "amount": "10 leaves",
+        "pcsv": []
+      },
+      {
+        "name": "low-moisture mozzarella",
+        "amount": "112 g",
+        "pcsv": []
+      },
+      {
+        "name": "parsley",
+        "amount": "for garnish",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Butterfly each chicken breast by slicing halfway through without cutting all the way. Leave a hinge to fold open like a book and flatten. If needed, pound with a pot or meat mallet. Generously sprinkle with salt and set aside to dry brine. 2. Heat olive oil in a saucepan over medium-low heat. Add diced onion, carrots, celery, and a pinch of salt. Sauté until onions are translucent and softened, about 10 minutes. Optionally blend tomatoes in a food processor or leave whole for rustic sauce. Add tomatoes and cook for 20 minutes over low simmer, stirring occasionally. After 20 minutes, raise heat to medium for a stronger simmer and cook another 10-15 minutes, reducing sauce until thick. Turn heat off. Add salt and sugar to taste. If using basil, add at the end with heat off. 3. Add flour, beaten eggs, and breadcrumbs/oregano/Parmigiano/garlic powder into 3 separate shallow pans. Pass chicken through flour, egg, and breadcrumbs, ensuring even coverage. Shake off excess flour and egg, then lightly press breadcrumbs into cutlet. Set breaded chicken aside. 4. Heat about 1/4 inch of oil in a wide, shallow frying pan over low heat. Once oil reaches 375°F/190°C, lay breaded chicken away from you and shallow fry 3-4 minutes per side until golden brown and meat reaches 155°F/56°C internal temperature. Rest on wire rack or paper towels and sprinkle with salt. Repeat with remaining cutlets. 5. Set oven broiler to high. Place chicken parm on baking sheet or oven-safe plates. Spread a layer of red sauce on chicken and top with grated parmigiano and mozzarella. Place under broiler until cheese is melted and starting to brown, about 5 minutes. Top with minced parsley, serve, and enjoy warm.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r059",
+    "name": "Cacio e Pepe (The Foolproof Way)",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/cacio-e-pepe-the-easy-way",
+    "cuisine": "Italian",
+    "cooking_method": "braise",
+    "time_minutes": 45,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "herby",
+      "rich",
+      "savory"
+    ],
+    "serves": 6,
+    "ingredients": [
+      {
+        "name": "water",
+        "amount": "150 g",
+        "pcsv": []
+      },
+      {
+        "name": "cornstarch",
+        "amount": "10 g (2 spoonfuls)",
+        "pcsv": []
+      },
+      {
+        "name": "parmigiano reggiano",
+        "amount": "100 g (1 part)",
+        "pcsv": []
+      },
+      {
+        "name": "pecorino romano",
+        "amount": "150 g (1.5 part)",
+        "pcsv": []
+      },
+      {
+        "name": "olive oil",
+        "amount": "15 g (a spoonful)",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper, freshly cracked",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "spaghetti, bronze cut",
+        "amount": "a serving",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "a sprinkle",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Make the cornstarch gel: Add cornstarch and water to a saucepan. Mix until dissolved with no clumps. Heat on low, whisking until just below simmer (180°F/82°C). Starch should thicken; stir to remove clumps and set aside. 2. Blend the sauce: Add cheeses, olive oil, and black pepper to a blender. Pulse once or twice, then pour in cornstarch gel. Blend into thick, stable emulsion. Store in fridge for 3-5 days if desired. 3. Boil the pasta: Boil salted water, add pasta, cook until al dente or slightly underdone. Reserve a cupful of pasta water before draining. 4. Combine the sauce: In a second pan off heat, add 2 heaping spoonfuls sauce and splash of pasta water per serving. Mix together. Add hot pasta and fold together. Turn heat to medium-low, slowly bring temperature up while tossing. Adjust consistency with more sauce or pasta water as needed. 5. Garnish & serve: Serve immediately on warmed plates with grated pecorino and fresh black pepper.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r060",
+    "name": "Carbonnade Flamande",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/carbonnade-flamande",
+    "cuisine": "Belgian",
+    "cooking_method": "stir-fry",
+    "time_minutes": 390,
+    "effort_level": "long",
+    "flavor_tags": [
+      "herby",
+      "rich",
+      "savory",
+      "sweet"
+    ],
+    "serves": 6,
+    "ingredients": [
+      {
+        "name": "chuck roast",
+        "amount": "1200 g (2-3 lbs)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "12 g (1%)",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "flour",
+        "amount": "to coat beef",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "for searing",
+        "pcsv": []
+      },
+      {
+        "name": "butter",
+        "amount": "a knob (~15 g)",
+        "pcsv": []
+      },
+      {
+        "name": "bacon",
+        "amount": "1-2 slices (a handful)",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "3",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "3",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "1-2",
+        "pcsv": []
+      },
+      {
+        "name": "fresh thyme, picked",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "belgian ale",
+        "amount": "1 part (~400 ml)",
+        "pcsv": []
+      },
+      {
+        "name": "beef broth",
+        "amount": "1-2 parts",
+        "pcsv": []
+      },
+      {
+        "name": "apple cider vinegar",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "brown sugar",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "french fries",
+        "amount": "for serving",
+        "pcsv": []
+      },
+      {
+        "name": "mashed potatoes",
+        "amount": "for serving",
+        "pcsv": []
+      },
+      {
+        "name": "bread",
+        "amount": "for serving",
+        "pcsv": []
+      },
+      {
+        "name": "parsley",
+        "amount": "for garnish",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Cut chuck roast into rough cubes. Season with salt and black pepper, then dust lightly with flour until coated. Preheat braising pot with oil and sear floured beef chunks until browned on all sides, working in batches if necessary. Remove and set aside. 2. In same pot, add butter, bacon, sliced onions, and garlic cloves. Stir frequently over medium heat to sweat everything. Bacon will render and onions will break down, deglazing the pan. Continue sautéing and stirring until onions caramelize and become sweet and jammy (minimum 45 minutes), scraping bottom frequently to prevent burning. 3. Add beer to pot, deglaze bottom, bring to simmer, and reduce by half to concentrate flavors (about 5 minutes). Return browned beef, add bay leaf, sugar, vinegar, and thyme. Top with beef stock until meat is mostly submerged. 4. Partially cover pot with lid and braise for 4-6 hours until meat is completely tender and liquid has reduced, either on stovetop or in 300°F/150°C oven. Optionally remove lid completely during last hour for extra browning. Taste and adjust seasonings as needed. 5. Cool slightly and serve with french fries, bread, or mashed potatoes. Garnish with minced parsley.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r061",
+    "name": "Galette Complete",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/galette-complete",
+    "cuisine": "French",
+    "cooking_method": "pan-sear",
+    "time_minutes": 30,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "rich",
+      "savory"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "buckwheat flour",
+        "amount": "250 g",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "500 g",
+        "pcsv": []
+      },
+      {
+        "name": "neutral oil",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "eggs",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "ham",
+        "amount": "thinly sliced",
+        "pcsv": []
+      },
+      {
+        "name": "comte",
+        "amount": "grated",
+        "pcsv": []
+      },
+      {
+        "name": "butter",
+        "amount": "for crisping",
+        "pcsv": []
+      },
+      {
+        "name": "chives",
+        "amount": "for garnish",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Mix the batter: Place a bowl on a scale and add buckwheat flour, salt, egg, and oil. Pour in half the water (250 g) and mix 3-5 minutes until no lumps remain. Gradually add remaining water while stirring until combined. Rest in refrigerator overnight or up to 3 days. 2. Par-cook the galettes: Heat largest nonstick skillet or carbon steel pan over medium heat with oil. Once hot (375-400°F/204°C), pour approximately 70 grams batter onto bottom quarter of pan. Use wooden crepe stick to spread thinly, or thin batter with water and use gravity to swirl to edges. Cook one side until lightly browned and lifts easily. Transfer to plate and repeat with remaining batter. 3. Finish the galette complete: Heat pan over medium heat, lightly oil it, and add partially cooked galette browned side up. Add small knobs of butter on top. Once melting begins, flip galette to crisp. Crack egg in center and break white for even cooking. When white is almost set, add shredded cheese and ham. Continue cooking until bottom is deeply browned. Fold galette's four sides up to expose egg. Garnish with chives and black pepper before serving.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r062",
+    "name": "Croque Madame",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/croque-madame",
+    "cuisine": "French",
+    "cooking_method": "fry",
+    "time_minutes": 25,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "herby",
+      "rich",
+      "savory",
+      "tangy"
+    ],
+    "serves": 2,
+    "ingredients": [
+      {
+        "name": "grain bread",
+        "amount": "2 slices",
+        "pcsv": []
+      },
+      {
+        "name": "butter",
+        "amount": "for toasting",
+        "pcsv": []
+      },
+      {
+        "name": "dijon mustard",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "gruyere",
+        "amount": "50 g",
+        "pcsv": []
+      },
+      {
+        "name": "emmental",
+        "amount": "25 g",
+        "pcsv": []
+      },
+      {
+        "name": "ham",
+        "amount": "100 g",
+        "pcsv": []
+      },
+      {
+        "name": "eggs",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "chives",
+        "amount": "for garnish",
+        "pcsv": []
+      },
+      {
+        "name": "flour",
+        "amount": "20 g",
+        "pcsv": []
+      },
+      {
+        "name": "milk",
+        "amount": "275 g",
+        "pcsv": []
+      },
+      {
+        "name": "fresh rosemary",
+        "amount": "1 sprig",
+        "pcsv": []
+      },
+      {
+        "name": "comte",
+        "amount": "50 g",
+        "pcsv": []
+      },
+      {
+        "name": "lemon juice",
+        "amount": "a drizzle",
+        "pcsv": []
+      },
+      {
+        "name": "flaky salt",
+        "amount": "to taste",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Set a pan over medium heat. Pour in the milk and add the rosemary sprig. Bring to a simmer, stirring occasionally. Once simmered, remove from heat. Set a different saucepan over medium heat and add butter to melt. Once melted, toss in flour. Cook for 2-3 minutes while stirring, then remove from heat. 2. Pour hot milk into the roux. Vigorously mix together and scrape roux from pan edges. Once combined, set pan back over medium heat and bring to a simmer while stirring constantly for 1-2 minutes. The sauce should thicken. For desired consistency, continue cooking or add more milk. Add comte, lemon juice, and salt. Taste and adjust flavorings. To store, pour into a container and drape plastic wrap on the surface, then refrigerate. 3. Set oven to broil. Butter the bread and toast on a pan. Spread thin mustard layer on toasted bread, followed by bechamel. Add Emmental, then ham, and half the Gruyere. Place second bread slice on top and spread thick bechamel layer over it. Add remaining Gruyere on top. 4. Place sandwich on sheet pan and slide beneath broiler until melty and golden brown. Meanwhile, fry a sunny side egg in butter. Pull sandwich from oven, add fried egg over top, and garnish with chives.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r063",
+    "name": "Red Wine Braised Short Ribs",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/red-wine-braised-short-ribs",
+    "cuisine": "French",
+    "cooking_method": "braise",
+    "time_minutes": 1440,
+    "effort_level": "long",
+    "flavor_tags": [
+      "herby",
+      "rich",
+      "savory",
+      "tangy"
+    ],
+    "serves": 5,
+    "ingredients": [
+      {
+        "name": "english cut short ribs",
+        "amount": "4-6 (~2.5 lbs)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "carrots",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "celery",
+        "amount": "1 stalk",
+        "pcsv": []
+      },
+      {
+        "name": "tomato paste",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "red wine",
+        "amount": "500 g",
+        "pcsv": []
+      },
+      {
+        "name": "beef broth",
+        "amount": "200 g",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "water",
+        "amount": "400 g",
+        "pcsv": []
+      },
+      {
+        "name": "dried polenta",
+        "amount": "100 g",
+        "pcsv": []
+      },
+      {
+        "name": "milk",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "parmigiano reggiano",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "butter",
+        "amount": "20 g",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "parsley",
+        "amount": "2 parts",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "lemon zest",
+        "amount": "1 part",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Heavily salt the exterior of the short ribs. Optionally let these dry brine for at least 3 hours or overnight in the fridge. When ready to braise, preheat oven to 275°F/135°C. 2. Set a dutch oven or braising pot over medium-high heat and add cooking oil. Once hot, sear the short ribs in batches, developing a nice crust on all sides. Set ribs aside and turn heat down to medium. 3. Add diced onion, carrot, and celery along with salt. Stir over medium heat for 10-15 minutes until vegetables are nicely browned. Add tomato paste and saute for about a minute until it turns deep red. 4. Pour in wine and scrape the bottom of the pan to deglaze any fond. Let simmer for 2 minutes to slightly reduce the wine. 5. Return browned ribs to pot and add enough beef stock so it comes 3/4 of the way up the ribs. Bring liquid to a simmer, cut off heat, partially cover with a lid and slide into preheated 275°F/135°C oven. Braise for roughly 4-5 hours until fork tender. Let cool until liquid reaches 140°F/60°C. 6. Move ribs to an airtight container and refrigerate. Strain cooking liquid into a container and refrigerate overnight so fat congeals on top. 7. The next day, remove fat from cooled cooking liquid. Set pan over medium-low heat, add liquid, bring to simmer and let slowly reduce for about 20 minutes while stirring occasionally. 8. In a sauce-pot, bring milk, water, and a big pinch of salt to a boil. While whisking, add polenta to boiling liquid. Stir continuously and boil for 2 minutes. Remove from heat, cover and let rest covered for 10 minutes to finish absorbing liquid. 9. Prepare gremolata by mincing 2 parts parsley, 1 part garlic, and 1 part lemon zest and tossing together. Set aside. 10. When braising liquid has reduced and thickened to point where a trail is left with a spatula, gently add in short ribs and turn them in sauce to coat exterior and bring them up to temperature. Turn heat off and set a lid on top to let them gently warm through. 11. While short ribs finish warming through, finish and adjust polenta. Stir in butter, parmesan, a sprinkle of black pepper, and for bonus points, a sprinkle of gremolata. If too thick, thin it out with a bit of milk. If too thin, reduce it for a bit back on the stove. Taste and adjust salt if needed. 12. To serve, spread a portion of polenta onto a plate, add a spoonful or two of reduced sauce, top with a short rib, and more sauce over the top. Garnish with gremolata. Devour.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r064",
+    "name": "Pierogi",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/pierogi",
+    "cuisine": "Eastern European",
+    "cooking_method": "fry",
+    "time_minutes": 90,
+    "effort_level": "long",
+    "flavor_tags": [
+      "comfort",
+      "rich",
+      "savory",
+      "sweet"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "all-purpose flour",
+        "amount": "360 g",
+        "pcsv": []
+      },
+      {
+        "name": "milk",
+        "amount": "110 g",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "7 g",
+        "pcsv": []
+      },
+      {
+        "name": "eggs",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "yukon gold potatoes",
+        "amount": "1000 g",
+        "pcsv": []
+      },
+      {
+        "name": "cheddar",
+        "amount": "100 g",
+        "pcsv": []
+      },
+      {
+        "name": "chives",
+        "amount": "a handful",
+        "pcsv": []
+      },
+      {
+        "name": "butter",
+        "amount": "2 spoonfuls",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "sour cream",
+        "amount": "to taste",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Peel and dice potatoes into 1-inch cubes. Boil in salted water until softened. Drain and mash. Mix in grated cheese and minced chives. Avoid overmixing; keep dry. Adjust seasoning and set aside. 2. Mix eggs and milk. Combine with flour, salt, and oil until shaggy dough forms. Rest 10 minutes. Knead 8-10 minutes until smooth. Refrigerate until ready. 3. Roll dough thin and cut circles using a bowl. Reroll scraps. Boil water with salt. Fill each circle with potato mixture, fold, and crimp edges to seal. 4. Drop pierogis into boiling water. Stir once and cook until they float, then 2 more minutes. Drain and set aside. 5. Saute sliced onions in butter until caramelized (10 minutes). Add cooked pierogis and fry until crispy on all sides. Serve with sour cream and chives.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r065",
+    "name": "20-Min Chicken Shawarma Wrap",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/20-min-chicken-shawarma-wrap",
+    "cuisine": "Mediterranean",
+    "cooking_method": "air-fry",
+    "time_minutes": 20,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "smoky",
+      "spicy"
+    ],
+    "serves": 6,
+    "ingredients": [
+      {
+        "name": "chicken thighs, boneless",
+        "amount": "~2 lbs (~900 g)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "~9 g",
+        "pcsv": []
+      },
+      {
+        "name": "mayonnaise",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "cumin, ground",
+        "amount": "2 parts",
+        "pcsv": []
+      },
+      {
+        "name": "garlic powder",
+        "amount": "2 parts",
+        "pcsv": []
+      },
+      {
+        "name": "turmeric powder",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "harissa powder",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "smoked paprika",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "yogurt",
+        "amount": "60 g",
+        "pcsv": []
+      },
+      {
+        "name": "za'atar",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "lemon juice",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "cucumbers",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "cherry tomatoes, halved",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "red onions",
+        "amount": "1/2 part",
+        "pcsv": []
+      },
+      {
+        "name": "sumac",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "olive oil",
+        "amount": "a drizzle",
+        "pcsv": []
+      },
+      {
+        "name": "pita bread",
+        "amount": "4-6",
+        "pcsv": []
+      },
+      {
+        "name": "frozen fries",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "muhammara",
+        "amount": "to taste",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Add chicken thighs to a bowl with a heaping spoonful of mayo. Add a generous sprinkle of cumin, garlic powder, turmeric, harissa, and smoked paprika. Massage until evenly coated. 2. Set pan/griddle to high heat and press chicken flat. Allow to sear on one side until browning develops. Meanwhile, cook frozen fries in air fryer or 450°F oven. 3. When chicken has color and light charring, flip and continue searing second side. Prepare vegetables in a bowl and toss with sumac, za'atar, salt, olive oil, and lemon juice. Taste and adjust. 4. Mix mayo, yogurt, lemon juice, za'atar, and black pepper for white sauce. When chicken reaches 180°F/83°C internal temp, remove from heat. 5. Warm pitas in microwave, checking every 15 seconds. Slice chicken into thin strips. Spread muhammara on each pita, layer with fries, chicken, salad, and white sauce. Wrap in foil if desired.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r066",
+    "name": "Harissa Spiced Lamb Kebabs",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/harissa-spiced-lamb-kebabs",
+    "cuisine": "Middle Eastern",
+    "cooking_method": "grill",
+    "time_minutes": 25,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "smoky",
+      "spicy"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "ground lamb",
+        "amount": "454 g (1 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "harissa paste",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "7 g",
+        "pcsv": []
+      },
+      {
+        "name": "cumin",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "red onions",
+        "amount": "1/8",
+        "pcsv": []
+      },
+      {
+        "name": "red pepper flakes",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "non stick cooking spray",
+        "amount": "for grilling",
+        "pcsv": []
+      },
+      {
+        "name": "pita bread",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "tomatoes",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "cucumbers",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "yogurt",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "feta",
+        "amount": "as needed",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Place a large mixing bowl on a scale. Add ground lamb, salt, red onion, cumin, red pepper flakes, and harissa paste. Mix with hands until well combined. Keep mixing until meat is pasty and sticks to bowl. Cover and store in fridge until ready to form. 2. Get out baking sheet, small cup of water, and metal or wooden skewers. Dip hands in water to prevent sticking and wrap meat mixture around skewer. Make sure not to use too much meat or it could fall off while cooking. Use about 1/4 of meat per skewer to make 4 large kebabs. Place finished skewers on baking sheet and lightly smooth into rectangular shape. Place kebabs in fridge uncovered to firm up for 15 minutes or up to 24 hours. 3. Preheat grill (or cast iron pan) to high. Lightly spray cooled kebabs and grill with cooking spray to prevent sticking. Once grill is hot, place kebabs on it. Allow to cook for 2 minutes on each side, or until meat is well-seared. Flip kebabs and grill until cooked through. Remove from grill and let rest for 1 minute. Enjoy with pita bread, yogurt sauce, and fresh vegetables.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r067",
+    "name": "Lamb Kofta",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/lamb-kofta",
+    "cuisine": "Middle Eastern",
+    "cooking_method": "pan-sear",
+    "time_minutes": 35,
+    "effort_level": "medium",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "spicy",
+      "tangy"
+    ],
+    "serves": 4,
+    "ingredients": [
+      {
+        "name": "ground lamb",
+        "amount": "454 g (1 lb)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "7 g",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "1 clove",
+        "pcsv": []
+      },
+      {
+        "name": "parsley",
+        "amount": "1 handful",
+        "pcsv": []
+      },
+      {
+        "name": "kofta spice mix",
+        "amount": "1 spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "cumin",
+        "amount": "2 parts",
+        "pcsv": []
+      },
+      {
+        "name": "chili powder",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "paprika",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "fresh oregano",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "ground cinnamon",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "yogurt",
+        "amount": "2 parts",
+        "pcsv": []
+      },
+      {
+        "name": "lemon juice",
+        "amount": "1/2 part",
+        "pcsv": []
+      },
+      {
+        "name": "black pepper",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "sumac",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "lemon zest",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "lavash bread",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "tomatoes",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "arugula",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "pickled onions",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "feta, crumbled",
+        "amount": "as needed",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Place cumin, chili powder, paprika, oregano, and ground cinnamon in a small bowl and mix together. Keep extra in a jar for future use as a Mediterranean blend. 2. Add ground lamb to a bowl with salt (1.5% by meat weight). Grate in onion, garlic clove, and parsley. Add a spoonful of kofta spice mix. Mix with hands for 2-3 minutes until cohesive and sticks together. 3. Add splash of water to hands to prevent sticking. Form small handfuls of meat into small ovals until all meat is used. 4. Set griddle or cast iron pan over medium heat. Sear each side for 2-3 minutes until browning forms and cooked through. 5. While meat sears, combine yogurt, lemon zest, lemon juice, garlic, salt, pepper, and sumac in bowl. Mix and adjust to taste. 6. Once brown crust forms, remove from heat and let cool. Spread yogurt sauce on lavash bread, add kofta, pickled onions, tomatoes, arugula, and more sauce. Wrap and toast on griddle. Enjoy.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r068",
+    "name": "Jollof Rice",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/jollof-rice",
+    "cuisine": "West African",
+    "cooking_method": "braise",
+    "time_minutes": 85,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "rich",
+      "smoky"
+    ],
+    "serves": 6,
+    "ingredients": [
+      {
+        "name": "ground ginger",
+        "amount": "4 parts",
+        "pcsv": []
+      },
+      {
+        "name": "dried thyme",
+        "amount": "4 parts",
+        "pcsv": []
+      },
+      {
+        "name": "red pepper flakes",
+        "amount": "3 parts",
+        "pcsv": []
+      },
+      {
+        "name": "ground coriander",
+        "amount": "2 parts",
+        "pcsv": []
+      },
+      {
+        "name": "onion powder",
+        "amount": "2 parts",
+        "pcsv": []
+      },
+      {
+        "name": "garlic powder",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "ground cinnamon",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "smoked paprika",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "cubeb tail pepper",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "crayfish powder",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "1 part",
+        "pcsv": []
+      },
+      {
+        "name": "nutmeg",
+        "amount": "1/2 part",
+        "pcsv": []
+      },
+      {
+        "name": "whole peeled tomatoes",
+        "amount": "397 g",
+        "pcsv": []
+      },
+      {
+        "name": "white onions",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "red bell peppers",
+        "amount": "3",
+        "pcsv": []
+      },
+      {
+        "name": "habanero peppers",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "30 g",
+        "pcsv": []
+      },
+      {
+        "name": "curry powder",
+        "amount": "3 g",
+        "pcsv": []
+      },
+      {
+        "name": "cayenne pepper",
+        "amount": "to taste",
+        "pcsv": []
+      },
+      {
+        "name": "red onions",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "bay leaves",
+        "amount": "2",
+        "pcsv": []
+      },
+      {
+        "name": "jollof spice mix",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "chicken broth",
+        "amount": "454 g",
+        "pcsv": []
+      },
+      {
+        "name": "basmati rice",
+        "amount": "300 g",
+        "pcsv": []
+      },
+      {
+        "name": "cilantro",
+        "amount": "for garnish",
+        "pcsv": []
+      },
+      {
+        "name": "chicken thighs",
+        "amount": "3-5",
+        "pcsv": []
+      },
+      {
+        "name": "butter",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "thyme",
+        "amount": "1 sprig",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Prepare the spice mix. Choose a very small measuring spoon to represent '1 part' by volume. Add all the spices to a container and mix them up. Cover and seal until ready to use. Preheat the oven to 350°F/176°C. 2. Make the sauce and rinse the rice. In a blender, add the canned peeled tomatoes, 1/4 of a white onion, red bell peppers, habanero, and a sprinkle of salt. Blend until completely smooth and set aside. Set a pan over medium heat and add the cooking oil. Thinly slice the red onion and toss it in the pan. Saute for about 5 minutes until softened, but still with a bite to them. Remove half of the red onions and set aside for garnishing later on. With half of the red onions still in the pan, add the bay leaves, Jollof spice mix, curry powder, and cayenne powder to bloom for 30 seconds before pouring in the sauce from the blender. Bring the liquid to a simmer, then turn the heat to medium-low and let it simmer for 15 minutes to reduce and slightly thicken. Meanwhile, rinse the basmati rice 3 to 4 times in a strainer to remove the starch. 3. Cook the rice. Once the Jollof sauce is almost done reducing, place another pan or pot over medium heat and add more cooking oil just to coat the surface. Once hot, toss in the rice and toast for 1-2 minutes, stirring occasionally. Add the reduced Jollof sauce to the pan with the rice and stir together. Add the chicken stock into the pan as well. Bring the liquid to a simmer then cover the pan with an oven-safe lid (aluminum foil works well too). Transfer the pot to the 350°F/176°C oven. Set a timer and bake for 30 minutes during which the rice should steam and become tender. Prepare the chicken thighs while this is in the oven. 4. Cook the chicken thighs. Salt both sides of the chicken thighs. Set a cast-iron pan over medium heat and add the chicken thighs skin side down to the cold pan. This will begin to slowly render the chicken fat. Once the fat has been rendered, flip the chicken thigh over and turn the heat to low. Add the butter, sprig of fresh thyme, 2 cloves of garlic, and a sprinkle of the Jollof Spice mix. Baste the fat and spices over the top of the chicken thigh. Place the entire pan into the oven with the rice and bake until the internal temperature reaches 170°F/76°C. If you time it right, you can have both the rice and chicken ready at the same time. Check both at the end of the 30 minutes and leave either in the oven longer, if needed (the rice should have absorbed almost all of the cooking liquid). 5. Fluff the rice and serve. Remove the rice from the oven and let sit covered for 10 minutes. Remove the chicken from the oven when done, and let it rest off the heat while the rice finishes steaming. Fluff the rice and then stir in the reserved red onions. Serve with the cooked chicken thighs and garnish with cilantro.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r069",
+    "name": "Jamaican Beef Patty",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/jamaican-beef-patty",
+    "cuisine": "Caribbean",
+    "cooking_method": "oven",
+    "time_minutes": 75,
+    "effort_level": "long",
+    "flavor_tags": [
+      "herby",
+      "savory",
+      "smoky",
+      "spicy"
+    ],
+    "serves": 8,
+    "ingredients": [
+      {
+        "name": "flour",
+        "amount": "300 g",
+        "pcsv": []
+      },
+      {
+        "name": "water, cold",
+        "amount": "200 g",
+        "pcsv": []
+      },
+      {
+        "name": "beef tallow, cold",
+        "amount": "100 g",
+        "pcsv": []
+      },
+      {
+        "name": "turmeric powder",
+        "amount": "15 g",
+        "pcsv": []
+      },
+      {
+        "name": "curry powder",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "sugar",
+        "amount": "10 g",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "ground beef, 80/20",
+        "amount": "450 g",
+        "pcsv": []
+      },
+      {
+        "name": "onions",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "carrots",
+        "amount": "1/4",
+        "pcsv": []
+      },
+      {
+        "name": "scotch bonnets",
+        "amount": "1",
+        "pcsv": []
+      },
+      {
+        "name": "garlic",
+        "amount": "2 cloves",
+        "pcsv": []
+      },
+      {
+        "name": "dried thyme",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "smoked paprika",
+        "amount": "a spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "allspice, ground",
+        "amount": "1/2 spoonful",
+        "pcsv": []
+      },
+      {
+        "name": "beef bouillon paste",
+        "amount": "a spoonful",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Combine dry dough ingredients: flour, turmeric, curry powder, sugar, and salt. Dice beef tallow into small cubes and mix into dry ingredients with fingers until pebbly. Add cold water and mix until cohesive without kneading. Form into smooth ball, wrap in plastic wrap, refrigerate. 2. Add ground beef to hot pan, break into small pebbly texture with potato masher or spatula. Sear until colored and cooked through, remove to bowl. Saute onion, carrot, and scotch bonnet on medium heat, scraping fond. Once softened, add garlic, curry powder, thyme, smoked paprika, and allspice, bloom for 30 seconds. Add meat back in. 3. Add cooked beef and beef bouillon to pan, mix until evenly dispersed. Remove from heat, taste and adjust salt as needed. 4. Preheat oven to 400°F/204°C. Roll dough to 1/8 inch thickness, stamp out ~8 inch circles using plate as guide. Dust with flour and set aside. Add 65g filling to half of each circle, fold over and seal edges, pushing out air. Fold sealed edge back and crimp all around with fork. 5. Bake on sheet at 400°F/204°C for 15-20 minutes until light browning appears. Remove and cool on wire rack. Enjoy warm or freeze for later reheating.",
+    "is_ai_generated": false
+  },
+  {
+    "id": "r070",
+    "name": "Doner Kebab",
+    "name_zh": "",
+    "source": "CookWell",
+    "source_url": "https://www.cookwell.com/recipe/doener-kebab",
+    "cuisine": "Turkish",
+    "cooking_method": "pan-sear",
+    "time_minutes": 150,
+    "effort_level": "long",
+    "flavor_tags": [
+      "aromatic",
+      "herby",
+      "savory",
+      "spicy"
+    ],
+    "serves": 6,
+    "ingredients": [
+      {
+        "name": "chicken thighs",
+        "amount": "8 (~2 lb / 900 g)",
+        "pcsv": []
+      },
+      {
+        "name": "salt",
+        "amount": "to taste (~9 g)",
+        "pcsv": []
+      },
+      {
+        "name": "cooking oil",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "rosemary",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "onion powder",
+        "amount": "5 g",
+        "pcsv": []
+      },
+      {
+        "name": "garlic powder",
+        "amount": "2 g",
+        "pcsv": []
+      },
+      {
+        "name": "dried parsley",
+        "amount": "a sprinkle",
+        "pcsv": []
+      },
+      {
+        "name": "dried oregano",
+        "amount": "2 g",
+        "pcsv": []
+      },
+      {
+        "name": "cumin",
+        "amount": "2 g",
+        "pcsv": []
+      },
+      {
+        "name": "paprika",
+        "amount": "2 g",
+        "pcsv": []
+      },
+      {
+        "name": "msg",
+        "amount": "2 g",
+        "pcsv": []
+      },
+      {
+        "name": "mayonnaise",
+        "amount": "225 g",
+        "pcsv": []
+      },
+      {
+        "name": "yogurt",
+        "amount": "115 g",
+        "pcsv": []
+      },
+      {
+        "name": "dried dill",
+        "amount": "2 g",
+        "pcsv": []
+      },
+      {
+        "name": "dried mint",
+        "amount": "2 g",
+        "pcsv": []
+      },
+      {
+        "name": "agave syrup",
+        "amount": "7 g",
+        "pcsv": []
+      },
+      {
+        "name": "ketchup",
+        "amount": "50 g",
+        "pcsv": []
+      },
+      {
+        "name": "sambal",
+        "amount": "50 g",
+        "pcsv": []
+      },
+      {
+        "name": "harissa paste",
+        "amount": "50 g",
+        "pcsv": []
+      },
+      {
+        "name": "purple cabbage, thinly shaved",
+        "amount": "1/2",
+        "pcsv": []
+      },
+      {
+        "name": "lemon juice",
+        "amount": "1/2 lemon",
+        "pcsv": []
+      },
+      {
+        "name": "olive oil",
+        "amount": "a drizzle",
+        "pcsv": []
+      },
+      {
+        "name": "tomatoes",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "iceberg lettuce",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "red onions",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "cucumbers",
+        "amount": "as needed",
+        "pcsv": []
+      },
+      {
+        "name": "pide",
+        "amount": "4-6 slices",
+        "pcsv": []
+      }
+    ],
+    "instructions": "1. Remove chicken skin and bones if needed. Season chicken generously with salt on all sides (use 1% salt by weight). Mix remaining dry seasonings and sprinkle evenly onto chicken. Lay flat on baking sheet and freeze uncovered for at least 2 hours. 2. Slice frozen seasoned chicken as thinly as possible with a sharp knife to create translucent shavings. If difficult, thaw 10 minutes. Cook immediately or freeze in gallon bags. 3. Preheat griddle or cast iron over high heat. Add cooking oil or rendered chicken fat. Add single layer of shaved chicken from freezer and sear undisturbed on high heat until browned on one side; no flipping needed. Repeat as needed. 4. Make herb sauce: measure all ingredients into bowl over scale, mix well, taste and adjust. Make spicy sauce: mix ketchup, sambal, and harissa paste; taste and adjust. 5. Make cabbage slaw: combine thinly sliced cabbage with salt, lemon juice, and oil; taste and adjust. Prep remaining vegetables and optionally season with salt. 6. Warm bread: place pide triangle in wet paper towel, microwave 30 seconds, then toast in pan and flatten. Slice bread open. Slather one side with herb sauce, other side with spicy sauce. Add seared chicken, vegetables, and cabbage slaw. Close sandwich and serve with parchment paper.",
+    "is_ai_generated": false
+  }
+]
