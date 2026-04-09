@@ -32,11 +32,11 @@ ALLOWED_TABLES: frozenset = frozenset({
 # Expected counts derived from source data at migration time.
 # All keys must be members of ALLOWED_TABLES (asserted at module load time below).
 EXPECTED_COUNTS = {
-    "recipes": 20,
-    "pcsv_mappings": 95,
-    "products": 396,
+    "recipes": 70,
+    "pcsv_mappings": 378,
+    "products": 6401,
     "substitutions": 20,
-    "glossary": 123,
+    "glossary": 409,
 }
 
 # Module-load assertion: every EXPECTED_COUNTS key must be in ALLOWED_TABLES.
@@ -144,7 +144,7 @@ def _check_constraints(conn: sqlite3.Connection) -> list:
 
     # products store domain
     vals = {r[0] for r in conn.execute("SELECT DISTINCT store FROM products")}
-    passed = vals == {"costco"}
+    passed = vals == {"costco", "community_market"}
     results.append(CheckResult("products store domain", passed, f"values: {vals}"))
 
     # no NULL brand_name

@@ -47,34 +47,42 @@ def _load_pcsv_mappings(cur: sqlite3.Cursor, data_dir: Path) -> int:
 
 
 def _load_products(cur: sqlite3.Cursor, data_dir: Path) -> int:
+    # Each entry: (raw_dir_name, store_label)
+    store_sources = [
+        ("costco_raw", "costco"),
+        ("saveonfoods_raw", "community_market"),
+    ]
     total = 0
-    seen = set()
-    for fpath in sorted((data_dir / "costco_raw").glob("*.json")):
-        data = json.loads(fpath.read_text())
-        department = data["department"]
-        store = "costco"
-        for p in data["products"]:
-            pid = str(p["productId"])
-            dedup_key = (pid, store)
-            if dedup_key in seen:
-                continue
-            seen.add(dedup_key)
-            cur.execute(
-                """INSERT INTO products
-                   (product_id, name, size, brand_name, category, department, store, available)
-                   VALUES (?,?,?,?,?,?,?,?)""",
-                (
-                    pid,
-                    p["name"],
-                    p.get("size") or "",
-                    p.get("brandName") or "",
-                    p.get("category", ""),
-                    department,
-                    "costco",
-                    int(p.get("available", True)),
-                ),
-            )
-            total += 1
+    seen: set[tuple[str, str]] = set()
+    for raw_dir_name, store in store_sources:
+        raw_dir = data_dir / raw_dir_name
+        if not raw_dir.exists():
+            continue
+        for fpath in sorted(raw_dir.glob("*.json")):
+            data = json.loads(fpath.read_text())
+            department = data["department"]
+            for p in data["products"]:
+                pid = str(p["productId"])
+                dedup_key = (pid, store)
+                if dedup_key in seen:
+                    continue
+                seen.add(dedup_key)
+                cur.execute(
+                    """INSERT INTO products
+                       (product_id, name, size, brand_name, category, department, store, available)
+                       VALUES (?,?,?,?,?,?,?,?)""",
+                    (
+                        pid,
+                        p["name"],
+                        p.get("size") or "",
+                        p.get("brandName") or "",
+                        p.get("category", ""),
+                        department,
+                        store,
+                        int(p.get("available", True)),
+                    ),
+                )
+                total += 1
     return total
 
 
