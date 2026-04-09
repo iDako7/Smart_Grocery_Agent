@@ -13,7 +13,7 @@ CREATE TABLE recipes (
     source_url      TEXT NOT NULL DEFAULT '',
     cuisine         TEXT NOT NULL DEFAULT '',
     cooking_method  TEXT NOT NULL DEFAULT '',
-    effort_level    TEXT NOT NULL DEFAULT 'medium',  -- quick | medium | long
+    effort_level    TEXT NOT NULL DEFAULT 'medium' CHECK (effort_level IN ('quick', 'medium', 'long')),
     time_minutes    INTEGER NOT NULL DEFAULT 0,      -- informational, not a search filter
     flavor_tags     TEXT NOT NULL DEFAULT '[]',       -- JSON array of strings
     serves          INTEGER NOT NULL DEFAULT 0,
@@ -50,8 +50,8 @@ CREATE TABLE substitutions (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
     ingredient      TEXT NOT NULL,
     substitute      TEXT NOT NULL,
-    match_quality   TEXT NOT NULL DEFAULT 'fair',     -- good | fair | poor
-    reason          TEXT NOT NULL DEFAULT 'unavailable', -- unavailable | dietary | preference
+    match_quality   TEXT NOT NULL DEFAULT 'fair' CHECK (match_quality IN ('good', 'fair', 'poor')),
+    reason          TEXT NOT NULL DEFAULT 'unavailable' CHECK (reason IN ('unavailable', 'dietary', 'preference')),
     notes           TEXT NOT NULL DEFAULT ''
 );
 

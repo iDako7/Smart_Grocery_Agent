@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 # ---------------------------------------------------------------------------
@@ -64,9 +64,29 @@ class GetRecipeDetailInput(BaseModel):
     recipe_id: str
 
 
+_PROFILE_FIELD_TYPES: dict[str, type] = {
+    "household_size": int,
+    "dietary_restrictions": list,
+    "preferred_cuisines": list,
+    "disliked_ingredients": list,
+    "preferred_stores": list,
+    "notes": str,
+}
+
+
 class UpdateUserProfileInput(BaseModel):
     field: ProfileField
     value: Any
+
+    @model_validator(mode="after")
+    def _check_value_type(self) -> "UpdateUserProfileInput":
+        expected = _PROFILE_FIELD_TYPES.get(self.field)
+        if expected and not isinstance(self.value, expected):
+            raise ValueError(
+                f"field '{self.field}' expects {expected.__name__}, "
+                f"got {type(self.value).__name__}"
+            )
+        return self
 
 
 class TranslateTermInput(BaseModel):
@@ -108,9 +128,18 @@ class RecipeSummary(BaseModel):
     effort_level: EffortLevel = "medium"
     flavor_tags: list[str] = Field(default_factory=list)
     serves: int = 0
-    pcsv_roles: dict[PCSVRole, list[str]] = Field(default_factory=dict)
-    ingredients_have: list[str] = Field(default_factory=list)
-    ingredients_need: list[str] = Field(default_factory=list)
+    pcsv_roles: dict[PCSVRole, list[str]] = Field(
+        default_factory=dict,
+        description="Computed by tool handler, not stored in DB",
+    )
+    ingredients_have: list[str] = Field(
+        default_factory=list,
+        description="Computed by tool handler, not stored in DB",
+    )
+    ingredients_need: list[str] = Field(
+        default_factory=list,
+        description="Computed by tool handler, not stored in DB",
+    )
 
 
 class RecipeDetail(BaseModel):
@@ -131,11 +160,14 @@ class RecipeDetail(BaseModel):
 
 
 class StoreProduct(BaseModel):
-    product_name: str
+    name: str
     size: str = ""
     department: str = ""
     store: str = "costco"
-    alternatives: list[str] = Field(default_factory=list)
+    alternatives: list[str] = Field(
+        default_factory=list,
+        description="Computed by tool handler, not stored in DB",
+    )
 
 
 class Substitution(BaseModel):
@@ -333,7 +365,12 @@ TOOLS: list[dict] = [
                         "description": "Which profile field to update",
                     },
                     "value": {
-                        "description": "The new value. For list fields, provide the full updated list.",
+                        "description": (
+                            "The new value. "
+                            "For household_size: integer. "
+                            "For dietary_restrictions, preferred_cuisines, disliked_ingredients, preferred_stores: array of strings. "
+                            "For notes: string."
+                        ),
                     },
                 },
                 "required": ["field", "value"],

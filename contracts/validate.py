@@ -132,7 +132,7 @@ check("RecipeDetail", lambda: round_trip(RecipeDetail, {
 }))
 
 check("StoreProduct", lambda: round_trip(StoreProduct, {
-    "product_name": "Kirkland Chicken Thighs", "size": "2.5 kg",
+    "name": "Kirkland Chicken Thighs", "size": "2.5 kg",
     "department": "meat_seafood", "store": "costco", "alternatives": [],
 }))
 
