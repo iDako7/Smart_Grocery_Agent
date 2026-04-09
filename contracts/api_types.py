@@ -7,7 +7,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 from contracts.sse_events import GroceryStore
 from contracts.tool_schemas import PCSVResult, RecipeDetail, RecipeSummary
@@ -52,6 +52,12 @@ class ChatRequest(BaseModel):
             "Identifies which saved item the chat modifies."
         ),
     )
+
+    @model_validator(mode="after")
+    def _require_target_id(self) -> "ChatRequest":
+        if self.screen in ("saved_meal_plan", "saved_recipe") and not self.target_id:
+            raise ValueError(f"target_id is required when screen is '{self.screen}'")
+        return self
 
 
 class ConversationTurn(BaseModel):
