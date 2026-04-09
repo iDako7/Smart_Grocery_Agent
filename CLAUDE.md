@@ -6,15 +6,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Smart Grocery Assistant V2 (SGA V2) — a conversational AI agent that helps users plan meals and shop smarter. Targets Vancouver users: immigrants exploring Western grocery items (bilingual EN/ZH) and locals exploring cultural foods.
 
-**Current status:** Pre-code, planning phase (Phase 1). All docs are in `docs/`. No application code exists yet.
+**Current status:** Phase 2 — scaffolding complete (Phase 0.3), parallel worktree development next.
 
 ## Three-Phase Plan
 
-- **Phase 1 (current):** Validate agent reasoning via Claude artifact with mock KB data. Build promptfoo evals from real conversation logs. Output: validated system prompt, tool definitions, eval fixtures.
-- **Phase 2:** Ship deployable app — FastAPI backend, React SPA frontend, real KB.
+- **Phase 1:** *(done)* Validated agent reasoning via Claude artifact + promptfoo evals.
+- **Phase 2 (current):** Ship deployable app — FastAPI backend, React SPA frontend, real KB. See `docs/01-plans/phase-2-implementation-plan.md`.
 - **Phase 3:** Optimize based on usage data (progressive streaming, vector search, model routing).
 
-## Architecture (Phase 2 target)
+## Architecture
 
 ```
 React SPA (Vite) ──SSE──> FastAPI ──tool-use loop──> Claude via OpenRouter
@@ -40,6 +40,47 @@ React SPA (Vite) ──SSE──> FastAPI ──tool-use loop──> Claude via 
 
 **Schema coercion pipeline** (not re-prompting): `json.loads()` → Pydantic type coercion → field validators → defaults → re-prompt only as last resort.
 
+## Project Structure
+
+```
+contracts/          ← Shared schemas (source of truth for all worktrees)
+src/backend/        ← FastAPI app, API endpoints, DB layer (WT2)
+src/ai/             ← Agent orchestrator, prompt assembly (WT2)
+src/frontend/       ← React SPA, Vite + Bun + Tailwind + shadcn/ui (WT3)
+data/               ← KB source data (WT1)
+scripts/            ← Migration scripts (WT1)
+prototype/          ← Phase 1 prototype (read-only reference)
+evals/              ← promptfoo eval suite
+docs/               ← Specs, plans, archives
+```
+
+## Contracts (`contracts/`)
+
+Shared schemas that all worktrees import. Contract changes go as small PRs to `main`.
+
+| File | Status | Contents |
+|---|---|---|
+| `tool_schemas.py` | frozen | Pydantic models for 7 tool inputs/outputs |
+| `sse_events.py` | unfrozen | SSE event type definitions |
+| `api_types.py` | unfrozen | Request/response types for all endpoints |
+| `kb_schema.sql` | unfrozen | SQLite DDL for KB |
+| `pg_schema.sql` | unfrozen | PostgreSQL DDL for mutable data |
+| `CHANGELOG.md` | — | Dated one-liners for breaking changes |
+
+**Contract freeze protocol:** Once a contract file is marked `# Status: frozen`, only additive non-breaking changes are allowed (new optional fields, new event types, new endpoints). Breaking changes require a PR to `main` with a `CHANGELOG.md` entry.
+
+## Worktree Development Protocol
+
+Three worktrees develop in parallel, each with its own `CLAUDE.md` defining scope:
+
+| Worktree | Branch | Owns | Scope file |
+|---|---|---|---|
+| WT1: KB + Data | `wt1-kb-data` | `data/`, `scripts/` | `data/CLAUDE.md` |
+| WT2: Backend + AI | `wt2-backend` | `src/backend/`, `src/ai/` | `src/backend/CLAUDE.md` |
+| WT3: Frontend | `wt3-frontend` | `src/frontend/` | `src/frontend/CLAUDE.md` |
+
+**Rebase protocol:** When a contract is frozen or updated on `main`, all active worktrees must `git rebase main` before continuing. Check `contracts/CHANGELOG.md` for breaking changes.
+
 ## Key Design Decisions
 
 - **PCV gap analysis** (Protein/Carb/Veggie) is the reasoning backbone — deterministic lookup, not LLM judgment. Sauce tracked internally but not shown in analysis UI.
@@ -49,10 +90,24 @@ React SPA (Vite) ──SSE──> FastAPI ──tool-use loop──> Claude via 
 - **System prompt** = persona snippet + rules snippet + tool instructions snippet (skill files concatenated at build time).
 - **Dietary restrictions are hard constraints** — never violated.
 - **Auth:** Magic link (passwordless email) + JWT. Token in memory, not localStorage.
+- **PostgreSQL access:** SQLAlchemy 2.0 Core (async) + asyncpg + Alembic. No full ORM.
 
 ## Key Documentation
 
 - `docs/00-specs/product-spec-v2.md` — full product vision, user stories, screens, saved content
 - `docs/00-specs/architecture-spec-v2.md` — system architecture, API contract, deployment
 - `docs/00-specs/ai-layer-architecture-v2.md` — agent internals, ADRs (7 decisions documented)
-- `docs/01-plans/Implementation_Plan_high_level.md` — phase plan, V1 lessons
+- `docs/01-plans/phase-2-implementation-plan.md` — phase plan, worktree protocol, sync points
+
+## Running Locally
+
+```bash
+# Backend (Docker: PostgreSQL + FastAPI)
+docker compose up
+
+# Frontend (standalone dev server)
+cd src/frontend && bun dev
+
+# Evals (prototype, Phase 1)
+cd prototype && uv run promptfoo eval -c ../evals/reasoning/promptfooconfig.yaml
+```
