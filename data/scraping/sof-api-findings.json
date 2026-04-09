@@ -1,0 +1,62 @@
+{
+  "api_base_url": "https://storefrontgateway.saveonfoods.com/api",
+  "endpoints": {
+    "search": {
+      "url": "/stores/{storeId}/search",
+      "method": "GET",
+      "params": {
+        "q": "Search query (required, non-empty, q=* does NOT work)",
+        "take": "Number of results per page (max 100)",
+        "skip": "Number of results to skip (for pagination)",
+        "sort": "Sort order: relevance, brand, brand+desc, price, price+desc",
+        "f": "Facet filter, e.g. f=Breadcrumb:grocery/meat & seafood (only works with relevant search terms)"
+      },
+      "notes": "q=* returns 0 results. Must use actual search terms. Breadcrumb filters only return results when the search term is relevant to that category."
+    },
+    "product_detail": {
+      "url": "/stores/{storeId}/products/{sku}",
+      "method": "GET",
+      "notes": "Returns full product detail including nutrition, ingredients, pricing"
+    },
+    "stores": {
+      "url": "/stores",
+      "method": "GET",
+      "notes": "Returns all 190 stores with addresses, coordinates, store IDs"
+    },
+    "notifications": {
+      "url": "/notifications/{storeId}",
+      "method": "GET"
+    }
+  },
+  "store_id": "1982",
+  "store_name": "Save-on-Foods, 19855 92a Ave, Langley Twp, BC V1M 3B6",
+  "authentication": "NONE REQUIRED - fully public API, works with curl, no cookies/tokens needed",
+  "pagination": {
+    "type": "skip/take",
+    "max_take": 100,
+    "skip_offset_based": true,
+    "note": "Error message 'Take too large. Take limit is 100.' if take > 100"
+  },
+  "anti_scraping": {
+    "cloudflare": true,
+    "cloudflare_bot_management": "Sets __cf_bm cookie but does not block requests",
+    "rate_limiting_headers": "None observed (no X-RateLimit-* headers)",
+    "captcha": "Not observed on API endpoints",
+    "note": "Cloudflare sits in front but allows direct API access without challenge"
+  },
+  "recommended_scraping_strategy": {
+    "approach_1_search_api": {
+      "description": "Use search API with category-specific search terms to enumerate products per department",
+      "pros": "Direct JSON API, no browser needed, fast, rich product data",
+      "cons": "Cannot enumerate ALL products - must craft relevant search queries per category. q=* doesn't work.",
+      "implementation": "For each leaf category, search with category-relevant terms (e.g., 'chicken' for chicken & turkey, 'bacon' for bacon, etc.). Paginate with skip/take. Then use product detail endpoint for nutrition/ingredients."
+    },
+    "approach_2_ssr_scraping": {
+      "description": "Load category pages via browser/requests and extract __PRELOADED_STATE__ from HTML",
+      "pros": "Gets exact product listings as displayed on site, correct category assignments, all products in a category",
+      "cons": "Requires parsing HTML, SSR pages may have Cloudflare challenges, slower",
+      "implementation": "For each leaf category URL, fetch HTML, extract __PRELOADED_STATE__ JSON from script tag, parse search.productCardDictionary (leaf categories) or departments.productCardDictionary (parent categories)."
+    },
+    "recommended": "Hybrid: Use approach_2 (SSR) to get all SKUs per category (complete coverage), then approach_1 (product detail API) to enrich with nutrition/ingredients data."
+  }
+}
