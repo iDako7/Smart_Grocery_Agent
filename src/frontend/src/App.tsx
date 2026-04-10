@@ -22,8 +22,8 @@ function AppShell() {
   );
 
   return (
-    <SessionProvider chatService={chatService}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <SessionProvider chatService={chatService}>
         <Routes>
           <Route path="/" element={<HomeScreen />} />
           <Route path="/clarify" element={<ClarifyScreen />} />
@@ -34,8 +34,8 @@ function AppShell() {
           <Route path="/saved/list/:id" element={<SavedGroceryListScreen />} />
         </Routes>
         <ScenarioSwitcher />
-      </BrowserRouter>
-    </SessionProvider>
+      </SessionProvider>
+    </BrowserRouter>
   );
 }
 

@@ -5,6 +5,10 @@ import { StepProgress } from "@/components/step-progress";
 import { ChecklistRow } from "@/components/checklist-row";
 import { StoreSection } from "@/components/store-section";
 import { useScenario } from "@/context/scenario-context";
+// TODO(Stage 4): Import useSessionOptional and wire screenData.groceryList
+// to replace scenario.groceryItems. The SSE grocery_list event stores data in
+// screenData.groceryList (via use-screen-state reducer), but this screen
+// currently reads scenario data only. Pattern: same as ClarifyScreen/RecipesScreen.
 
 export function GroceryScreen() {
   const navigate = useNavigate();

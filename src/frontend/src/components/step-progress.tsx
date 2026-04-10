@@ -8,7 +8,13 @@ interface StepProgressProps {
 
 export function StepProgress({ currentStep, totalSteps, label }: StepProgressProps) {
   return (
-    <div>
+    <div
+      role="progressbar"
+      aria-valuemin={1}
+      aria-valuemax={totalSteps}
+      aria-valuenow={currentStep}
+      aria-label={`Step ${currentStep} of ${totalSteps}: ${label}`}
+    >
       <div className="flex items-center gap-0 px-[22px] pt-2 pb-1">
         {Array.from({ length: totalSteps }, (_, i) => {
           const stepNum = i + 1;

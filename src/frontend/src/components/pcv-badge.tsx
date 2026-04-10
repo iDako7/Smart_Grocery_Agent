@@ -28,6 +28,7 @@ export function PcvBadge({ category, status }: PcvBadgeProps) {
 
   return (
     <span
+      aria-label={`${category}: ${status === "ok" ? "good" : status === "warn" ? "low" : "gap"}`}
       className={cn(
         "inline-flex items-center gap-[5px] px-3 py-[5px] rounded-full text-[11px] font-semibold",
         config.badge

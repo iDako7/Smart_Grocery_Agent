@@ -3,36 +3,9 @@
 
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router";
-import { vi } from "vitest";
 
-// ---------------------------------------------------------------------------
-// Mock @base-ui/react/dialog so Sheet renders inline (no portal)
-// ---------------------------------------------------------------------------
-vi.mock("@base-ui/react/dialog", async () => {
-  const React = await import("react");
-  return {
-    Dialog: {
-      Root: ({ open, children }: { open?: boolean; onOpenChange?: (v: boolean) => void; children: React.ReactNode }) =>
-        open ? <div data-testid="sheet-root">{children}</div> : null,
-      Trigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-      Close: ({ children, render: renderProp }: { children?: React.ReactNode; render?: React.ReactElement }) => {
-        if (renderProp) {
-          return React.cloneElement(renderProp, {}, children);
-        }
-        return <button>{children}</button>;
-      },
-      Portal: ({ children }: { children: React.ReactNode }) => <>{children}</>,
-      Backdrop: ({ children, className }: { children?: React.ReactNode; className?: string }) =>
-        <div className={className}>{children}</div>,
-      Popup: ({ children, className, "data-side": side }: { children: React.ReactNode; className?: string; "data-side"?: string }) =>
-        <div className={className} data-side={side}>{children}</div>,
-      Title: ({ children, className }: { children: React.ReactNode; className?: string }) =>
-        <h2 className={className}>{children}</h2>,
-      Description: ({ children, className }: { children: React.ReactNode; className?: string }) =>
-        <p className={className}>{children}</p>,
-    },
-  };
-});
+// Base-ui mocks (menu + dialog) are in setup.ts
+
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ClarifyScreen } from "@/screens/ClarifyScreen";
 import { RecipesScreen } from "@/screens/RecipesScreen";

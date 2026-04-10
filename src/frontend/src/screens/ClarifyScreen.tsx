@@ -47,8 +47,13 @@ export function ClarifyScreen() {
   const [pcvInfoOpen, setPcvInfoOpen] = useState(false);
 
   function handleLooksGood() {
+    const setup = selectedSetup.join(", ");
+    const diet = selectedDiet.filter((d) => d !== "None").join(", ");
+    const msg = diet
+      ? `Looks good, show recipes. Setup: ${setup}. Dietary: ${diet}.`
+      : `Looks good, show recipes. Setup: ${setup}.`;
     navigateToScreen?.("recipes");
-    sendMessage("Looks good, show recipes");
+    sendMessage(msg);
     navigate("/recipes");
   }
 
@@ -192,6 +197,7 @@ export function ClarifyScreen() {
                 <button
                   key={opt}
                   type="button"
+                  aria-pressed={selectedSetup.includes(opt)}
                   onClick={() =>
                     toggleOption(opt, selectedSetup, setSelectedSetup)
                   }
@@ -217,6 +223,7 @@ export function ClarifyScreen() {
                 <button
                   key={opt}
                   type="button"
+                  aria-pressed={selectedDiet.includes(opt)}
                   onClick={() =>
                     toggleOption(opt, selectedDiet, setSelectedDiet)
                   }

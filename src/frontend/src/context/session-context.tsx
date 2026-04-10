@@ -15,6 +15,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -118,6 +119,18 @@ export function SessionProvider({
   // Store the cancel function from the last chatService call
   const cancelRef = useRef<(() => void) | null>(null);
 
+  // H2: Cancel stale SSE events when chatService changes (scenario switch).
+  // Old setTimeout chains from the previous mock SSE service would otherwise
+  // fire callbacks into the new scenario's state.
+  useEffect(() => {
+    return () => {
+      if (cancelRef.current) {
+        cancelRef.current();
+        cancelRef.current = null;
+      }
+    };
+  }, [chatService]);
+
   // --------------------------------------------------------------------------
   // sendMessage
   // --------------------------------------------------------------------------
@@ -169,9 +182,12 @@ export function SessionProvider({
           dispatch({ type: "complete", status, reason: reason ?? undefined });
 
           // Add assistant turn to history
+          // TODO(Stage 4): Populate assistant content from screenData summary.
+          // Content lives in screenData (pcsv, recipes, etc.), not as a flat string.
+          // At Stage 4, serialize a summary for backend context injection.
           const assistantTurn: ConversationTurn = {
             role: "assistant",
-            content: "", // Content is in screenData; history records the turn metadata
+            content: "",
             timestamp: new Date().toISOString(),
           };
           setConversationHistory((prev) => [...prev, assistantTurn]);

@@ -14,15 +14,20 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: ['./src/test/setup.ts'],
+    setupFiles: ['./src/test/setup.tsx'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
-      // Cover only the Phase 2A deliverables: screen components.
+      // Cover screens, hooks, context, and components.
       // shadcn/ui primitives (button, sheet, checkbox, input) are third-party
-      // generated files; App.tsx and utils are exercised by integration tests.
-      include: ['src/screens/**/*.{ts,tsx}'],
-      exclude: ['src/test/**'],
+      // generated files excluded via the components/ui pattern.
+      include: [
+        'src/screens/**/*.{ts,tsx}',
+        'src/hooks/**/*.{ts,tsx}',
+        'src/context/**/*.{ts,tsx}',
+        'src/components/**/*.{ts,tsx}',
+      ],
+      exclude: ['src/test/**', 'src/components/ui/**'],
       thresholds: {
         branches: 80,
         functions: 80,

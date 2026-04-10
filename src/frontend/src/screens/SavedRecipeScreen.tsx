@@ -36,7 +36,7 @@ export function SavedRecipeScreen() {
     <div data-testid="screen-saved-recipe" className="min-h-screen bg-cream flex flex-col">
       {/* Nav bar */}
       <div data-testid="saved-recipe-nav" className="flex justify-between items-center px-[14px] pt-3 pb-1">
-        <button type="button" aria-label="Go back" onClick={() => navigate(-1)}
+        <button type="button" aria-label="Go back" onClick={() => navigate("/")}
           className="flex items-center justify-center min-w-[36px] min-h-[44px] text-ink-2 hover:text-ink transition-colors bg-transparent border-none cursor-pointer">
           <ArrowLeft size={20} />
         </button>
@@ -57,7 +57,7 @@ export function SavedRecipeScreen() {
           <h1 className="text-[20px] font-bold tracking-tight text-ink">
             {name}
           </h1>
-          <p className="font-cjk text-[14px] font-medium text-ink-3 mt-1 tracking-[0.02em]">
+          <p lang="zh" className="font-cjk text-[14px] font-medium text-ink-3 mt-1 tracking-[0.02em]">
             {nameCjk}
           </p>
           <p className="mt-[5px] text-[12px] text-ink-3">

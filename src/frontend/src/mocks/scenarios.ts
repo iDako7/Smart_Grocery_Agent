@@ -5,6 +5,7 @@ import { bbqWeekend } from "./bbq-weekend";
 import { weeknightChicken } from "./weeknight-chicken";
 import type { ScenarioShape } from "./bbq-weekend";
 
+export type { RecipeCardData, SwapAlternative } from "./bbq-weekend";
 export type ScenarioData = ScenarioShape;
 export type ScenarioKey = "bbq" | "chicken";
 

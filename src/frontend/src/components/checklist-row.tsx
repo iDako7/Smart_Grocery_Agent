@@ -23,6 +23,7 @@ export function ChecklistRow({ id, name, subtitle, checked, onToggle, onRemove, 
         type="button"
         role="checkbox"
         aria-checked={checked}
+        aria-label={`Toggle ${name}`}
         onClick={() => onToggle(id)}
         className={cn(
           "w-7 h-7 rounded-full border-[1.5px] shrink-0 cursor-pointer flex items-center justify-center text-[12px] font-bold text-white transition-all duration-150 min-w-[28px]",

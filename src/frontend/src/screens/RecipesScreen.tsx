@@ -9,7 +9,7 @@ import { InfoSheet } from "@/components/info-sheet";
 import { ErrorBanner } from "@/components/error-banner";
 import { useScenario } from "@/context/scenario-context";
 import { useSessionOptional } from "@/context/session-context";
-import type { RecipeCardData } from "@/mocks/bbq-weekend";
+import type { RecipeCardData } from "@/mocks/scenarios";
 import type { RecipeSummary, EffortLevel } from "@/types/tools";
 
 // Map RecipeSummary (from SSE events) → RecipeCardData (screen component props)
@@ -65,8 +65,11 @@ export function RecipesScreen() {
   }
 
   function handleSwap(idx: number, recipeName: string) {
-    setSwappingIndex(idx === swappingIndex ? null : idx);
-    sendMessage(`try another for ${recipeName}`);
+    const isClosing = idx === swappingIndex;
+    setSwappingIndex(isClosing ? null : idx);
+    if (!isClosing) {
+      sendMessage(`try another for ${recipeName}`);
+    }
   }
 
   function handleKeepOriginal() {
@@ -142,12 +145,8 @@ export function RecipesScreen() {
             <span className="bg-cream-deep px-[11px] py-[5px] rounded-full text-[10.5px] font-semibold text-ink-2">
               <b className="text-jade">{RECIPES.length}</b> dishes
             </span>
-            <span className="bg-cream-deep px-[11px] py-[5px] rounded-full text-[10.5px] font-semibold text-ink-2">
-              serves <b className="text-jade">8</b>
-            </span>
-            <span className="bg-cream-deep px-[11px] py-[5px] rounded-full text-[10.5px] font-semibold text-ink-2">
-              ~<b className="text-jade">60</b> min
-            </span>
+            {/* TODO(Stage 4): Derive serves and total time from RecipeSummary data.
+                RecipeCardData lacks a servings field; for now show dish count only. */}
           </div>
         </div>
       </div>
@@ -174,7 +173,7 @@ export function RecipesScreen() {
 
       {/* Recipe cards + swap panel interleaved */}
       {RECIPES.map((recipe) => (
-        <div key={recipe.name}>
+        <div key={`recipe-${recipe.index}`}>
           <RecipeCard
             index={recipe.index}
             name={recipe.name}

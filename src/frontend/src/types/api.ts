@@ -14,7 +14,8 @@ export type Screen =
   | "recipes"
   | "grocery"
   | "saved_meal_plan"
-  | "saved_recipe";
+  | "saved_recipe"
+  | "saved_grocery_list";
 
 // ---------------------------------------------------------------------------
 // Session endpoints

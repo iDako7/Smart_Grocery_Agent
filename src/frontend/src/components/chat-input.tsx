@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface ChatInputProps {
   placeholder: string;
@@ -9,10 +9,14 @@ interface ChatInputProps {
 
 export function ChatInput({ placeholder, hint, onSend, defaultValue = "" }: ChatInputProps) {
   const [value, setValue] = useState(defaultValue);
+  const prevDefaultRef = useRef(defaultValue);
 
   useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
+    if (defaultValue !== prevDefaultRef.current) {
+      prevDefaultRef.current = defaultValue;
+      if (!value) setValue(defaultValue);
+    }
+  }, [defaultValue, value]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter" && value.trim()) {

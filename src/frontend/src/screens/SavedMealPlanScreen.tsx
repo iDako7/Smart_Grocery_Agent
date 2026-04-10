@@ -17,7 +17,7 @@ export function SavedMealPlanScreen() {
     <div data-testid="screen-saved-meal-plan" className="min-h-screen bg-cream flex flex-col">
       {/* Nav bar */}
       <div className="flex justify-between items-center px-[14px] pt-3 pb-1">
-        <button type="button" aria-label="Go back" onClick={() => navigate(-1)}
+        <button type="button" aria-label="Go back" onClick={() => navigate("/")}
           className="flex items-center justify-center min-w-[36px] min-h-[44px] text-ink-2 hover:text-ink transition-colors bg-transparent border-none cursor-pointer">
           <ArrowLeft size={20} />
         </button>

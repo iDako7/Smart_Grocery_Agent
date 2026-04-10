@@ -1,7 +1,7 @@
 // ScenarioContext — provides current scenario data and a switcher function
 // Defaults to 'bbq' scenario. Checks URL param ?scenario=chicken to override.
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { scenarios } from "@/mocks/scenarios";
 import type { ScenarioData, ScenarioKey } from "@/mocks/scenarios";
@@ -27,8 +27,8 @@ function resolveInitialKey(): ScenarioKey {
   if (typeof window !== "undefined") {
     const params = new URLSearchParams(window.location.search);
     const param = params.get("scenario");
-    if (param === "chicken" || param === "bbq") {
-      return param;
+    if (param && param in scenarios) {
+      return param as ScenarioKey;
     }
   }
   return "bbq";
@@ -42,14 +42,19 @@ export function ScenarioProvider({ children }: { children: ReactNode }) {
     resolveInitialKey
   );
 
-  function setScenario(key: ScenarioKey) {
+  const setScenario = useCallback((key: ScenarioKey) => {
     setScenarioKey(key);
-  }
+  }, []);
 
   const scenario = scenarios[scenarioKey];
 
+  const value = useMemo(
+    () => ({ scenario, scenarioKey, setScenario }),
+    [scenario, scenarioKey, setScenario]
+  );
+
   return (
-    <ScenarioContext.Provider value={{ scenario, scenarioKey, setScenario }}>
+    <ScenarioContext.Provider value={value}>
       {children}
     </ScenarioContext.Provider>
   );

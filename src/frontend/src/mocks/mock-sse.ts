@@ -11,7 +11,7 @@ import type { RecipeSummary, EffortLevel } from "@/types/tools";
 import type { Screen } from "@/types/api";
 import type { ScenarioData } from "@/mocks/scenarios";
 import type { ChatServiceHandler } from "@/context/session-context";
-import type { RecipeCardData, SwapAlternative } from "@/mocks/bbq-weekend";
+import type { RecipeCardData, SwapAlternative } from "@/mocks/scenarios";
 
 // ---------------------------------------------------------------------------
 // Default delay constants (ms) — scaled by delayMs multiplier
@@ -242,6 +242,7 @@ function resolveSteps(
     case "home":
     case "saved_meal_plan":
     case "saved_recipe":
+    case "saved_grocery_list":
       return buildImmediateDoneSteps();
     default: {
       // Exhaustive check — TypeScript will error if Screen union grows
@@ -273,9 +274,13 @@ function runSteps(
       } else if (step.kind === "done") {
         onDone(step.status, step.reason);
       } else if (step.kind === "error") {
-        // Dual emission by design: onEvent carries the typed ErrorEvent for the
-        // state machine reducer; onError is the out-of-band signal for the
-        // session context to dispatch { type: "error" } directly.
+        // Dual emission by design (mock only — do NOT replicate at Stage 4):
+        // 1. onEvent(ErrorEvent) — typed SSE event for the reducer (applySSEEvent
+        //    handles recoverable vs non-recoverable). Covers error-during-streaming.
+        // 2. onError(message) — out-of-band signal for session-context to dispatch
+        //    { type: "error" } directly. Covers error-from-loading (before streaming).
+        // At Stage 4, the real SSE client should use ONLY onError for non-recoverable
+        // errors and ONLY onEvent for recoverable ErrorEvents.
         onEvent(makeError(step.message));
         onError(step.message);
       }

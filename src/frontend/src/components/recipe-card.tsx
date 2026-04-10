@@ -70,7 +70,7 @@ export function RecipeCard({
 
       {/* CJK name */}
       {nameCjk && (
-        <div className="font-cjk text-[12px] font-medium text-ink-3 mt-[3px] tracking-[0.02em]">
+        <div lang="zh" className="font-cjk text-[12px] font-medium text-ink-3 mt-[3px] tracking-[0.02em]">
           {nameCjk}
         </div>
       )}

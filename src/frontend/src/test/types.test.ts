@@ -382,16 +382,18 @@ describe("sse.ts — event types", () => {
 });
 
 describe("api.ts — Screen literals", () => {
-  it("Screen covers all 6 values including saved screens", () => {
-    const screens: Screen[] = [
-      "home",
-      "clarify",
-      "recipes",
-      "grocery",
-      "saved_meal_plan",
-      "saved_recipe",
-    ];
-    expect(screens).toHaveLength(6);
+  it("Screen covers all 7 values including saved screens", () => {
+    // Compile-time exhaustive check — fails if Screen union changes
+    const _exhaustive: Record<Screen, true> = {
+      home: true,
+      clarify: true,
+      recipes: true,
+      grocery: true,
+      saved_meal_plan: true,
+      saved_recipe: true,
+      saved_grocery_list: true,
+    };
+    expect(Object.keys(_exhaustive)).toHaveLength(7);
   });
 });
 
