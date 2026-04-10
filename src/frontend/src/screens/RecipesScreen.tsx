@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { ArrowLeft, X } from "lucide-react";
 import { StepProgress } from "@/components/step-progress";
@@ -54,11 +54,37 @@ export function RecipesScreen() {
     return scenario.recipes;
   }, [sessionRecipes, scenario.recipes]);
 
-  const SWAP_ALTERNATIVES = scenario.swapAlternatives;
   const { eyebrow, description } = scenario.recipesHeader;
+  const initialAltPool = useMemo(() =>
+    scenario.swapAlternatives.map((alt, i) => ({
+      index: 100 + i,
+      name: alt.name,
+      nameCjk: alt.nameCjk,
+      flavorProfile: "",
+      cookingMethod: "",
+      time: "",
+      ingredients: [],
+      infoFlavorTags: [],
+      infoDescription: alt.description,
+    })),
+    [scenario.swapAlternatives]
+  );
+  const [displayedRecipes, setDisplayedRecipes] = useState<RecipeCardData[]>(RECIPES);
+  const [altPool, setAltPool] = useState<RecipeCardData[]>(initialAltPool);
   const [swappingIndex, setSwappingIndex] = useState<number | null>(null);
+
+  // Sync displayed recipes when source data changes (scenario switch or SSE)
+  useEffect(() => {
+    setDisplayedRecipes(RECIPES);
+  }, [RECIPES]);
+
+  useEffect(() => {
+    setAltPool(initialAltPool);
+  }, [initialAltPool]);
   const [infoOpen, setInfoOpen] = useState(false);
   const [infoRecipe, setInfoRecipe] = useState<RecipeCardData | null>(null);
+  const [lang, setLang] = useState<"en" | "zh">("en");
+  const [planSaved, setPlanSaved] = useState(false);
 
   function handleRetry() {
     sendMessage("retry");
@@ -70,6 +96,22 @@ export function RecipesScreen() {
     if (!isClosing) {
       sendMessage(`try another for ${recipeName}`);
     }
+  }
+
+  function handlePick(altIndex: number) {
+    if (swappingIndex === null) return;
+    const displaced = displayedRecipes[swappingIndex];
+    const picked = altPool[altIndex];
+    setDisplayedRecipes((prev) => {
+      const next = [...prev];
+      next[swappingIndex] = { ...picked, index: swappingIndex };
+      return next;
+    });
+    setAltPool((prev) => [
+      ...prev.filter((_, i) => i !== altIndex),
+      displaced,
+    ]);
+    setSwappingIndex(null);
   }
 
   function handleKeepOriginal() {
@@ -93,11 +135,16 @@ export function RecipesScreen() {
         >
           <ArrowLeft size={20} />
         </button>
-        <span className="bg-paper px-[9px] py-[3px] rounded-full text-[10px] flex gap-1.5 items-center">
-          <b className="text-ink">EN</b>
+        <button
+          type="button"
+          aria-label="Toggle language"
+          onClick={() => setLang((l) => (l === "en" ? "zh" : "en"))}
+          className="bg-paper px-[9px] py-[3px] rounded-full text-[10px] flex gap-1.5 items-center border-none cursor-pointer"
+        >
+          {lang === "en" ? <b className="text-ink">EN</b> : <span className="text-ink-3 font-normal">EN</span>}
           <span className="text-ink-3 font-normal">·</span>
-          <span className="text-ink-3 font-normal">中</span>
-        </span>
+          {lang === "zh" ? <b className="text-ink">中</b> : <span className="text-ink-3 font-normal">中</span>}
+        </button>
         <button
           type="button"
           aria-label="Cancel"
@@ -143,7 +190,7 @@ export function RecipesScreen() {
           </p>
           <div className="flex gap-1.5 mt-2.5 flex-wrap">
             <span className="bg-cream-deep px-[11px] py-[5px] rounded-full text-[10.5px] font-semibold text-ink-2">
-              <b className="text-jade">{RECIPES.length}</b> dishes
+              <b className="text-jade">{displayedRecipes.length}</b> dishes
             </span>
             {/* TODO(Stage 4): Derive serves and total time from RecipeSummary data.
                 RecipeCardData lacks a servings field; for now show dish count only. */}
@@ -172,24 +219,28 @@ export function RecipesScreen() {
       )}
 
       {/* Recipe cards + swap panel interleaved */}
-      {RECIPES.map((recipe) => (
-        <div key={`recipe-${recipe.index}`}>
+      {displayedRecipes.map((recipe, idx) => (
+        <div key={`recipe-${recipe.name}`}>
           <RecipeCard
-            index={recipe.index}
+            index={idx}
             name={recipe.name}
             nameCjk={recipe.nameCjk}
             flavorProfile={recipe.flavorProfile}
             cookingMethod={recipe.cookingMethod}
             time={recipe.time}
             ingredients={recipe.ingredients}
-            isSwapping={swappingIndex === recipe.index}
-            onSwap={() => handleSwap(recipe.index, recipe.name)}
+            isSwapping={swappingIndex === idx}
+            onSwap={() => handleSwap(idx, recipe.name)}
             onInfoClick={() => handleInfoClick(recipe)}
           />
-          {swappingIndex === recipe.index && (
+          {swappingIndex === idx && (
             <SwapPanel
-              alternatives={SWAP_ALTERNATIVES}
-              onPick={() => setSwappingIndex(null)}
+              alternatives={altPool.map((a) => ({
+                name: a.name,
+                nameCjk: a.nameCjk,
+                description: a.infoDescription,
+              }))}
+              onPick={handlePick}
               onKeepOriginal={handleKeepOriginal}
             />
           )}
@@ -207,9 +258,15 @@ export function RecipesScreen() {
       <div className="flex gap-2.5 px-3.5 pt-1 pb-2.5">
         <button
           type="button"
+          data-saved={planSaved ? "true" : undefined}
+          onClick={() => {
+            console.info("[Stage 4 TODO] Save plan");
+            setPlanSaved(true);
+            setTimeout(() => setPlanSaved(false), 1500);
+          }}
           className="flex-1 py-3 rounded-md bg-paper text-ink border border-cream-deep font-sans text-[13px] font-semibold cursor-pointer min-h-[44px]"
         >
-          Save plan
+          {planSaved ? "Saved!" : "Save plan"}
         </button>
         <button
           type="button"

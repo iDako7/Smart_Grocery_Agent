@@ -16,7 +16,8 @@ const COOKING_SETUP_OPTIONS = [
   "All of the above",
 ];
 
-const DIETARY_OPTIONS = ["None", "Halal", "Vegetarian", "Gluten-free"];
+const DIETARY_OPTIONS = ["None", "Halal", "Vegetarian", "Vegan", "Gluten-free"];
+const INDIVIDUAL_SETUP_OPTIONS = COOKING_SETUP_OPTIONS.filter(o => o !== "All of the above");
 
 const PCV_INFO = {
   name: "How PCV analysis works",
@@ -47,11 +48,15 @@ export function ClarifyScreen() {
   const [pcvInfoOpen, setPcvInfoOpen] = useState(false);
 
   function handleLooksGood() {
-    const setup = selectedSetup.join(", ");
+    // Resolve "All of the above" to actual option names
+    const resolvedSetup = selectedSetup.includes("All of the above")
+      ? INDIVIDUAL_SETUP_OPTIONS
+      : selectedSetup.filter((o) => o !== "All of the above");
+    const setup = resolvedSetup.join(", ");
     const diet = selectedDiet.filter((d) => d !== "None").join(", ");
-    const msg = diet
-      ? `Looks good, show recipes. Setup: ${setup}. Dietary: ${diet}.`
-      : `Looks good, show recipes. Setup: ${setup}.`;
+    const setupClause = setup ? ` Setup: ${setup}.` : "";
+    const dietClause = diet ? ` Dietary: ${diet}.` : "";
+    const msg = `Looks good, show recipes.${setupClause}${dietClause}`;
     navigateToScreen?.("recipes");
     sendMessage(msg);
     navigate("/recipes");
@@ -61,16 +66,37 @@ export function ClarifyScreen() {
     sendMessage("retry");
   }
 
-  function toggleOption(
-    option: string,
-    selected: string[],
-    setSelected: (v: string[]) => void
-  ) {
-    setSelected(
-      selected.includes(option)
-        ? selected.filter((o) => o !== option)
-        : [...selected, option]
-    );
+  function toggleSetup(option: string) {
+    setSelectedSetup((prev) => {
+      if (option === "All of the above") {
+        if (prev.includes("All of the above")) {
+          return [];
+        }
+        return [...INDIVIDUAL_SETUP_OPTIONS, "All of the above"];
+      }
+      const toggled = prev.includes(option)
+        ? prev.filter((o) => o !== option)
+        : [...prev.filter((o) => o !== "All of the above"), option];
+      // Auto-select "All of the above" if all individual options are selected
+      const allIndividualSelected = INDIVIDUAL_SETUP_OPTIONS.every((o) => toggled.includes(o));
+      if (allIndividualSelected) {
+        return [...toggled, "All of the above"];
+      }
+      return toggled.filter((o) => o !== "All of the above");
+    });
+  }
+
+  function toggleDiet(option: string) {
+    setSelectedDiet((prev) => {
+      if (option === "None") {
+        return ["None"];
+      }
+      const withoutNone = prev.filter((o) => o !== "None");
+      const toggled = withoutNone.includes(option)
+        ? withoutNone.filter((o) => o !== option)
+        : [...withoutNone, option];
+      return toggled.length === 0 ? ["None"] : toggled;
+    });
   }
 
   return (
@@ -198,9 +224,7 @@ export function ClarifyScreen() {
                   key={opt}
                   type="button"
                   aria-pressed={selectedSetup.includes(opt)}
-                  onClick={() =>
-                    toggleOption(opt, selectedSetup, setSelectedSetup)
-                  }
+                  onClick={() => toggleSetup(opt)}
                   className={`px-4 py-2 rounded-full text-[11px] font-semibold cursor-pointer min-h-[34px] flex items-center border-none transition-colors ${
                     selectedSetup.includes(opt)
                       ? "bg-shoyu text-cream"
@@ -224,9 +248,7 @@ export function ClarifyScreen() {
                   key={opt}
                   type="button"
                   aria-pressed={selectedDiet.includes(opt)}
-                  onClick={() =>
-                    toggleOption(opt, selectedDiet, setSelectedDiet)
-                  }
+                  onClick={() => toggleDiet(opt)}
                   className={`px-4 py-2 rounded-full text-[11px] font-semibold cursor-pointer min-h-[34px] flex items-center border-none transition-colors ${
                     selectedDiet.includes(opt)
                       ? "bg-shoyu text-cream"

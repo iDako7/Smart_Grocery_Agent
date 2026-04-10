@@ -444,26 +444,23 @@ describe('RecipesScreen — "Build list" navigates to /grocery', () => {
   it("navigates to /grocery when Build list is clicked", async () => {
     const user = userEvent.setup();
     const mock = createMockChatService();
+    const { GroceryScreen } = await import("@/screens/GroceryScreen");
 
-    // Render a container that holds GroceryScreen at /grocery
-    // We'll just check navigation happened by checking GroceryScreen testid
-    const { container } = renderWithSession(
-      <>
-        <RecipesScreen />
-      </>,
-      { chatService: mock.service, initialPath: "/recipes" }
+    render(
+      <ScenarioProvider>
+        <SessionProvider chatService={mock.service}>
+          <MemoryRouter initialEntries={["/recipes"]}>
+            <Routes>
+              <Route path="/recipes" element={<RecipesScreen />} />
+              <Route path="/grocery" element={<GroceryScreen />} />
+            </Routes>
+          </MemoryRouter>
+        </SessionProvider>
+      </ScenarioProvider>
     );
 
     await user.click(screen.getByText(/Build list/i));
-
-    // After navigation to /grocery, the grocery screen should be present.
-    // We can't easily verify this without a router that renders GroceryScreen,
-    // so we verify the mock navigation happened by checking the URL change
-    // would normally happen. As a proxy: the RecipesScreen should no longer
-    // show since we navigated away (but with MemoryRouter it re-renders
-    // the same screen unless we have Route elements).
-    // Minimal assertion: Build list button is clickable without error.
-    expect(container).toBeDefined();
+    expect(screen.getByTestId("screen-grocery")).toBeInTheDocument();
   });
 });
 
