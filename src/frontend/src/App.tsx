@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ClarifyScreen } from "@/screens/ClarifyScreen";
@@ -6,12 +7,22 @@ import { GroceryScreen } from "@/screens/GroceryScreen";
 import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
 import { SavedRecipeScreen } from "@/screens/SavedRecipeScreen";
 import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
-import { ScenarioProvider } from "@/context/scenario-context";
+import { ScenarioProvider, useScenario } from "@/context/scenario-context";
+import { SessionProvider } from "@/context/session-context";
 import { ScenarioSwitcher } from "@/components/scenario-switcher";
+import { createMockSSEService } from "@/mocks/mock-sse";
 
-function App() {
+// AppShell reads the current scenario to create the chat service, then wraps
+// everything in a SessionProvider so all screens can call useSession().
+function AppShell() {
+  const { scenario } = useScenario();
+  const chatService = useMemo(
+    () => createMockSSEService(scenario),
+    [scenario]
+  );
+
   return (
-    <ScenarioProvider>
+    <SessionProvider chatService={chatService}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomeScreen />} />
@@ -24,6 +35,14 @@ function App() {
         </Routes>
         <ScenarioSwitcher />
       </BrowserRouter>
+    </SessionProvider>
+  );
+}
+
+function App() {
+  return (
+    <ScenarioProvider>
+      <AppShell />
     </ScenarioProvider>
   );
 }

@@ -3,11 +3,15 @@ import { useNavigate } from "react-router";
 import { ChatInput } from "@/components/chat-input";
 import { ExpandableRecipe } from "@/components/expandable-recipe";
 import { useScenario } from "@/context/scenario-context";
+import { useSessionOptional } from "@/context/session-context";
 
 export function SavedMealPlanScreen() {
   const navigate = useNavigate();
   const { scenario } = useScenario();
   const { name, savedDate, deckText, recipes: SAVED_RECIPES } = scenario.savedPlan;
+  const session = useSessionOptional();
+  const sendMessage = session?.sendMessage ?? (() => {});
+  const navigateToScreen = session?.navigateToScreen;
 
   return (
     <div data-testid="screen-saved-meal-plan" className="min-h-screen bg-cream flex flex-col">
@@ -63,7 +67,10 @@ export function SavedMealPlanScreen() {
       <ChatInput
         placeholder="Add a dessert to this plan..."
         hint="Chat to add or modify recipes"
-        onSend={() => {}}
+        onSend={(text) => {
+          navigateToScreen?.("saved_meal_plan");
+          sendMessage(text);
+        }}
       />
 
       {/* Footer */}

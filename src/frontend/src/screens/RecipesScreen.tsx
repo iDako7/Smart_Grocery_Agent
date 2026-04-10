@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { ArrowLeft, X } from "lucide-react";
 import { StepProgress } from "@/components/step-progress";
@@ -6,21 +6,67 @@ import { RecipeCard } from "@/components/recipe-card";
 import { SwapPanel } from "@/components/swap-panel";
 import { ChatInput } from "@/components/chat-input";
 import { InfoSheet } from "@/components/info-sheet";
+import { ErrorBanner } from "@/components/error-banner";
 import { useScenario } from "@/context/scenario-context";
+import { useSessionOptional } from "@/context/session-context";
 import type { RecipeCardData } from "@/mocks/bbq-weekend";
+import type { RecipeSummary, EffortLevel } from "@/types/tools";
+
+// Map RecipeSummary (from SSE events) → RecipeCardData (screen component props)
+function summaryToCardData(summary: RecipeSummary, index: number): RecipeCardData {
+  const effortToTime: Record<EffortLevel, string> = {
+    quick: "15 min",
+    medium: "25 min",
+    long: "45 min",
+  };
+  return {
+    index,
+    name: summary.name,
+    nameCjk: summary.name_zh,
+    flavorProfile: summary.cuisine,
+    cookingMethod: summary.cooking_method,
+    time: effortToTime[summary.effort_level] ?? "30 min",
+    ingredients: [
+      ...summary.ingredients_have.map((n) => ({ name: n, have: true })),
+      ...summary.ingredients_need.map((n) => ({ name: n, have: false })),
+    ],
+    infoFlavorTags: summary.flavor_tags,
+    infoDescription: `${summary.cuisine} · ${summary.cooking_method}`,
+  };
+}
 
 export function RecipesScreen() {
   const navigate = useNavigate();
   const { scenario } = useScenario();
-  const RECIPES = scenario.recipes;
+  const session = useSessionOptional();
+  const sendMessage = session?.sendMessage ?? (() => {});
+  const navigateToScreen = session?.navigateToScreen;
+  const sessionRecipes = session?.screenData?.recipes ?? [];
+  const screenState = session?.screenState ?? "idle";
+  const screenData = session?.screenData;
+  const isComplete = session?.isComplete ?? false;
+
+  // Use session recipe data if available, fall back to scenario data
+  const RECIPES: RecipeCardData[] = useMemo(() => {
+    if (sessionRecipes.length > 0) {
+      return sessionRecipes.map((r, i) => summaryToCardData(r, i));
+    }
+    return scenario.recipes;
+  }, [sessionRecipes, scenario.recipes]);
+
   const SWAP_ALTERNATIVES = scenario.swapAlternatives;
   const { eyebrow, description } = scenario.recipesHeader;
   const [swappingIndex, setSwappingIndex] = useState<number | null>(null);
   const [infoOpen, setInfoOpen] = useState(false);
   const [infoRecipe, setInfoRecipe] = useState<RecipeCardData | null>(null);
 
-  function handleSwap(idx: number) {
+  function handleRetry() {
+    sendMessage("retry");
+  }
+
+  function handleSwap(idx: number, recipeName: string) {
     setSwappingIndex(idx === swappingIndex ? null : idx);
+    sendMessage(`try another for ${recipeName}`);
   }
 
   function handleKeepOriginal() {
@@ -106,6 +152,26 @@ export function RecipesScreen() {
         </div>
       </div>
 
+      {/* Error banner */}
+      {screenState === "error" && screenData?.error && (
+        <div className="mx-3.5 mb-2">
+          <ErrorBanner
+            message={screenData.error}
+            onRetry={handleRetry}
+          />
+        </div>
+      )}
+
+      {/* Partial banner */}
+      {isComplete && screenData?.completionStatus === "partial" && (
+        <div className="mx-3.5 mb-2">
+          <ErrorBanner
+            message="Some results may be incomplete"
+            variant="partial"
+          />
+        </div>
+      )}
+
       {/* Recipe cards + swap panel interleaved */}
       {RECIPES.map((recipe) => (
         <div key={recipe.name}>
@@ -118,7 +184,7 @@ export function RecipesScreen() {
             time={recipe.time}
             ingredients={recipe.ingredients}
             isSwapping={swappingIndex === recipe.index}
-            onSwap={() => handleSwap(recipe.index)}
+            onSwap={() => handleSwap(recipe.index, recipe.name)}
             onInfoClick={() => handleInfoClick(recipe)}
           />
           {swappingIndex === recipe.index && (
@@ -135,7 +201,7 @@ export function RecipesScreen() {
       <ChatInput
         placeholder="Refine your meal plan..."
         hint="Edit to refine, or send as written"
-        onSend={() => {}}
+        onSend={(text) => sendMessage(text)}
       />
 
       {/* Actions */}
@@ -148,7 +214,7 @@ export function RecipesScreen() {
         </button>
         <button
           type="button"
-          onClick={() => navigate("/grocery")}
+          onClick={() => { navigateToScreen?.("grocery"); navigate("/grocery"); }}
           className="flex-[1.3] py-3 rounded-md bg-shoyu text-cream border-none font-sans text-[13px] font-semibold cursor-pointer flex items-center justify-center gap-2 min-h-[44px]"
         >
           Build list <span className="text-apricot text-[14px]">→</span>

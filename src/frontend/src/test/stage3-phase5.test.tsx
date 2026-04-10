@@ -1,0 +1,604 @@
+// Stage 3 Phase 5 tests — ErrorBanner component + saved screen chat wiring.
+// Written BEFORE implementation (RED phase). All tests should FAIL until
+// ErrorBanner component is created and screen files are updated.
+
+import React from "react";
+import type { ReactNode } from "react";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, act } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router";
+
+// ---------------------------------------------------------------------------
+// Mock @base-ui/react/menu so DropdownMenu renders inline (no portal)
+// (copied from stage3-integration.test.tsx)
+// ---------------------------------------------------------------------------
+vi.mock("@base-ui/react/menu", async () => {
+  const React = await import("react");
+  const { useState } = React;
+  function MenuRoot({ children }: { children: React.ReactNode }) {
+    const [open, setOpen] = useState(false);
+    return (
+      <div data-testid="menu-root">
+        {React.Children.map(children, (child) => {
+          if (React.isValidElement(child)) {
+            return React.cloneElement(
+              child as React.ReactElement<{
+                onToggle?: () => void;
+                open?: boolean;
+              }>,
+              {
+                onToggle: () => setOpen((v) => !v),
+                open,
+              }
+            );
+          }
+          return child;
+        })}
+      </div>
+    );
+  }
+  function MenuTrigger({
+    children,
+    onToggle,
+  }: {
+    children: React.ReactNode;
+    onToggle?: () => void;
+  }) {
+    return React.cloneElement(
+      children as React.ReactElement<{ onClick?: () => void }>,
+      { onClick: onToggle }
+    );
+  }
+  function MenuPortal({ children }: { children: React.ReactNode }) {
+    return <>{children}</>;
+  }
+  function MenuPositioner({ children }: { children: React.ReactNode }) {
+    return <>{children}</>;
+  }
+  function MenuPopup({
+    children,
+    open,
+  }: {
+    children: React.ReactNode;
+    open?: boolean;
+  }) {
+    return open ? <div role="menu">{children}</div> : null;
+  }
+  function MenuItem({
+    children,
+    onClick,
+  }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+  }) {
+    return (
+      <div role="menuitem" onClick={onClick} style={{ cursor: "pointer" }}>
+        {children}
+      </div>
+    );
+  }
+  return {
+    Menu: {
+      Root: MenuRoot,
+      Trigger: MenuTrigger,
+      Portal: MenuPortal,
+      Positioner: MenuPositioner,
+      Popup: MenuPopup,
+      Item: MenuItem,
+      Group: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+      GroupLabel: ({ children }: { children: React.ReactNode }) => (
+        <div>{children}</div>
+      ),
+      Separator: () => <hr />,
+      SubmenuRoot: ({ children }: { children: React.ReactNode }) => (
+        <>{children}</>
+      ),
+      SubmenuTrigger: ({ children }: { children: React.ReactNode }) => (
+        <>{children}</>
+      ),
+      CheckboxItem: ({
+        children,
+        onClick,
+      }: {
+        children: React.ReactNode;
+        onClick?: () => void;
+      }) => (
+        <div role="menuitem" onClick={onClick}>
+          {children}
+        </div>
+      ),
+      CheckboxItemIndicator: ({ children }: { children: React.ReactNode }) => (
+        <>{children}</>
+      ),
+      RadioGroup: ({ children }: { children: React.ReactNode }) => (
+        <>{children}</>
+      ),
+      RadioItem: ({
+        children,
+        onClick,
+      }: {
+        children: React.ReactNode;
+        onClick?: () => void;
+      }) => (
+        <div role="menuitem" onClick={onClick}>
+          {children}
+        </div>
+      ),
+      RadioItemIndicator: ({ children }: { children: React.ReactNode }) => (
+        <>{children}</>
+      ),
+    },
+  };
+});
+
+// ---------------------------------------------------------------------------
+// Mock @base-ui/react/dialog so Sheet renders inline (no portal)
+// (copied from stage3-integration.test.tsx)
+// ---------------------------------------------------------------------------
+vi.mock("@base-ui/react/dialog", async () => {
+  const React = await import("react");
+  return {
+    Dialog: {
+      Root: ({
+        open,
+        children,
+      }: {
+        open?: boolean;
+        onOpenChange?: (v: boolean) => void;
+        children: React.ReactNode;
+      }) =>
+        open ? (
+          <div data-testid="sheet-root">{children}</div>
+        ) : null,
+      Trigger: ({ children }: { children: React.ReactNode }) => (
+        <>{children}</>
+      ),
+      Close: ({
+        children,
+        render: renderProp,
+      }: {
+        children?: React.ReactNode;
+        render?: React.ReactElement;
+      }) => {
+        if (renderProp) {
+          return React.cloneElement(renderProp, {}, children);
+        }
+        return <button>{children}</button>;
+      },
+      Portal: ({ children }: { children: React.ReactNode }) => (
+        <>{children}</>
+      ),
+      Backdrop: ({
+        children,
+        className,
+      }: {
+        children?: React.ReactNode;
+        className?: string;
+      }) => <div className={className}>{children}</div>,
+      Popup: ({
+        children,
+        className,
+        "data-side": side,
+      }: {
+        children: React.ReactNode;
+        className?: string;
+        "data-side"?: string;
+      }) => (
+        <div className={className} data-side={side}>
+          {children}
+        </div>
+      ),
+      Title: ({
+        children,
+        className,
+      }: {
+        children: React.ReactNode;
+        className?: string;
+      }) => <h2 className={className}>{children}</h2>,
+      Description: ({
+        children,
+        className,
+      }: {
+        children: React.ReactNode;
+        className?: string;
+      }) => <p className={className}>{children}</p>,
+    },
+  };
+});
+
+import { ErrorBanner } from "@/components/error-banner";
+import { ClarifyScreen } from "@/screens/ClarifyScreen";
+import { RecipesScreen } from "@/screens/RecipesScreen";
+import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
+import { SavedRecipeScreen } from "@/screens/SavedRecipeScreen";
+import { ScenarioProvider } from "@/context/scenario-context";
+import { SessionProvider } from "@/context/session-context";
+import type { ChatServiceHandler } from "@/context/session-context";
+import type { SSEEvent } from "@/types/sse";
+
+// ---------------------------------------------------------------------------
+// createMockChatService — captures callbacks for manual event injection
+// (pattern from session-context.test.tsx)
+// ---------------------------------------------------------------------------
+
+function createMockChatService() {
+  let capturedOnEvent: ((event: SSEEvent) => void) | null = null;
+  let capturedOnDone:
+    | ((status: "complete" | "partial", reason: string | null) => void)
+    | null = null;
+  let capturedOnError: ((message: string) => void) | null = null;
+  const cancelFn = vi.fn();
+  const serviceFn = vi.fn<ChatServiceHandler>();
+
+  const service: ChatServiceHandler = (
+    message,
+    screen,
+    onEvent,
+    onDone,
+    onError
+  ) => {
+    capturedOnEvent = onEvent;
+    capturedOnDone = onDone;
+    capturedOnError = onError;
+    serviceFn(message, screen, onEvent, onDone, onError);
+    return { cancel: cancelFn };
+  };
+
+  return {
+    service,
+    serviceFn,
+    getOnEvent: () => capturedOnEvent!,
+    getOnDone: () => capturedOnDone!,
+    getOnError: () => capturedOnError!,
+    cancelFn,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// renderWithSession — test helper
+// ---------------------------------------------------------------------------
+
+function renderWithSession(
+  ui: React.ReactElement,
+  options?: {
+    chatService?: ChatServiceHandler;
+    initialPath?: string;
+  }
+) {
+  const Wrapper = ({ children }: { children: ReactNode }) => (
+    <ScenarioProvider>
+      <SessionProvider chatService={options?.chatService}>
+        <MemoryRouter initialEntries={[options?.initialPath ?? "/"]}>
+          {children}
+        </MemoryRouter>
+      </SessionProvider>
+    </ScenarioProvider>
+  );
+  return render(ui, { wrapper: Wrapper });
+}
+
+// ---------------------------------------------------------------------------
+// 1. ErrorBanner renders error message
+// ---------------------------------------------------------------------------
+
+describe("ErrorBanner — renders error message", () => {
+  it("displays the provided message text", () => {
+    render(<ErrorBanner message="Something went wrong" />);
+    expect(screen.getByText("Something went wrong")).toBeInTheDocument();
+  });
+
+  it("renders with error variant by default", () => {
+    const { container } = render(<ErrorBanner message="An error occurred" />);
+    // error variant uses persimmon-soft background class
+    expect(container.firstChild).toHaveClass("bg-persimmon-soft");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 2. ErrorBanner renders retry button when onRetry provided
+// ---------------------------------------------------------------------------
+
+describe("ErrorBanner — retry button presence", () => {
+  it("shows a retry button when onRetry is provided", () => {
+    const onRetry = vi.fn();
+    render(<ErrorBanner message="Network error" onRetry={onRetry} />);
+    expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
+  });
+
+  it("calls onRetry when retry button is clicked", async () => {
+    const user = userEvent.setup();
+    const onRetry = vi.fn();
+    render(<ErrorBanner message="Network error" onRetry={onRetry} />);
+    await user.click(screen.getByRole("button", { name: /try again/i }));
+    expect(onRetry).toHaveBeenCalledTimes(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 3. ErrorBanner does not render retry button when onRetry not provided
+// ---------------------------------------------------------------------------
+
+describe("ErrorBanner — no retry button when onRetry not provided", () => {
+  it("does not render a Try again button", () => {
+    render(<ErrorBanner message="Partial results" />);
+    expect(screen.queryByRole("button", { name: /try again/i })).not.toBeInTheDocument();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 4. ErrorBanner partial variant renders differently
+// ---------------------------------------------------------------------------
+
+describe("ErrorBanner — partial variant styling", () => {
+  it("uses apricot background for partial variant", () => {
+    const { container } = render(
+      <ErrorBanner message="Some results may be incomplete" variant="partial" />
+    );
+    expect(container.firstChild).toHaveClass("bg-apricot");
+  });
+
+  it("does not use persimmon-soft for partial variant", () => {
+    const { container } = render(
+      <ErrorBanner message="Some results may be incomplete" variant="partial" />
+    );
+    expect(container.firstChild).not.toHaveClass("bg-persimmon-soft");
+  });
+
+  it("partial variant uses ink text color", () => {
+    const { container } = render(
+      <ErrorBanner message="Some results may be incomplete" variant="partial" />
+    );
+    expect(container.firstChild).toHaveClass("text-ink");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 5. SavedMealPlanScreen — chat input calls sendMessage
+// ---------------------------------------------------------------------------
+
+describe("SavedMealPlanScreen — chat input calls sendMessage", () => {
+  it("calls chatService when user types and submits the chat input", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(<SavedMealPlanScreen />, { chatService: mock.service });
+
+    const chatInput = screen.getByPlaceholderText(/Add a dessert/i);
+    await user.click(chatInput);
+    await user.type(chatInput, "Add a chocolate cake");
+    await user.keyboard("{Enter}");
+
+    expect(mock.serviceFn).toHaveBeenCalledTimes(1);
+    expect(mock.serviceFn.mock.calls[0][0]).toBe("Add a chocolate cake");
+  });
+
+  it("does not call chatService when chat input is empty", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(<SavedMealPlanScreen />, { chatService: mock.service });
+
+    const chatInput = screen.getByPlaceholderText(/Add a dessert/i);
+    await user.click(chatInput);
+    await user.keyboard("{Enter}");
+
+    expect(mock.serviceFn).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 6. SavedRecipeScreen — chat input calls sendMessage
+// ---------------------------------------------------------------------------
+
+describe("SavedRecipeScreen — chat input calls sendMessage", () => {
+  it("calls chatService when user types and submits the chat input", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(<SavedRecipeScreen />, { chatService: mock.service });
+
+    const chatInput = screen.getByPlaceholderText(/Adjust this recipe/i);
+    await user.click(chatInput);
+    await user.type(chatInput, "Make it serve 12 people");
+    await user.keyboard("{Enter}");
+
+    expect(mock.serviceFn).toHaveBeenCalledTimes(1);
+    expect(mock.serviceFn.mock.calls[0][0]).toBe("Make it serve 12 people");
+  });
+
+  it("does not call chatService when chat input is empty", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(<SavedRecipeScreen />, { chatService: mock.service });
+
+    const chatInput = screen.getByPlaceholderText(/Adjust this recipe/i);
+    await user.click(chatInput);
+    await user.keyboard("{Enter}");
+
+    expect(mock.serviceFn).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 7. ClarifyScreen — shows error banner on error state
+// ---------------------------------------------------------------------------
+
+describe("ClarifyScreen — shows error banner on error state", () => {
+  it("renders ErrorBanner when an error event is received", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(<ClarifyScreen />, { chatService: mock.service });
+
+    // Trigger sendMessage to start the session
+    const chatInput = screen.getByPlaceholderText(/kimchi/i);
+    await user.click(chatInput);
+    await user.type(chatInput, "BBQ for 8");
+    await user.keyboard("{Enter}");
+
+    // Emit an error via onError callback
+    act(() => {
+      mock.getOnError()("Something went wrong with the AI");
+    });
+
+    expect(screen.getByText("Something went wrong with the AI")).toBeInTheDocument();
+  });
+
+  it("shows a Try again button in the error banner on ClarifyScreen", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(<ClarifyScreen />, { chatService: mock.service });
+
+    const chatInput = screen.getByPlaceholderText(/kimchi/i);
+    await user.click(chatInput);
+    await user.type(chatInput, "test input");
+    await user.keyboard("{Enter}");
+
+    act(() => {
+      mock.getOnError()("Connection failed");
+    });
+
+    expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 8. ClarifyScreen — shows partial banner on partial completion
+// ---------------------------------------------------------------------------
+
+describe("ClarifyScreen — shows partial banner on partial completion", () => {
+  it("renders partial ErrorBanner when done with partial status", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(<ClarifyScreen />, { chatService: mock.service });
+
+    const chatInput = screen.getByPlaceholderText(/kimchi/i);
+    await user.click(chatInput);
+    await user.type(chatInput, "BBQ for 8");
+    await user.keyboard("{Enter}");
+
+    // Enter streaming state first
+    act(() => {
+      mock.getOnEvent()({ event_type: "thinking", message: "Analyzing..." });
+    });
+
+    // Complete with partial status
+    act(() => {
+      mock.getOnDone()("partial", "timeout");
+    });
+
+    expect(
+      screen.getByText(/Some results may be incomplete/i)
+    ).toBeInTheDocument();
+  });
+
+  it("does not show retry button in partial banner on ClarifyScreen", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(<ClarifyScreen />, { chatService: mock.service });
+
+    const chatInput = screen.getByPlaceholderText(/kimchi/i);
+    await user.click(chatInput);
+    await user.type(chatInput, "BBQ for 8");
+    await user.keyboard("{Enter}");
+
+    act(() => {
+      mock.getOnEvent()({ event_type: "thinking", message: "Analyzing..." });
+    });
+
+    act(() => {
+      mock.getOnDone()("partial", "timeout");
+    });
+
+    // Partial banner should NOT have a retry button
+    expect(
+      screen.queryByRole("button", { name: /try again/i })
+    ).not.toBeInTheDocument();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 9. RecipesScreen — shows error banner on error state
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — shows error banner on error state", () => {
+  it("renders ErrorBanner when an error occurs during streaming", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(<RecipesScreen />, { chatService: mock.service });
+
+    const chatInput = screen.getByPlaceholderText(/Refine/i);
+    await user.click(chatInput);
+    await user.type(chatInput, "show recipes");
+    await user.keyboard("{Enter}");
+
+    act(() => {
+      mock.getOnError()("Recipe lookup failed");
+    });
+
+    expect(screen.getByText("Recipe lookup failed")).toBeInTheDocument();
+  });
+
+  it("shows partial banner on RecipesScreen when done with partial status", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(<RecipesScreen />, { chatService: mock.service });
+
+    const chatInput = screen.getByPlaceholderText(/Refine/i);
+    await user.click(chatInput);
+    await user.type(chatInput, "show recipes");
+    await user.keyboard("{Enter}");
+
+    act(() => {
+      mock.getOnEvent()({ event_type: "thinking", message: "Searching..." });
+    });
+
+    act(() => {
+      mock.getOnDone()("partial", "max_iterations");
+    });
+
+    expect(
+      screen.getByText(/Some results may be incomplete/i)
+    ).toBeInTheDocument();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 10. Error retry calls sendMessage
+// ---------------------------------------------------------------------------
+
+describe("ErrorBanner retry — calls sendMessage in ClarifyScreen", () => {
+  it("clicking Try again in error banner calls sendMessage with 'retry'", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(<ClarifyScreen />, { chatService: mock.service });
+
+    // First send to get into error state
+    const chatInput = screen.getByPlaceholderText(/kimchi/i);
+    await user.click(chatInput);
+    await user.type(chatInput, "BBQ for 8");
+    await user.keyboard("{Enter}");
+
+    act(() => {
+      mock.getOnError()("Network timeout");
+    });
+
+    // Reset call count before clicking retry
+    mock.serviceFn.mockClear();
+
+    // Click retry button
+    const retryBtn = screen.getByRole("button", { name: /try again/i });
+    await user.click(retryBtn);
+
+    expect(mock.serviceFn).toHaveBeenCalledTimes(1);
+    expect(mock.serviceFn.mock.calls[0][0]).toBe("retry");
+  });
+});

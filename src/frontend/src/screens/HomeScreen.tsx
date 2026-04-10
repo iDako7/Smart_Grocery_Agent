@@ -3,18 +3,39 @@ import { useNavigate } from "react-router";
 import { QuickStartChip } from "@/components/quick-start-chip";
 import { Sidebar, type SidebarItemType } from "@/components/sidebar";
 import { useScenario } from "@/context/scenario-context";
+import { useSessionOptional } from "@/context/session-context";
 
 const QUICK_STARTS = ["Weekend BBQ", "Weeknight meals", "Use my leftovers"];
 
 export function HomeScreen() {
   const navigate = useNavigate();
   const { scenario } = useScenario();
+  const session = useSessionOptional();
+  const sendMessage = session?.sendMessage ?? (() => {});
+  const navigateToScreen = session?.navigateToScreen;
   const { mealPlans: MOCK_MEAL_PLANS, savedRecipes: MOCK_SAVED_RECIPES, groceryLists: MOCK_GROCERY_LISTS } =
     scenario.sidebar;
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
-  function handleQuickStart() {
+  function handleSend(text: string) {
+    const trimmed = text.trim();
+    if (!trimmed) return;
+    navigateToScreen?.("clarify");
+    sendMessage(trimmed);
     navigate("/clarify");
+  }
+
+  function handleQuickStart(label: string) {
+    navigateToScreen?.("clarify");
+    sendMessage(label);
+    navigate("/clarify");
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") {
+      handleSend(inputValue);
+    }
   }
 
   function handleSidebarItemClick(id: string, type: SidebarItemType) {
@@ -66,6 +87,9 @@ export function HomeScreen() {
           </p>
           <input
             type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="BBQ for 8, or I have leftover chicken..."
             className="w-full mt-3.5 px-3.5 py-3 border-[1.5px] border-cream-deep rounded-md bg-tofu font-sans text-[14px] text-ink outline-none placeholder:text-ink-3 focus:border-ink-3 min-h-[44px]"
           />
@@ -78,7 +102,7 @@ export function HomeScreen() {
       </div>
       <div className="flex flex-wrap gap-2 px-3.5 pb-4">
         {QUICK_STARTS.map((label) => (
-          <QuickStartChip key={label} label={label} onClick={handleQuickStart} />
+          <QuickStartChip key={label} label={label} onClick={() => handleQuickStart(label)} />
         ))}
       </div>
 

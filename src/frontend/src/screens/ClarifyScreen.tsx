@@ -5,7 +5,9 @@ import { StepProgress } from "@/components/step-progress";
 import { PcvBadge } from "@/components/pcv-badge";
 import { ChatInput } from "@/components/chat-input";
 import { InfoSheet } from "@/components/info-sheet";
+import { ErrorBanner } from "@/components/error-banner";
 import { useScenario } from "@/context/scenario-context";
+import { useSessionOptional } from "@/context/session-context";
 
 const COOKING_SETUP_OPTIONS = [
   "Outdoor grill",
@@ -26,12 +28,33 @@ const PCV_INFO = {
 export function ClarifyScreen() {
   const navigate = useNavigate();
   const { scenario } = useScenario();
-  const { pcsv, deckText, summaryText } = scenario.clarify;
+  const session = useSessionOptional();
+  const sendMessage = session?.sendMessage ?? (() => {});
+  const navigateToScreen = session?.navigateToScreen;
+  const screenData = session?.screenData;
+  const screenState = session?.screenState ?? "idle";
+  const isComplete = session?.isComplete ?? false;
+  const { pcsv: scenarioPcsv, deckText: scenarioDeckText, summaryText } = scenario.clarify;
+
+  // Use session data when available, fall back to scenario data
+  const pcsv = screenData?.pcsv ?? scenarioPcsv;
+  const deckText = screenData?.explanation || scenarioDeckText;
+
   const [selectedSetup, setSelectedSetup] = useState<string[]>([
     "Outdoor grill",
   ]);
   const [selectedDiet, setSelectedDiet] = useState<string[]>(["None"]);
   const [pcvInfoOpen, setPcvInfoOpen] = useState(false);
+
+  function handleLooksGood() {
+    navigateToScreen?.("recipes");
+    sendMessage("Looks good, show recipes");
+    navigate("/recipes");
+  }
+
+  function handleRetry() {
+    sendMessage("retry");
+  }
 
   function toggleOption(
     option: string,
@@ -133,6 +156,26 @@ export function ClarifyScreen() {
           </div>
         </div>
 
+        {/* Error banner */}
+        {screenState === "error" && screenData?.error && (
+          <div className="px-5 pt-3">
+            <ErrorBanner
+              message={screenData.error}
+              onRetry={handleRetry}
+            />
+          </div>
+        )}
+
+        {/* Partial banner */}
+        {isComplete && screenData?.completionStatus === "partial" && (
+          <div className="px-5 pt-3">
+            <ErrorBanner
+              message="Some results may be incomplete"
+              variant="partial"
+            />
+          </div>
+        )}
+
         {/* Questions */}
         <div className="px-5 pt-3">
           <div className="text-[11px] font-bold tracking-[0.06em] uppercase text-ink-3 mb-2">
@@ -190,18 +233,25 @@ export function ClarifyScreen() {
           </div>
         </div>
 
+        {/* Thinking message — shown during loading/streaming */}
+        {(screenState === "loading" || screenState === "streaming") && screenData?.thinkingMessage && (
+          <div className="px-5 py-2 text-[12px] text-ink-2 italic">
+            {screenData.thinkingMessage}
+          </div>
+        )}
+
         {/* Chat input */}
         <ChatInput
           placeholder="I also have kimchi, forgot to mention..."
           hint="Add details or corrections"
-          onSend={() => {}}
+          onSend={(text) => sendMessage(text)}
         />
 
         {/* Action */}
         <div className="px-5 py-3 flex justify-end">
           <button
             type="button"
-            onClick={() => navigate("/recipes")}
+            onClick={handleLooksGood}
             className="px-6 py-[11px] bg-shoyu text-cream border-none rounded-full font-sans text-[13px] font-semibold cursor-pointer"
           >
             Looks good, show recipes →
