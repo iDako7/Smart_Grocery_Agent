@@ -6,8 +6,8 @@ gracefully when prerequisites are missing.
 """
 
 import json
-import os
 import uuid
+from pathlib import Path
 
 import pytest
 import pytest_asyncio
@@ -21,10 +21,9 @@ from tests.conftest import _engine, _ensure_tables
 # Skip conditions
 # ---------------------------------------------------------------------------
 
-_SKIP_NO_KEY = not os.environ.get("OPENROUTER_API_KEY")
-_SKIP_NO_KB = not os.path.exists(
-    os.path.join(os.path.dirname(__file__), "..", "data", "kb.sqlite")
-)
+import os as _os  # only for env var check
+_SKIP_NO_KEY = not _os.environ.get("OPENROUTER_API_KEY")
+_SKIP_NO_KB = not (Path(__file__).resolve().parent.parent / "data" / "kb.sqlite").exists()
 
 _skip_reason = (
     "OPENROUTER_API_KEY not set" if _SKIP_NO_KEY
@@ -46,7 +45,7 @@ pytestmark = [
     pytest.mark.live,
 ]
 
-_DEV_USER = uuid.UUID("00000000-0000-0000-0000-000000000001")
+_LIVE_USER = uuid.uuid4()  # unique per test run — avoids TRUNCATE CASCADE
 
 _ALLOWED_EVENT_TYPES = {
     "thinking", "pcsv_update", "recipe_card",
@@ -71,19 +70,24 @@ async def _preflight_check():
 async def _seed_db(_preflight_check):
     await _ensure_tables()
     async with _engine.begin() as conn:
-        await conn.execute(text("TRUNCATE users CASCADE"))
         await conn.execute(text(
-            "INSERT INTO users (id, email) VALUES (:id, :email)"
-        ), {"id": _DEV_USER, "email": "dev@test.local"})
+            "INSERT INTO users (id, email) VALUES (:id, :email) ON CONFLICT (id) DO NOTHING"
+        ), {"id": _LIVE_USER, "email": f"live-{_LIVE_USER}@test.local"})
         await conn.execute(text(
-            "INSERT INTO user_profiles (user_id) VALUES (:uid)"
-        ), {"uid": _DEV_USER})
+            "INSERT INTO user_profiles (user_id) VALUES (:uid) ON CONFLICT (user_id) DO NOTHING"
+        ), {"uid": _LIVE_USER})
+    yield
+    # Cleanup only our own rows
+    async with _engine.begin() as conn:
+        await conn.execute(text(
+            "DELETE FROM users WHERE id = :id"
+        ), {"id": _LIVE_USER})
 
 
 @pytest_asyncio.fixture()
 async def client():
     async def _override_auth():
-        return _DEV_USER
+        return _LIVE_USER
 
     async def _override_db():
         conn = await _engine.connect()
@@ -105,7 +109,11 @@ async def client():
 
 
 def _parse_sse_events(body: str) -> list[tuple[str, dict]]:
-    """Parse SSE response body into (event_type, data) pairs."""
+    """Parse SSE response body into (event_type, data) pairs.
+
+    Note: assumes single-line data: fields (no multi-line SSE data).
+    Our backend always emits one JSON blob per data: line.
+    """
     events = []
     for block in body.split("\n\n"):
         block = block.strip()
@@ -137,6 +145,7 @@ async def test_live_simple_chat(client):
     resp = await client.post(
         f"/session/{sid}/chat",
         json={"message": "I have chicken wings and rice", "screen": "home"},
+        timeout=60.0,
     )
     assert resp.status_code == 200
     assert "text/event-stream" in resp.headers["content-type"]
@@ -162,8 +171,12 @@ async def test_live_schema_coercion(client):
     resp = await client.post(
         f"/session/{sid}/chat",
         json={"message": "I have chicken wings and rice", "screen": "home"},
+        timeout=60.0,
     )
     events = _parse_sse_events(resp.text)
+
+    typed_events = [e for e in events if e[0] in ("pcsv_update", "recipe_card")]
+    assert typed_events, "LLM returned no typed events to validate"
 
     for etype, data in events:
         if etype == "pcsv_update":
@@ -187,6 +200,7 @@ async def test_live_session_persistence(client):
     resp = await client.post(
         f"/session/{sid}/chat",
         json={"message": "I have chicken wings and rice", "screen": "home"},
+        timeout=60.0,
     )
     # Verify chat completed
     events = _parse_sse_events(resp.text)
