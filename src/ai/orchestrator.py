@@ -3,13 +3,23 @@
 Uses AsyncOpenAI SDK with OpenRouter base_url.
 """
 
+import asyncio
 import json
+import logging
 import os
 import uuid
 
 import aiosqlite
-from openai import AsyncOpenAI
+from openai import (
+    APIConnectionError,
+    APITimeoutError,
+    AsyncOpenAI,
+    InternalServerError,
+    RateLimitError,
+)
 from sqlalchemy.ext.asyncio import AsyncConnection
+
+logger = logging.getLogger(__name__)
 
 from contracts.tool_schemas import (
     TOOLS,
@@ -39,6 +49,10 @@ MAX_ITERATIONS = 10
 MODEL = os.environ.get("SGA_MODEL", "anthropic/claude-sonnet-4.6")
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
+LLM_MAX_RETRIES = 1
+LLM_BACKOFF_BASE = 1.0
+_RETRYABLE_ERRORS = (APIConnectionError, APITimeoutError, RateLimitError, InternalServerError)
+
 _openai_client: AsyncOpenAI | None = None
 
 
@@ -60,6 +74,26 @@ _TOOL_REGISTRY: dict[str, tuple[type, str]] = {
     "lookup_store_product": (LookupStoreProductInput, "kb"),
     "update_user_profile": (UpdateUserProfileInput, "pg"),
 }
+
+
+async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens):
+    """Call LLM with one retry + exponential backoff on transient errors."""
+    last_error = None
+    for attempt in range(LLM_MAX_RETRIES + 1):
+        try:
+            return await client.chat.completions.create(
+                model=model, messages=messages, tools=tools, max_tokens=max_tokens,
+            )
+        except _RETRYABLE_ERRORS as e:
+            last_error = e
+            if attempt < LLM_MAX_RETRIES:
+                delay = LLM_BACKOFF_BASE * (2 ** attempt)
+                logger.warning(
+                    "LLM call failed (attempt %d), retrying in %.1fs: %s",
+                    attempt + 1, delay, e,
+                )
+                await asyncio.sleep(delay)
+    raise last_error
 
 
 async def _dispatch_tool(
@@ -139,11 +173,8 @@ async def run_agent(
     last_content = ""
 
     for iteration in range(MAX_ITERATIONS):
-        response = await client.chat.completions.create(
-            model=MODEL,
-            messages=messages,
-            tools=TOOLS,
-            max_tokens=4096,
+        response = await _llm_call_with_retry(
+            client, model=MODEL, messages=messages, tools=TOOLS, max_tokens=4096,
         )
 
         choice = response.choices[0]
