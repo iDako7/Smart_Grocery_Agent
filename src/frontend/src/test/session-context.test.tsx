@@ -12,44 +12,7 @@ import {
 } from "@/context/session-context";
 import type { ChatServiceHandler } from "@/context/session-context";
 import type { SSEEvent } from "@/types/sse";
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-/**
- * Creates a mock chatService that captures callback functions so tests can
- * invoke them manually, simulating SSE events arriving from the server.
- */
-function createMockChatService() {
-  let capturedOnEvent: ((event: SSEEvent) => void) | null = null;
-  let capturedOnDone:
-    | ((status: "complete" | "partial", reason: string | null) => void)
-    | null = null;
-  let capturedOnError: ((message: string) => void) | null = null;
-  const cancelFn = vi.fn();
-
-  const service: ChatServiceHandler = (
-    _message,
-    _screen,
-    onEvent,
-    onDone,
-    onError
-  ) => {
-    capturedOnEvent = onEvent;
-    capturedOnDone = onDone;
-    capturedOnError = onError;
-    return { cancel: cancelFn };
-  };
-
-  return {
-    service,
-    getOnEvent: () => capturedOnEvent!,
-    getOnDone: () => capturedOnDone!,
-    getOnError: () => capturedOnError!,
-    cancelFn,
-  };
-}
+import { createMockChatService } from "@/test/test-utils";
 
 // ---------------------------------------------------------------------------
 // Test wrapper factory — allows injecting an optional chatService

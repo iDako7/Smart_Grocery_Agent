@@ -5,15 +5,30 @@ import { StepProgress } from "@/components/step-progress";
 import { ChecklistRow } from "@/components/checklist-row";
 import { StoreSection } from "@/components/store-section";
 import { useScenario } from "@/context/scenario-context";
-// TODO(Stage 4): Import useSessionOptional and wire screenData.groceryList
-// to replace scenario.groceryItems. The SSE grocery_list event stores data in
-// screenData.groceryList (via use-screen-state reducer), but this screen
-// currently reads scenario data only. Pattern: same as ClarifyScreen/RecipesScreen.
+import { useSessionOptional } from "@/context/session-context";
 
 export function GroceryScreen() {
   const navigate = useNavigate();
   const { scenario } = useScenario();
-  const GROCERY_ITEMS = scenario.groceryItems;
+  const session = useSessionOptional();
+  // Use session grocery data when available (from SSE grocery_list event),
+  // fall back to scenario data for mock/Stage 3.
+  const sessionGrocery = session?.screenData?.groceryList ?? [];
+  const GROCERY_ITEMS = sessionGrocery.length > 0
+    ? sessionGrocery.flatMap((store) =>
+        store.departments.flatMap((dept) =>
+          dept.items.map((item) => ({
+            id: item.id,
+            name: item.name,
+            subtitle: item.amount,
+            aisle: dept.name,
+            store: store.store_name.toLowerCase().includes("costco")
+              ? ("costco" as const)
+              : ("market" as const),
+          }))
+        )
+      )
+    : scenario.groceryItems;
   const { eyebrow, deckText } = scenario.groceryHeader;
   const [checked, setChecked] = useState<Set<string>>(new Set());
 

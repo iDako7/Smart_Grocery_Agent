@@ -34,7 +34,7 @@ export function InfoSheet({
         {/* Name */}
         <SheetTitle className="text-[18px] font-bold tracking-tight text-ink">{name}</SheetTitle>
         {nameCjk && (
-          <p className="font-cjk text-[14px] font-medium text-ink-3 mt-1 tracking-[0.02em]">
+          <p lang="zh" className="font-cjk text-[14px] font-medium text-ink-3 mt-1 tracking-[0.02em]">
             {nameCjk}
           </p>
         )}

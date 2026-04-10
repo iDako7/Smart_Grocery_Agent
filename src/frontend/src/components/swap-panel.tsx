@@ -34,7 +34,7 @@ export function SwapPanel({ alternatives, onPick, onKeepOriginal }: SwapPanelPro
               {alt.name}
             </div>
             {alt.nameCjk && (
-              <div className="font-cjk text-[11px] text-ink-3 font-medium mt-0.5">
+              <div lang="zh" className="font-cjk text-[11px] text-ink-3 font-medium mt-0.5">
                 {alt.nameCjk}
               </div>
             )}

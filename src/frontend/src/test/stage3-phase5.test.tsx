@@ -2,12 +2,9 @@
 // Written BEFORE implementation (RED phase). All tests should FAIL until
 // ErrorBanner component is created and screen files are updated.
 
-import React from "react";
-import type { ReactNode } from "react";
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter } from "react-router";
 
 // Base-ui mocks (menu + dialog) are in setup.ts
 
@@ -16,71 +13,7 @@ import { ClarifyScreen } from "@/screens/ClarifyScreen";
 import { RecipesScreen } from "@/screens/RecipesScreen";
 import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
 import { SavedRecipeScreen } from "@/screens/SavedRecipeScreen";
-import { ScenarioProvider } from "@/context/scenario-context";
-import { SessionProvider } from "@/context/session-context";
-import type { ChatServiceHandler } from "@/context/session-context";
-import type { SSEEvent } from "@/types/sse";
-
-// ---------------------------------------------------------------------------
-// createMockChatService — captures callbacks for manual event injection
-// (pattern from session-context.test.tsx)
-// ---------------------------------------------------------------------------
-
-function createMockChatService() {
-  let capturedOnEvent: ((event: SSEEvent) => void) | null = null;
-  let capturedOnDone:
-    | ((status: "complete" | "partial", reason: string | null) => void)
-    | null = null;
-  let capturedOnError: ((message: string) => void) | null = null;
-  const cancelFn = vi.fn();
-  const serviceFn = vi.fn<ChatServiceHandler>();
-
-  const service: ChatServiceHandler = (
-    message,
-    screen,
-    onEvent,
-    onDone,
-    onError
-  ) => {
-    capturedOnEvent = onEvent;
-    capturedOnDone = onDone;
-    capturedOnError = onError;
-    serviceFn(message, screen, onEvent, onDone, onError);
-    return { cancel: cancelFn };
-  };
-
-  return {
-    service,
-    serviceFn,
-    getOnEvent: () => capturedOnEvent!,
-    getOnDone: () => capturedOnDone!,
-    getOnError: () => capturedOnError!,
-    cancelFn,
-  };
-}
-
-// ---------------------------------------------------------------------------
-// renderWithSession — test helper
-// ---------------------------------------------------------------------------
-
-function renderWithSession(
-  ui: React.ReactElement,
-  options?: {
-    chatService?: ChatServiceHandler;
-    initialPath?: string;
-  }
-) {
-  const Wrapper = ({ children }: { children: ReactNode }) => (
-    <ScenarioProvider>
-      <SessionProvider chatService={options?.chatService}>
-        <MemoryRouter initialEntries={[options?.initialPath ?? "/"]}>
-          {children}
-        </MemoryRouter>
-      </SessionProvider>
-    </ScenarioProvider>
-  );
-  return render(ui, { wrapper: Wrapper });
-}
+import { createMockChatService, renderWithSession } from "@/test/test-utils";
 
 // ---------------------------------------------------------------------------
 // 1. ErrorBanner renders error message
