@@ -5,17 +5,24 @@ import aiosqlite
 from contracts.tool_schemas import GetSubstitutionsInput, Substitution
 
 
+def _escape_like(value: str) -> str:
+    """Escape LIKE special characters to prevent wildcard injection."""
+    return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
+
 async def get_substitutions(
     db: aiosqlite.Connection, input: GetSubstitutionsInput
 ) -> list[Substitution]:
     query = input.ingredient.lower().strip()
+    escaped = _escape_like(query)
 
     # Use LIKE for partial matching (ingredient contains query or query contains ingredient)
     cursor = await db.execute(
         "SELECT ingredient, substitute, match_quality, reason, notes "
         "FROM substitutions "
-        "WHERE LOWER(ingredient) LIKE ? OR ? LIKE '%' || LOWER(ingredient) || '%'",
-        (f"%{query}%", query),
+        "WHERE LOWER(ingredient) LIKE ? ESCAPE '\\' "
+        "OR ? LIKE '%' || LOWER(ingredient) || '%'",
+        (f"%{escaped}%", query),
     )
 
     results: list[tuple[bool, Substitution]] = []

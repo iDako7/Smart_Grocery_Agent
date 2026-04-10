@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+import uuid
 from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
@@ -43,7 +44,7 @@ class CreateSessionResponse(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    message: str
+    message: str = Field(max_length=4000)
     screen: Screen
     target_id: str | None = Field(
         default=None,
@@ -170,14 +171,14 @@ class SavedGroceryListSummary(BaseModel):
 # Meal plans
 
 class SaveMealPlanRequest(BaseModel):
-    name: str
-    session_id: str = Field(
+    name: str = Field(max_length=200)
+    session_id: uuid.UUID = Field(
         description="Derives recipes from current session state"
     )
 
 
 class UpdateMealPlanRequest(BaseModel):
-    name: str | None = None
+    name: str | None = Field(default=None, max_length=200)
     recipes: list[RecipeDetail] | None = None
 
 
@@ -188,23 +189,23 @@ class SaveRecipeRequest(BaseModel):
         default=None, description="KB recipe id, or null for AI-generated"
     )
     recipe_snapshot: RecipeDetail
-    notes: str | None = None
+    notes: str | None = Field(default=None, max_length=5000)
 
 
 class UpdateSavedRecipeRequest(BaseModel):
     recipe_snapshot: RecipeDetail | None = None
-    notes: str | None = None
+    notes: str | None = Field(default=None, max_length=5000)
 
 
 # Grocery lists
 
 class SaveGroceryListRequest(BaseModel):
-    name: str
-    session_id: str = Field(
+    name: str = Field(max_length=200)
+    session_id: uuid.UUID = Field(
         description="Derives grocery list from current session state"
     )
 
 
 class UpdateGroceryListRequest(BaseModel):
-    name: str | None = None
+    name: str | None = Field(default=None, max_length=200)
     stores: list[GroceryStore] | None = None

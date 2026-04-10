@@ -5,6 +5,11 @@ import aiosqlite
 from contracts.tool_schemas import TranslateTermInput, TranslateTermResult
 
 
+def _escape_like(value: str) -> str:
+    """Escape LIKE special characters to prevent wildcard injection."""
+    return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
+
 def _contains_chinese(text: str) -> bool:
     return any("\u4e00" <= ch <= "\u9fff" for ch in text)
 
@@ -36,9 +41,11 @@ async def translate_term(
             )
 
         # Partial match
+        escaped = _escape_like(term.lower())
         cursor = await db.execute(
-            "SELECT en, zh FROM glossary WHERE LOWER(en) LIKE ? OR ? LIKE '%' || LOWER(en) || '%' LIMIT 1",
-            (f"%{term.lower()}%", term.lower()),
+            "SELECT en, zh FROM glossary WHERE LOWER(en) LIKE ? ESCAPE '\\' "
+            "OR ? LIKE '%' || LOWER(en) || '%' LIMIT 1",
+            (f"%{escaped}%", term.lower()),
         )
         row = await cursor.fetchone()
         if row:
@@ -56,9 +63,11 @@ async def translate_term(
                 term=row[0], translation=row[1], direction="zh_to_en", match_type="exact"
             )
 
+        escaped = _escape_like(term)
         cursor = await db.execute(
-            "SELECT zh, en FROM glossary WHERE zh LIKE ? OR ? LIKE '%' || zh || '%' LIMIT 1",
-            (f"%{term}%", term),
+            "SELECT zh, en FROM glossary WHERE zh LIKE ? ESCAPE '\\' "
+            "OR ? LIKE '%' || zh || '%' LIMIT 1",
+            (f"%{escaped}%", term),
         )
         row = await cursor.fetchone()
         if row:

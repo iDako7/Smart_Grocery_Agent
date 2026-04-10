@@ -1,6 +1,6 @@
 """Conversation context manager — store and load turns with token budget."""
 
-import json
+from collections import deque
 import uuid
 
 from sqlalchemy import select
@@ -8,9 +8,11 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 
 from src.backend.db.tables import conversation_turns
 
-# ~8K tokens for history, 1 token ≈ 4 chars
+# Conservative: 1 token ≈ 2 chars.
+# English text is ~4 chars/token but CJK text is ~1 char/token.
+# Using 2 as a safe lower bound prevents budget overflow for mixed-language content.
 DEFAULT_TOKEN_BUDGET = 8000
-CHARS_PER_TOKEN = 4
+CHARS_PER_TOKEN = 2
 
 
 async def save_turn(
@@ -28,7 +30,7 @@ async def save_turn(
             role=role,
             content=content,
             screen=screen,
-            tool_calls=json.dumps(tool_calls) if tool_calls else None,
+            tool_calls=tool_calls or None,
         )
     )
 
@@ -58,7 +60,7 @@ async def load_context(
     rows = result.fetchall()
 
     # Estimate tokens for each turn
-    turns_with_tokens: list[tuple[dict, int]] = []
+    turns_with_tokens: deque[tuple[dict, int]] = deque()
     for row in rows:
         msg: dict = {"role": row[0], "content": row[1]}
         char_count = len(row[1] or "")
@@ -68,7 +70,7 @@ async def load_context(
     # Drop oldest turns until within budget
     total_tokens = sum(t for _, t in turns_with_tokens)
     while total_tokens > token_budget and turns_with_tokens:
-        _, dropped = turns_with_tokens.pop(0)
+        _, dropped = turns_with_tokens.popleft()
         total_tokens -= dropped
 
     return [msg for msg, _ in turns_with_tokens]

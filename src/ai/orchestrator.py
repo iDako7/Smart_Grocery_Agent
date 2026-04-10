@@ -17,6 +17,8 @@ from contracts.tool_schemas import (
     GetRecipeDetailInput,
     GetSubstitutionsInput,
     LookupStoreProductInput,
+    PCSVResult,
+    RecipeSummary,
     SearchRecipesInput,
     TranslateTermInput,
     UpdateUserProfileInput,
@@ -36,6 +38,17 @@ from src.backend.db.crud import get_user_profile
 MAX_ITERATIONS = 10
 MODEL = os.environ.get("SGA_MODEL", "anthropic/claude-sonnet-4.6")
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+
+_openai_client: AsyncOpenAI | None = None
+
+
+def _get_client() -> AsyncOpenAI:
+    """Lazy singleton — reuses connection pool across requests."""
+    global _openai_client
+    if _openai_client is None:
+        api_key = os.environ.get("OPENROUTER_API_KEY", "")
+        _openai_client = AsyncOpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key)
+    return _openai_client
 
 # Tool name → (Pydantic input model, handler requires kb or pg)
 _TOOL_REGISTRY: dict[str, tuple[type, str]] = {
@@ -91,7 +104,7 @@ async def _dispatch_tool(
         return error, ToolCall(name=name, input=parsed.model_dump(), result=error)
 
     if result is None:
-        result_dict = {"error": f"No result (e.g., recipe not found)"}
+        result_dict = {"error": "No result (e.g., recipe not found)"}
     elif hasattr(result, "model_dump"):
         result_dict = result.model_dump()
     elif isinstance(result, list):
@@ -118,10 +131,7 @@ async def run_agent(
         messages.extend(history)
     messages.append({"role": "user", "content": user_message})
 
-    client = AsyncOpenAI(
-        base_url=OPENROUTER_BASE_URL,
-        api_key=os.environ.get("OPENROUTER_API_KEY", ""),
-    )
+    client = _get_client()
 
     all_tool_calls: list[ToolCall] = []
     pcsv_result = None
@@ -161,10 +171,8 @@ async def run_agent(
 
             # Track structured results for SSE
             if tc.function.name == "analyze_pcsv" and isinstance(result_dict, dict) and "error" not in result_dict:
-                from contracts.tool_schemas import PCSVResult
                 pcsv_result = PCSVResult.model_validate(result_dict)
             elif tc.function.name == "search_recipes" and isinstance(result_dict, list):
-                from contracts.tool_schemas import RecipeSummary
                 recipe_results = [RecipeSummary.model_validate(r) if isinstance(r, dict) else r for r in result_dict]
 
             content = json.dumps(result_dict, ensure_ascii=False, default=str)

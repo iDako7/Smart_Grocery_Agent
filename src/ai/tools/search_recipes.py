@@ -24,6 +24,8 @@ async def search_recipes(
         clauses.append("effort_level = ?")
         params.append(input.effort_level)
 
+    # SAFETY: clauses contain only hardcoded SQL fragments with ? placeholders.
+    # All user-supplied values go into params. Never interpolate user data into clauses.
     where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
     sql = f"SELECT id, name, name_zh, cuisine, cooking_method, effort_level, flavor_tags, serves, ingredients FROM recipes{where}"
 

@@ -5,7 +5,7 @@ typed events in rapid sequence.
 """
 
 import json
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncIterator
 
 from contracts.sse_events import (
     DoneEvent,
@@ -25,7 +25,7 @@ def _sse_line(event_type: str, data: dict) -> str:
     return f"event: {event_type}\ndata: {payload}\n\n"
 
 
-async def emit_agent_result(result: AgentResult) -> AsyncGenerator[str, None]:
+async def emit_agent_result(result: AgentResult) -> AsyncIterator[str]:
     """Emit SSE events from a completed AgentResult.
 
     Sequence: thinking* → pcsv_update → recipe_card(s) → explanation → grocery_list → done

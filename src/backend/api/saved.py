@@ -1,6 +1,5 @@
 """Saved content CRUD endpoints — meal plans, recipes, grocery lists."""
 
-import json
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -46,7 +45,7 @@ async def create_meal_plan(
 ) -> SavedMealPlan:
     # Get recipes from session state
     sess_row = (await conn.execute(
-        sessions.select().where(sessions.c.id == uuid.UUID(body.session_id), sessions.c.user_id == user_id)
+        sessions.select().where(sessions.c.id == body.session_id, sessions.c.user_id == user_id)
     )).first()
     recipes_data = (sess_row.state_snapshot or {}).get("recipes", []) if sess_row else []
 
@@ -244,7 +243,7 @@ async def create_grocery_list(
     conn: AsyncConnection = Depends(get_db),
 ) -> SavedGroceryList:
     sess_row = (await conn.execute(
-        sessions.select().where(sessions.c.id == uuid.UUID(body.session_id), sessions.c.user_id == user_id)
+        sessions.select().where(sessions.c.id == body.session_id, sessions.c.user_id == user_id)
     )).first()
     stores_data = (sess_row.state_snapshot or {}).get("grocery_list", []) if sess_row else []
 

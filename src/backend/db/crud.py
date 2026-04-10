@@ -3,6 +3,7 @@
 import uuid
 
 from sqlalchemy import text
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncConnection
 
 from contracts.tool_schemas import UserProfile
@@ -10,12 +11,13 @@ from src.backend.db.tables import user_profiles, users
 
 
 async def ensure_user_exists(conn: AsyncConnection, user_id: uuid.UUID, email: str) -> None:
-    """Insert a user + default profile if the user doesn't already exist."""
-    row = (await conn.execute(users.select().where(users.c.id == user_id))).first()
-    if row is not None:
-        return
-    await conn.execute(users.insert().values(id=user_id, email=email))
-    await conn.execute(user_profiles.insert().values(user_id=user_id))
+    """Insert a user + default profile if the user doesn't already exist (race-safe)."""
+    await conn.execute(
+        pg_insert(users).values(id=user_id, email=email).on_conflict_do_nothing(index_elements=["id"])
+    )
+    await conn.execute(
+        pg_insert(user_profiles).values(user_id=user_id).on_conflict_do_nothing(index_elements=["user_id"])
+    )
 
 
 async def get_user_profile(conn: AsyncConnection, user_id: uuid.UUID) -> UserProfile:

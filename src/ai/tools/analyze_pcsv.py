@@ -1,6 +1,7 @@
 """PCSV analysis: deterministic ingredient categorization via SQLite KB."""
 
 import json
+import re
 
 import aiosqlite
 
@@ -33,11 +34,17 @@ async def analyze_pcsv(db: aiosqlite.Connection, input: AnalyzePcsvInput) -> PCS
         key = ingredient.lower().strip()
         roles = mappings.get(key, [])
         if not roles:
-            # Partial match — prefer closest-length match
+            # Partial match — word-boundary matching to avoid false positives
+            # (e.g. "egg" should not match "eggplant")
+            key_pattern = re.compile(r'\b' + re.escape(key) + r'\b')
             best_match = None
             best_delta = float("inf")
             for mapped_name, mapped_roles in mappings.items():
-                if key in mapped_name or mapped_name in key:
+                key_in_mapped = bool(key_pattern.search(mapped_name))
+                mapped_in_key = bool(
+                    re.search(r'\b' + re.escape(mapped_name) + r'\b', key)
+                )
+                if key_in_mapped or mapped_in_key:
                     delta = abs(len(mapped_name) - len(key))
                     if delta < best_delta:
                         best_delta = delta

@@ -1,6 +1,7 @@
 """Session + Chat API endpoints."""
 
 import json
+import logging
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -19,9 +20,12 @@ from src.ai.context import load_context, save_turn
 from src.ai.kb import get_kb
 from src.ai.orchestrator import run_agent
 from src.ai.sse import emit_agent_result
+from src.ai.types import AgentResult
 from src.backend.auth import get_current_user_id
 from src.backend.db.engine import get_db
 from src.backend.db.tables import conversation_turns, sessions
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -113,37 +117,41 @@ async def chat(
     history = await load_context(conn, session_id)
 
     # Run agent (collect phase)
-    kb = await get_kb()
+    agent_failed = False
     try:
-        result = await run_agent(body.message, kb, conn, user_id, history=history)
-    except Exception as e:
-        # LLM failure — emit error event
-        from src.ai.types import AgentResult
+        kb = await get_kb()
+        try:
+            result = await run_agent(body.message, kb, conn, user_id, history=history)
+        finally:
+            await kb.close()
+    except Exception:
+        logger.exception("Agent execution failed for session %s", session_id)
+        agent_failed = True
         result = AgentResult(
             status="partial",
-            response_text=f"An error occurred: {e}",
+            response_text="I encountered an error processing your request. Please try again.",
         )
-    finally:
-        await kb.close()
 
-    # Save assistant turn
-    await save_turn(conn, session_id, "assistant", result.response_text, screen=body.screen)
+    # Only persist on success — don't save error messages as assistant turns
+    if not agent_failed:
+        # Save assistant turn
+        await save_turn(conn, session_id, "assistant", result.response_text, screen=body.screen)
 
-    # Update session state snapshot
-    snapshot: dict = {}
-    if result.pcsv:
-        snapshot["pcsv"] = result.pcsv.model_dump()
-    if result.recipes:
-        snapshot["recipes"] = [r.model_dump() for r in result.recipes]
-    if result.grocery_list:
-        snapshot["grocery_list"] = [s.model_dump() for s in result.grocery_list]
+        # Update session state snapshot
+        snapshot: dict = {}
+        if result.pcsv:
+            snapshot["pcsv"] = result.pcsv.model_dump()
+        if result.recipes:
+            snapshot["recipes"] = [r.model_dump() for r in result.recipes]
+        if result.grocery_list:
+            snapshot["grocery_list"] = [s.model_dump() for s in result.grocery_list]
 
-    await conn.execute(
-        sessions.update()
-        .where(sessions.c.id == session_id)
-        .values(screen=body.screen, state_snapshot=snapshot)
-    )
-    await conn.commit()
+        await conn.execute(
+            sessions.update()
+            .where(sessions.c.id == session_id)
+            .values(screen=body.screen, state_snapshot=snapshot)
+        )
+        await conn.commit()
 
     # Emit phase — stream SSE events
     return StreamingResponse(

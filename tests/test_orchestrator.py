@@ -53,7 +53,7 @@ async def test_simple_text_response(kb, seeded_user, db):
     mock_client = AsyncMock()
     mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
 
-    with patch("src.ai.orchestrator.AsyncOpenAI", return_value=mock_client):
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("What should I cook?", kb, db, seeded_user)
 
     assert result.status == "complete"
@@ -72,7 +72,7 @@ async def test_tool_call_then_response(kb, seeded_user, db):
         side_effect=[response_with_tool, response_final]
     )
 
-    with patch("src.ai.orchestrator.AsyncOpenAI", return_value=mock_client):
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("I have chicken and rice", kb, db, seeded_user)
 
     assert result.status == "complete"
@@ -92,7 +92,7 @@ async def test_max_iterations_returns_partial(kb, seeded_user, db):
     mock_client = AsyncMock()
     mock_client.chat.completions.create = AsyncMock(return_value=response_with_tool)
 
-    with patch("src.ai.orchestrator.AsyncOpenAI", return_value=mock_client):
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         with patch("src.ai.orchestrator.MAX_ITERATIONS", 3):
             result = await run_agent("test", kb, db, seeded_user)
 
@@ -111,7 +111,7 @@ async def test_unknown_tool_returns_error(kb, seeded_user, db):
         side_effect=[response_with_tool, response_final]
     )
 
-    with patch("src.ai.orchestrator.AsyncOpenAI", return_value=mock_client):
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("test", kb, db, seeded_user)
 
     assert result.status == "complete"
@@ -134,7 +134,7 @@ async def test_malformed_args_returns_error(kb, seeded_user, db):
         side_effect=[response_with_tool, response_final]
     )
 
-    with patch("src.ai.orchestrator.AsyncOpenAI", return_value=mock_client):
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("test", kb, db, seeded_user)
 
     assert result.status == "complete"
@@ -152,7 +152,7 @@ async def test_search_recipes_tool_call(kb, seeded_user, db):
         side_effect=[response_with_tool, response_final]
     )
 
-    with patch("src.ai.orchestrator.AsyncOpenAI", return_value=mock_client):
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("Find me chicken recipes", kb, db, seeded_user)
 
     assert result.status == "complete"
@@ -170,7 +170,7 @@ async def test_history_passed_to_llm(kb, seeded_user, db):
         {"role": "assistant", "content": "Let me analyze that."},
     ]
 
-    with patch("src.ai.orchestrator.AsyncOpenAI", return_value=mock_client):
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("What else?", kb, db, seeded_user, history=history)
 
     # Verify history was included in the call

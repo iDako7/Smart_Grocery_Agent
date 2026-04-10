@@ -97,6 +97,13 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
+    # Drop indexes explicitly (symmetric with upgrade)
+    op.drop_index("idx_grocery_lists_user", table_name="saved_grocery_lists")
+    op.drop_index("idx_saved_recipes_user", table_name="saved_recipes")
+    op.drop_index("idx_meal_plans_user", table_name="saved_meal_plans")
+    op.drop_index("idx_turns_session", table_name="conversation_turns")
+    op.drop_index("idx_sessions_user", table_name="sessions")
+
     op.drop_table("saved_grocery_lists")
     op.drop_table("saved_recipes")
     op.drop_table("saved_meal_plans")
