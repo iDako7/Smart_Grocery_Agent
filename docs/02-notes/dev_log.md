@@ -41,3 +41,15 @@ Improvement: orchestration still needs a gate.
 - **Phase 2 plan:** `#important` Wrote `phase-2-implementation-plan.md` with frontend build strategy (static HTML -> React components -> mock state machine -> live SSE).
 - **Design system:** Explored three visual directions (Editorial Cookbook, Market Receipt, Soft Bento), selected Soft Bento, produced design reference covering tokens, typography, component patterns, bilingual rules.
 - **Phase 1c completion:** Produced artifact-to-Phase-2 mapping — every prototype file mapped to its Phase 2 destination. Added vegetarian KB data. Normalized chat endpoint to `POST /session/{id}/chat` across all docs. Created contract freeze protocol. Restructured `docs/` into `00-specs/`, `01-plans/`, `02-notes/`, `03-evaluations/`, `04-walkthroughs/`. Archived Phase 1b eval artifacts. (PR #4)
+
+## Day 8 (Apr 9) — WT2 Backend + AI layer implementation
+
+- **Full WT2 implementation:** Completed all 5 stages in a single session — DB layer, 7 tool handlers, orchestrator, API endpoints, SSE streaming. 56 files, 4213 lines. 175 tests, 80% coverage. (PR #9)
+
+### Implementation pattern: orchestration plan + TDD + async code review
+
+Wrote a detailed orchestration plan upfront (`wt2-orchestration-plan.md`) specifying 10 TDD calls, 3 code review checkpoints, and 5 verification gates in exact dependency order. One agent executed the plan sequentially — write tests first, implement to pass, run the gate. Code review agents ran in the background at marked checkpoints (Stages 1, 2, 4) and reported issues without blocking progress. Fixes were batched and applied before the final gate.
+
+This pattern traded planning time for execution speed. The entire backend shipped in one session because each TDD call had zero ambiguity — file names, function signatures, test expectations, and reference code were all specified. The code reviews caught real bugs (unbound variable, list/dict mismatch, unsanitized field name) that would have been painful to debug later.
+
+The trade-off: this only works when the design is locked. Contracts, schemas, and prototype code must exist before the plan is written. Without that, the orchestration plan would be guesswork.

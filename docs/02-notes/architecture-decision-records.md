@@ -27,6 +27,10 @@
 | ADR-16 | Frontend Stack: React + Vite + shadcn/ui + Tailwind + Bun | Decided | New |
 | ADR-17 | Screen-Agnostic API Design | Decided | New |
 | ADR-18 | SQLAlchemy 2.0 Core (async) + asyncpg + Alembic, No Full ORM | Decided | Phase 0.3 planning |
+| ADR-19 | AsyncOpenAI SDK Over Raw httpx for LLM Client | Decided | WT2 planning |
+| ADR-20 | `rapidfuzz` Over `thefuzz` / FTS5 for Product Search | Decided | WT2 planning |
+| ADR-21 | Transaction-Rollback PostgreSQL Tests Over In-Memory SQLite | Decided | WT2 planning |
+| ADR-22 | Token-Based Context Truncation Over Fixed Turn Count | Decided | WT2 planning |
 
 ---
 
@@ -382,6 +386,76 @@ VPS
 - *Raw asyncpg:* Simpler, but SQL strings everywhere and no migration story without adding another tool.
 
 **Trade-off:** SQLAlchemy Core requires slightly more boilerplate per query than ORM. Acceptable given schema simplicity.
+
+---
+
+## ADR-19: AsyncOpenAI SDK Over Raw httpx for LLM Client
+
+**Decision:** Use the `openai` Python SDK (`AsyncOpenAI`) with `base_url` pointed at OpenRouter, not raw `httpx` calls.
+
+**Context:** The prototype uses the sync `OpenAI` SDK against OpenRouter successfully. The WT2 scope file says "httpx, no SDK" — intended to reject heavy frameworks (LangChain), not thin HTTP clients.
+
+**Why:** The SDK saves ~100 lines of boilerplate: SSE stream parsing, `tool_calls` deserialization into typed objects, retry logic with backoff, and timeout configuration. All proven in the prototype. The SDK pulls in `httpx` internally anyway, so there's no dependency savings from going raw. No practical advantage from managing the low-level HTTP code ourselves.
+
+**Alternatives considered:**
+
+- *Raw httpx:* Full visibility into wire protocol, zero abstraction. But requires manual SSE line parsing, manual `tool_calls` JSON extraction, manual retry/timeout logic. ~100 extra lines for the same result.
+
+**Risk:** Mild vendor coupling to OpenAI's SDK shape. Mitigated by the fact that OpenRouter is OpenAI-compatible, and the orchestration loop structure doesn't change if we swap clients later.
+
+---
+
+## ADR-20: `rapidfuzz` Over `thefuzz` / FTS5 for Product Search
+
+**Decision:** Use `rapidfuzz` for fuzzy matching in `lookup_store_product`, replacing the prototype's `thefuzz`. Defer SQLite FTS5 to Phase 3.
+
+**Context:** The prototype uses `thefuzz` (Levenshtein-based token sort ratio) for fuzzy product search. The product catalog is small (~hundreds of Costco items). Three alternatives exist: keep `thefuzz`, switch to `rapidfuzz`, or use SQLite FTS5.
+
+**Why:** `rapidfuzz` is a drop-in API replacement (`from rapidfuzz import fuzz`) that's 10-50x faster (C++ implementation) with no `python-Levenshtein` dependency issues. At the current catalog size, in-memory scoring is fine — no need for database-level search. FTS5 is token-based and won't catch typos ("chiken" vs "chicken"), which fuzzy matching handles naturally.
+
+**Alternatives considered:**
+
+- *Keep `thefuzz`:* Works but slower, has optional C extension dependency issues.
+- *SQLite FTS5:* Built-in, fast for keyword matching, but won't catch typos. Requires FTS5 virtual table setup in WT1's schema. Worth exploring when catalog grows to thousands of items.
+- *SQLite `LIKE` + Levenshtein UDF:* More work to implement, fragile, not meaningfully better than in-memory scoring.
+
+**Risk:** In-memory scoring loads all products per query. Acceptable at hundreds of items. If catalog grows to 10K+, revisit with FTS5 or indexed search.
+
+---
+
+## ADR-21: Transaction-Rollback PostgreSQL Tests Over In-Memory SQLite
+
+**Decision:** Run all integration tests against the Docker Compose PostgreSQL instance using per-test transaction rollback for isolation. No SQLite in-memory substitution.
+
+**Context:** The PostgreSQL schema uses JSONB columns, `gen_random_uuid()`, `TIMESTAMPTZ`, and other PostgreSQL-specific features. Four testing approaches were considered.
+
+**Why:** Transaction rollback per test gives full-fidelity PostgreSQL behavior (~5ms overhead per test) with automatic cleanup. The Docker Compose PostgreSQL instance already exists for development — no new infrastructure needed. SQLite in-memory substitution would mask real dialect differences (JSONB behavior, UUID generation, timestamp handling), creating false-green tests.
+
+**Alternatives considered:**
+
+- *SQLite in-memory for unit tests, PostgreSQL for integration:* Fast unit tests but JSONB/UUID/TIMESTAMPTZ dialect differences cause false greens. Two test configurations to maintain.
+- *`testcontainers-python`:* Throwaway PostgreSQL container per test session. Real PostgreSQL, auto-cleanup, but adds a dependency and is slower than transaction rollback against an existing container.
+- *All tests against Docker Compose without rollback:* Requires explicit cleanup fixtures. Slower, more fragile, tests may interfere with each other.
+
+**Risk:** Tests require a running PostgreSQL container (`docker compose up db`). Acceptable — this is already the dev workflow. For CI, GitHub Actions PostgreSQL service containers provide the same setup.
+
+---
+
+## ADR-22: Token-Based Context Truncation Over Fixed Turn Count
+
+**Decision:** Manage conversation history with a token budget (~8K tokens for history) rather than a fixed turn count. Keep recent turns verbatim, drop oldest first. Summary generation deferred to Phase 3.
+
+**Context:** The orchestration loop re-sends conversation history on every LLM call (which may iterate 2-5 times per `/chat`). History cost = `history_tokens x iterations_per_chat`. A fixed turn count (e.g., "keep last 10 turns") doesn't account for varying turn lengths — a turn with recipe search results is 5-10x larger than a simple clarification.
+
+**Why:** Token-based truncation adapts to actual content size. Budget breakdown per LLM call: ~3K system prompt + tools, ~4K current exchange (message + tool calls), ~8K history = ~15K input tokens. This keeps costs reasonable while preserving enough context for cross-screen reasoning. Approximate counting (1 token ~ 4 chars) is sufficient — precision doesn't matter when the budget is a soft guideline, not a hard limit.
+
+**Alternatives considered:**
+
+- *Fixed turn count (last N turns):* Simple but wasteful — keeps 10 short turns (2K tokens) or overflows on 10 long turns (20K tokens). Doesn't adapt to content.
+- *LLM-generated summaries:* Compresses old turns into a paragraph. Better quality but adds an LLM call per `/chat` — latency and cost overhead. Planned for Phase 3 when usage data shows where compression matters most.
+- *No truncation (full history):* Works for short sessions but token costs grow unbounded. A 20-turn session with tool results could hit 50K+ tokens per iteration.
+
+**Risk:** Approximate token counting may over- or under-truncate by ~20%. Acceptable — the budget is a guideline. If a specific session feels lossy, the Phase 3 summary approach addresses it properly.
 
 ---
 

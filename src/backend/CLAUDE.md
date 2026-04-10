@@ -21,7 +21,7 @@
 - **DB driver:** asyncpg (PostgreSQL), aiosqlite (SQLite KB)
 - **ORM:** SQLAlchemy 2.0 Core (async) — no full ORM, no relationship mapping
 - **Migrations:** Alembic
-- **LLM:** Claude via OpenRouter (httpx, no SDK)
+- **LLM:** Claude via OpenRouter (AsyncOpenAI SDK with base_url)
 - **Orchestration:** Explicit while-loop (~40 lines), max 10 iterations
 
 ## Key patterns
