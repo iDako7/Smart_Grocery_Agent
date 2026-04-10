@@ -13,11 +13,11 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
 
 # Expected counts from actual source data
-EXPECTED_RECIPES = 20
-EXPECTED_PCSV = 95
-EXPECTED_PRODUCTS = 396  # 443 total minus 47 duplicates across departments
+EXPECTED_RECIPES = 120
+EXPECTED_PCSV = 564
+EXPECTED_PRODUCTS = 6401  # Costco + Save-On-Foods after dedup
 EXPECTED_SUBSTITUTIONS = 20
-EXPECTED_GLOSSARY = 123
+EXPECTED_GLOSSARY = 595
 
 EXPECTED_TABLES = {"recipes", "pcsv_mappings", "products", "substitutions", "glossary"}
 EXPECTED_INDEXES = {
@@ -186,10 +186,10 @@ class TestProductsTable(MigrateTestBase):
         count = self.conn.execute("SELECT COUNT(*) FROM products").fetchone()[0]
         self.assertEqual(count, EXPECTED_PRODUCTS)
 
-    def test_store_always_costco(self):
+    def test_expected_stores(self):
         cur = self.conn.execute("SELECT DISTINCT store FROM products")
         stores = {row[0] for row in cur}
-        self.assertEqual(stores, {"costco"})
+        self.assertEqual(stores, {"costco", "community_market"})
 
     def test_no_null_brand_name(self):
         count = self.conn.execute("SELECT COUNT(*) FROM products WHERE brand_name IS NULL").fetchone()[0]

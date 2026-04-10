@@ -4,6 +4,8 @@ import json
 import uuid
 from unittest.mock import AsyncMock, MagicMock, patch
 
+import openai
+import pytest
 import pytest_asyncio
 
 from src.ai.kb import get_kb
@@ -179,3 +181,70 @@ async def test_history_passed_to_llm(kb, seeded_user, db):
     # system + 2 history + 1 user = 4 messages
     assert len(messages) == 4
     assert messages[1]["content"] == "I have chicken"
+
+
+# ---------------------------------------------------------------------------
+# Retry-with-backoff tests
+# ---------------------------------------------------------------------------
+
+@pytest.mark.parametrize("exc_class,kwargs", [
+    (openai.APIConnectionError, {"request": MagicMock()}),
+    (openai.APITimeoutError, {"request": MagicMock()}),
+    (openai.RateLimitError, {"message": "rate limit", "response": MagicMock(status_code=429), "body": None}),
+    (openai.InternalServerError, {"message": "server error", "response": MagicMock(status_code=500), "body": None}),
+])
+async def test_retryable_error_types(exc_class, kwargs, kb, seeded_user, db):
+    """All 4 retryable error types are retried once, then succeed."""
+    mock_response = _make_response(content="Recovered after retry!")
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(
+        side_effect=[exc_class(**kwargs), mock_response]
+    )
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
+            result = await run_agent("What should I cook?", kb, db, seeded_user)
+
+    assert result.status == "complete"
+    assert result.response_text == "Recovered after retry!"
+    assert mock_client.chat.completions.create.call_count == 2
+    mock_sleep.assert_called_once_with(1.0)  # LLM_BACKOFF_BASE * 2**0
+
+
+async def test_llm_permanent_failure_not_retried(kb, seeded_user, db):
+    """AuthenticationError (4xx) propagates immediately without retrying."""
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(
+        side_effect=openai.AuthenticationError(
+            message="bad key",
+            response=MagicMock(status_code=401),
+            body=None,
+        )
+    )
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
+            with pytest.raises(openai.AuthenticationError):
+                await run_agent("What should I cook?", kb, db, seeded_user)
+
+    assert mock_client.chat.completions.create.call_count == 1
+    mock_sleep.assert_not_called()
+
+
+async def test_llm_retry_exhausted_propagates(kb, seeded_user, db):
+    """APIConnectionError on BOTH attempts propagates after exhausting retries."""
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(
+        side_effect=[
+            openai.APIConnectionError(request=MagicMock()),
+            openai.APIConnectionError(request=MagicMock()),
+        ]
+    )
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:
+            with pytest.raises(openai.APIConnectionError):
+                await run_agent("What should I cook?", kb, db, seeded_user)
+
+    assert mock_client.chat.completions.create.call_count == 2
+    mock_sleep.assert_called_once_with(1.0)
