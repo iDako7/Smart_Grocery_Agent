@@ -24,7 +24,7 @@ Within `archive/`:
 
 | File | Purpose |
 |---|---|
-| `00-specs/product-spec-v2.md` | Product vision, target users, core principles, user stories, and feature scope |
+| `00-specs/product-spec-v2.md` | Product spec v3: feature catalog (26 features with IDs), 5 user journeys, acceptance criteria, system behavior |
 | `00-specs/architecture-spec-v2.md` | End-to-end system architecture, components, data flow, interfaces |
 | `00-specs/ai-layer-architecture-v2.md` | AI-layer design, orchestration model, tool architecture |
 | `01-plans/phase-2-implementation-plan.md` | Phase 2 execution plan, worktree protocol, sync points |

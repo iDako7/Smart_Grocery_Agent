@@ -131,3 +131,24 @@ The `/tdd` agent defaulted to unit tests because that's the path of least resist
 ### Fix plan
 
 Wrote `docs/01-plans/frontend-fix-orchestration-plan.md` — 7 TDD calls, 4 new test files, 1 code review checkpoint, explicit behavior assertions for each bug. Also wrote a backend live-LLM test prompt (single test file, no plan needed).
+
+## Day 10 (Apr 10) — Product spec v3 rewrite + process reflection
+
+### What happened
+
+Preparing for Phase 2.2 integration, ran a gap analysis comparing the product spec against the codebase. Found significant gaps on both frontend (7 issues) and backend (5 issues) — features described in prose but never built, hardcoded IDs, empty data pipelines, stubbed buttons.
+
+Diagnosed the root cause: the product spec itself. Written as dense prose, it was hard for both agents and humans to extract discrete features, behavioral expectations, and test criteria. The agents had to interpret paragraphs and translate them into feature definitions — a lossy process that produced gaps.
+
+Rewrote `product-spec-v2.md` as a structured, agent-friendly format (Approved v3):
+- **Feature catalog** — 26 features with IDs (H1-H2, C1-C4, R1-R6, G1-G3, S1-S8, A1-A3), grouped by screen
+- **User journeys** — 5 end-to-end flows in compact notation with "must be true" assertions
+- **Acceptance criteria** — per-journey FE/BE behavioral requirements, each tagged with feature IDs for traceability
+
+### Reflection: prototypes prevent gaps, specs must meet human standards
+
+**Prototype as full-scope reference.** In an earlier project I used Claude artifacts (full JSX prototypes) as the reference for coding agents. The agent could refer to the artifact directly and complete the full scope — no gaps. This project used an HTML wireframe instead, because the product was too complex for a single artifact. The wireframe worked for visual design but lacked the behavioral detail that a runnable prototype provides.
+
+The lesson: a prototype is not just a frontend reference — it's a critical backend reference too. A full-scope prototype in a single code space means one agent session has seen the entire product. That's the best way to prevent gaps between frontend and backend. Next time: draw wireframes in Figma → let Claude Code Desktop generate a full artifact from the wireframe + product spec → use that artifact as the single source of truth for the implementation plan.
+
+**Specs must meet human standards, not agent standards.** I had a persistent feeling the product spec wasn't good enough, but assumed the agent would handle the ambiguity. It didn't — the agent produced exactly what the spec described, including the vagueness. The spec is the command system I build for the agents. If I can't use it to clearly verify what's right and what's wrong, neither can the agent. The standard for documentation is not "can an agent parse this" — it's "can I, as the commander, use this to know where things stand at a glance."

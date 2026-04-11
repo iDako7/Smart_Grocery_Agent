@@ -14,7 +14,7 @@ from contracts.tool_schemas import PCSVResult, RecipeSummary
 
 # ---------------------------------------------------------------------------
 # Grocery list structure (Store > Department > Item)
-# Derived from product spec Screen 4 + Section 5
+# Derived from product spec §2 Grocery features (G1-G3) + §2 Saved Content (S1-S8)
 # ---------------------------------------------------------------------------
 
 

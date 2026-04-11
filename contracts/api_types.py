@@ -18,7 +18,7 @@ from contracts.tool_schemas import PCSVResult, RecipeDetail, RecipeSummary
 # ---------------------------------------------------------------------------
 
 # Core flow screens + saved content screens that support chat.
-# No "saved_grocery_list" — product spec shows no chat input on that screen.
+# No "saved_grocery_list" — product spec §2 Grocery constraint: no chat input on this screen.
 Screen = Literal[
     "home",
     "clarify",

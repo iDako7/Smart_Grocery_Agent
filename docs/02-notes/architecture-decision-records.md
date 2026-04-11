@@ -462,7 +462,7 @@ VPS
 ## References
 
 - **ADR-1 through ADR-7 original source:** `docs/ai-layer-architecture-v2.md` §4
-- **Product spec:** `docs/product-spec-v2.md`
+- **Product spec:** `docs/00-specs/product-spec-v2.md` (v3 — feature catalog, journeys, acceptance criteria)
 - **Architecture spec:** `docs/architecture-spec-v2.md`
 - **AI layer architecture:** `docs/ai-layer-architecture-v2.md`
 - **Phase 1b eval results:** `docs/03-evaluations/phase-1b-reasoning-eval-report.md`

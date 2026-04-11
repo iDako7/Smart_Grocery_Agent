@@ -36,7 +36,7 @@ This plan covers the frontend worktree (WT3) of Phase 2. Four stages, each produ
 **Input:**
 - `docs/00-specs/soft-bento-preview.html` — design system (tokens, typography, components, bilingual rules)
 - `docs/00-specs/wireframe-v2.html` — structure and interaction source of truth
-- `docs/00-specs/product-spec-v2.md` — what each screen does and why
+- `docs/00-specs/product-spec-v2.md` — feature catalog §2, user journeys §3, acceptance criteria §4
 
 **Output:** `src/frontend/static-preview.html` — single file, 7 screens, tab navigation.
 
@@ -360,7 +360,7 @@ src/frontend/
 
 - **Design system:** `docs/00-specs/soft-bento-preview.html`
 - **Wireframe:** `docs/00-specs/wireframe-v2.html`
-- **Product spec:** `docs/00-specs/product-spec-v2.md`
+- **Product spec:** `docs/00-specs/product-spec-v2.md` (v3 — feature catalog, journeys, acceptance criteria)
 - **Architecture spec:** `docs/00-specs/architecture-spec-v2.md` (§8 SSE, §11 Frontend)
 - **Phase 2 plan:** `docs/01-plans/phase-2-implementation-plan.md`
 - **Contracts:** `contracts/tool_schemas.py`, `contracts/sse_events.py`, `contracts/api_types.py`

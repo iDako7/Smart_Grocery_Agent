@@ -172,7 +172,7 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 
 - **Architecture spec:** `docs/00-specs/architecture-spec-v2.md`
 - **AI layer architecture:** `docs/00-specs/ai-layer-architecture-v2.md`
-- **Product spec:** `docs/00-specs/product-spec-v2.md`
+- **Product spec:** `docs/00-specs/product-spec-v2.md` (v3 — feature catalog, journeys, acceptance criteria)
 - **Phase 1 plan:** `docs/01-plans/phase-1-plan.md`
 - **Wireframe:** `docs/00-specs/wireframe-v2.html`
 - **Design reference:** `docs/00-specs/soft-bento-preview.html`

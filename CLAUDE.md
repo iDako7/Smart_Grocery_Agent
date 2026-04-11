@@ -94,7 +94,7 @@ Three worktrees develop in parallel, each with its own `CLAUDE.md` defining scop
 
 ## Key Documentation
 
-- `docs/00-specs/product-spec-v2.md` — full product vision, user stories, screens, saved content
+- `docs/00-specs/product-spec-v2.md` — product spec v3: feature catalog (26 features), user journeys, acceptance criteria, system behavior
 - `docs/00-specs/architecture-spec-v2.md` — system architecture, API contract, deployment
 - `docs/00-specs/ai-layer-architecture-v2.md` — agent internals, ADRs (7 decisions documented)
 - `docs/01-plans/phase-2-implementation-plan.md` — phase plan, worktree protocol, sync points
