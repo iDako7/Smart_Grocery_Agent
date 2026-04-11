@@ -257,7 +257,8 @@ export function RecipesScreen() {
       <div className="flex gap-2.5 px-3.5 pt-1 pb-2.5">
         <button
           type="button"
-          onClick={() => { console.info("[Stage 4 TODO] Save plan"); navigate("/saved/plan/1"); }}
+          onClick={() => { // TODO(stage-4): replace hardcoded id with real saved plan id
+            navigate("/saved/plan/1", { state: { justSaved: true } }); }}
           className="flex-1 py-3 rounded-md bg-paper text-ink border border-cream-deep font-sans text-[13px] font-semibold cursor-pointer min-h-[44px]"
         >
           Save plan

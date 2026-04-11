@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { screen, act } from "@testing-library/react";
-import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
+import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
 import { renderWithSession } from "./test-utils";
 
-describe("SavedMealPlanScreen — saved toast", () => {
+describe("SavedGroceryListScreen — saved toast", () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -13,8 +13,8 @@ describe("SavedMealPlanScreen — saved toast", () => {
   });
 
   it("shows saved toast when navigated with justSaved state", () => {
-    renderWithSession(<SavedMealPlanScreen />, {
-      initialPath: "/saved/plan/1",
+    renderWithSession(<SavedGroceryListScreen />, {
+      initialPath: "/saved/list/1",
       initialState: { justSaved: true },
     });
     expect(screen.getByTestId("saved-toast")).toBeInTheDocument();
@@ -22,13 +22,15 @@ describe("SavedMealPlanScreen — saved toast", () => {
   });
 
   it("does NOT show saved toast when navigated without justSaved state", () => {
-    renderWithSession(<SavedMealPlanScreen />, { initialPath: "/saved/plan/1" });
+    renderWithSession(<SavedGroceryListScreen />, {
+      initialPath: "/saved/list/1",
+    });
     expect(screen.queryByTestId("saved-toast")).not.toBeInTheDocument();
   });
 
   it("toast disappears after timeout when navigated with justSaved state", () => {
-    renderWithSession(<SavedMealPlanScreen />, {
-      initialPath: "/saved/plan/1",
+    renderWithSession(<SavedGroceryListScreen />, {
+      initialPath: "/saved/list/1",
       initialState: { justSaved: true },
     });
     expect(screen.getByTestId("saved-toast")).toBeInTheDocument();

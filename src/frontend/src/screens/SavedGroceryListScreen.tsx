@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { ChecklistRow } from "@/components/checklist-row";
 import { StoreSection } from "@/components/store-section";
 import { Toast } from "@/components/toast";
@@ -15,6 +15,7 @@ type ListItem = {
 
 export function SavedGroceryListScreen() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { scenario } = useScenario();
   const { name, savedDate, items: INITIAL_ITEMS } = scenario.savedGroceryList;
   const [items, setItems] = useState<ListItem[]>(INITIAL_ITEMS);
@@ -79,8 +80,8 @@ export function SavedGroceryListScreen() {
         <div aria-hidden="true" className="min-w-[36px]" />
       </div>
 
-      {/* Saved toast */}
-      <Toast message="Saved!" />
+      {/* Saved toast — only shown when arriving via the Save list button */}
+      {(location.state as { justSaved?: boolean } | null)?.justSaved && <Toast message="Saved!" />}
 
       {/* Header card */}
       <div className="mx-3.5 my-2.5 px-5 py-[18px] bg-paper rounded-2xl relative overflow-hidden">

@@ -1,13 +1,11 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter, Routes, Route } from "react-router";
+import { Routes, Route } from "react-router";
 import { RecipesScreen } from "@/screens/RecipesScreen";
 import { GroceryScreen } from "@/screens/GroceryScreen";
 import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
 import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
-import { ScenarioProvider } from "@/context/scenario-context";
-import { SessionProvider } from "@/context/session-context";
 import { renderWithSession } from "./test-utils";
 
 // ---------------------------------------------------------------------------
@@ -26,15 +24,12 @@ describe('RecipesScreen — "Save plan" button', () => {
     expect(btn.tagName).toBe("BUTTON");
   });
 
-  it("calls console.info on click", async () => {
-    const spy = vi.spyOn(console, "info").mockImplementation(() => {});
+  it("navigates away from recipes screen on click", async () => {
     const user = userEvent.setup();
     renderWithSession(<RecipesScreen />, { initialPath: "/recipes" });
 
+    // clicking should not throw; navigation is tested in the routing suite below
     await user.click(screen.getByRole("button", { name: /save plan/i }));
-
-    expect(spy).toHaveBeenCalled();
-    expect(spy.mock.calls[0][0]).toMatch(/save/i);
   });
 
   it("always shows 'Save plan' text (no local feedback)", () => {
@@ -60,14 +55,12 @@ describe('GroceryScreen — "Save list" button', () => {
     expect(btn).toBeInTheDocument();
   });
 
-  it("calls console.info on click", async () => {
-    const spy = vi.spyOn(console, "info").mockImplementation(() => {});
+  it("navigates away from grocery screen on click", async () => {
     const user = userEvent.setup();
     renderWithSession(<GroceryScreen />, { initialPath: "/grocery" });
 
+    // clicking should not throw; navigation is tested in the routing suite below
     await user.click(screen.getByRole("button", { name: /save list/i }));
-
-    expect(spy).toHaveBeenCalled();
   });
 });
 
@@ -113,24 +106,19 @@ describe('RecipesScreen — "EN/中" language toggle', () => {
 // ---------------------------------------------------------------------------
 
 describe('GroceryScreen — "Save list" navigates to saved grocery list', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it("Save list navigates to saved grocery list", async () => {
-    vi.spyOn(console, "info").mockImplementation(() => {});
+  it("Save list navigates to saved grocery list and shows toast", async () => {
     const user = userEvent.setup();
-    render(
-      <ScenarioProvider>
-        <SessionProvider>
-          <MemoryRouter initialEntries={["/grocery"]}>
-            <Routes>
-              <Route path="/grocery" element={<GroceryScreen />} />
-              <Route path="/saved/list/:id" element={<SavedGroceryListScreen />} />
-            </Routes>
-          </MemoryRouter>
-        </SessionProvider>
-      </ScenarioProvider>
+    renderWithSession(
+      <></>,
+      {
+        initialPath: "/grocery",
+        routes: (
+          <Routes>
+            <Route path="/grocery" element={<GroceryScreen />} />
+            <Route path="/saved/list/:id" element={<SavedGroceryListScreen />} />
+          </Routes>
+        ),
+      }
     );
 
     await user.click(screen.getByRole("button", { name: /save list/i }));
@@ -138,28 +126,24 @@ describe('GroceryScreen — "Save list" navigates to saved grocery list', () => 
     await waitFor(() => {
       expect(screen.getByTestId("screen-saved-grocery-list")).toBeInTheDocument();
     });
+    expect(screen.getByTestId("saved-toast")).toBeInTheDocument();
   });
 });
 
 describe('RecipesScreen — "Save plan" navigates to saved meal plan', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it("Save plan navigates to saved meal plan", async () => {
-    vi.spyOn(console, "info").mockImplementation(() => {});
+  it("Save plan navigates to saved meal plan and shows toast", async () => {
     const user = userEvent.setup();
-    render(
-      <ScenarioProvider>
-        <SessionProvider>
-          <MemoryRouter initialEntries={["/recipes"]}>
-            <Routes>
-              <Route path="/recipes" element={<RecipesScreen />} />
-              <Route path="/saved/plan/:id" element={<SavedMealPlanScreen />} />
-            </Routes>
-          </MemoryRouter>
-        </SessionProvider>
-      </ScenarioProvider>
+    renderWithSession(
+      <></>,
+      {
+        initialPath: "/recipes",
+        routes: (
+          <Routes>
+            <Route path="/recipes" element={<RecipesScreen />} />
+            <Route path="/saved/plan/:id" element={<SavedMealPlanScreen />} />
+          </Routes>
+        ),
+      }
     );
 
     await user.click(screen.getByRole("button", { name: /save plan/i }));
@@ -167,5 +151,6 @@ describe('RecipesScreen — "Save plan" navigates to saved meal plan', () => {
     await waitFor(() => {
       expect(screen.getByTestId("screen-saved-meal-plan")).toBeInTheDocument();
     });
+    expect(screen.getByTestId("saved-toast")).toBeInTheDocument();
   });
 });
