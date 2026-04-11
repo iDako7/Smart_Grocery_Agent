@@ -84,7 +84,6 @@ export function RecipesScreen() {
   const [infoOpen, setInfoOpen] = useState(false);
   const [infoRecipe, setInfoRecipe] = useState<RecipeCardData | null>(null);
   const [lang, setLang] = useState<"en" | "zh">("en");
-  const [planSaved, setPlanSaved] = useState(false);
 
   function handleRetry() {
     sendMessage("retry");
@@ -258,15 +257,10 @@ export function RecipesScreen() {
       <div className="flex gap-2.5 px-3.5 pt-1 pb-2.5">
         <button
           type="button"
-          data-saved={planSaved ? "true" : undefined}
-          onClick={() => {
-            console.info("[Stage 4 TODO] Save plan");
-            setPlanSaved(true);
-            setTimeout(() => setPlanSaved(false), 1500);
-          }}
+          onClick={() => { console.info("[Stage 4 TODO] Save plan"); navigate("/saved/plan/1"); }}
           className="flex-1 py-3 rounded-md bg-paper text-ink border border-cream-deep font-sans text-[13px] font-semibold cursor-pointer min-h-[44px]"
         >
-          {planSaved ? "Saved!" : "Save plan"}
+          Save plan
         </button>
         <button
           type="button"
