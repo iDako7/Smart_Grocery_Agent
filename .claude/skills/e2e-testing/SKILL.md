@@ -277,50 +277,57 @@ jobs:
 - Traces: artifacts/*.zip
 ```
 
-## Wallet / Web3 Testing
+## SSE Streaming Testing
 
 ```typescript
-test('wallet connection', async ({ page, context }) => {
-  // Mock wallet provider
-  await context.addInitScript(() => {
-    window.ethereum = {
-      isMetaMask: true,
-      request: async ({ method }) => {
-        if (method === 'eth_requestAccounts')
-          return ['0x1234567890123456789012345678901234567890']
-        if (method === 'eth_chainId') return '0x1'
-      }
-    }
-  })
-
+test('chat receives SSE events', async ({ page }) => {
   await page.goto('/')
-  await page.locator('[data-testid="connect-wallet"]').click()
-  await expect(page.locator('[data-testid="wallet-address"]')).toContainText('0x1234')
-})
-```
 
-## Financial / Critical Flow Testing
+  // Type a message and send
+  await page.locator('[data-testid="chat-input"]').fill('What can I make with chicken and rice?')
+  await page.locator('[data-testid="send-button"]').click()
 
-```typescript
-test('trade execution', async ({ page }) => {
-  // Skip on production — real money
-  test.skip(process.env.NODE_ENV === 'production', 'Skip on production')
+  // Verify thinking indicator appears during SSE stream
+  await expect(page.locator('[data-testid="thinking-indicator"]')).toBeVisible()
 
-  await page.goto('/markets/test-market')
-  await page.locator('[data-testid="position-yes"]').click()
-  await page.locator('[data-testid="trade-amount"]').fill('1.0')
-
-  // Verify preview
-  const preview = page.locator('[data-testid="trade-preview"]')
-  await expect(preview).toContainText('1.0')
-
-  // Confirm and wait for blockchain
-  await page.locator('[data-testid="confirm-trade"]').click()
+  // Wait for SSE stream to complete (done event)
   await page.waitForResponse(
-    resp => resp.url().includes('/api/trade') && resp.status() === 200,
+    resp => resp.url().includes('/api/chat') && resp.status() === 200,
     { timeout: 30000 }
   )
 
-  await expect(page.locator('[data-testid="trade-success"]')).toBeVisible()
+  // Verify structured response cards appear
+  await expect(page.locator('[data-testid="recipe-card"]').first()).toBeVisible({ timeout: 15000 })
+})
+```
+
+## Auth / JWT Flow Testing
+
+```typescript
+test('magic link login flow', async ({ page, context }) => {
+  // Mock magic link verification endpoint
+  await page.route('**/api/auth/verify', async route => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({ token: 'mock-jwt-token', user: { id: '1', email: 'test@example.com' } })
+    })
+  })
+
+  await page.goto('/login')
+  await page.locator('[data-testid="email-input"]').fill('test@example.com')
+  await page.locator('[data-testid="send-link-button"]').click()
+
+  // Simulate clicking magic link (navigate to verify URL)
+  await page.goto('/auth/verify?token=mock-token')
+
+  // Verify redirect to app after auth
+  await expect(page).toHaveURL('/')
+  await expect(page.locator('[data-testid="user-menu"]')).toBeVisible()
+})
+
+test('unauthenticated user cannot access saved content', async ({ page }) => {
+  await page.goto('/saved')
+  await expect(page).toHaveURL(/\/login/)
 })
 ```

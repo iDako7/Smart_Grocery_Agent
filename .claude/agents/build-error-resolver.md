@@ -24,7 +24,7 @@ You are an expert build error resolution specialist. Your mission is to get buil
 npx tsc --noEmit --pretty
 npx tsc --noEmit --pretty --incremental false   # Show all errors
 npm run build
-npx eslint .
+npx eslint . --ext .ts,.tsx,.js,.jsx
 ```
 
 ## Workflow
