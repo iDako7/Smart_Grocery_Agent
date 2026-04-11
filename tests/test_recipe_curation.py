@@ -21,7 +21,7 @@ class TestRecipeCuration(unittest.TestCase):
             cls.recipes = json.load(f)
 
     def test_recipe_count(self):
-        self.assertEqual(len(self.recipes), 20)
+        self.assertEqual(len(self.recipes), 120)
 
     def test_every_recipe_has_effort_level(self):
         for r in self.recipes:
@@ -65,7 +65,7 @@ class TestRecipeCuration(unittest.TestCase):
 
     def test_all_ids_present(self):
         ids = {r["id"] for r in self.recipes}
-        expected_ids = {f"r{i:03d}" for i in range(1, 21)}
+        expected_ids = {f"r{i:03d}" for i in range(1, 121)}
         self.assertEqual(ids, expected_ids)
 
 

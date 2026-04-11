@@ -41,3 +41,93 @@ Improvement: orchestration still needs a gate.
 - **Phase 2 plan:** `#important` Wrote `phase-2-implementation-plan.md` with frontend build strategy (static HTML -> React components -> mock state machine -> live SSE).
 - **Design system:** Explored three visual directions (Editorial Cookbook, Market Receipt, Soft Bento), selected Soft Bento, produced design reference covering tokens, typography, component patterns, bilingual rules.
 - **Phase 1c completion:** Produced artifact-to-Phase-2 mapping — every prototype file mapped to its Phase 2 destination. Added vegetarian KB data. Normalized chat endpoint to `POST /session/{id}/chat` across all docs. Created contract freeze protocol. Restructured `docs/` into `00-specs/`, `01-plans/`, `02-notes/`, `03-evaluations/`, `04-walkthroughs/`. Archived Phase 1b eval artifacts. (PR #4)
+
+## Day 8 (Apr 9) — WT2 Backend + AI layer implementation
+
+- **Full WT2 implementation:** Completed all 5 stages in a single session — DB layer, 7 tool handlers, orchestrator, API endpoints, SSE streaming. 56 files, 4213 lines. 175 tests, 80% coverage. (PR #9)
+
+### Implementation pattern: orchestration plan + TDD + async code review
+
+Wrote a detailed orchestration plan upfront (`wt2-orchestration-plan.md`) specifying 10 TDD calls, 3 code review checkpoints, and 5 verification gates in exact dependency order. One agent executed the plan sequentially — write tests first, implement to pass, run the gate. Code review agents ran in the background at marked checkpoints (Stages 1, 2, 4) and reported issues without blocking progress. Fixes were batched and applied before the final gate.
+
+This pattern traded planning time for execution speed. The entire backend shipped in one session because each TDD call had zero ambiguity — file names, function signatures, test expectations, and reference code were all specified. The code reviews caught real bugs (unbound variable, list/dict mismatch, unsanitized field name) that would have been painful to debug later.
+
+The trade-off: this only works when the design is locked. Contracts, schemas, and prototype code must exist before the plan is written.
+
+## Day 9 (Apr 9)
+
+### Post-merge fixes: orchestrated subagent pattern
+
+- **WT2 verification:** Confirmed all WT2 deliverables complete against the Phase 2 plan. Found 2 issues: 7 stale WT1 data tests (KB expansion changed row counts) and missing LLM retry-with-backoff (plan specified it, code didn't have it).
+- **Fixes shipped:** Updated test assertions, implemented `_llm_call_with_retry()` with parametrized tests for all 4 retryable error types. 181 tests pass, 0 failures. (PR #10)
+
+### Orchestration pattern: Plan → Parallel Subagents → Verify → Review
+
+Used Claude Code skills as specialized subagents, orchestrated by the main conversation.
+
+```
+Round 1:
+  /plan          → scoped 2 issues, 4 phases, got CONFIRM
+  /build-fix     ─┐ parallel — fix 7 stale test assertions
+  /tdd           ─┘ parallel — RED (3 retry tests) → GREEN (_llm_call_with_retry)
+  /verify        → 178 passed, 0 failed (gate)
+  /code-review   → approved, flagged 2 MEDIUM
+
+Round 2 (address review findings):
+  /tdd           ─┐ parallel — parametrize 4 error types + assert backoff delay
+  /build-fix     ─┘ parallel — fix traceback preservation
+  /verify        → 181 passed, 0 failed (gate)
+  /code-review   → approved, 0 blocking issues
+```
+
+**Key properties:**
+
+1. **Independent phases run in parallel** — `/build-fix` and `/tdd` never touch the same files, so they execute concurrently.
+2. **Verify gates review** — don't review broken code. `/verify` must pass before `/code-review` runs.
+3. **Review findings loop back** — same pattern at smaller scope. MEDIUM findings from Round 1 became Round 2 inputs.
+4. **Self-contained subagent briefs** — each agent gets exact file paths, line numbers, expected values, constructor signatures. No ambiguity.
+5. **Orchestrator does synthesis** — reads subagent results, decides what's next, writes the next prompt. Never delegates understanding.
+
+**When this works:** Design is locked (contracts, schemas, existing tests all exist). Each subagent prompt can be fully specified upfront.
+
+**When this doesn't work:** Exploratory work where the next step depends on what you discover. In that case, use a single agent with broader scope instead of trying to parallelize. Without that, the orchestration plan would be guesswork.
+
+## Day 10 (Apr 10) — Stage 3 UAT review + test strategy diagnosis
+
+### Background
+
+WT3 Stage 3 UAT found 3 critical interaction bugs despite ~4500 test assertions across 13 test files:
+1. Clarify page "All of the above" / "None" toggle has no mutual exclusion logic — clicking "All" just adds the string, doesn't select individual options.
+2. Recipe swap cycling broken — `onPick` closes the panel but never replaces the recipe in the array or rotates alternatives.
+3. Non-functional buttons — "Save plan", "EN/中", "Save list" render but have no onClick handlers.
+
+Diagnosed why the same `/tdd` agent produced high-quality integration tests for backend but shallow unit tests for frontend.
+
+### Root cause: test quality is determined by the orchestration plan, not the agent
+
+The backend orchestration plan (`wt2-orchestration-plan.md`) specified:
+- Exact integration test file names (`test_session_lifecycle.py`, `test_chat_e2e.py`, `test_saved_content_integration.py`)
+- Exact behaviors to verify ("multi-turn context includes previous turns", "save from session, verify independence")
+- Real infrastructure in tests (PostgreSQL via tx-rollback, SQLite KB, ASGI transport)
+
+The frontend plan (`wt3-frontend-plan.md`) specified:
+- Human review criteria ("full click-through: Home → Clarify → Recipes → Grocery")
+- No test file list, no behavior specs, no multi-step flow requirements
+
+The `/tdd` agent defaulted to unit tests because that's the path of least resistance when the plan doesn't demand integration tests by name. The frontend "integration" tests (`stage3-integration.test.tsx`) each test ONE screen, ONE action, ONE assertion — never a multi-step flow. One test's assertion was literally `expect(container).toBeDefined()` (always passes).
+
+### Takeaways
+
+1. **The agent does what the plan tells it to — no more.** Test quality is a planning problem, not an execution problem. The `/tdd` agent doesn't decide what kind of tests to write. The orchestration plan does.
+
+2. **The orchestrator pattern requires one more translation step** for frontend work:
+   ```
+   Product spec (human behavior)
+       → Orchestration plan (test file names + behavior assertions)
+           → /tdd agent (writes code)
+   ```
+   The middle step was thorough for backend, thin for frontend. That's the gap.
+
+### Fix plan
+
+Wrote `docs/01-plans/frontend-fix-orchestration-plan.md` — 7 TDD calls, 4 new test files, 1 code review checkpoint, explicit behavior assertions for each bug. Also wrote a backend live-LLM test prompt (single test file, no plan needed).
