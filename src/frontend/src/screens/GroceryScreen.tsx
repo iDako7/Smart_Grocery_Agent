@@ -135,7 +135,8 @@ export function GroceryScreen() {
       {/* Save list button */}
       <button
         type="button"
-        onClick={() => { console.info("[Stage 4 TODO] Save list"); }}
+        onClick={() => { // TODO(stage-4): replace hardcoded id with real saved list id
+          navigate("/saved/list/1", { state: { justSaved: true } }); }}
         className="mx-3.5 mt-1.5 mb-3 py-[13px] bg-shoyu text-cream border-none rounded-md font-sans text-[13px] font-semibold cursor-pointer min-h-[44px]"
       >
         Save list

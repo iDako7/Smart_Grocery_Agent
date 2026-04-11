@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Routes, Route } from "react-router";
 
@@ -7,6 +7,8 @@ import { HomeScreen } from "@/screens/HomeScreen";
 import { ClarifyScreen } from "@/screens/ClarifyScreen";
 import { RecipesScreen } from "@/screens/RecipesScreen";
 import { GroceryScreen } from "@/screens/GroceryScreen";
+import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
+import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
 import { ScenarioProvider } from "@/context/scenario-context";
 import { SessionProvider } from "@/context/session-context";
 import { createMockChatService } from "./test-utils";
@@ -21,6 +23,8 @@ function renderFullApp(options?: { chatService?: ReturnType<typeof createMockCha
             <Route path="/clarify" element={<ClarifyScreen />} />
             <Route path="/recipes" element={<RecipesScreen />} />
             <Route path="/grocery" element={<GroceryScreen />} />
+            <Route path="/saved/list/:id" element={<SavedGroceryListScreen />} />
+            <Route path="/saved/plan/:id" element={<SavedMealPlanScreen />} />
           </Routes>
         </MemoryRouter>
       </SessionProvider>
@@ -137,5 +141,41 @@ describe("Flow 4 — Full navigation", () => {
     // Click "Build list"
     await user.click(screen.getByText(/Build list/i));
     expect(screen.getByTestId("screen-grocery")).toBeInTheDocument();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Flow 5 — Full flow ends at saved grocery list
+// ---------------------------------------------------------------------------
+
+describe("Flow 5 — Full flow ends at saved list", () => {
+  it("navigates Home → Clarify → Recipes → Grocery → Saved grocery list", async () => {
+    vi.spyOn(console, "info").mockImplementation(() => {});
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+    renderFullApp({ chatService: mock.service });
+
+    // Home screen — type and submit
+    const input = screen.getByPlaceholderText(/BBQ for 8/i);
+    await user.click(input);
+    await user.type(input, "BBQ for 8");
+    await user.keyboard("{Enter}");
+
+    // Should navigate to /clarify
+    expect(screen.getByTestId("screen-clarify")).toBeInTheDocument();
+
+    // Click "Looks good, show recipes"
+    await user.click(screen.getByText(/Looks good, show recipes/));
+    expect(screen.getByTestId("screen-recipes")).toBeInTheDocument();
+
+    // Click "Build list"
+    await user.click(screen.getByText(/Build list/i));
+    expect(screen.getByTestId("screen-grocery")).toBeInTheDocument();
+
+    // Click "Save list"
+    await user.click(screen.getByRole("button", { name: /save list/i }));
+    await waitFor(() => {
+      expect(screen.getByTestId("screen-saved-grocery-list")).toBeInTheDocument();
+    });
   });
 });

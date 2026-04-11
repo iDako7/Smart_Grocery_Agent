@@ -1,12 +1,14 @@
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { ChatInput } from "@/components/chat-input";
 import { ExpandableRecipe } from "@/components/expandable-recipe";
+import { Toast } from "@/components/toast";
 import { useScenario } from "@/context/scenario-context";
 import { useSessionOptional } from "@/context/session-context";
 
 export function SavedMealPlanScreen() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { scenario } = useScenario();
   const { name, savedDate, deckText, recipes: SAVED_RECIPES } = scenario.savedPlan;
   const session = useSessionOptional();
@@ -25,6 +27,9 @@ export function SavedMealPlanScreen() {
         {/* spacer for alignment */}
         <div aria-hidden="true" className="min-w-[36px]" />
       </div>
+
+      {/* Saved toast — only shown when arriving via the Save plan button */}
+      {(location.state as { justSaved?: boolean } | null)?.justSaved && <Toast message="Saved!" />}
 
       {/* Saved plan card */}
       <div className="mx-3.5 my-3.5 bg-paper rounded-2xl overflow-hidden">

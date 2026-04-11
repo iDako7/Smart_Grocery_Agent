@@ -56,22 +56,35 @@ export function createMockChatService() {
 /**
  * Render a component wrapped in ScenarioProvider + SessionProvider + MemoryRouter.
  * Use this for integration tests that need the full provider stack.
+ *
+ * Pass `initialState` to simulate location.state (e.g. `{ justSaved: true }`).
+ * Pass `routes` to render a full route tree instead of a single `ui` element —
+ * useful for tests that need cross-screen navigation.
  */
 export function renderWithSession(
   ui: React.ReactElement,
   options?: {
     chatService?: ChatServiceHandler;
     initialPath?: string;
+    initialState?: Record<string, unknown>;
+    routes?: React.ReactElement;
   }
 ) {
+  const initialEntry = options?.initialState
+    ? { pathname: options.initialPath ?? "/", state: options.initialState }
+    : (options?.initialPath ?? "/");
+
   const Wrapper = ({ children }: { children: ReactNode }) => (
     <ScenarioProvider>
       <SessionProvider chatService={options?.chatService}>
-        <MemoryRouter initialEntries={[options?.initialPath ?? "/"]}>
+        <MemoryRouter initialEntries={[initialEntry]}>
           {children}
         </MemoryRouter>
       </SessionProvider>
     </ScenarioProvider>
   );
-  return render(ui, { wrapper: Wrapper });
+
+  return options?.routes
+    ? render(options.routes, { wrapper: Wrapper })
+    : render(ui, { wrapper: Wrapper });
 }
