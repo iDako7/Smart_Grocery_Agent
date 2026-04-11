@@ -279,7 +279,7 @@ graph TB
 
 ## References
 
-- **Product spec:** `product-spec-v2.md`
+- **Product spec:** `product-spec-v2.md` (v3 — feature catalog, journeys, acceptance criteria)
 - **Architecture spec:** `architecture-spec-v2.md`
 - **Implementation plan:** `Smart_Grocery_Assistant_V2_Implementation_Plan.md`
 - **AI layer contracts:** `ai-layer-contracts-v2.md`

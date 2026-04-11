@@ -460,7 +460,7 @@ AWS
 
 ## References
 
-- **Product spec:** `product-spec-v2.md`
+- **Product spec:** `product-spec-v2.md` (v3 — feature catalog, journeys, acceptance criteria)
 - **AI layer architecture:** `ai-layer-architecture-v2.md`
 - **Implementation plan:** `Smart_Grocery_Assistant_V2_Implementation_Plan.md`
 - **Wireframe:** `wireframe-v2.html`

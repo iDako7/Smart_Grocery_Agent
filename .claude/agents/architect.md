@@ -21,7 +21,7 @@ Read these docs before making any architectural recommendation:
 
 - `docs/architecture-spec-v2.md` — system architecture, API contract, deployment (contains ADR-1 through ADR-7)
 - `docs/ai-layer-architecture-v2.md` — agent internals, orchestration loop, prompt assembly
-- `docs/product-spec-v2.md` — product vision, screens, intelligence layer
+- `docs/00-specs/product-spec-v2.md` — product spec v3: feature catalog, user journeys, acceptance criteria
 - `docs/Smart_Grocery_Assistant___V2_Implementation_Plan.md` — phase plan, V1 lessons
 
 ## System Shape

@@ -140,6 +140,6 @@ Must not edit: `src/frontend/`, `data/`, `evals/`, `contracts/` (propose changes
 - Phase 2 implementation plan: `docs/01-plans/phase-2-implementation-plan.md`
 - Architecture spec: `docs/00-specs/architecture-spec-v2.md`
 - AI layer architecture: `docs/00-specs/ai-layer-architecture-v2.md`
-- Product spec: `docs/00-specs/product-spec-v2.md`
+- Product spec: `docs/00-specs/product-spec-v2.md` (v3 — feature catalog, journeys, acceptance criteria)
 - Prototype code: `prototype/` (read-only reference)
 - Open questions: `docs/02-notes/open_question.md`

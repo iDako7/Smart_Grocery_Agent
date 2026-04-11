@@ -361,7 +361,7 @@ All tests pass — existing 13 files + 4 new files (`clarify-toggle`, `recipe-sw
 | File | Role |
 |------|------|
 | `evals/UAT_result/stage3_review.md` | Bug descriptions + screenshots |
-| `docs/00-specs/product-spec-v2.md` §4 | Correct interaction specs |
+| `docs/00-specs/product-spec-v2.md` §2-§4 | Feature catalog, journeys, acceptance criteria |
 | `src/frontend/src/test/test-utils.tsx` | Shared test helpers |
 | `src/frontend/src/mocks/bbq-weekend.ts` | Scenario data used in tests |
 | `docs/01-plans/wt2-orchestration-plan.md` | Backend plan pattern (reference) |
