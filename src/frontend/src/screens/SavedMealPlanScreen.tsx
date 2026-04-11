@@ -1,20 +1,14 @@
-import { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router";
 import { ChatInput } from "@/components/chat-input";
 import { ExpandableRecipe } from "@/components/expandable-recipe";
+import { Toast } from "@/components/toast";
 import { useScenario } from "@/context/scenario-context";
 import { useSessionOptional } from "@/context/session-context";
 
 export function SavedMealPlanScreen() {
   const navigate = useNavigate();
   const { scenario } = useScenario();
-  const [showToast, setShowToast] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowToast(false), 2000);
-    return () => clearTimeout(timer);
-  }, []);
   const { name, savedDate, deckText, recipes: SAVED_RECIPES } = scenario.savedPlan;
   const session = useSessionOptional();
   const sendMessage = session?.sendMessage ?? (() => {});
@@ -34,14 +28,7 @@ export function SavedMealPlanScreen() {
       </div>
 
       {/* Saved toast */}
-      {showToast && (
-        <div
-          data-testid="saved-toast"
-          className="mx-3.5 mt-1 mb-0.5 px-4 py-2.5 bg-jade text-cream rounded-xl text-[13px] font-semibold text-center"
-        >
-          Saved!
-        </div>
-      )}
+      <Toast message="Saved!" />
 
       {/* Saved plan card */}
       <div className="mx-3.5 my-3.5 bg-paper rounded-2xl overflow-hidden">

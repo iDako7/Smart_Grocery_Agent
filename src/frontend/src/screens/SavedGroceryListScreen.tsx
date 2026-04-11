@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router";
 import { ChecklistRow } from "@/components/checklist-row";
 import { StoreSection } from "@/components/store-section";
+import { Toast } from "@/components/toast";
 import { useScenario } from "@/context/scenario-context";
 
 type ListItem = {
@@ -77,6 +78,9 @@ export function SavedGroceryListScreen() {
         {/* spacer for alignment */}
         <div aria-hidden="true" className="min-w-[36px]" />
       </div>
+
+      {/* Saved toast */}
+      <Toast message="Saved!" />
 
       {/* Header card */}
       <div className="mx-3.5 my-2.5 px-5 py-[18px] bg-paper rounded-2xl relative overflow-hidden">
