@@ -831,7 +831,10 @@ describe("SavedMealPlanScreen — recipe expansion", () => {
       </ScenarioProvider>
     );
 
-    const recipeBtn = screen.getByRole("button", { name: /Korean BBQ Pork Belly/i });
+    // Use aria-expanded to target the expand toggle button (not the remove button)
+    const recipeBtn = screen
+      .getAllByRole("button", { name: /Korean BBQ Pork Belly/i })
+      .find((btn) => btn.hasAttribute("aria-expanded"))!;
     // Expand
     await user.click(recipeBtn);
     expect(screen.getByText(/char marks/i)).toBeInTheDocument();

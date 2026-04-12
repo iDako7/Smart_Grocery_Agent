@@ -1,19 +1,16 @@
+import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useLocation } from "react-router";
-import { ChatInput } from "@/components/chat-input";
 import { ExpandableRecipe } from "@/components/expandable-recipe";
 import { Toast } from "@/components/toast";
 import { useScenario } from "@/context/scenario-context";
-import { useSessionOptional } from "@/context/session-context";
 
 export function SavedMealPlanScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const { scenario } = useScenario();
   const { name, savedDate, deckText, recipes: SAVED_RECIPES } = scenario.savedPlan;
-  const session = useSessionOptional();
-  const sendMessage = session?.sendMessage ?? (() => {});
-  const navigateToScreen = session?.navigateToScreen;
+  const [recipes, setRecipes] = useState(SAVED_RECIPES);
 
   return (
     <div data-testid="screen-saved-meal-plan" className="min-h-screen bg-cream flex flex-col">
@@ -58,25 +55,16 @@ export function SavedMealPlanScreen() {
         </div>
 
         {/* Expandable recipe rows */}
-        {SAVED_RECIPES.map((recipe) => (
+        {recipes.map((recipe) => (
           <ExpandableRecipe
             key={recipe.id}
             name={recipe.name}
             meta={recipe.meta}
             detail={recipe.detail}
+            onRemove={() => setRecipes((prev) => prev.filter((r) => r.name !== recipe.name))}
           />
         ))}
       </div>
-
-      {/* Chat input */}
-      <ChatInput
-        placeholder="Add a dessert to this plan..."
-        hint="Chat to add or modify recipes"
-        onSend={(text) => {
-          navigateToScreen?.("saved_meal_plan");
-          sendMessage(text);
-        }}
-      />
 
       {/* Footer */}
       <div className="text-center px-4 pt-3 pb-[22px] text-[10px] text-ink-3 font-medium mt-auto">

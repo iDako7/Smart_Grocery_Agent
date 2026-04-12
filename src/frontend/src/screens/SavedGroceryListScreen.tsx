@@ -54,6 +54,15 @@ export function SavedGroceryListScreen() {
     setAddCostco("");
   }
 
+  async function handleCopyToNotes() {
+    const text = items.map((item) => `[ ] ${item.name}`).join("\n");
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // Clipboard access denied — silently degrade
+    }
+  }
+
   function handleAddMarket() {
     const val = addMarket.trim();
     if (!val) return;
@@ -109,6 +118,7 @@ export function SavedGroceryListScreen() {
       <div className="flex gap-2 px-3.5 pb-2">
         <button
           type="button"
+          onClick={handleCopyToNotes}
           className="bg-paper border border-cream-deep rounded-full px-4 py-2 text-[11px] font-semibold text-ink cursor-pointer min-h-[36px]"
         >
           Copy to Notes

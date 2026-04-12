@@ -3,7 +3,7 @@
 // Base-ui mocks (menu + dialog) are in setup.ts
 
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 import { HomeScreen } from "@/screens/HomeScreen";
@@ -254,8 +254,11 @@ describe("RecipesScreen", () => {
     expect(screen.getByText("Korean BBQ Pork Belly")).toBeInTheDocument();
   });
 
-  it("renders CJK name for first dish", () => {
+  it("renders CJK name for first dish after toggling to zh", () => {
+    // CJK names are hidden by default (lang=en). Toggle to zh first.
     renderWithRouter(<RecipesScreen />);
+    const toggleButton = screen.getByRole("button", { name: /toggle language/i });
+    fireEvent.click(toggleButton);
     expect(screen.getByText("韩式烤五花肉")).toBeInTheDocument();
   });
 
@@ -494,18 +497,18 @@ describe("SavedMealPlanScreen", () => {
   it("expands recipe detail when clicked", async () => {
     const user = userEvent.setup();
     renderWithRouter(<SavedMealPlanScreen />, "/saved/plan/1");
-    await user.click(
-      screen.getByRole("button", { name: /Korean BBQ Pork Belly/i })
-    );
+    // Use aria-expanded to target the expand toggle button (not the remove button)
+    const expandButton = screen
+      .getAllByRole("button", { name: /Korean BBQ Pork Belly/i })
+      .find((btn) => btn.hasAttribute("aria-expanded"))!;
+    await user.click(expandButton);
     // "char marks = done" is only in the detail block, not the meta
     expect(screen.getByText(/char marks/i)).toBeInTheDocument();
   });
 
-  it("renders chat input for recipe questions", () => {
+  it("does not render a chat input (spec S2: no chat on saved screens)", () => {
     renderWithRouter(<SavedMealPlanScreen />, "/saved/plan/1");
-    expect(
-      screen.getByPlaceholderText(/dessert/i)
-    ).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText(/dessert/i)).not.toBeInTheDocument();
   });
 
   it("renders footer", () => {
@@ -599,7 +602,7 @@ describe("SavedRecipeScreen", () => {
     renderWithRouter(<SavedRecipeScreen />, "/saved/recipe/1");
     await user.click(screen.getByText("Edit"));
     await user.click(screen.getByText("Cancel"));
-    // textarea is gone, only ChatInput's text input remains
+    // textarea is gone (edit mode exited, no textboxes remain)
     expect(screen.queryByRole("textbox", { name: "" })).not.toBeInTheDocument();
     expect(screen.getByText("Edit")).toBeInTheDocument();
   });
@@ -612,11 +615,9 @@ describe("SavedRecipeScreen", () => {
     expect(screen.queryByRole("textbox", { name: "" })).not.toBeInTheDocument();
   });
 
-  it("renders chat input", () => {
+  it("does not render a chat input (spec S3: modifications via in-place edit)", () => {
     renderWithRouter(<SavedRecipeScreen />, "/saved/recipe/1");
-    expect(
-      screen.getByPlaceholderText(/Adjust this recipe/i)
-    ).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText(/Adjust this recipe/i)).not.toBeInTheDocument();
   });
 
   it("renders footer", () => {

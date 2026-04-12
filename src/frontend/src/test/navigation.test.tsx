@@ -203,7 +203,6 @@ describe("Sidebar item navigation", () => {
     await user.click(screen.getByLabelText(/open menu/i));
     // There may be multiple BBQ weekend buttons; pick from within the sidebar sheet
     const sheet = screen.getByTestId("sheet-root");
-    const mealPlanBtn = sheet.querySelector("button");
     // The first button in the sheet is the Close sidebar button; find by text
     const allBtns = Array.from(sheet.querySelectorAll("button"));
     const bbqBtn = allBtns.find((b) => b.textContent?.includes("BBQ weekend"));

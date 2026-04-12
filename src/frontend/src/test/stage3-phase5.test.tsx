@@ -91,70 +91,26 @@ describe("ErrorBanner — partial variant styling", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 5. SavedMealPlanScreen — chat input calls sendMessage
+// 5. SavedMealPlanScreen — no chat input (spec S2)
 // ---------------------------------------------------------------------------
 
-describe("SavedMealPlanScreen — chat input calls sendMessage", () => {
-  it("calls chatService when user types and submits the chat input", async () => {
-    const user = userEvent.setup();
-    const mock = createMockChatService();
-
-    renderWithSession(<SavedMealPlanScreen />, { chatService: mock.service });
-
-    const chatInput = screen.getByPlaceholderText(/Add a dessert/i);
-    await user.click(chatInput);
-    await user.type(chatInput, "Add a chocolate cake");
-    await user.keyboard("{Enter}");
-
-    expect(mock.serviceFn).toHaveBeenCalledTimes(1);
-    expect(mock.serviceFn.mock.calls[0][0]).toBe("Add a chocolate cake");
-  });
-
-  it("does not call chatService when chat input is empty", async () => {
-    const user = userEvent.setup();
-    const mock = createMockChatService();
-
-    renderWithSession(<SavedMealPlanScreen />, { chatService: mock.service });
-
-    const chatInput = screen.getByPlaceholderText(/Add a dessert/i);
-    await user.click(chatInput);
-    await user.keyboard("{Enter}");
-
-    expect(mock.serviceFn).not.toHaveBeenCalled();
+describe("SavedMealPlanScreen — no chat input", () => {
+  it("does not render a chat input (spec S2: modifications are manual)", () => {
+    renderWithSession(<SavedMealPlanScreen />);
+    expect(screen.queryByPlaceholderText(/Add a dessert/i)).not.toBeInTheDocument();
+    expect(screen.queryAllByRole("textbox")).toHaveLength(0);
   });
 });
 
 // ---------------------------------------------------------------------------
-// 6. SavedRecipeScreen — chat input calls sendMessage
+// 6. SavedRecipeScreen — no chat input (spec S3)
 // ---------------------------------------------------------------------------
 
-describe("SavedRecipeScreen — chat input calls sendMessage", () => {
-  it("calls chatService when user types and submits the chat input", async () => {
-    const user = userEvent.setup();
-    const mock = createMockChatService();
-
-    renderWithSession(<SavedRecipeScreen />, { chatService: mock.service });
-
-    const chatInput = screen.getByPlaceholderText(/Adjust this recipe/i);
-    await user.click(chatInput);
-    await user.type(chatInput, "Make it serve 12 people");
-    await user.keyboard("{Enter}");
-
-    expect(mock.serviceFn).toHaveBeenCalledTimes(1);
-    expect(mock.serviceFn.mock.calls[0][0]).toBe("Make it serve 12 people");
-  });
-
-  it("does not call chatService when chat input is empty", async () => {
-    const user = userEvent.setup();
-    const mock = createMockChatService();
-
-    renderWithSession(<SavedRecipeScreen />, { chatService: mock.service });
-
-    const chatInput = screen.getByPlaceholderText(/Adjust this recipe/i);
-    await user.click(chatInput);
-    await user.keyboard("{Enter}");
-
-    expect(mock.serviceFn).not.toHaveBeenCalled();
+describe("SavedRecipeScreen — no chat input", () => {
+  it("does not render a chat input (spec S3: modifications via in-place edit)", () => {
+    renderWithSession(<SavedRecipeScreen />);
+    expect(screen.queryByPlaceholderText(/Adjust this recipe/i)).not.toBeInTheDocument();
+    expect(screen.queryAllByRole("textbox")).toHaveLength(0);
   });
 });
 

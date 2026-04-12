@@ -3,7 +3,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { describe, it, expect } from "vitest";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 
@@ -400,7 +400,11 @@ describe("RecipesScreen with ScenarioProvider", () => {
       </ScenarioProvider>
     );
 
+    // English name always visible.
     expect(screen.getByText("Korean BBQ Pork Belly")).toBeInTheDocument();
+    // CJK name is hidden by default (lang=en). Toggle to zh to reveal it.
+    const toggleButton = screen.getByRole("button", { name: /toggle language/i });
+    fireEvent.click(toggleButton);
     expect(screen.getByText("韩式烤五花肉")).toBeInTheDocument();
   });
 

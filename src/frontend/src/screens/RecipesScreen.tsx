@@ -84,6 +84,18 @@ export function RecipesScreen() {
   const [infoOpen, setInfoOpen] = useState(false);
   const [infoRecipe, setInfoRecipe] = useState<RecipeCardData | null>(null);
   const [lang, setLang] = useState<"en" | "zh">("en");
+  const [excludedByCard, setExcludedByCard] = useState<Map<number, Set<string>>>(new Map());
+
+  function handleToggleBuy(cardIndex: number, ingredientName: string) {
+    setExcludedByCard((prev) => {
+      const next = new Map(prev);
+      const cardSet = new Set(next.get(cardIndex) || []);
+      if (cardSet.has(ingredientName)) cardSet.delete(ingredientName);
+      else cardSet.add(ingredientName);
+      next.set(cardIndex, cardSet);
+      return next;
+    });
+  }
 
   function handleRetry() {
     sendMessage("retry");
@@ -224,6 +236,7 @@ export function RecipesScreen() {
             index={idx}
             name={recipe.name}
             nameCjk={recipe.nameCjk}
+            lang={lang}
             flavorProfile={recipe.flavorProfile}
             cookingMethod={recipe.cookingMethod}
             time={recipe.time}
@@ -231,6 +244,8 @@ export function RecipesScreen() {
             isSwapping={swappingIndex === idx}
             onSwap={() => handleSwap(idx, recipe.name)}
             onInfoClick={() => handleInfoClick(recipe)}
+            onToggleBuy={(name) => handleToggleBuy(idx, name)}
+            excludedIngredients={excludedByCard.get(idx) ?? new Set()}
           />
           {swappingIndex === idx && (
             <SwapPanel
