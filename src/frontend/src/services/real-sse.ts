@@ -123,14 +123,26 @@ async function consumeSseStream(
 // Factory
 // ---------------------------------------------------------------------------
 
-export function createRealSSEService(): ChatServiceHandler {
+export interface SSEServiceOptions {
+  onSessionCreated?: (id: string) => void;
+}
+
+export interface SSEService {
+  handler: ChatServiceHandler;
+  resetSession: () => void;
+}
+
+export function createRealSSEService(options?: SSEServiceOptions): SSEService {
   // Session ID lives in closure — shared across all calls from this service instance.
   let sessionIdPromise: Promise<string> | null = null;
 
   function getOrCreateSession(): Promise<string> {
     if (!sessionIdPromise) {
       sessionIdPromise = createSession()
-        .then((r) => r.session_id)
+        .then((r) => {
+          options?.onSessionCreated?.(r.session_id);
+          return r.session_id;
+        })
         .catch((err) => {
           sessionIdPromise = null; // reset so next call retries
           return Promise.reject(err);
@@ -139,7 +151,11 @@ export function createRealSSEService(): ChatServiceHandler {
     return sessionIdPromise;
   }
 
-  return function handler(
+  function resetSession(): void {
+    sessionIdPromise = null;
+  }
+
+  const handler: ChatServiceHandler = function(
     message: string,
     screen: Screen,
     onEvent: (event: SSEEvent) => void,
@@ -188,4 +204,6 @@ export function createRealSSEService(): ChatServiceHandler {
 
     return { cancel: () => abort.abort() };
   };
+
+  return { handler, resetSession };
 }
