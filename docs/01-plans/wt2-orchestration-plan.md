@@ -1,6 +1,6 @@
 # WT2 Backend: TDD Orchestration Plan
 
-**Date:** 2026-04-09 | **Status:** Active | **Branch:** `wt2-backend`
+**Date:** 2026-04-09 | **Status:** Complete (merged to main 2026-04-11) | **Branch:** `wt2-backend`
 
 > **How to use:** You are the senior engineer manager. For each TDD call below, invoke the TDD agent with the prompt details specified. After each verification gate, run the listed commands. Call code review agent only at marked points (Stages 1, 2, 4). The plan file at `docs/01-plans/wt2-backend-plan.md` has the full stage specs.
 

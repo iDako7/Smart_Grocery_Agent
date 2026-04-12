@@ -1,6 +1,6 @@
 # WT2: Backend + AI Layer — Implementation Plan
 
-**Date:** 2026-04-09 | **Status:** Active | **Branch:** `wt2-backend`
+**Date:** 2026-04-09 | **Status:** Complete (merged to main 2026-04-11) | **Branch:** `wt2-backend`
 
 ---
 

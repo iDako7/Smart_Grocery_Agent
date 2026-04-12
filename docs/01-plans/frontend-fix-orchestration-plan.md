@@ -1,6 +1,6 @@
 # Frontend Fix: TDD Orchestration Plan
 
-**Date:** 2026-04-10 | **Status:** Active | **Branch:** `fix/frontend-uat-bugs` (off `main`)
+**Date:** 2026-04-10 | **Status:** Complete (merged to main 2026-04-11) | **Branch:** `fix/frontend-uat-bugs` (off `main`)
 
 > **How to use:** You are the senior engineer orchestrator. For each TDD call below, invoke the `/tdd` agent with the prompt details specified. After each verification gate, run the listed commands. Call `/code-review` only at the marked checkpoint. The full diagnostic is in `evals/UAT_result/stage3_review.md`.
 

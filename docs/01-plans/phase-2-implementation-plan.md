@@ -1,6 +1,6 @@
 # Smart Grocery Assistant — Phase 2 Implementation Plan
 
-**Date:** 2026-04-07 | **Status:** Active | **Owner:** Dako (@iDako7)
+**Date:** 2026-04-07 | **Status:** Phase 0-1 Complete; Phase 2.2/2.3 superseded by `phase-2-integration-plan.md` | **Owner:** Dako (@iDako7)
 
 ---
 

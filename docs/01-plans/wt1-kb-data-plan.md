@@ -1,6 +1,6 @@
 # WT1: KB + Data — Implementation Plan
 
-**Date:** 2026-04-09 | **Status:** Active | **Branch:** `wt1-kb-data`
+**Date:** 2026-04-09 | **Status:** Complete (merged to main 2026-04-11) | **Branch:** `wt1-kb-data`
 
 ---
 
