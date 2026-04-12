@@ -611,10 +611,8 @@ describe("ClarifyScreen — chip deselection", () => {
 
     renderWithSession(<ClarifyScreen />);
 
-    // Click to select, then click again to deselect
+    // "Outdoor grill" is pre-selected; clicking it deselects it
     const grillChip = screen.getByText("Outdoor grill");
-    await user.click(grillChip);
-    expect(grillChip.className).toMatch(/bg-shoyu/);
     await user.click(grillChip);
 
     // After deselection it should have the non-selected style

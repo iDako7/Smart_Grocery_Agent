@@ -53,12 +53,11 @@ export function ClarifyScreen() {
 
   // Use session data when available, fall back to scenario data (idle only)
   const pcsv = screenData?.pcsv ?? scenarioPcsv;
-  const deckText = screenState === "idle" ? scenarioDeckText : (screenData?.explanation ?? "");
+  const deckText = screenData?.explanation || scenarioDeckText;
 
-  // isBusy — loading, or streaming before any real data arrived. Used to gate skeleton.
-  const isBusy = screenState === "loading" || (screenState === "streaming" && !hasRealData);
-
-  const [selectedSetup, setSelectedSetup] = useState<string[]>([]);
+  const [selectedSetup, setSelectedSetup] = useState<string[]>([
+    "Outdoor grill",
+  ]);
   const [selectedDiet, setSelectedDiet] = useState<string[]>(["None"]);
   const [pcvInfoOpen, setPcvInfoOpen] = useState(false);
 
@@ -173,28 +172,8 @@ export function ClarifyScreen() {
               Here's what I <span className="text-persimmon">see</span>.
             </h1>
 
-            {/* Busy skeleton — shown during loading or streaming-without-data */}
-            {isBusy && (
-              <div className="mt-1.5" data-testid="clarify-skeleton">
-                <div className="space-y-1.5">
-                  <div className="bg-cream-deep animate-pulse rounded h-3 w-[92%]" />
-                  <div className="bg-cream-deep animate-pulse rounded h-3 w-[78%]" />
-                  <div className="bg-cream-deep animate-pulse rounded h-3 w-[60%]" />
-                </div>
-                <div className="flex gap-2 mt-3 flex-wrap">
-                  <div className="bg-cream-deep animate-pulse rounded-full h-6 w-20" />
-                  <div className="bg-cream-deep animate-pulse rounded-full h-6 w-16" />
-                  <div className="bg-cream-deep animate-pulse rounded-full h-6 w-20" />
-                </div>
-                <div className="mt-3 space-y-2">
-                  <div className="bg-cream-deep animate-pulse rounded h-3 w-[85%]" />
-                  <div className="bg-cream-deep animate-pulse rounded h-3 w-[70%]" />
-                </div>
-              </div>
-            )}
-
             {/* Deck, PCV badges, and summary — only when idle (scenario preview) or real data arrived */}
-            {showContent && !isBusy && (
+            {showContent && (
               <>
                 {/* Deck */}
                 <p className="mt-1.5 text-[13px] text-ink-2 leading-[1.5]">
@@ -254,8 +233,7 @@ export function ClarifyScreen() {
           </div>
         )}
 
-        {/* Questions — hidden while busy */}
-        {!isBusy && (
+        {/* Questions */}
         <div className="px-5 pt-3">
           <div className="text-[11px] font-bold tracking-[0.06em] uppercase text-ink-3 mb-2">
             A few quick questions
@@ -309,24 +287,6 @@ export function ClarifyScreen() {
             </div>
           </div>
         </div>
-        )}
-
-        {/* Busy skeleton for questions area */}
-        {isBusy && (
-          <div className="px-5 pt-3 pb-2" data-testid="clarify-questions-skeleton">
-            <div className="bg-cream-deep animate-pulse rounded h-3 w-[45%] mb-3" />
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              <div className="bg-cream-deep animate-pulse rounded-full h-[34px] w-24" />
-              <div className="bg-cream-deep animate-pulse rounded-full h-[34px] w-16" />
-              <div className="bg-cream-deep animate-pulse rounded-full h-[34px] w-20" />
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              <div className="bg-cream-deep animate-pulse rounded-full h-[34px] w-16" />
-              <div className="bg-cream-deep animate-pulse rounded-full h-[34px] w-20" />
-              <div className="bg-cream-deep animate-pulse rounded-full h-[34px] w-24" />
-            </div>
-          </div>
-        )}
 
         {/* Thinking message — shown during loading/streaming */}
         {(screenState === "loading" || screenState === "streaming") && screenData?.thinkingMessage && (

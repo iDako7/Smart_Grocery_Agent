@@ -52,19 +52,14 @@ export function RecipesScreen() {
   const dispatch = session?.dispatch;
   const sessionId = session?.sessionId ?? null;
 
-  // Use session recipe data if available. Only fall back to scenario mocks in
-  // pure demo/preview mode (idle + no session). Otherwise show empty — the
-  // render body handles skeleton / empty-complete messaging.
+  // Use session recipe data if available, fall back to scenario data
   const RECIPES: RecipeCardData[] = useMemo(() => {
     const sessionRecipes = session?.screenData?.recipes ?? [];
     if (sessionRecipes.length > 0) {
       return sessionRecipes.map((r, i) => summaryToCardData(r, i));
     }
-    if (screenState === "idle" && !sessionId) {
-      return scenario.recipes;
-    }
-    return [];
-  }, [session?.screenData?.recipes, scenario.recipes, screenState, sessionId]);
+    return scenario.recipes;
+  }, [session?.screenData?.recipes, scenario.recipes]);
 
   const { eyebrow, description } = scenario.recipesHeader;
   const initialAltPool = useMemo(() =>
@@ -93,17 +88,10 @@ export function RecipesScreen() {
     return () => { mountedRef.current = false; };
   }, []);
 
-  // Sync displayed recipes when source data changes (scenario switch or SSE).
-  // When RECIPES is empty (loading/streaming with no session data yet), keep
-  // any previously-displayed recipes so in-flight swap interactions persist;
-  // the render body handles skeleton vs empty-complete gating separately.
+  // Sync displayed recipes when source data changes (scenario switch or SSE)
   useEffect(() => {
-    if (RECIPES.length > 0) {
-      setDisplayedRecipes(RECIPES);
-    } else if (screenState === "idle") {
-      setDisplayedRecipes([]);
-    }
-  }, [RECIPES, screenState]);
+    setDisplayedRecipes(RECIPES);
+  }, [RECIPES]);
 
   useEffect(() => {
     setAltPool(initialAltPool);
@@ -319,40 +307,6 @@ export function RecipesScreen() {
             message="Some results may be incomplete"
             variant="partial"
           />
-        </div>
-      )}
-
-      {/* Loading skeleton — busy with no recipes yet */}
-      {displayedRecipes.length === 0 && (screenState === "loading" || screenState === "streaming") && (
-        <div data-testid="recipes-skeleton">
-          {[0, 1, 2].map((i) => (
-            <div
-              key={`recipe-skeleton-${i}`}
-              className="mx-3.5 mb-3.5 p-5 bg-paper rounded-2xl"
-            >
-              <div className="bg-cream-deep animate-pulse rounded h-5 w-[60%] mb-3" />
-              <div className="flex gap-1.5 mb-3">
-                <div className="bg-cream-deep animate-pulse rounded-full h-5 w-16" />
-                <div className="bg-cream-deep animate-pulse rounded-full h-5 w-20" />
-                <div className="bg-cream-deep animate-pulse rounded-full h-5 w-14" />
-              </div>
-              <div className="space-y-2">
-                <div className="bg-cream-deep animate-pulse rounded h-3 w-[90%]" />
-                <div className="bg-cream-deep animate-pulse rounded h-3 w-[75%]" />
-                <div className="bg-cream-deep animate-pulse rounded h-3 w-[82%]" />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Empty complete — session finished with zero recipes */}
-      {displayedRecipes.length === 0 && isComplete && (
-        <div
-          data-testid="recipes-empty"
-          className="mx-3.5 mb-3.5 px-5 py-10 bg-paper rounded-2xl text-center text-[13px] text-ink-2"
-        >
-          No recipes returned — try refining your request.
         </div>
       )}
 
