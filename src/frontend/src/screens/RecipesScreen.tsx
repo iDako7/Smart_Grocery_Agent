@@ -43,6 +43,7 @@ export function RecipesScreen() {
   const session = useSessionOptional();
   const sendMessage = session?.sendMessage ?? (() => {});
   const navigateToScreen = session?.navigateToScreen;
+  const addLocalTurn = session?.addLocalTurn;
   const sessionRecipes = session?.screenData?.recipes ?? [];
   const screenState = session?.screenState ?? "idle";
   const screenData = session?.screenData;
@@ -134,6 +135,32 @@ export function RecipesScreen() {
 
   function handleKeepOriginal() {
     setSwappingIndex(null);
+  }
+
+  function handleRemove(idx: number) {
+    const removed = displayedRecipes[idx];
+    // Filter out the removed recipe
+    setDisplayedRecipes((prev) => prev.filter((_, i) => i !== idx));
+    // Re-key excludedByCard: shift indices above the removed one down by 1
+    setExcludedByCard((prev) => {
+      const next = new Map<number, Set<string>>();
+      for (const [key, value] of prev) {
+        if (key < idx) next.set(key, value);
+        else if (key > idx) next.set(key - 1, value);
+        // key === idx is dropped
+      }
+      return next;
+    });
+    // Close swap panel if open
+    setSwappingIndex(null);
+    // Record in conversation history
+    if (removed) {
+      addLocalTurn?.({
+        role: "user",
+        content: `[Removed ${removed.name} from meal plan]`,
+        timestamp: new Date().toISOString(),
+      });
+    }
   }
 
   function handleInfoClick(recipe: RecipeCardData) {
@@ -238,7 +265,7 @@ export function RecipesScreen() {
 
       {/* Recipe cards + swap panel interleaved */}
       {displayedRecipes.map((recipe, idx) => (
-        <div key={`recipe-${idx}`}>
+        <div key={`recipe-${recipe.name}-${idx}`}>
           <RecipeCard
             index={idx}
             name={recipe.name}
@@ -253,6 +280,8 @@ export function RecipesScreen() {
             onInfoClick={() => handleInfoClick(recipe)}
             onToggleBuy={(name) => handleToggleBuy(idx, name)}
             excludedIngredients={excludedByCard.get(idx) ?? EMPTY_SET}
+            onRemove={() => handleRemove(idx)}
+            canRemove={displayedRecipes.length > 1}
           />
           {swappingIndex === idx && (
             <SwapPanel

@@ -22,6 +22,8 @@ interface RecipeCardProps {
   isSwapping?: boolean;
   onToggleBuy?: (ingredientName: string) => void;
   excludedIngredients?: Set<string>;
+  onRemove?: () => void;
+  canRemove?: boolean;
 }
 
 export function RecipeCard({
@@ -38,6 +40,8 @@ export function RecipeCard({
   isSwapping = false,
   onToggleBuy,
   excludedIngredients,
+  onRemove,
+  canRemove = false,
 }: RecipeCardProps) {
   const ordinal = ORDINALS[index] ?? String(index + 1);
 
@@ -124,7 +128,22 @@ export function RecipeCard({
       </div>
 
       {/* Footer */}
-      <div className="flex justify-end items-center mt-3 pt-3 border-t border-cream-deep">
+      <div
+        className={cn(
+          "flex items-center mt-3 pt-3 border-t border-cream-deep",
+          onRemove && canRemove && !isSwapping ? "justify-between" : "justify-end"
+        )}
+      >
+        {onRemove && canRemove && !isSwapping && (
+          <button
+            type="button"
+            onClick={onRemove}
+            aria-label={`Remove ${name}`}
+            className="w-7 h-7 rounded-full bg-cream-deep text-ink-3 text-[10px] flex items-center justify-center cursor-pointer shrink-0 border-none hover:bg-cream transition-colors"
+          >
+            ×
+          </button>
+        )}
         {isSwapping ? (
           <div className="flex items-center gap-1.5 text-[10px] font-bold tracking-[0.1em] uppercase text-persimmon">
             <span

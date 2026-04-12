@@ -70,6 +70,7 @@ type SessionContextValue = {
   sendMessage: (message: string) => void;
   navigateToScreen: (screen: Screen) => void;
   resetSession: () => void;
+  addLocalTurn: (turn: ConversationTurn) => void;
   dispatch: Dispatch<ScreenAction>;
 };
 
@@ -204,6 +205,14 @@ export function SessionProvider({
   );
 
   // --------------------------------------------------------------------------
+  // addLocalTurn
+  // --------------------------------------------------------------------------
+
+  const addLocalTurn = useCallback((turn: ConversationTurn) => {
+    setConversationHistory((prev) => [...prev, turn]);
+  }, []);
+
+  // --------------------------------------------------------------------------
   // navigateToScreen
   // --------------------------------------------------------------------------
 
@@ -251,12 +260,13 @@ export function SessionProvider({
       sendMessage,
       navigateToScreen,
       resetSession,
+      addLocalTurn,
       dispatch,
     }),
     [
       state, data, isLoading, isStreaming, isComplete, isError,
       sessionId, conversationHistory, currentScreen,
-      sendMessage, navigateToScreen, resetSession, dispatch,
+      sendMessage, navigateToScreen, resetSession, addLocalTurn, dispatch,
     ]
   );
 

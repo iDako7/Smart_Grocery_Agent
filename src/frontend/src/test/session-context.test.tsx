@@ -872,3 +872,63 @@ describe("useSession — edge cases", () => {
     expect(result.current.conversationHistory).toHaveLength(0);
   });
 });
+
+// ---------------------------------------------------------------------------
+// 16. addLocalTurn
+// ---------------------------------------------------------------------------
+
+describe("useSession — addLocalTurn", () => {
+  it("appends a ConversationTurn to conversationHistory", () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    const turn = {
+      role: "user" as const,
+      content: "locally injected message",
+      timestamp: "2026-04-11T00:00:00.000Z",
+    };
+
+    act(() => {
+      result.current.addLocalTurn(turn);
+    });
+
+    expect(result.current.conversationHistory).toHaveLength(1);
+    expect(result.current.conversationHistory[0]).toEqual(turn);
+  });
+
+  it("does NOT change screenState — stays idle", () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    act(() => {
+      result.current.addLocalTurn({
+        role: "assistant",
+        content: "injected assistant turn",
+        timestamp: "2026-04-11T00:00:01.000Z",
+      });
+    });
+
+    expect(result.current.screenState).toBe("idle");
+  });
+
+  it("does NOT trigger loading or streaming", () => {
+    const mock = createMockChatService();
+    const serviceSpy = vi.fn(mock.service);
+    const wrapper = makeWrapper(serviceSpy);
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    act(() => {
+      result.current.addLocalTurn({
+        role: "user",
+        content: "no chat service call",
+        timestamp: "2026-04-11T00:00:02.000Z",
+      });
+    });
+
+    // chatService must NOT be called
+    expect(serviceSpy).not.toHaveBeenCalled();
+    // State machine must stay idle
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.isStreaming).toBe(false);
+  });
+});
