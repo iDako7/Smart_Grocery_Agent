@@ -29,6 +29,8 @@ import type { ScreenAction, ScreenData, ScreenState } from "@/hooks/use-screen-s
 
 import type { SSEEvent } from "@/types/sse";
 import type { ConversationTurn, Screen } from "@/types/api";
+import { createRealSSEService } from "@/services/real-sse";
+import type { SSEService } from "@/services/real-sse";
 
 // ---------------------------------------------------------------------------
 // ChatService interface
@@ -95,7 +97,7 @@ interface SessionProviderProps {
 
 export function SessionProvider({
   children,
-  chatService = noopChatService,
+  chatService,
 }: SessionProviderProps) {
   const { state, data, dispatch, isLoading, isStreaming, isComplete, isError } =
     useScreenState();
@@ -106,17 +108,28 @@ export function SessionProvider({
   >([]);
   const [currentScreen, setCurrentScreen] = useState<Screen>("home");
 
+  // Real SSE service — created once when no test chatService is injected.
+  // Held in a ref so it survives re-renders without re-creation.
+  const sseServiceRef = useRef<SSEService | null>(null);
+  if (!chatService && !sseServiceRef.current) {
+    sseServiceRef.current = createRealSSEService({
+      onSessionCreated: (id) => setSessionId(id),
+    });
+  }
+
+  const activeChatService = chatService ?? sseServiceRef.current?.handler ?? noopChatService;
+
   // Refs for values that should be readable inside stable callbacks without
   // causing those callbacks to be re-created on every render.
   const stateRef = useRef<ScreenState>(state);
   const currentScreenRef = useRef<Screen>(currentScreen);
-  const chatServiceRef = useRef<ChatServiceHandler>(chatService);
+  const chatServiceRef = useRef<ChatServiceHandler>(activeChatService);
 
   // Sync refs after render — callbacks only read these after commit phase.
   useEffect(() => {
     stateRef.current = state;
     currentScreenRef.current = currentScreen;
-    chatServiceRef.current = chatService;
+    chatServiceRef.current = activeChatService;
   });
 
   // Store the cancel function from the last chatService call
@@ -135,7 +148,7 @@ export function SessionProvider({
         cancelRef.current = null;
       }
     };
-  }, [chatService]);
+  }, [activeChatService]);
 
   // --------------------------------------------------------------------------
   // sendMessage
@@ -245,6 +258,10 @@ export function SessionProvider({
     setSessionId(null);
     setConversationHistory([]);
     setCurrentScreen("home");
+
+    // Invalidate the SSE service's cached session so a new one is created next time
+    sseServiceRef.current?.resetSession();
+    sseServiceRef.current = null;
 
     // Reset screen state machine to idle
     dispatch({ type: "reset" });

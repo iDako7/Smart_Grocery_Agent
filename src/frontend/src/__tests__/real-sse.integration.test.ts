@@ -164,7 +164,7 @@ describe("createRealSSEService — happy path", () => {
 
     const { createRealSSEService } = await import("@/services/real-sse");
 
-    const service = createRealSSEService();
+    const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
     const onDone = vi.fn();
     const onError = vi.fn();
@@ -229,7 +229,7 @@ describe("createRealSSEService — network failure", () => {
     // Re-import to get a fresh closure (session state is fresh per module load)
     const { createRealSSEService } = await import("@/services/real-sse");
 
-    const service = createRealSSEService();
+    const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
     const onDone = vi.fn();
     const onError = vi.fn();
@@ -264,7 +264,7 @@ describe("createRealSSEService — non-recoverable error event", () => {
 
     const { createRealSSEService } = await import("@/services/real-sse");
 
-    const service = createRealSSEService();
+    const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
     const onDone = vi.fn();
     const onError = vi.fn();
@@ -299,7 +299,7 @@ describe("createRealSSEService — recoverable error event", () => {
 
     const { createRealSSEService } = await import("@/services/real-sse");
 
-    const service = createRealSSEService();
+    const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
     const onDone = vi.fn();
     const onError = vi.fn();
@@ -342,7 +342,7 @@ describe("createRealSSEService — session creation", () => {
 
     const { createRealSSEService } = await import("@/services/real-sse");
 
-    const service = createRealSSEService();
+    const { handler: service } = createRealSSEService();
     const onDone = vi.fn();
 
     await new Promise<void>((resolve) => {
@@ -412,7 +412,7 @@ describe("createRealSSEService — session reuse", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const { createRealSSEService } = await import("@/services/real-sse");
-    const service = createRealSSEService();
+    const { handler: service } = createRealSSEService();
 
     // First call
     await new Promise<void>((resolve) => {
@@ -476,7 +476,7 @@ describe("createRealSSEService — cancel / abort", () => {
     vi.stubGlobal("fetch", fetchMock);
 
     const { createRealSSEService } = await import("@/services/real-sse");
-    const service = createRealSSEService();
+    const { handler: service } = createRealSSEService();
 
     const { cancel } = service("hello", "home", vi.fn(), vi.fn(), vi.fn());
 
@@ -523,7 +523,7 @@ describe("createRealSSEService — stream closes without done event", () => {
 
     const { createRealSSEService } = await import("@/services/real-sse");
 
-    const service = createRealSSEService();
+    const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
     const onDone = vi.fn();
     const onError = vi.fn();
@@ -557,7 +557,7 @@ describe("createRealSSEService — stream closes without done event", () => {
 
     const { createRealSSEService } = await import("@/services/real-sse");
 
-    const service = createRealSSEService();
+    const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
     const onDone = vi.fn();
     const onError = vi.fn();
@@ -580,7 +580,210 @@ describe("createRealSSEService — stream closes without done event", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Test 9 (F12): explanation text in assistant turn (SessionProvider integration)
+// Test 9: onSessionCreated callback fires with session ID
+// ---------------------------------------------------------------------------
+
+describe("createRealSSEService — onSessionCreated callback", () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  afterEach(async () => {
+    vi.unstubAllGlobals();
+    const { resetAuthToken } = await import("@/services/api-client");
+    resetAuthToken();
+  });
+
+  it("calls onSessionCreated with the session ID after first message", async () => {
+    const sseBody = makeSseBody([DONE_BLOCK]);
+    vi.stubGlobal("fetch", mockFetchWithSessionAndChat(sseBody));
+
+    const { createRealSSEService } = await import("@/services/real-sse");
+
+    const onSessionCreated = vi.fn();
+    const { handler: service } = createRealSSEService({ onSessionCreated });
+
+    await new Promise<void>((resolve) => {
+      service("hello", "home", vi.fn(), () => { resolve(); }, vi.fn());
+    });
+
+    expect(onSessionCreated).toHaveBeenCalledOnce();
+    expect(onSessionCreated).toHaveBeenCalledWith("test-session-123");
+  });
+
+  it("calls onSessionCreated only once across two messages (session reuse)", async () => {
+    const makeDoneBody = () => makeSseBody([DONE_BLOCK]);
+
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (typeof url === "string" && url.includes("/auth/verify")) {
+        return Promise.resolve({
+          ok: true,
+          body: null,
+          json: async () => AUTH_RESPONSE,
+        });
+      }
+      if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
+        return Promise.resolve({
+          ok: true,
+          body: null,
+          json: async () => SESSION_RESPONSE,
+        });
+      }
+      return Promise.resolve({
+        ok: true,
+        body: makeDoneBody(),
+        json: async () => ({}),
+      });
+    });
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { createRealSSEService } = await import("@/services/real-sse");
+
+    const onSessionCreated = vi.fn();
+    const { handler: service } = createRealSSEService({ onSessionCreated });
+
+    await new Promise<void>((resolve) => {
+      service("first", "home", vi.fn(), () => { resolve(); }, vi.fn());
+    });
+    await new Promise<void>((resolve) => {
+      service("second", "home", vi.fn(), () => { resolve(); }, vi.fn());
+    });
+
+    expect(onSessionCreated).toHaveBeenCalledOnce();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test 10: resetSession causes new POST /session on next call
+// ---------------------------------------------------------------------------
+
+describe("createRealSSEService — resetSession", () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  afterEach(async () => {
+    vi.unstubAllGlobals();
+    const { resetAuthToken } = await import("@/services/api-client");
+    resetAuthToken();
+  });
+
+  it("creates a new session after resetSession is called", async () => {
+    const makeDoneBody = () => makeSseBody([DONE_BLOCK]);
+
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (typeof url === "string" && url.includes("/auth/verify")) {
+        return Promise.resolve({
+          ok: true,
+          body: null,
+          json: async () => AUTH_RESPONSE,
+        });
+      }
+      if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
+        return Promise.resolve({
+          ok: true,
+          body: null,
+          json: async () => SESSION_RESPONSE,
+        });
+      }
+      return Promise.resolve({
+        ok: true,
+        body: makeDoneBody(),
+        json: async () => ({}),
+      });
+    });
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { createRealSSEService } = await import("@/services/real-sse");
+
+    const onSessionCreated = vi.fn();
+    const { handler: service, resetSession } = createRealSSEService({ onSessionCreated });
+
+    // First message — creates session
+    await new Promise<void>((resolve) => {
+      service("first", "home", vi.fn(), () => { resolve(); }, vi.fn());
+    });
+
+    expect(onSessionCreated).toHaveBeenCalledOnce();
+
+    // Reset — clears cached session
+    resetSession();
+
+    // Second message — should create a new session
+    await new Promise<void>((resolve) => {
+      service("second", "home", vi.fn(), () => { resolve(); }, vi.fn());
+    });
+
+    // onSessionCreated called twice (once per session creation)
+    expect(onSessionCreated).toHaveBeenCalledTimes(2);
+
+    // POST /session called twice
+    const sessionCalls = (fetchMock.mock.calls as [string, RequestInit][]).filter(
+      ([url]) => typeof url === "string" && /\/session$/.test(url)
+    );
+    expect(sessionCalls).toHaveLength(2);
+  });
+
+  it("does not fire onSessionCreated for a stale session when resetSession interrupts in-flight creation", async () => {
+    let sessionResolve: ((value: Response) => void) | null = null;
+
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (typeof url === "string" && url.includes("/auth/verify")) {
+        return Promise.resolve({
+          ok: true,
+          body: null,
+          json: async () => AUTH_RESPONSE,
+        });
+      }
+      if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
+        // Hang the session creation — resolve manually
+        return new Promise<Response>((resolve) => {
+          sessionResolve = resolve;
+        });
+      }
+      return Promise.resolve({
+        ok: true,
+        body: makeSseBody([DONE_BLOCK]),
+        json: async () => ({}),
+      });
+    });
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { createRealSSEService } = await import("@/services/real-sse");
+
+    const onSessionCreated = vi.fn();
+    const { handler: service, resetSession } = createRealSSEService({ onSessionCreated });
+
+    // Start first message — session creation is pending
+    service("first", "home", vi.fn(), vi.fn(), vi.fn());
+
+    // Wait a tick for the fetch to be called
+    await new Promise((r) => setTimeout(r, 10));
+    expect(sessionResolve).not.toBeNull();
+
+    // Reset BEFORE the session creation resolves
+    resetSession();
+
+    // Now resolve the stale session creation
+    sessionResolve!({
+      ok: true,
+      body: null,
+      json: async () => SESSION_RESPONSE,
+    } as unknown as Response);
+
+    // Wait for promise chain to settle
+    await new Promise((r) => setTimeout(r, 10));
+
+    // onSessionCreated must NOT have been called — the generation was invalidated
+    expect(onSessionCreated).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test 11 (F12): explanation text in assistant turn (SessionProvider integration)
 // ---------------------------------------------------------------------------
 
 describe("F12 — SessionProvider stores explanation in assistant turn", () => {

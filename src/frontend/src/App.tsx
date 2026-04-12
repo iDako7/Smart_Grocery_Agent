@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ClarifyScreen } from "@/screens/ClarifyScreen";
@@ -10,14 +9,11 @@ import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
 import { ScenarioProvider } from "@/context/scenario-context";
 import { SessionProvider } from "@/context/session-context";
 import { ScenarioSwitcher } from "@/components/scenario-switcher";
-import { createRealSSEService } from "@/services/real-sse";
 
 function AppShell() {
-  const chatService = useMemo(() => createRealSSEService(), []);
-
   return (
     <BrowserRouter>
-      <SessionProvider chatService={chatService}>
+      <SessionProvider>
         <Routes>
           <Route path="/" element={<HomeScreen />} />
           <Route path="/clarify" element={<ClarifyScreen />} />

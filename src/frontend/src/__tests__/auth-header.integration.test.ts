@@ -211,7 +211,7 @@ describe("createRealSSEService — auth header in chat fetch", () => {
     resetAuthToken();
 
     const { createRealSSEService } = await import("@/services/real-sse");
-    const service = createRealSSEService();
+    const { handler: service } = createRealSSEService();
 
     await new Promise<void>((resolve) => {
       service(
