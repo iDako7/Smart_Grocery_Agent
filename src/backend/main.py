@@ -28,9 +28,7 @@ def _check_config() -> None:
             raise RuntimeError("JWT_SECRET must be set to a real secret (not the default placeholder)")
 
     if not os.environ.get("OPENROUTER_API_KEY"):
-        raise RuntimeError(
-            "OPENROUTER_API_KEY must be set. Add it to .env or export it in your shell."
-        )
+        raise RuntimeError("OPENROUTER_API_KEY must be set. Add it to .env or export it in your shell.")
 
 
 @asynccontextmanager
