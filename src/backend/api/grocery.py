@@ -122,7 +122,7 @@ async def generate_grocery_list(
     await conn.execute(
         sessions.update()
         .where(sessions.c.id == session_id)
-        .values(state_snapshot=snapshot)
+        .values(screen="grocery", state_snapshot=snapshot)
     )
     await conn.commit()
 

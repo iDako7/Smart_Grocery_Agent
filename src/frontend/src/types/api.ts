@@ -53,6 +53,21 @@ export type SessionStateResponse = {
 };
 
 // ---------------------------------------------------------------------------
+// Grocery list endpoint
+// ---------------------------------------------------------------------------
+
+export type GroceryListItem = {
+  ingredient_name: string;
+  amount?: string;
+  recipe_name?: string;
+  recipe_id?: string;
+};
+
+export type GroceryListRequest = {
+  items: GroceryListItem[];
+};
+
+// ---------------------------------------------------------------------------
 // Auth endpoints
 // ---------------------------------------------------------------------------
 
