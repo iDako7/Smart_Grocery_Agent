@@ -81,6 +81,10 @@ Three worktrees develop in parallel, each with its own `CLAUDE.md` defining scop
 
 **Rebase protocol:** When a contract is frozen or updated on `main`, all active worktrees must `git rebase main` before continuing. Check `contracts/CHANGELOG.md` for breaking changes.
 
+**Worktree policy:** Prefer `claude --worktree <issue-name>` for any task that will produce a PR. Work on `main` only for read-only exploration, trivial one-line fixes, or contract updates that all worktrees need immediately.
+
+**Branch protection:** `main` is protected on GitHub — no direct pushes, no force pushes. All changes go through PRs with CI checks passing.
+
 ## Key Design Decisions
 
 - **PCV gap analysis** (Protein/Carb/Veggie) is the reasoning backbone — deterministic lookup, not LLM judgment. Sauce tracked internally but not shown in analysis UI.
