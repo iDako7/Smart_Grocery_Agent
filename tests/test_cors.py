@@ -7,7 +7,6 @@ Verifies that the FastAPI app correctly handles CORS preflight (OPTIONS) request
 
 import pytest
 from httpx import ASGITransport, AsyncClient
-
 from src.backend.main import app
 
 
