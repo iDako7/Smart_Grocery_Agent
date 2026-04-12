@@ -3,8 +3,24 @@ name: CI — E2E
 on:
   push:
     branches: [main]
+    paths:
+      - ".github/workflows/ci-e2e.yml"
+      - "src/backend/**"
+      - "src/ai/**"
+      - "src/frontend/**"
+      - "contracts/**"
+      - "data/**"
+      - "scripts/**"
   pull_request:
     branches: [main]
+    paths:
+      - ".github/workflows/ci-e2e.yml"
+      - "src/backend/**"
+      - "src/ai/**"
+      - "src/frontend/**"
+      - "contracts/**"
+      - "data/**"
+      - "scripts/**"
 
 concurrency:
   group: e2e-${{ github.ref }}
@@ -49,6 +65,9 @@ jobs:
         working-directory: src/backend
         run: uv sync --frozen
 
+      - name: Build SQLite KB from source data
+        run: uv run --project src/backend python -m scripts.migrate_kb
+
       - name: Run Alembic migrations
         run: uv run --project src/backend alembic -c src/backend/alembic.ini upgrade head
 
@@ -69,9 +88,9 @@ jobs:
       - name: Start backend
         run: |
           uv run --project src/backend uvicorn src.backend.main:app --host 0.0.0.0 --port 8000 &
-          # Wait for backend to be ready
           for i in $(seq 1 30); do
             curl -sf http://localhost:8000/health && break
+            if [ "$i" -eq 30 ]; then echo "Backend failed to start" && exit 1; fi
             sleep 1
           done
 
@@ -79,9 +98,9 @@ jobs:
         working-directory: src/frontend
         run: |
           bun run dev &
-          # Wait for Vite dev server to be ready
           for i in $(seq 1 30); do
             curl -sf http://localhost:5173 && break
+            if [ "$i" -eq 30 ]; then echo "Frontend failed to start" && exit 1; fi
             sleep 1
           done
 
