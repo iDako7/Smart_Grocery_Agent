@@ -47,6 +47,13 @@ export function GroceryScreen() {
     });
   }
 
+  function handleSave() {
+    // TODO(Issue #22): POST payload to save endpoint, use returned ID for navigation.
+    // Extract session?.screenData?.recipes and bundle as linked save payload:
+    // { groceryStores: sessionGrocery, recipes: session?.screenData?.recipes }
+    navigate("/saved/list/1", { state: { justSaved: true } });
+  }
+
   const costcoItems = GROCERY_ITEMS.filter((i) => i.store === "costco");
   const marketItems = GROCERY_ITEMS.filter((i) => i.store === "market");
 
@@ -145,10 +152,10 @@ export function GroceryScreen() {
       </StoreSection>
 
       {/* Save list button */}
+      {/* TODO(Issue #22): replace hardcoded id with real saved list id returned by POST */}
       <button
         type="button"
-        onClick={() => { // TODO(stage-4): replace hardcoded id with real saved list id
-          navigate("/saved/list/1", { state: { justSaved: true } }); }}
+        onClick={handleSave}
         className="mx-3.5 mt-1.5 mb-3 py-[13px] bg-shoyu text-cream border-none rounded-md font-sans text-[13px] font-semibold cursor-pointer min-h-[44px]"
       >
         Save list
