@@ -4,7 +4,7 @@
 //   - src/services/real-sse.ts    (createRealSSEService)
 //   - session-context.tsx         (F12 — explanationRef integration)
 
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import type { ReactNode } from "react";
 import React from "react";
@@ -325,6 +325,10 @@ describe("createRealSSEService — recoverable error event", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — session creation", () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
   afterEach(async () => {
     vi.unstubAllGlobals();
     const { resetAuthToken } = await import("@/services/api-client");
@@ -368,6 +372,10 @@ describe("createRealSSEService — session creation", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — session reuse", () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
   afterEach(async () => {
     vi.unstubAllGlobals();
     const { resetAuthToken } = await import("@/services/api-client");
@@ -491,7 +499,88 @@ describe("createRealSSEService — cancel / abort", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Test 8 (F12): explanation text in assistant turn (SessionProvider integration)
+// Test 8: Stream closes without done event → onError is called
+// ---------------------------------------------------------------------------
+
+describe("createRealSSEService — stream closes without done event", () => {
+  afterEach(async () => {
+    vi.unstubAllGlobals();
+    const { resetAuthToken } = await import("@/services/api-client");
+    resetAuthToken();
+  });
+
+  it("calls onError with 'Connection closed unexpectedly' when stream closes without a done event", async () => {
+    // Stream emits a thinking event then closes — no done event
+    const encoder = new TextEncoder();
+    const sseBody = new ReadableStream<Uint8Array>({
+      start(controller) {
+        controller.enqueue(encoder.encode(THINKING_BLOCK));
+        controller.close(); // closes without emitting done
+      },
+    });
+
+    vi.stubGlobal("fetch", mockFetchWithSessionAndChat(sseBody));
+
+    const { createRealSSEService } = await import("@/services/real-sse");
+
+    const service = createRealSSEService();
+    const onEvent = vi.fn();
+    const onDone = vi.fn();
+    const onError = vi.fn();
+
+    await new Promise<void>((resolve) => {
+      const wrappedError = (msg: string) => {
+        onError(msg);
+        resolve();
+      };
+      service("what should I cook?", "home", onEvent, onDone, wrappedError);
+    });
+
+    expect(onError).toHaveBeenCalledOnce();
+    expect(onError).toHaveBeenCalledWith("Connection closed unexpectedly");
+    expect(onDone).not.toHaveBeenCalled();
+  });
+
+  it("does NOT call onError or onDone when stream closes after cancel()", async () => {
+    // Stream that never closes on its own — we cancel before it ends
+    let streamController: ReadableStreamDefaultController<Uint8Array> | null = null;
+    const encoder = new TextEncoder();
+    const sseBody = new ReadableStream<Uint8Array>({
+      start(controller) {
+        streamController = controller;
+        controller.enqueue(encoder.encode(THINKING_BLOCK));
+        // Does NOT call controller.close() — the test closes it after cancel
+      },
+    });
+
+    vi.stubGlobal("fetch", mockFetchWithSessionAndChat(sseBody));
+
+    const { createRealSSEService } = await import("@/services/real-sse");
+
+    const service = createRealSSEService();
+    const onEvent = vi.fn();
+    const onDone = vi.fn();
+    const onError = vi.fn();
+
+    const { cancel } = service("what should I cook?", "home", onEvent, onDone, onError);
+
+    // Give the IIFE time to reach consumeSseStream and block on reader.read()
+    await new Promise((r) => setTimeout(r, 30));
+
+    // Cancel first, then close the stream to unblock the reader
+    cancel();
+    streamController!.close();
+
+    // Wait for the async IIFE to settle
+    await new Promise((r) => setTimeout(r, 30));
+
+    expect(onError).not.toHaveBeenCalled();
+    expect(onDone).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Test 9 (F12): explanation text in assistant turn (SessionProvider integration)
 // ---------------------------------------------------------------------------
 
 describe("F12 — SessionProvider stores explanation in assistant turn", () => {

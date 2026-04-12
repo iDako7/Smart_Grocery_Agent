@@ -56,6 +56,9 @@ async function consumeSseStream(
   const decoder = new TextDecoder();
   const reader = body.getReader();
   let buffer = "";
+  // Tracks whether a terminal event (done or non-recoverable error) was received.
+  // If the stream closes without one, we report an unexpected connection drop.
+  let completed = false;
 
   try {
     while (true) {
@@ -81,6 +84,7 @@ async function consumeSseStream(
         const payload = data as Record<string, unknown>;
 
         if (eventType === "done") {
+          completed = true;
           onDone(
             payload.status as "complete" | "partial",
             (payload.reason as string | null) ?? null
@@ -91,6 +95,7 @@ async function consumeSseStream(
         if (eventType === "error") {
           const errEvent = data as ErrorEvent;
           if (!errEvent.recoverable) {
+            completed = true;
             onError(errEvent.message);
             return;
           }
@@ -102,6 +107,12 @@ async function consumeSseStream(
         // All other events — route to onEvent
         onEvent(data as SSEEvent);
       }
+    }
+
+    // Stream closed without a terminal event — report unexpected drop
+    // (unless the caller aborted intentionally)
+    if (!completed && !signal.aborted) {
+      onError("Connection closed unexpectedly");
     }
   } finally {
     reader.releaseLock();
