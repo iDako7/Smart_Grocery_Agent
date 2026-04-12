@@ -37,7 +37,21 @@ export function ClarifyScreen() {
   const isComplete = session?.isComplete ?? false;
   const { pcsv: scenarioPcsv, deckText: scenarioDeckText, summaryText } = scenario.clarify;
 
-  // Use session data when available, fall back to scenario data
+  // hasRealData — true when at least one pcsv_update SSE event has arrived.
+  // When false and in error state, we have no meaningful content to display.
+  const hasRealData = screenData?.pcsv != null;
+
+  // showContent — show PCV/deck content only in idle (scenario preview) or
+  // when real data has arrived from the SSE stream.
+  // During loading/streaming with no data yet, content is intentionally hidden
+  // since we show the scenario preview only in idle.
+  const showContent = screenState === "idle" || hasRealData;
+
+  // showActionButton — show "Looks good" in all states EXCEPT error with no real data,
+  // which is the pure network-failure case where there is nothing meaningful to confirm.
+  const showActionButton = !(screenState === "error" && !hasRealData);
+
+  // Use session data when available, fall back to scenario data (idle only)
   const pcsv = screenData?.pcsv ?? scenarioPcsv;
   const deckText = screenData?.explanation || scenarioDeckText;
 
@@ -158,37 +172,49 @@ export function ClarifyScreen() {
               Here's what I <span className="text-persimmon">see</span>.
             </h1>
 
-            {/* Deck */}
-            <p className="mt-1.5 text-[13px] text-ink-2 leading-[1.5]">
-              {deckText}
-            </p>
+            {/* Deck, PCV badges, and summary — only when idle (scenario preview) or real data arrived */}
+            {showContent && (
+              <>
+                {/* Deck */}
+                <p className="mt-1.5 text-[13px] text-ink-2 leading-[1.5]">
+                  {deckText}
+                </p>
 
-            {/* PCV badges */}
-            <div className="flex gap-2 mt-3 flex-wrap">
-              <PcvBadge category="Protein" status={pcsv.protein.status === "ok" ? "ok" : pcsv.protein.status === "low" ? "warn" : "gap"} />
-              <PcvBadge category="Carb" status={pcsv.carb.status === "ok" ? "ok" : pcsv.carb.status === "low" ? "warn" : "gap"} />
-              <PcvBadge category="Veggie" status={pcsv.veggie.status === "ok" ? "ok" : pcsv.veggie.status === "low" ? "warn" : "gap"} />
-            </div>
+                {/* PCV badges */}
+                <div className="flex gap-2 mt-3 flex-wrap">
+                  <PcvBadge category="Protein" status={pcsv.protein.status === "ok" ? "ok" : pcsv.protein.status === "low" ? "warn" : "gap"} />
+                  <PcvBadge category="Carb" status={pcsv.carb.status === "ok" ? "ok" : pcsv.carb.status === "low" ? "warn" : "gap"} />
+                  <PcvBadge category="Veggie" status={pcsv.veggie.status === "ok" ? "ok" : pcsv.veggie.status === "low" ? "warn" : "gap"} />
+                </div>
 
-            {/* PCV summary */}
-            <div className="mt-2 text-[12px] text-ink-2 leading-[1.45] flex items-start gap-1.5 relative">
-              <span>
-                {summaryText}
-              </span>
-              <button
-                type="button"
-                aria-label="PCV info"
-                onClick={() => setPcvInfoOpen(true)}
-                className="w-4 h-4 rounded-full bg-cream-deep text-ink-3 text-[9px] font-bold border-none cursor-pointer shrink-0 mt-[1px] inline-flex items-center justify-center"
-              >
-                ?
-              </button>
-            </div>
+                {/* PCV summary */}
+                <div className="mt-2 text-[12px] text-ink-2 leading-[1.45] flex items-start gap-1.5 relative">
+                  <span>
+                    {summaryText}
+                  </span>
+                  <button
+                    type="button"
+                    aria-label="PCV info"
+                    onClick={() => setPcvInfoOpen(true)}
+                    className="w-4 h-4 rounded-full bg-cream-deep text-ink-3 text-[9px] font-bold border-none cursor-pointer shrink-0 mt-[1px] inline-flex items-center justify-center"
+                  >
+                    ?
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
-        {/* Error banner */}
-        {screenState === "error" && screenData?.error && (
+        {/* Error with no real data — prominent centered display, no PCV content */}
+        {screenState === "error" && !hasRealData && screenData?.error && (
+          <div className="px-5 py-8 text-center">
+            <ErrorBanner message={screenData.error} onRetry={handleRetry} />
+          </div>
+        )}
+
+        {/* Error banner — shown alongside PCV content when partial data arrived before error */}
+        {screenState === "error" && hasRealData && screenData?.error && (
           <div className="px-5 pt-3">
             <ErrorBanner
               message={screenData.error}
@@ -276,16 +302,18 @@ export function ClarifyScreen() {
           onSend={(text) => sendMessage(text)}
         />
 
-        {/* Action */}
-        <div className="px-5 py-3 flex justify-end">
-          <button
-            type="button"
-            onClick={handleLooksGood}
-            className="px-6 py-[11px] bg-shoyu text-cream border-none rounded-full font-sans text-[13px] font-semibold cursor-pointer"
-          >
-            Looks good, show recipes →
-          </button>
-        </div>
+        {/* Action — hidden only when in error state with no real data */}
+        {showActionButton && (
+          <div className="px-5 py-3 flex justify-end">
+            <button
+              type="button"
+              onClick={handleLooksGood}
+              className="px-6 py-[11px] bg-shoyu text-cream border-none rounded-full font-sans text-[13px] font-semibold cursor-pointer"
+            >
+              Looks good, show recipes →
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Footer */}
