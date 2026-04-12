@@ -39,6 +39,8 @@ The user types input on Home, sees PCV analysis on Clarify, gets recipe cards on
 | F1 | Frontend uses mock SSE, not real `fetch` + `ReadableStream` | Journey 1 acceptance: "AI responses arrive via SSE." |
 | F12 | Assistant SSE content not appended to conversation history | F7 acceptance: "Frontend must append the full assistant SSE explanation response." |
 | F4 | "Save list" button navigates to hardcoded `/saved/list/1` | G3 acceptance: "Save list triggers backend POST, navigates using returned ID." |
+| F13 | No ✕ button to remove a dish from the active Recipes screen | R7: "User taps ✕ on a recipe card to dismiss it from the active plan entirely." |
+| F14 | "Save list" only saves the grocery list, not the associated meal plan | G3: "Both the grocery checklist and the associated meal plan are persisted as a linked pair." |
 
 ### Journey 2: Recipe Refinement
 
@@ -104,7 +106,7 @@ Toggle button on Recipes and Grocery screens. When active, recipe names and ingr
 
 | Issue | Title | Gaps Covered | Layer | Verify With |
 |-------|-------|-------------|-------|-------------|
-| [**#18**](https://github.com/iDako7/Smart_Grocery_Agent/issues/18) A1 | Frontend Cleanup | F5, F6, F7-S5, F9, F2, F10, F11 | Frontend | Browser: walk through all screens with dev server |
+| [**#18**](https://github.com/iDako7/Smart_Grocery_Agent/issues/18) A1 | Frontend Cleanup | F5, F6, F7-S5, F9, F2, F10, F11, F13, F14 | Frontend | Browser: walk through all screens with dev server |
 | [**#19**](https://github.com/iDako7/Smart_Grocery_Agent/issues/19) A2 | Backend Cleanup | B2, B3, B1, B-auth | Backend | pytest + curl |
 
 A1 and A2 have zero dependencies on each other. Execute in either order.
@@ -143,7 +145,7 @@ Done: All 5 journeys verifiable end-to-end.
 The integration effort is complete when:
 
 - [ ] All 5 journeys can be walked through in the browser with real backend responses
-- [ ] Journey 1: Type input → real PCV analysis → real recipe cards → toggle buy pills → build shopping list → store-grouped grocery list → save with real ID
+- [ ] Journey 1: Type input → real PCV analysis → real recipe cards → remove a dish (✕) → toggle buy pills → build shopping list → store-grouped grocery list → save (linked: grocery list + meal plan)
 - [ ] Journey 2: Tap swap → real alternative cards from agent → pick or keep
 - [ ] Journey 3: Save plan → sidebar lists it → tap → loads real data by ID
 - [ ] Journey 4: Remove recipe from plan (x button) → edit saved recipe → copy grocery list to clipboard
@@ -159,3 +161,4 @@ The integration effort is complete when:
 | Date | Version | Changes |
 |:-----|:--------|:--------|
 | 2026-04-11 | v1 | Initial: gap analysis, 5 issues across 2 phases, execution order, done criteria. |
+| 2026-04-11 | v2 | Added F13 (remove dish from active Recipes, R7) and F14 (linked save for grocery list + meal plan, G3 update) to Journey 1 gap table and Issue #18. Updated done criteria. |
