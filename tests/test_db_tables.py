@@ -1,7 +1,6 @@
 """Tests for SQLAlchemy table definitions."""
 
 from sqlalchemy.dialects.postgresql import JSONB, UUID
-
 from src.backend.db.tables import (
     conversation_turns,
     metadata,

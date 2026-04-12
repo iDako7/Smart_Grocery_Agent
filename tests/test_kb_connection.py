@@ -9,14 +9,14 @@ import tempfile
 from unittest.mock import patch
 
 import pytest
-
 from src.ai.kb import get_kb
 
 
 def _make_tmp_sqlite() -> str:
     """Create a temporary SQLite file and return its path."""
-    import aiosqlite
     import asyncio
+
+    import aiosqlite
 
     with tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False) as f:
         tmp_path = f.name

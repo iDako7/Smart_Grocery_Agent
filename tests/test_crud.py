@@ -23,9 +23,7 @@ async def test_update_user_profile_field_household_size(seeded_user, db):
 
 
 async def test_update_user_profile_field_list(seeded_user, db):
-    ok = await update_user_profile_field(
-        db, seeded_user, "dietary_restrictions", ["vegetarian", "gluten-free"]
-    )
+    ok = await update_user_profile_field(db, seeded_user, "dietary_restrictions", ["vegetarian", "gluten-free"])
     assert ok is True
     profile = await get_user_profile(db, seeded_user)
     assert profile.dietary_restrictions == ["vegetarian", "gluten-free"]
@@ -56,9 +54,7 @@ async def test_ensure_user_exists_creates_new(db):
     assert row is not None
     assert row.email == "new@test.local"
     # Profile should also exist
-    profile_row = (
-        await db.execute(user_profiles.select().where(user_profiles.c.user_id == uid))
-    ).first()
+    profile_row = (await db.execute(user_profiles.select().where(user_profiles.c.user_id == uid))).first()
     assert profile_row is not None
 
 

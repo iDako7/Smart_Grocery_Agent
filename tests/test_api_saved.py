@@ -5,8 +5,8 @@ import uuid
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
-
 from src.backend.main import app
+
 from tests.conftest import _engine, _ensure_tables
 
 _DEV_USER = uuid.UUID("00000000-0000-0000-0000-000000000001")
@@ -18,12 +18,10 @@ async def _clean_db():
     await _ensure_tables()
     async with _engine.begin() as conn:
         await conn.execute(text("TRUNCATE users CASCADE"))
-        await conn.execute(text(
-            "INSERT INTO users (id, email) VALUES (:id, :email)"
-        ), {"id": _DEV_USER, "email": "dev@test.local"})
-        await conn.execute(text(
-            "INSERT INTO user_profiles (user_id) VALUES (:uid)"
-        ), {"uid": _DEV_USER})
+        await conn.execute(
+            text("INSERT INTO users (id, email) VALUES (:id, :email)"), {"id": _DEV_USER, "email": "dev@test.local"}
+        )
+        await conn.execute(text("INSERT INTO user_profiles (user_id) VALUES (:uid)"), {"uid": _DEV_USER})
 
 
 @pytest_asyncio.fixture()
@@ -41,6 +39,7 @@ async def client():
     app.dependency_overrides.clear()
     from src.backend.auth import get_current_user_id
     from src.backend.db.engine import get_db
+
     app.dependency_overrides[get_current_user_id] = _override_auth
     app.dependency_overrides[get_db] = _override_db
 
@@ -56,6 +55,7 @@ async def _create_session(client) -> str:
 
 
 # ---- Meal Plans ----
+
 
 async def test_meal_plan_crud(client):
     sid = await _create_session(client)
@@ -102,11 +102,14 @@ _RECIPE_SNAPSHOT = {
 
 async def test_recipe_crud(client):
     # Create
-    resp = await client.post("/saved/recipes", json={
-        "recipe_id": "r001",
-        "recipe_snapshot": _RECIPE_SNAPSHOT,
-        "notes": "Family favorite",
-    })
+    resp = await client.post(
+        "/saved/recipes",
+        json={
+            "recipe_id": "r001",
+            "recipe_snapshot": _RECIPE_SNAPSHOT,
+            "notes": "Family favorite",
+        },
+    )
     assert resp.status_code == 201
     recipe = resp.json()
     rid = recipe["id"]
@@ -137,6 +140,7 @@ async def test_recipe_crud(client):
 
 
 # ---- Grocery Lists ----
+
 
 async def test_grocery_list_crud(client):
     sid = await _create_session(client)
@@ -170,6 +174,7 @@ async def test_grocery_list_crud(client):
 
 
 # ---- 404 tests ----
+
 
 async def test_meal_plan_404(client):
     fake = uuid.uuid4()

@@ -8,7 +8,6 @@ from unittest.mock import patch
 import jwt
 import pytest
 from fastapi import HTTPException
-
 from src.backend.auth import get_current_user_id
 
 _TEST_SECRET = "test-secret-key-for-auth-tests"

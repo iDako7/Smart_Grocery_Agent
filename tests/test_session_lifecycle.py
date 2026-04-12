@@ -1,15 +1,14 @@
 """Integration test: multi-turn session lifecycle."""
 
-import json
 import uuid
 from unittest.mock import AsyncMock, patch
 
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
-
-from src.ai.types import AgentResult, ToolCall
+from src.ai.types import AgentResult
 from src.backend.main import app
+
 from tests.conftest import _engine, _ensure_tables
 
 _DEV_USER = uuid.UUID("00000000-0000-0000-0000-000000000001")
@@ -20,12 +19,10 @@ async def _clean_db():
     await _ensure_tables()
     async with _engine.begin() as conn:
         await conn.execute(text("TRUNCATE users CASCADE"))
-        await conn.execute(text(
-            "INSERT INTO users (id, email) VALUES (:id, :email)"
-        ), {"id": _DEV_USER, "email": "dev@test.local"})
-        await conn.execute(text(
-            "INSERT INTO user_profiles (user_id) VALUES (:uid)"
-        ), {"uid": _DEV_USER})
+        await conn.execute(
+            text("INSERT INTO users (id, email) VALUES (:id, :email)"), {"id": _DEV_USER, "email": "dev@test.local"}
+        )
+        await conn.execute(text("INSERT INTO user_profiles (user_id) VALUES (:uid)"), {"uid": _DEV_USER})
 
 
 @pytest_asyncio.fixture()
@@ -43,6 +40,7 @@ async def client():
     app.dependency_overrides.clear()
     from src.backend.auth import get_current_user_id
     from src.backend.db.engine import get_db
+
     app.dependency_overrides[get_current_user_id] = _override_auth
     app.dependency_overrides[get_db] = _override_db
     transport = ASGITransport(app=app)

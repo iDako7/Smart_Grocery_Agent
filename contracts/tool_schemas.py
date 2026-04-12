@@ -9,7 +9,6 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field, model_validator
 
-
 # ---------------------------------------------------------------------------
 # Shared enums / literals
 # ---------------------------------------------------------------------------
@@ -79,13 +78,10 @@ class UpdateUserProfileInput(BaseModel):
     value: Any
 
     @model_validator(mode="after")
-    def _check_value_type(self) -> "UpdateUserProfileInput":
+    def _check_value_type(self) -> UpdateUserProfileInput:
         expected = _PROFILE_FIELD_TYPES.get(self.field)
         if expected and not isinstance(self.value, expected):
-            raise ValueError(
-                f"field '{self.field}' expects {expected.__name__}, "
-                f"got {type(self.value).__name__}"
-            )
+            raise ValueError(f"field '{self.field}' expects {expected.__name__}, got {type(self.value).__name__}")
         return self
 
 
@@ -114,9 +110,7 @@ class PCSVResult(BaseModel):
 class Ingredient(BaseModel):
     name: str
     amount: str = ""
-    pcsv: list[PCSVRole] = Field(
-        default_factory=list, description="protein/carb/veggie/sauce roles"
-    )
+    pcsv: list[PCSVRole] = Field(default_factory=list, description="protein/carb/veggie/sauce roles")
 
 
 class RecipeSummary(BaseModel):

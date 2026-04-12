@@ -18,8 +18,7 @@ logger = logging.getLogger(__name__)
 def _check_config() -> None:
     if os.environ.get("SGA_AUTH_MODE", "dev") == "dev":
         logger.warning(
-            "SGA_AUTH_MODE is 'dev' — authentication is DISABLED. "
-            "Set SGA_AUTH_MODE=prod for production deployments."
+            "SGA_AUTH_MODE is 'dev' — authentication is DISABLED. Set SGA_AUTH_MODE=prod for production deployments."
         )
     else:
         jwt_secret = os.getenv("JWT_SECRET", "")

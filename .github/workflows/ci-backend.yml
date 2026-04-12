@@ -1,0 +1,91 @@
+name: CI — Backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/backend/**"
+      - "src/ai/**"
+      - "contracts/**"
+      - "tests/**"
+      - "pytest.ini"
+      - "ruff.toml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/backend/**"
+      - "src/ai/**"
+      - "contracts/**"
+      - "tests/**"
+      - "pytest.ini"
+      - "ruff.toml"
+
+concurrency:
+  group: backend-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Ruff lint & format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Lint
+        run: uvx ruff@0.11 check src/backend/ src/ai/ contracts/ tests/
+
+      - name: Format check
+        run: uvx ruff@0.11 format --check src/backend/ src/ai/ contracts/ tests/
+
+  test:
+    name: Pytest
+    runs-on: ubuntu-latest
+    needs: lint
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: sga
+          POSTGRES_USER: sga
+          POSTGRES_PASSWORD: sga_dev
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U sga"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+    env:
+      DATABASE_URL: "postgresql+asyncpg://sga:sga_dev@localhost:5432/sga"
+      TEST_DATABASE_URL: "postgresql+asyncpg://sga:sga_dev@localhost:5432/sga"
+      PYTHONPATH: "."
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        working-directory: src/backend
+        run: uv sync --frozen
+
+      - name: Run Alembic migrations
+        run: uv run --project src/backend alembic -c src/backend/alembic.ini upgrade head
+
+      - name: Run tests
+        run: uv run --project src/backend pytest
+
+  docker:
+    name: Docker build check
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build backend image
+        run: docker build -f src/backend/Dockerfile.dev src/backend/

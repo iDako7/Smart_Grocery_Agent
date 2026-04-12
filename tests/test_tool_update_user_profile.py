@@ -6,9 +6,7 @@ from src.backend.db.crud import get_user_profile
 
 
 async def test_update_household_size(seeded_user, db):
-    result = await update_user_profile(
-        db, seeded_user, UpdateUserProfileInput(field="household_size", value=6)
-    )
+    result = await update_user_profile(db, seeded_user, UpdateUserProfileInput(field="household_size", value=6))
     assert result.updated is True
     assert result.field == "household_size"
     assert result.new_value == 6
@@ -18,7 +16,8 @@ async def test_update_household_size(seeded_user, db):
 
 async def test_update_dietary_restrictions(seeded_user, db):
     result = await update_user_profile(
-        db, seeded_user,
+        db,
+        seeded_user,
         UpdateUserProfileInput(field="dietary_restrictions", value=["halal"]),
     )
     assert result.updated is True
@@ -28,8 +27,10 @@ async def test_update_dietary_restrictions(seeded_user, db):
 
 async def test_update_nonexistent_user(db):
     import uuid
+
     result = await update_user_profile(
-        db, uuid.uuid4(),
+        db,
+        uuid.uuid4(),
         UpdateUserProfileInput(field="household_size", value=3),
     )
     assert result.updated is False

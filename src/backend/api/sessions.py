@@ -1,13 +1,7 @@
 """Session + Chat API endpoints."""
 
-import json
 import logging
 import uuid
-
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import StreamingResponse
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncConnection
 
 from contracts.api_types import (
     ChatRequest,
@@ -16,6 +10,10 @@ from contracts.api_types import (
     CreateSessionResponse,
     SessionStateResponse,
 )
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncConnection
 from src.ai.context import load_context, save_turn
 from src.ai.kb import get_kb
 from src.ai.orchestrator import run_agent
@@ -37,11 +35,7 @@ async def create_session(
     conn: AsyncConnection = Depends(get_db),
 ) -> CreateSessionResponse:
     sid = uuid.uuid4()
-    result = await conn.execute(
-        sessions.insert()
-        .values(id=sid, user_id=user_id)
-        .returning(sessions.c.created_at)
-    )
+    result = await conn.execute(sessions.insert().values(id=sid, user_id=user_id).returning(sessions.c.created_at))
     row = result.first()
     await conn.commit()
     return CreateSessionResponse(session_id=str(sid), created_at=row.created_at)
@@ -76,8 +70,7 @@ async def get_session(
         .order_by(conversation_turns.c.id)
     )
     conversation = [
-        ConversationTurn(role=t.role, content=t.content, timestamp=t.created_at)
-        for t in turns_result.fetchall()
+        ConversationTurn(role=t.role, content=t.content, timestamp=t.created_at) for t in turns_result.fetchall()
     ]
 
     snapshot = row.state_snapshot or {}
@@ -144,9 +137,7 @@ async def chat(
             snapshot["grocery_list"] = [s.model_dump() for s in result.grocery_list]
 
         await conn.execute(
-            sessions.update()
-            .where(sessions.c.id == session_id)
-            .values(screen=body.screen, state_snapshot=snapshot)
+            sessions.update().where(sessions.c.id == session_id).values(screen=body.screen, state_snapshot=snapshot)
         )
         await conn.commit()
 

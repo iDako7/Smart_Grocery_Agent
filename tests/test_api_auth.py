@@ -4,15 +4,12 @@ Phase 2 mock: /auth/send-code always succeeds, /auth/verify always returns a
 valid JWT for the dev user. No DB required — auth endpoints are stateless mocks.
 """
 
-import os
 import uuid
 
 import jwt
 import pytest
 from httpx import ASGITransport, AsyncClient
-
 from src.backend.main import app
-
 
 # ---------------------------------------------------------------------------
 # /auth/send-code
@@ -52,9 +49,7 @@ async def test_send_code_any_email_succeeds():
     """Mock accepts any well-formed email string."""
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        resp = await client.post(
-            "/auth/send-code", json={"email": "nobody@nowhere.example"}
-        )
+        resp = await client.post("/auth/send-code", json={"email": "nobody@nowhere.example"})
     assert resp.status_code == 200
     assert resp.json()["sent"] is True
 
@@ -69,9 +64,7 @@ async def test_verify_returns_token_and_user_id():
     """Happy path: response contains token and user_id keys."""
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        resp = await client.post(
-            "/auth/verify", json={"email": "test@example.com", "code": "123456"}
-        )
+        resp = await client.post("/auth/verify", json={"email": "test@example.com", "code": "123456"})
     assert resp.status_code == 200
     data = resp.json()
     assert "token" in data
@@ -83,9 +76,7 @@ async def test_verify_user_id_is_dev_uuid():
     """user_id must be the hardcoded dev UUID so DB-seeded user works."""
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        resp = await client.post(
-            "/auth/verify", json={"email": "test@example.com", "code": "123456"}
-        )
+        resp = await client.post("/auth/verify", json={"email": "test@example.com", "code": "123456"})
     data = resp.json()
     assert data["user_id"] == "00000000-0000-0000-0000-000000000001"
 
@@ -95,9 +86,7 @@ async def test_verify_user_id_is_valid_uuid_string():
     """user_id must be parseable as a UUID."""
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        resp = await client.post(
-            "/auth/verify", json={"email": "test@example.com", "code": "000000"}
-        )
+        resp = await client.post("/auth/verify", json={"email": "test@example.com", "code": "000000"})
     data = resp.json()
     # Should not raise ValueError
     uuid.UUID(data["user_id"])
@@ -108,9 +97,7 @@ async def test_verify_token_is_valid_jwt():
     """Token must be a valid JWT decodable with the dev secret."""
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        resp = await client.post(
-            "/auth/verify", json={"email": "test@example.com", "code": "000000"}
-        )
+        resp = await client.post("/auth/verify", json={"email": "test@example.com", "code": "000000"})
     data = resp.json()
     # JWT_SECRET not set in test env → falls back to "dev-secret"
     payload = jwt.decode(data["token"], "dev-secret", algorithms=["HS256"])
@@ -124,9 +111,7 @@ async def test_verify_jwt_has_exp_claim():
 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        resp = await client.post(
-            "/auth/verify", json={"email": "test@example.com", "code": "000000"}
-        )
+        resp = await client.post("/auth/verify", json={"email": "test@example.com", "code": "000000"})
     data = resp.json()
     payload = jwt.decode(data["token"], "dev-secret", algorithms=["HS256"])
     assert "exp" in payload
@@ -141,9 +126,7 @@ async def test_verify_any_code_succeeds():
     """Mock accepts any code string — no OTP validation in Phase 2."""
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
-        resp = await client.post(
-            "/auth/verify", json={"email": "test@example.com", "code": "wrong-code"}
-        )
+        resp = await client.post("/auth/verify", json={"email": "test@example.com", "code": "wrong-code"})
     assert resp.status_code == 200
 
 
@@ -186,9 +169,7 @@ async def test_send_code_prod_mode_returns_501():
         mp.setenv("SGA_AUTH_MODE", "prod")
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            resp = await client.post(
-                "/auth/send-code", json={"email": "test@example.com"}
-            )
+            resp = await client.post("/auth/send-code", json={"email": "test@example.com"})
     assert resp.status_code == 501
     assert "not yet implemented" in resp.json()["detail"].lower()
 
@@ -200,8 +181,6 @@ async def test_verify_prod_mode_returns_501():
         mp.setenv("SGA_AUTH_MODE", "prod")
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
-            resp = await client.post(
-                "/auth/verify", json={"email": "test@example.com", "code": "123456"}
-            )
+            resp = await client.post("/auth/verify", json={"email": "test@example.com", "code": "123456"})
     assert resp.status_code == 501
     assert "not yet implemented" in resp.json()["detail"].lower()

@@ -1,0 +1,19 @@
+target-version = "py313"
+line-length = 120
+src = ["src/backend", "src/ai", "contracts", "tests"]
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = [
+    "B008",    # function-call-in-default-argument — standard FastAPI pattern (Depends, Query)
+    "E402",    # module-import-not-at-top — intentional in scripts/tests after sys.path setup
+    "SIM117",  # multiple-with-statements — style preference, not a bug
+    "SIM108",  # if-else-block-instead-of-ternary — readability preference
+]
+
+[lint.per-file-ignores]
+"contracts/validate.py" = ["E501"]  # inline test data, long lines are fine
+"contracts/tool_schemas.py" = ["E501"]  # tool description strings
+"src/ai/**" = ["E501"]  # prompt templates and orchestrator, long strings by design
+"src/backend/api/saved.py" = ["E501"]  # long SQL query expressions
+"tests/**" = ["E501", "SIM115"]  # test data + NamedTemporaryFile pattern

@@ -3,6 +3,7 @@
 TDD RED phase — these tests define the contract the migration must satisfy.
 All tests use a temp DB file for isolation.
 """
+
 import json
 import sqlite3
 import tempfile
@@ -21,16 +22,23 @@ EXPECTED_GLOSSARY = 595
 
 EXPECTED_TABLES = {"recipes", "pcsv_mappings", "products", "substitutions", "glossary"}
 EXPECTED_INDEXES = {
-    "idx_recipes_cuisine", "idx_recipes_cooking_method", "idx_recipes_effort_level",
-    "idx_products_store", "idx_products_department", "idx_products_category",
+    "idx_recipes_cuisine",
+    "idx_recipes_cooking_method",
+    "idx_recipes_effort_level",
+    "idx_products_store",
+    "idx_products_department",
+    "idx_products_category",
     "idx_substitutions_ingredient",
-    "idx_glossary_en", "idx_glossary_zh", "idx_glossary_category",
+    "idx_glossary_en",
+    "idx_glossary_zh",
+    "idx_glossary_category",
 }
 
 
 def _run_migration(db_path: Path) -> Path:
     """Import and run migration, returning the db path."""
     from scripts.migrate_kb import migrate
+
     return migrate(db_path=db_path)
 
 
@@ -39,17 +47,22 @@ class TestMigrateImport(unittest.TestCase):
 
     def test_migrate_is_callable(self):
         from scripts.migrate_kb import migrate
+
         self.assertTrue(callable(migrate))
 
     def test_migrate_accepts_db_path(self):
         import inspect
+
         from scripts.migrate_kb import migrate
+
         sig = inspect.signature(migrate)
         self.assertIn("db_path", sig.parameters)
 
     def test_migrate_accepts_data_dir(self):
         import inspect
+
         from scripts.migrate_kb import migrate
+
         sig = inspect.signature(migrate)
         self.assertIn("data_dir", sig.parameters)
 
@@ -73,7 +86,6 @@ class MigrateTestBase(unittest.TestCase):
 
 
 class TestSchemaCreation(MigrateTestBase):
-
     def test_all_tables_exist(self):
         cur = self.conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")
         tables = {row["name"] for row in cur}
@@ -86,7 +98,6 @@ class TestSchemaCreation(MigrateTestBase):
 
 
 class TestIdempotency(unittest.TestCase):
-
     def test_run_twice_no_error_same_counts(self):
         tmp = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
         tmp.close()
@@ -94,19 +105,13 @@ class TestIdempotency(unittest.TestCase):
         try:
             _run_migration(db_path)
             conn1 = sqlite3.connect(db_path)
-            counts1 = {
-                t: conn1.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
-                for t in EXPECTED_TABLES
-            }
+            counts1 = {t: conn1.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0] for t in EXPECTED_TABLES}
             conn1.close()
 
             # Second run — should not raise and counts should match
             _run_migration(db_path)
             conn2 = sqlite3.connect(db_path)
-            counts2 = {
-                t: conn2.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
-                for t in EXPECTED_TABLES
-            }
+            counts2 = {t: conn2.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0] for t in EXPECTED_TABLES}
             conn2.close()
 
             self.assertEqual(counts1, counts2)
@@ -115,7 +120,6 @@ class TestIdempotency(unittest.TestCase):
 
 
 class TestRecipesTable(MigrateTestBase):
-
     def test_row_count(self):
         count = self.conn.execute("SELECT COUNT(*) FROM recipes").fetchone()[0]
         self.assertEqual(count, EXPECTED_RECIPES)
@@ -159,7 +163,6 @@ class TestRecipesTable(MigrateTestBase):
 
 
 class TestPcsvMappingsTable(MigrateTestBase):
-
     def test_row_count(self):
         count = self.conn.execute("SELECT COUNT(*) FROM pcsv_mappings").fetchone()[0]
         self.assertEqual(count, EXPECTED_PCSV)
@@ -181,7 +184,6 @@ class TestPcsvMappingsTable(MigrateTestBase):
 
 
 class TestProductsTable(MigrateTestBase):
-
     def test_row_count(self):
         count = self.conn.execute("SELECT COUNT(*) FROM products").fetchone()[0]
         self.assertEqual(count, EXPECTED_PRODUCTS)
@@ -196,7 +198,9 @@ class TestProductsTable(MigrateTestBase):
         self.assertEqual(count, 0, "Found NULL brand_name values — coercion failed")
 
     def test_department_populated(self):
-        count = self.conn.execute("SELECT COUNT(*) FROM products WHERE department = '' OR department IS NULL").fetchone()[0]
+        count = self.conn.execute(
+            "SELECT COUNT(*) FROM products WHERE department = '' OR department IS NULL"
+        ).fetchone()[0]
         self.assertEqual(count, 0, "Found products with empty or NULL department")
 
     def test_available_is_integer(self):
@@ -218,7 +222,6 @@ class TestProductsTable(MigrateTestBase):
 
 
 class TestSubstitutionsTable(MigrateTestBase):
-
     def test_row_count(self):
         count = self.conn.execute("SELECT COUNT(*) FROM substitutions").fetchone()[0]
         self.assertEqual(count, EXPECTED_SUBSTITUTIONS)
@@ -240,7 +243,6 @@ class TestSubstitutionsTable(MigrateTestBase):
 
 
 class TestGlossaryTable(MigrateTestBase):
-
     def test_row_count(self):
         count = self.conn.execute("SELECT COUNT(*) FROM glossary").fetchone()[0]
         self.assertEqual(count, EXPECTED_GLOSSARY)
@@ -275,6 +277,7 @@ class TestMigrateErrorRollback(unittest.TestCase):
         import sqlite3
         import tempfile
         import unittest.mock as mock
+
         from scripts.migrate_kb import migrate
 
         tmp = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
@@ -303,8 +306,10 @@ class TestMigrateErrorRollback(unittest.TestCase):
 
         boom = RuntimeError("simulated load failure")
 
-        with mock.patch("scripts.migrate_kb.sqlite3.connect", side_effect=patched_connect), \
-             mock.patch("scripts.migrate_kb._load_recipes", side_effect=boom):
+        with (
+            mock.patch("scripts.migrate_kb.sqlite3.connect", side_effect=patched_connect),
+            mock.patch("scripts.migrate_kb._load_recipes", side_effect=boom),
+        ):
             with self.assertRaises(RuntimeError):
                 migrate(db_path=db_path)
 
@@ -318,14 +323,14 @@ class TestMigrateErrorRollback(unittest.TestCase):
     def test_db_file_deleted_on_error(self):
         """The partial DB file must be removed when migration fails mid-way."""
         import unittest.mock as mock
+
         from scripts.migrate_kb import migrate
 
         tmp = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
         tmp.close()
         db_path = Path(tmp.name)
 
-        with mock.patch("scripts.migrate_kb._load_recipes",
-                        side_effect=RuntimeError("boom")):
+        with mock.patch("scripts.migrate_kb._load_recipes", side_effect=RuntimeError("boom")):
             with self.assertRaises(RuntimeError):
                 migrate(db_path=db_path)
 

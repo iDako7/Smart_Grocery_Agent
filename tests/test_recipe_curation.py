@@ -1,4 +1,5 @@
 """Tests for Phase 1a: Validate curated recipe fields in data/recipes.json."""
+
 import json
 import unittest
 from pathlib import Path
@@ -7,14 +8,24 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 RECIPES_PATH = DATA_DIR / "recipes.json"
 
 EXPECTED_KEYS = {
-    "id", "name", "name_zh", "source", "source_url", "cuisine",
-    "cooking_method", "time_minutes", "effort_level", "flavor_tags",
-    "serves", "ingredients", "instructions", "is_ai_generated",
+    "id",
+    "name",
+    "name_zh",
+    "source",
+    "source_url",
+    "cuisine",
+    "cooking_method",
+    "time_minutes",
+    "effort_level",
+    "flavor_tags",
+    "serves",
+    "ingredients",
+    "instructions",
+    "is_ai_generated",
 }
 
 
 class TestRecipeCuration(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         with open(RECIPES_PATH) as f:
@@ -38,7 +49,8 @@ class TestRecipeCuration(unittest.TestCase):
             t = r["time_minutes"]
             expected = "quick" if t <= 15 else ("medium" if t <= 45 else "long")
             self.assertEqual(
-                r["effort_level"], expected,
+                r["effort_level"],
+                expected,
                 f"{r['id']} time_minutes={t} should be {expected}, got {r['effort_level']}",
             )
 
@@ -55,7 +67,9 @@ class TestRecipeCuration(unittest.TestCase):
 
     def test_no_unexpected_fields(self):
         for r in self.recipes:
-            self.assertEqual(set(r.keys()), EXPECTED_KEYS, f"{r['id']} has unexpected keys: {set(r.keys()) - EXPECTED_KEYS}")
+            self.assertEqual(
+                set(r.keys()), EXPECTED_KEYS, f"{r['id']} has unexpected keys: {set(r.keys()) - EXPECTED_KEYS}"
+            )
 
     def test_existing_fields_intact(self):
         by_id = {r["id"]: r for r in self.recipes}

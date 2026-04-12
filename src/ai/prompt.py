@@ -24,11 +24,7 @@ def build_system_prompt(profile: UserProfile, screen: Screen | None = None) -> s
 
 
 def _build_screen_section(screen: Screen) -> str:
-    return (
-        f"## Current Screen\n"
-        f"The user is currently on the {screen} screen.\n"
-        f"Flow: Home → Clarify → Recipes → Grocery"
-    )
+    return f"## Current Screen\nThe user is currently on the {screen} screen.\nFlow: Home → Clarify → Recipes → Grocery"
 
 
 def _build_profile_section(profile: UserProfile) -> str:

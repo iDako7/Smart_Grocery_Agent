@@ -1,11 +1,10 @@
 """Conversation context manager — store and load turns with token budget."""
 
-from collections import deque
 import uuid
+from collections import deque
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncConnection
-
 from src.backend.db.tables import conversation_turns
 
 # Conservative: 1 token ≈ 2 chars.

@@ -2,8 +2,8 @@
 
 from dataclasses import dataclass, field
 
-from contracts.tool_schemas import PCSVResult, RecipeSummary
 from contracts.sse_events import GroceryStore
+from contracts.tool_schemas import PCSVResult, RecipeSummary
 
 
 @dataclass
