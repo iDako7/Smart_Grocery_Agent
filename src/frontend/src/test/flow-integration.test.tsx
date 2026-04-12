@@ -13,6 +13,19 @@ import { ScenarioProvider } from "@/context/scenario-context";
 import { SessionProvider } from "@/context/session-context";
 import { createMockChatService } from "./test-utils";
 
+// Prevent cross-test module pollution from api-client's module-level _tokenPromise.
+// When grocery-api.integration.test.ts runs before this file in the same worker,
+// its stubbed fetch can leave a cached auth token that causes real-sse to create a
+// session and set sessionId to non-null. With proper error handling, postGroceryList
+// must succeed (or sessionId must stay null) for navigation to proceed.
+vi.mock("@/services/api-client", async () => {
+  const actual = await vi.importActual("@/services/api-client");
+  return {
+    ...actual,
+    postGroceryList: vi.fn().mockResolvedValue([]),
+  };
+});
+
 function renderFullApp(options?: { chatService?: ReturnType<typeof createMockChatService>["service"]; initialPath?: string }) {
   return render(
     <ScenarioProvider>

@@ -32,7 +32,8 @@ export type ScreenAction =
   | { type: "receive_event"; event: SSEEvent }
   | { type: "complete"; status: "complete" | "partial"; reason?: string | null }
   | { type: "error"; message: string }
-  | { type: "reset" };
+  | { type: "reset" }
+  | { type: "set_grocery_list"; stores: GroceryStore[] };
 
 export type ScreenData = {
   pcsv: PCSVResult | null;
@@ -100,6 +101,17 @@ export function screenReducer(
     // -----------------------------------------------------------------------
     case "reset":
       return { state: "idle", data: { ...initialScreenData } };
+
+    // -----------------------------------------------------------------------
+    // set_grocery_list — any → same state, injects grocery REST result
+    // Accepted from any state: the grocery endpoint call happens outside
+    // the SSE state machine (user clicks "Build shopping list" post-chat).
+    // -----------------------------------------------------------------------
+    case "set_grocery_list":
+      return {
+        state,
+        data: { ...data, groceryList: action.stores },
+      };
 
     // -----------------------------------------------------------------------
     // error — transitions to error from loading or streaming;

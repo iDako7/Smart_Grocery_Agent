@@ -3,6 +3,9 @@
 // All endpoints talk to the FastAPI backend.
 // Auth header: Bearer JWT obtained from POST /auth/verify (dev credentials).
 
+import type { GroceryListItem } from "@/types/api";
+import type { GroceryStore } from "@/types/sse";
+
 // ---------------------------------------------------------------------------
 // Base URL
 // ---------------------------------------------------------------------------
@@ -67,4 +70,28 @@ export async function createSession(): Promise<{
   }
 
   return response.json() as Promise<{ session_id: string; created_at: string }>;
+}
+
+// ---------------------------------------------------------------------------
+// Grocery list generation
+// ---------------------------------------------------------------------------
+
+export async function postGroceryList(
+  sessionId: string,
+  items: GroceryListItem[]
+): Promise<GroceryStore[]> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/session/${sessionId}/grocery-list`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ items }),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to generate grocery list: ${response.status}`);
+  }
+  return response.json() as Promise<GroceryStore[]>;
 }

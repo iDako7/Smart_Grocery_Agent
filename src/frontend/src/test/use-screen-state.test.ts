@@ -853,7 +853,77 @@ describe("screenReducer — pure function contract", () => {
 });
 
 // ---------------------------------------------------------------------------
-// 10. TypeScript type exports (compile-time verification)
+// 10. set_grocery_list action (REST endpoint injection, outside SSE flow)
+// ---------------------------------------------------------------------------
+
+describe("screenReducer — set_grocery_list action", () => {
+  const makeStore = (name: string): GroceryStore => ({
+    store_name: name,
+    departments: [
+      {
+        name: "Produce",
+        items: [
+          {
+            id: `${name}-item-1`,
+            name: "Broccoli",
+            amount: "1 head",
+            recipe_context: "Stir-fry",
+            checked: false,
+          },
+        ],
+      },
+    ],
+  });
+
+  it("set_grocery_list populates groceryList from idle state", () => {
+    const stores = [makeStore("Costco"), makeStore("T&T")];
+    const state = { state: "idle" as ScreenState, data: { ...initialScreenData } };
+    const next = screenReducer(state, { type: "set_grocery_list", stores });
+    expect(next.state).toBe("idle");
+    expect(next.data.groceryList).toEqual(stores);
+  });
+
+  it("set_grocery_list preserves other data fields", () => {
+    const pcsv = makePcsv();
+    const recipe = makeRecipe("r001");
+    const existingData = {
+      ...initialScreenData,
+      pcsv,
+      recipes: [recipe],
+      explanation: "Here are your recipes.",
+    };
+    const state = { state: "streaming" as ScreenState, data: existingData };
+    const stores = [makeStore("Costco")];
+    const next = screenReducer(state, { type: "set_grocery_list", stores });
+    expect(next.data.groceryList).toEqual(stores);
+    expect(next.data.pcsv).toEqual(pcsv);
+    expect(next.data.recipes).toEqual([recipe]);
+    expect(next.data.explanation).toBe("Here are your recipes.");
+  });
+
+  it("set_grocery_list works from complete state", () => {
+    // Simulate: SSE chat finished → user clicks "Build shopping list" → REST call returns
+    const dataAfterChat = {
+      ...initialScreenData,
+      pcsv: makePcsv(),
+      recipes: [makeRecipe("r001"), makeRecipe("r002")],
+      explanation: "Here are your meals.",
+      completionStatus: "complete" as const,
+      completionReason: null,
+    };
+    const state = { state: "complete" as ScreenState, data: dataAfterChat };
+    const stores = [makeStore("Costco"), makeStore("Community Market")];
+    const next = screenReducer(state, { type: "set_grocery_list", stores });
+    expect(next.state).toBe("complete");
+    expect(next.data.groceryList).toEqual(stores);
+    expect(next.data.pcsv).toEqual(dataAfterChat.pcsv);
+    expect(next.data.recipes).toHaveLength(2);
+    expect(next.data.completionStatus).toBe("complete");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 11. TypeScript type exports (compile-time verification)
 // ---------------------------------------------------------------------------
 
 describe("useScreenState — exported types are usable", () => {
@@ -868,7 +938,7 @@ describe("useScreenState — exported types are usable", () => {
     expect(states).toHaveLength(5);
   });
 
-  it("ScreenAction type covers all 6 actions", () => {
+  it("ScreenAction type covers all 7 actions", () => {
     const actions: ScreenAction[] = [
       { type: "start_loading" },
       { type: "start_streaming" },
@@ -876,8 +946,9 @@ describe("useScreenState — exported types are usable", () => {
       { type: "complete", status: "complete" },
       { type: "error", message: "test" },
       { type: "reset" },
+      { type: "set_grocery_list", stores: [] },
     ];
-    expect(actions).toHaveLength(6);
+    expect(actions).toHaveLength(7);
   });
 
   it("ScreenData type has all 8 expected fields", () => {
