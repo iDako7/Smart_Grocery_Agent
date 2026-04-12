@@ -12,6 +12,8 @@ import { useSessionOptional } from "@/context/session-context";
 import type { RecipeCardData } from "@/mocks/scenarios";
 import type { RecipeSummary, EffortLevel } from "@/types/tools";
 
+const EMPTY_SET = new Set<string>();
+
 // Map RecipeSummary (from SSE events) → RecipeCardData (screen component props)
 function summaryToCardData(summary: RecipeSummary, index: number): RecipeCardData {
   const effortToTime: Record<EffortLevel, string> = {
@@ -250,7 +252,7 @@ export function RecipesScreen() {
             onSwap={() => handleSwap(idx, recipe.name)}
             onInfoClick={() => handleInfoClick(recipe)}
             onToggleBuy={(name) => handleToggleBuy(idx, name)}
-            excludedIngredients={excludedByCard.get(idx) ?? new Set()}
+            excludedIngredients={excludedByCard.get(idx) ?? EMPTY_SET}
           />
           {swappingIndex === idx && (
             <SwapPanel

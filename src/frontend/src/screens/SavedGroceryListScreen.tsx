@@ -23,6 +23,7 @@ export function SavedGroceryListScreen() {
   const [addCostco, setAddCostco] = useState("");
   const [addMarket, setAddMarket] = useState("");
   const [copyCount, setCopyCount] = useState(0);
+  const [copyFailed, setCopyFailed] = useState(false);
 
   function handleToggle(id: string) {
     setChecked((prev) => {
@@ -59,9 +60,11 @@ export function SavedGroceryListScreen() {
     const text = items.map((item) => `[ ] ${item.name}`).join("\n");
     try {
       await navigator.clipboard.writeText(text);
+      setCopyFailed(false);
       setCopyCount((c) => c + 1);
     } catch {
-      // Clipboard access denied — silently degrade
+      setCopyFailed(true);
+      setCopyCount((c) => c + 1);
     }
   }
 
@@ -93,7 +96,7 @@ export function SavedGroceryListScreen() {
 
       {/* Saved toast — only shown when arriving via the Save list button */}
       {(location.state as { justSaved?: boolean } | null)?.justSaved && <Toast message="Saved!" testId="saved-toast" />}
-      {copyCount > 0 && <Toast key={copyCount} message="Copied!" testId="copied-toast" />}
+      {copyCount > 0 && <Toast key={copyCount} message={copyFailed ? "Copy failed" : "Copied!"} testId="copied-toast" />}
 
       {/* Header card */}
       <div className="mx-3.5 my-2.5 px-5 py-[18px] bg-paper rounded-2xl relative overflow-hidden">
