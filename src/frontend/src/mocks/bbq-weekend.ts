@@ -25,6 +25,11 @@ export interface SwapAlternative {
   name: string;
   nameCjk: string;
   description: string;
+  flavorProfile: string;
+  cookingMethod: string;
+  time: string;
+  ingredients: Array<{ name: string; have: boolean }>;
+  infoFlavorTags: string[];
 }
 
 // ---------------------------------------------------------------------------
@@ -243,11 +248,30 @@ export const bbqWeekend: ScenarioShape = {
       name: "Asian Slaw",
       nameCjk: "亚式凉拌卷心菜",
       description: "Crunchy, tangy · 10 min",
+      flavorProfile: "Rice vinegar",
+      cookingMethod: "Raw",
+      time: "10 min",
+      ingredients: [
+        { name: "cabbage", have: false },
+        { name: "carrots", have: false },
+        { name: "sesame oil", have: true },
+        { name: "rice vinegar", have: false },
+      ],
+      infoFlavorTags: ["tangy", "crunchy", "fresh"],
     },
     {
       name: "Grilled Veggie Skewers",
       nameCjk: "烤蔬菜串",
       description: "Zucchini, pepper · 20 min",
+      flavorProfile: "Smoky",
+      cookingMethod: "Grill",
+      time: "20 min",
+      ingredients: [
+        { name: "zucchini", have: false },
+        { name: "bell pepper", have: false },
+        { name: "olive oil", have: false },
+      ],
+      infoFlavorTags: ["smoky", "savoury", "light"],
     },
   ],
 

@@ -385,9 +385,16 @@ describe("RecipeCard", () => {
     expect(screen.getByText("Korean BBQ")).toBeInTheDocument();
   });
 
-  it("renders CJK name", () => {
-    render(<RecipeCard {...defaultProps} />);
+  it("renders CJK name when lang=zh", () => {
+    // CJK name is only rendered when lang prop is "zh".
+    render(<RecipeCard {...defaultProps} lang="zh" />);
     expect(screen.getByText("韩式烤肉")).toBeInTheDocument();
+  });
+
+  it("does not render CJK name when lang=en (default)", () => {
+    // Default lang is "en" — CJK name should not appear in the DOM.
+    render(<RecipeCard {...defaultProps} />);
+    expect(screen.queryByText("韩式烤肉")).not.toBeInTheDocument();
   });
 
   it("renders DISH ONE label for index 0", () => {

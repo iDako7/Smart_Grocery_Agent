@@ -1,18 +1,13 @@
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router";
-import { ChatInput } from "@/components/chat-input";
 import { useScenario } from "@/context/scenario-context";
-import { useSessionOptional } from "@/context/session-context";
 
 export function SavedRecipeScreen() {
   const navigate = useNavigate();
   const { scenario } = useScenario();
   const { name, nameCjk, deckText, cookingMethodPill, sourcePill, recipeText: RECIPE_TEXT } =
     scenario.savedRecipe;
-  const session = useSessionOptional();
-  const sendMessage = session?.sendMessage ?? (() => {});
-  const navigateToScreen = session?.navigateToScreen;
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(RECIPE_TEXT);
   const [savedText, setSavedText] = useState(RECIPE_TEXT);
@@ -109,16 +104,6 @@ export function SavedRecipeScreen() {
           </>
         )}
       </div>
-
-      {/* Chat input */}
-      <ChatInput
-        placeholder="Adjust this recipe for 8 people..."
-        hint="Chat to modify this recipe"
-        onSend={(text) => {
-          navigateToScreen?.("saved_recipe");
-          sendMessage(text);
-        }}
-      />
 
       {/* Footer */}
       <div className="text-center px-4 pt-3 pb-[22px] text-[10px] text-ink-3 font-medium mt-auto">

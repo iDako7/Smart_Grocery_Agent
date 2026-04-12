@@ -30,6 +30,9 @@ export function GroceryScreen() {
       )
     : scenario.groceryItems;
   const { eyebrow, deckText } = scenario.groceryHeader;
+  // Bilingual toggle infrastructure — lang state will control CJK name visibility
+  // once grocery items include name_zh fields from the KB. Currently a UI stub.
+  const [lang, setLang] = useState<"en" | "zh">("en");
   const [checked, setChecked] = useState<Set<string>>(new Set());
 
   function handleToggle(id: string) {
@@ -59,7 +62,16 @@ export function GroceryScreen() {
         >
           <ArrowLeft size={20} />
         </button>
-        <span className="text-[11px] font-semibold text-ink-2">SGA</span>
+        <button
+          type="button"
+          aria-label="Toggle language"
+          onClick={() => setLang((l) => (l === "en" ? "zh" : "en"))}
+          className="bg-paper px-[9px] py-[3px] rounded-full text-[10px] flex gap-1.5 items-center border-none cursor-pointer"
+        >
+          {lang === "en" ? <b className="text-ink">EN</b> : <span className="text-ink-3 font-normal">EN</span>}
+          <span className="text-ink-3 font-normal">·</span>
+          {lang === "zh" ? <b className="text-ink">中</b> : <span className="text-ink-3 font-normal">中</span>}
+        </button>
         <button
           type="button"
           aria-label="Cancel"

@@ -12,6 +12,8 @@ import { useSessionOptional } from "@/context/session-context";
 import type { RecipeCardData } from "@/mocks/scenarios";
 import type { RecipeSummary, EffortLevel } from "@/types/tools";
 
+const EMPTY_SET = new Set<string>();
+
 // Map RecipeSummary (from SSE events) → RecipeCardData (screen component props)
 function summaryToCardData(summary: RecipeSummary, index: number): RecipeCardData {
   const effortToTime: Record<EffortLevel, string> = {
@@ -60,11 +62,11 @@ export function RecipesScreen() {
       index: 100 + i,
       name: alt.name,
       nameCjk: alt.nameCjk,
-      flavorProfile: "",
-      cookingMethod: "",
-      time: "",
-      ingredients: [],
-      infoFlavorTags: [],
+      flavorProfile: alt.flavorProfile,
+      cookingMethod: alt.cookingMethod,
+      time: alt.time,
+      ingredients: alt.ingredients,
+      infoFlavorTags: alt.infoFlavorTags,
       infoDescription: alt.description,
     })),
     [scenario.swapAlternatives]
@@ -84,6 +86,18 @@ export function RecipesScreen() {
   const [infoOpen, setInfoOpen] = useState(false);
   const [infoRecipe, setInfoRecipe] = useState<RecipeCardData | null>(null);
   const [lang, setLang] = useState<"en" | "zh">("en");
+  const [excludedByCard, setExcludedByCard] = useState<Map<number, Set<string>>>(new Map());
+
+  function handleToggleBuy(cardIndex: number, ingredientName: string) {
+    setExcludedByCard((prev) => {
+      const next = new Map(prev);
+      const cardSet = new Set(next.get(cardIndex) || []);
+      if (cardSet.has(ingredientName)) cardSet.delete(ingredientName);
+      else cardSet.add(ingredientName);
+      next.set(cardIndex, cardSet);
+      return next;
+    });
+  }
 
   function handleRetry() {
     sendMessage("retry");
@@ -110,6 +124,11 @@ export function RecipesScreen() {
       ...prev.filter((_, i) => i !== altIndex),
       displaced,
     ]);
+    setExcludedByCard((prev) => {
+      const next = new Map(prev);
+      next.delete(swappingIndex);
+      return next;
+    });
     setSwappingIndex(null);
   }
 
@@ -219,11 +238,12 @@ export function RecipesScreen() {
 
       {/* Recipe cards + swap panel interleaved */}
       {displayedRecipes.map((recipe, idx) => (
-        <div key={`recipe-${recipe.name}`}>
+        <div key={`recipe-${idx}`}>
           <RecipeCard
             index={idx}
             name={recipe.name}
             nameCjk={recipe.nameCjk}
+            lang={lang}
             flavorProfile={recipe.flavorProfile}
             cookingMethod={recipe.cookingMethod}
             time={recipe.time}
@@ -231,6 +251,8 @@ export function RecipesScreen() {
             isSwapping={swappingIndex === idx}
             onSwap={() => handleSwap(idx, recipe.name)}
             onInfoClick={() => handleInfoClick(recipe)}
+            onToggleBuy={(name) => handleToggleBuy(idx, name)}
+            excludedIngredients={excludedByCard.get(idx) ?? EMPTY_SET}
           />
           {swappingIndex === idx && (
             <SwapPanel

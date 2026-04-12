@@ -95,11 +95,28 @@ export const weeknightChicken: ScenarioShape = {
       name: "Steamed Rice",
       nameCjk: "白米饭",
       description: "Plain · pairs with wings · 20 min",
+      flavorProfile: "Neutral",
+      cookingMethod: "Simmer",
+      time: "20 min",
+      ingredients: [
+        { name: "jasmine rice", have: false },
+        { name: "water", have: true },
+      ],
+      infoFlavorTags: ["plain", "comforting"],
     },
     {
       name: "Macaroni Salad",
       nameCjk: "通心粉沙拉",
       description: "Cold side · 15 min",
+      flavorProfile: "Creamy",
+      cookingMethod: "Boil + chill",
+      time: "15 min",
+      ingredients: [
+        { name: "macaroni", have: false },
+        { name: "mayo", have: false },
+        { name: "celery", have: false },
+      ],
+      infoFlavorTags: ["creamy", "cold", "hearty"],
     },
   ],
 
