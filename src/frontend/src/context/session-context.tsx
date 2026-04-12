@@ -120,6 +120,9 @@ export function SessionProvider({
   // Store the cancel function from the last chatService call
   const cancelRef = useRef<(() => void) | null>(null);
 
+  // Accumulates the explanation text during streaming; written to assistant turn on done.
+  const explanationRef = useRef<string>("");
+
   // H2: Cancel stale SSE events when chatService changes (scenario switch).
   // Old setTimeout chains from the previous mock SSE service would otherwise
   // fire callbacks into the new scenario's state.
@@ -170,10 +173,18 @@ export function SessionProvider({
             streamingStarted = true;
             dispatch({ type: "start_streaming" });
           }
+          if (event.event_type === "explanation") {
+            explanationRef.current = event.text;
+          }
           dispatch({ type: "receive_event", event });
         },
         // onDone
         (status: "complete" | "partial", reason: string | null) => {
+          // Capture explanation before resetting so a stale onDone fired
+          // after resetSession() can't corrupt the next conversation.
+          const assistantContent = explanationRef.current;
+          explanationRef.current = "";
+
           // Ensure we enter streaming before completing, otherwise
           // the complete action is silently dropped by the reducer.
           if (!streamingStarted) {
@@ -182,13 +193,10 @@ export function SessionProvider({
           }
           dispatch({ type: "complete", status, reason: reason ?? undefined });
 
-          // Add assistant turn to history
-          // TODO(Stage 4): Populate assistant content from screenData summary.
-          // Content lives in screenData (pcsv, recipes, etc.), not as a flat string.
-          // At Stage 4, serialize a summary for backend context injection.
+          // Add assistant turn to history using the captured explanation text.
           const assistantTurn: ConversationTurn = {
             role: "assistant",
-            content: "",
+            content: assistantContent,
             timestamp: new Date().toISOString(),
           };
           setConversationHistory((prev) => [...prev, assistantTurn]);
