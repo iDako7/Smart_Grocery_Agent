@@ -65,6 +65,7 @@ def _get_client() -> AsyncOpenAI:
         _openai_client = AsyncOpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key)
     return _openai_client
 
+
 # Tool name → (Pydantic input model, handler requires kb or pg)
 _TOOL_REGISTRY: dict[str, tuple[type, str]] = {
     "analyze_pcsv": (AnalyzePcsvInput, "kb"),
@@ -83,15 +84,20 @@ async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens):
     for attempt in range(LLM_MAX_RETRIES + 1):
         try:
             return await client.chat.completions.create(
-                model=model, messages=messages, tools=tools, max_tokens=max_tokens,
+                model=model,
+                messages=messages,
+                tools=tools,
+                max_tokens=max_tokens,
             )
         except _RETRYABLE_ERRORS as e:
             last_error = e
             if attempt < LLM_MAX_RETRIES:
-                delay = LLM_BACKOFF_BASE * (2 ** attempt)
+                delay = LLM_BACKOFF_BASE * (2**attempt)
                 logger.warning(
                     "LLM call failed (attempt %d), retrying in %.1fs: %s",
-                    attempt + 1, delay, e,
+                    attempt + 1,
+                    delay,
+                    e,
                 )
                 await asyncio.sleep(delay)
     raise last_error
@@ -147,7 +153,11 @@ async def _dispatch_tool(
     else:
         result_dict = result
 
-    return result_dict, ToolCall(name=name, input=parsed.model_dump(), result=result_dict if isinstance(result_dict, dict) else {"items": result_dict})
+    return result_dict, ToolCall(
+        name=name,
+        input=parsed.model_dump(),
+        result=result_dict if isinstance(result_dict, dict) else {"items": result_dict},
+    )
 
 
 async def run_agent(
@@ -176,7 +186,11 @@ async def run_agent(
 
     for iteration in range(MAX_ITERATIONS):
         response = await _llm_call_with_retry(
-            client, model=MODEL, messages=messages, tools=TOOLS, max_tokens=4096,
+            client,
+            model=MODEL,
+            messages=messages,
+            tools=TOOLS,
+            max_tokens=4096,
         )
 
         choice = response.choices[0]
@@ -209,11 +223,13 @@ async def run_agent(
                 recipe_results = [RecipeSummary.model_validate(r) if isinstance(r, dict) else r for r in result_dict]
 
             content = json.dumps(result_dict, ensure_ascii=False, default=str)
-            tool_messages.append({
-                "role": "tool",
-                "tool_call_id": tc.id,
-                "content": content,
-            })
+            tool_messages.append(
+                {
+                    "role": "tool",
+                    "tool_call_id": tc.id,
+                    "content": content,
+                }
+            )
 
         messages.append(message.model_dump())
         messages.extend(tool_messages)

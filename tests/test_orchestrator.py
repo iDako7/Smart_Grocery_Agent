@@ -1,13 +1,11 @@
 """Tests for orchestrator — mock AsyncOpenAI, real tool handlers."""
 
 import json
-import uuid
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import openai
 import pytest
 import pytest_asyncio
-
 from src.ai.kb import get_kb
 from src.ai.orchestrator import run_agent
 
@@ -23,14 +21,22 @@ def _make_response(content=None, tool_calls=None, finish_reason="stop"):
     message = MagicMock()
     message.content = content
     message.tool_calls = tool_calls or []
-    message.model_dump = MagicMock(return_value={
-        "role": "assistant",
-        "content": content,
-        "tool_calls": [
-            {"id": tc.id, "type": "function", "function": {"name": tc.function.name, "arguments": tc.function.arguments}}
-            for tc in (tool_calls or [])
-        ] if tool_calls else None,
-    })
+    message.model_dump = MagicMock(
+        return_value={
+            "role": "assistant",
+            "content": content,
+            "tool_calls": [
+                {
+                    "id": tc.id,
+                    "type": "function",
+                    "function": {"name": tc.function.name, "arguments": tc.function.arguments},
+                }
+                for tc in (tool_calls or [])
+            ]
+            if tool_calls
+            else None,
+        }
+    )
     choice = MagicMock()
     choice.message = message
     choice.finish_reason = finish_reason
@@ -69,9 +75,7 @@ async def test_tool_call_then_response(kb, seeded_user, db):
     response_final = _make_response(content="Your protein is low!")
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_with_tool, response_final]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_with_tool, response_final])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("I have chicken and rice", kb, db, seeded_user)
@@ -86,9 +90,7 @@ async def test_tool_call_then_response(kb, seeded_user, db):
 async def test_max_iterations_returns_partial(kb, seeded_user, db):
     """If LLM keeps calling tools, we stop at MAX_ITERATIONS."""
     tool_call = _make_tool_call("analyze_pcsv", {"ingredients": ["chicken"]})
-    response_with_tool = _make_response(
-        content="still thinking...", tool_calls=[tool_call], finish_reason="tool_calls"
-    )
+    response_with_tool = _make_response(content="still thinking...", tool_calls=[tool_call], finish_reason="tool_calls")
 
     mock_client = AsyncMock()
     mock_client.chat.completions.create = AsyncMock(return_value=response_with_tool)
@@ -108,9 +110,7 @@ async def test_unknown_tool_returns_error(kb, seeded_user, db):
     response_final = _make_response(content="I see there was an error.")
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_with_tool, response_final]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_with_tool, response_final])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("test", kb, db, seeded_user)
@@ -131,9 +131,7 @@ async def test_malformed_args_returns_error(kb, seeded_user, db):
     response_final = _make_response(content="Let me try again.")
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_with_tool, response_final]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_with_tool, response_final])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("test", kb, db, seeded_user)
@@ -149,9 +147,7 @@ async def test_search_recipes_tool_call(kb, seeded_user, db):
     response_final = _make_response(content="Here are some recipes!")
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_with_tool, response_final]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_with_tool, response_final])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("Find me chicken recipes", kb, db, seeded_user)
@@ -172,7 +168,7 @@ async def test_history_passed_to_llm(kb, seeded_user, db):
     ]
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
-        result = await run_agent("What else?", kb, db, seeded_user, history=history)
+        await run_agent("What else?", kb, db, seeded_user, history=history)
 
     # Verify history was included in the call
     call_args = mock_client.chat.completions.create.call_args
@@ -186,19 +182,21 @@ async def test_history_passed_to_llm(kb, seeded_user, db):
 # Retry-with-backoff tests
 # ---------------------------------------------------------------------------
 
-@pytest.mark.parametrize("exc_class,kwargs", [
-    (openai.APIConnectionError, {"request": MagicMock()}),
-    (openai.APITimeoutError, {"request": MagicMock()}),
-    (openai.RateLimitError, {"message": "rate limit", "response": MagicMock(status_code=429), "body": None}),
-    (openai.InternalServerError, {"message": "server error", "response": MagicMock(status_code=500), "body": None}),
-])
+
+@pytest.mark.parametrize(
+    "exc_class,kwargs",
+    [
+        (openai.APIConnectionError, {"request": MagicMock()}),
+        (openai.APITimeoutError, {"request": MagicMock()}),
+        (openai.RateLimitError, {"message": "rate limit", "response": MagicMock(status_code=429), "body": None}),
+        (openai.InternalServerError, {"message": "server error", "response": MagicMock(status_code=500), "body": None}),
+    ],
+)
 async def test_retryable_error_types(exc_class, kwargs, kb, seeded_user, db):
     """All 4 retryable error types are retried once, then succeed."""
     mock_response = _make_response(content="Recovered after retry!")
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[exc_class(**kwargs), mock_response]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[exc_class(**kwargs), mock_response])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         with patch("asyncio.sleep", new_callable=AsyncMock) as mock_sleep:

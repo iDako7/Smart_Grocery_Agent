@@ -5,12 +5,11 @@
 
 from __future__ import annotations
 
-from typing import Annotated, Literal, Union
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field
 
 from contracts.tool_schemas import PCSVResult, RecipeSummary
-
 
 # ---------------------------------------------------------------------------
 # Grocery list structure (Store > Department > Item)
@@ -22,12 +21,8 @@ class GroceryItem(BaseModel):
     id: str = Field(description="Stable identifier for check/add/remove operations")
     name: str
     amount: str = ""
-    recipe_context: str = Field(
-        default="", description="What recipe this is for, e.g. 'for Korean BBQ pork belly'"
-    )
-    checked: bool = Field(
-        default=False, description="Persisted state for saved grocery lists"
-    )
+    recipe_context: str = Field(default="", description="What recipe this is for, e.g. 'for Korean BBQ pork belly'")
+    checked: bool = Field(default=False, description="Persisted state for saved grocery lists")
 
 
 class GroceryDepartment(BaseModel):
@@ -91,14 +86,6 @@ class DoneEvent(BaseModel):
 # ---------------------------------------------------------------------------
 
 SSEEvent = Annotated[
-    Union[
-        ThinkingEvent,
-        PcsvUpdateEvent,
-        RecipeCardEvent,
-        ExplanationEvent,
-        GroceryListEvent,
-        ErrorEvent,
-        DoneEvent,
-    ],
+    ThinkingEvent | PcsvUpdateEvent | RecipeCardEvent | ExplanationEvent | GroceryListEvent | ErrorEvent | DoneEvent,
     Field(discriminator="event_type"),
 ]

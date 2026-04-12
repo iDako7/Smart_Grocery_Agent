@@ -1,7 +1,6 @@
 """Tests for get_substitutions tool against real SQLite KB."""
 
 import pytest_asyncio
-
 from contracts.tool_schemas import GetSubstitutionsInput
 from src.ai.kb import get_kb
 from src.ai.tools.get_substitutions import get_substitutions
@@ -20,9 +19,7 @@ async def test_finds_substitutions(kb):
 
 
 async def test_reason_filter_sorts_matching_first(kb):
-    result = await get_substitutions(
-        kb, GetSubstitutionsInput(ingredient="fish sauce", reason="dietary")
-    )
+    result = await get_substitutions(kb, GetSubstitutionsInput(ingredient="fish sauce", reason="dietary"))
     assert all(hasattr(r, "match_quality") for r in result)
 
 

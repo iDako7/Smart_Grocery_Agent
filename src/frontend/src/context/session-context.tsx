@@ -109,13 +109,15 @@ export function SessionProvider({
   // Refs for values that should be readable inside stable callbacks without
   // causing those callbacks to be re-created on every render.
   const stateRef = useRef<ScreenState>(state);
-  stateRef.current = state;
-
   const currentScreenRef = useRef<Screen>(currentScreen);
-  currentScreenRef.current = currentScreen;
-
   const chatServiceRef = useRef<ChatServiceHandler>(chatService);
-  chatServiceRef.current = chatService;
+
+  // Sync refs after render — callbacks only read these after commit phase.
+  useEffect(() => {
+    stateRef.current = state;
+    currentScreenRef.current = currentScreen;
+    chatServiceRef.current = chatService;
+  });
 
   // Store the cancel function from the last chatService call
   const cancelRef = useRef<(() => void) | null>(null);

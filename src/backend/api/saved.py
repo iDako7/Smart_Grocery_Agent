@@ -2,10 +2,6 @@
 
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select, text
-from sqlalchemy.ext.asyncio import AsyncConnection
-
 from contracts.api_types import (
     SavedGroceryList,
     SavedGroceryListSummary,
@@ -20,6 +16,9 @@ from contracts.api_types import (
     UpdateMealPlanRequest,
     UpdateSavedRecipeRequest,
 )
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select, text
+from sqlalchemy.ext.asyncio import AsyncConnection
 from src.backend.auth import get_current_user_id
 from src.backend.db.engine import get_db
 from src.backend.db.tables import (
@@ -44,9 +43,9 @@ async def create_meal_plan(
     conn: AsyncConnection = Depends(get_db),
 ) -> SavedMealPlan:
     # Get recipes from session state
-    sess_row = (await conn.execute(
-        sessions.select().where(sessions.c.id == body.session_id, sessions.c.user_id == user_id)
-    )).first()
+    sess_row = (
+        await conn.execute(sessions.select().where(sessions.c.id == body.session_id, sessions.c.user_id == user_id))
+    ).first()
     recipes_data = (sess_row.state_snapshot or {}).get("recipes", []) if sess_row else []
 
     pid = uuid.uuid4()
@@ -57,7 +56,9 @@ async def create_meal_plan(
     )
     row = result.first()
     await conn.commit()
-    return SavedMealPlan(id=str(pid), name=body.name, recipes=recipes_data, created_at=row.created_at, updated_at=row.updated_at)
+    return SavedMealPlan(
+        id=str(pid), name=body.name, recipes=recipes_data, created_at=row.created_at, updated_at=row.updated_at
+    )
 
 
 @router.get("/meal-plans")
@@ -66,16 +67,23 @@ async def list_meal_plans(
     conn: AsyncConnection = Depends(get_db),
 ) -> list[SavedMealPlanSummary]:
     result = await conn.execute(
-        select(saved_meal_plans.c.id, saved_meal_plans.c.name, saved_meal_plans.c.recipes,
-               saved_meal_plans.c.created_at, saved_meal_plans.c.updated_at)
+        select(
+            saved_meal_plans.c.id,
+            saved_meal_plans.c.name,
+            saved_meal_plans.c.recipes,
+            saved_meal_plans.c.created_at,
+            saved_meal_plans.c.updated_at,
+        )
         .where(saved_meal_plans.c.user_id == user_id)
         .order_by(saved_meal_plans.c.updated_at.desc())
     )
     return [
         SavedMealPlanSummary(
-            id=str(r.id), name=r.name,
+            id=str(r.id),
+            name=r.name,
             recipe_count=len(r.recipes) if r.recipes else 0,
-            created_at=r.created_at, updated_at=r.updated_at,
+            created_at=r.created_at,
+            updated_at=r.updated_at,
         )
         for r in result.fetchall()
     ]
@@ -87,12 +95,16 @@ async def get_meal_plan(
     user_id: uuid.UUID = Depends(get_current_user_id),
     conn: AsyncConnection = Depends(get_db),
 ) -> SavedMealPlan:
-    row = (await conn.execute(
-        saved_meal_plans.select().where(saved_meal_plans.c.id == plan_id, saved_meal_plans.c.user_id == user_id)
-    )).first()
+    row = (
+        await conn.execute(
+            saved_meal_plans.select().where(saved_meal_plans.c.id == plan_id, saved_meal_plans.c.user_id == user_id)
+        )
+    ).first()
     if not row:
         raise HTTPException(404, "Meal plan not found")
-    return SavedMealPlan(id=str(row.id), name=row.name, recipes=row.recipes or [], created_at=row.created_at, updated_at=row.updated_at)
+    return SavedMealPlan(
+        id=str(row.id), name=row.name, recipes=row.recipes or [], created_at=row.created_at, updated_at=row.updated_at
+    )
 
 
 @router.put("/meal-plans/{plan_id}")
@@ -147,7 +159,9 @@ async def save_recipe(
     result = await conn.execute(
         saved_recipes.insert()
         .values(
-            id=rid, user_id=user_id, recipe_id=body.recipe_id,
+            id=rid,
+            user_id=user_id,
+            recipe_id=body.recipe_id,
             recipe_snapshot=body.recipe_snapshot.model_dump(),
             notes=body.notes or "",
         )
@@ -155,7 +169,13 @@ async def save_recipe(
     )
     row = result.first()
     await conn.commit()
-    return SavedRecipe(id=str(rid), recipe_snapshot=body.recipe_snapshot, notes=body.notes or "", created_at=row.created_at, updated_at=row.updated_at)
+    return SavedRecipe(
+        id=str(rid),
+        recipe_snapshot=body.recipe_snapshot,
+        notes=body.notes or "",
+        created_at=row.created_at,
+        updated_at=row.updated_at,
+    )
 
 
 @router.get("/recipes")
@@ -164,8 +184,9 @@ async def list_recipes(
     conn: AsyncConnection = Depends(get_db),
 ) -> list[SavedRecipeSummary]:
     result = await conn.execute(
-        select(saved_recipes.c.id, saved_recipes.c.recipe_snapshot,
-               saved_recipes.c.created_at, saved_recipes.c.updated_at)
+        select(
+            saved_recipes.c.id, saved_recipes.c.recipe_snapshot, saved_recipes.c.created_at, saved_recipes.c.updated_at
+        )
         .where(saved_recipes.c.user_id == user_id)
         .order_by(saved_recipes.c.updated_at.desc())
     )
@@ -174,7 +195,8 @@ async def list_recipes(
             id=str(r.id),
             recipe_name=r.recipe_snapshot.get("name", "") if r.recipe_snapshot else "",
             recipe_name_zh=r.recipe_snapshot.get("name_zh", "") if r.recipe_snapshot else "",
-            created_at=r.created_at, updated_at=r.updated_at,
+            created_at=r.created_at,
+            updated_at=r.updated_at,
         )
         for r in result.fetchall()
     ]
@@ -186,12 +208,20 @@ async def get_saved_recipe(
     user_id: uuid.UUID = Depends(get_current_user_id),
     conn: AsyncConnection = Depends(get_db),
 ) -> SavedRecipe:
-    row = (await conn.execute(
-        saved_recipes.select().where(saved_recipes.c.id == recipe_id, saved_recipes.c.user_id == user_id)
-    )).first()
+    row = (
+        await conn.execute(
+            saved_recipes.select().where(saved_recipes.c.id == recipe_id, saved_recipes.c.user_id == user_id)
+        )
+    ).first()
     if not row:
         raise HTTPException(404, "Recipe not found")
-    return SavedRecipe(id=str(row.id), recipe_snapshot=row.recipe_snapshot, notes=row.notes or "", created_at=row.created_at, updated_at=row.updated_at)
+    return SavedRecipe(
+        id=str(row.id),
+        recipe_snapshot=row.recipe_snapshot,
+        notes=row.notes or "",
+        created_at=row.created_at,
+        updated_at=row.updated_at,
+    )
 
 
 @router.put("/recipes/{recipe_id}")
@@ -242,9 +272,9 @@ async def create_grocery_list(
     user_id: uuid.UUID = Depends(get_current_user_id),
     conn: AsyncConnection = Depends(get_db),
 ) -> SavedGroceryList:
-    sess_row = (await conn.execute(
-        sessions.select().where(sessions.c.id == body.session_id, sessions.c.user_id == user_id)
-    )).first()
+    sess_row = (
+        await conn.execute(sessions.select().where(sessions.c.id == body.session_id, sessions.c.user_id == user_id))
+    ).first()
     stores_data = (sess_row.state_snapshot or {}).get("grocery_list", []) if sess_row else []
 
     gid = uuid.uuid4()
@@ -255,7 +285,9 @@ async def create_grocery_list(
     )
     row = result.first()
     await conn.commit()
-    return SavedGroceryList(id=str(gid), name=body.name, stores=stores_data, created_at=row.created_at, updated_at=row.updated_at)
+    return SavedGroceryList(
+        id=str(gid), name=body.name, stores=stores_data, created_at=row.created_at, updated_at=row.updated_at
+    )
 
 
 @router.get("/grocery-lists")
@@ -264,16 +296,27 @@ async def list_grocery_lists(
     conn: AsyncConnection = Depends(get_db),
 ) -> list[SavedGroceryListSummary]:
     result = await conn.execute(
-        select(saved_grocery_lists.c.id, saved_grocery_lists.c.name, saved_grocery_lists.c.stores,
-               saved_grocery_lists.c.created_at, saved_grocery_lists.c.updated_at)
+        select(
+            saved_grocery_lists.c.id,
+            saved_grocery_lists.c.name,
+            saved_grocery_lists.c.stores,
+            saved_grocery_lists.c.created_at,
+            saved_grocery_lists.c.updated_at,
+        )
         .where(saved_grocery_lists.c.user_id == user_id)
         .order_by(saved_grocery_lists.c.updated_at.desc())
     )
     return [
         SavedGroceryListSummary(
-            id=str(r.id), name=r.name,
-            item_count=sum(len(d.get("items", [])) for s in (r.stores or []) for d in (s.get("departments", []) if isinstance(s, dict) else [])),
-            created_at=r.created_at, updated_at=r.updated_at,
+            id=str(r.id),
+            name=r.name,
+            item_count=sum(
+                len(d.get("items", []))
+                for s in (r.stores or [])
+                for d in (s.get("departments", []) if isinstance(s, dict) else [])
+            ),
+            created_at=r.created_at,
+            updated_at=r.updated_at,
         )
         for r in result.fetchall()
     ]
@@ -285,12 +328,18 @@ async def get_grocery_list(
     user_id: uuid.UUID = Depends(get_current_user_id),
     conn: AsyncConnection = Depends(get_db),
 ) -> SavedGroceryList:
-    row = (await conn.execute(
-        saved_grocery_lists.select().where(saved_grocery_lists.c.id == list_id, saved_grocery_lists.c.user_id == user_id)
-    )).first()
+    row = (
+        await conn.execute(
+            saved_grocery_lists.select().where(
+                saved_grocery_lists.c.id == list_id, saved_grocery_lists.c.user_id == user_id
+            )
+        )
+    ).first()
     if not row:
         raise HTTPException(404, "Grocery list not found")
-    return SavedGroceryList(id=str(row.id), name=row.name, stores=row.stores or [], created_at=row.created_at, updated_at=row.updated_at)
+    return SavedGroceryList(
+        id=str(row.id), name=row.name, stores=row.stores or [], created_at=row.created_at, updated_at=row.updated_at
+    )
 
 
 @router.put("/grocery-lists/{list_id}")
@@ -323,7 +372,9 @@ async def delete_grocery_list(
     conn: AsyncConnection = Depends(get_db),
 ) -> None:
     result = await conn.execute(
-        saved_grocery_lists.delete().where(saved_grocery_lists.c.id == list_id, saved_grocery_lists.c.user_id == user_id)
+        saved_grocery_lists.delete().where(
+            saved_grocery_lists.c.id == list_id, saved_grocery_lists.c.user_id == user_id
+        )
     )
     if result.rowcount == 0:
         raise HTTPException(404, "Grocery list not found")

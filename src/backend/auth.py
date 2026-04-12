@@ -4,8 +4,7 @@ import os
 import uuid
 
 import jwt
-from fastapi import Depends, HTTPException, Request
-
+from fastapi import HTTPException, Request
 
 DEV_USER_ID = uuid.UUID("00000000-0000-0000-0000-000000000001")
 JWT_ALGORITHM = "HS256"
@@ -39,10 +38,10 @@ async def get_current_user_id(request: Request) -> uuid.UUID:
 
     try:
         payload = jwt.decode(token, secret, algorithms=[JWT_ALGORITHM])
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+    except jwt.ExpiredSignatureError as err:
+        raise HTTPException(status_code=401, detail="Token expired") from err
+    except jwt.InvalidTokenError as err:
+        raise HTTPException(status_code=401, detail="Invalid token") from err
 
     user_id_str = payload.get("sub")
     if not user_id_str:
@@ -50,5 +49,5 @@ async def get_current_user_id(request: Request) -> uuid.UUID:
 
     try:
         return uuid.UUID(user_id_str)
-    except ValueError:
-        raise HTTPException(status_code=401, detail="Invalid user ID in token")
+    except ValueError as err:
+        raise HTTPException(status_code=401, detail="Invalid user ID in token") from err

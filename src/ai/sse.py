@@ -9,7 +9,6 @@ from collections.abc import AsyncIterator
 
 from contracts.sse_events import (
     DoneEvent,
-    ErrorEvent,
     ExplanationEvent,
     GroceryListEvent,
     PcsvUpdateEvent,

@@ -5,12 +5,11 @@ import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
-
 from src.backend.api.auth import router as auth_router
 from src.backend.api.grocery import router as grocery_router
 from src.backend.api.saved import router as saved_router
 from src.backend.api.sessions import router as sessions_router
+from starlette.middleware.cors import CORSMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -18,8 +17,7 @@ logger = logging.getLogger(__name__)
 def _check_config() -> None:
     if os.environ.get("SGA_AUTH_MODE", "dev") == "dev":
         logger.warning(
-            "SGA_AUTH_MODE is 'dev' — authentication is DISABLED. "
-            "Set SGA_AUTH_MODE=prod for production deployments."
+            "SGA_AUTH_MODE is 'dev' — authentication is DISABLED. Set SGA_AUTH_MODE=prod for production deployments."
         )
     else:
         jwt_secret = os.getenv("JWT_SECRET", "")

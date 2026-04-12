@@ -3,13 +3,10 @@
 import json
 
 import aiosqlite
-
 from contracts.tool_schemas import RecipeSummary, SearchRecipesInput
 
 
-async def search_recipes(
-    db: aiosqlite.Connection, input: SearchRecipesInput
-) -> list[RecipeSummary]:
+async def search_recipes(db: aiosqlite.Connection, input: SearchRecipesInput) -> list[RecipeSummary]:
     # Build SQL query with optional filters
     clauses = []
     params: list[object] = []
@@ -41,9 +38,7 @@ async def search_recipes(
 
         for ing in ingredients_json:
             name = ing["name"].lower()
-            matched = any(
-                ui in name or name in ui for ui in user_ingredients
-            )
+            matched = any(ui in name or name in ui for ui in user_ingredients)
             if matched:
                 have.append(ing["name"])
             else:
@@ -57,22 +52,24 @@ async def search_recipes(
         score = len(have) / len(ingredients_json) if ingredients_json else 0
         flavor_tags = json.loads(row[6]) if row[6] else []
 
-        results.append((
-            score,
-            RecipeSummary(
-                id=row[0],
-                name=row[1],
-                name_zh=row[2] or "",
-                cuisine=row[3] or "",
-                cooking_method=row[4] or "",
-                effort_level=row[5] or "medium",
-                flavor_tags=flavor_tags,
-                serves=row[7] or 0,
-                pcsv_roles=pcsv_roles,
-                ingredients_have=have,
-                ingredients_need=need,
-            ),
-        ))
+        results.append(
+            (
+                score,
+                RecipeSummary(
+                    id=row[0],
+                    name=row[1],
+                    name_zh=row[2] or "",
+                    cuisine=row[3] or "",
+                    cooking_method=row[4] or "",
+                    effort_level=row[5] or "medium",
+                    flavor_tags=flavor_tags,
+                    serves=row[7] or 0,
+                    pcsv_roles=pcsv_roles,
+                    ingredients_have=have,
+                    ingredients_need=need,
+                ),
+            )
+        )
 
     results.sort(key=lambda r: r[0], reverse=True)
     return [r[1] for r in results[:10]]

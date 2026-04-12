@@ -4,8 +4,8 @@
 
 from __future__ import annotations
 
-from datetime import datetime
 import uuid
+from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
@@ -55,7 +55,7 @@ class ChatRequest(BaseModel):
     )
 
     @model_validator(mode="after")
-    def _require_target_id(self) -> "ChatRequest":
+    def _require_target_id(self) -> ChatRequest:
         if self.screen in ("saved_meal_plan", "saved_recipe") and not self.target_id:
             raise ValueError(f"target_id is required when screen is '{self.screen}'")
         return self
@@ -92,11 +92,13 @@ class SessionStateResponse(BaseModel):
 # Grocery list endpoint
 # ---------------------------------------------------------------------------
 
+
 class GroceryListItem(BaseModel):
     ingredient_name: str = Field(max_length=200)
     amount: str = Field(default="", max_length=100)
     recipe_name: str = Field(default="", max_length=200)
     recipe_id: str = Field(default="", max_length=100)
+
 
 class GroceryListRequest(BaseModel):
     items: list[GroceryListItem] = Field(min_length=1, max_length=50)
@@ -184,11 +186,10 @@ class SavedGroceryListSummary(BaseModel):
 
 # Meal plans
 
+
 class SaveMealPlanRequest(BaseModel):
     name: str = Field(max_length=200)
-    session_id: uuid.UUID = Field(
-        description="Derives recipes from current session state"
-    )
+    session_id: uuid.UUID = Field(description="Derives recipes from current session state")
 
 
 class UpdateMealPlanRequest(BaseModel):
@@ -198,10 +199,9 @@ class UpdateMealPlanRequest(BaseModel):
 
 # Recipes
 
+
 class SaveRecipeRequest(BaseModel):
-    recipe_id: str | None = Field(
-        default=None, description="KB recipe id, or null for AI-generated"
-    )
+    recipe_id: str | None = Field(default=None, description="KB recipe id, or null for AI-generated")
     recipe_snapshot: RecipeDetail
     notes: str | None = Field(default=None, max_length=5000)
 
@@ -213,11 +213,10 @@ class UpdateSavedRecipeRequest(BaseModel):
 
 # Grocery lists
 
+
 class SaveGroceryListRequest(BaseModel):
     name: str = Field(max_length=200)
-    session_id: uuid.UUID = Field(
-        description="Derives grocery list from current session state"
-    )
+    session_id: uuid.UUID = Field(description="Derives grocery list from current session state")
 
 
 class UpdateGroceryListRequest(BaseModel):

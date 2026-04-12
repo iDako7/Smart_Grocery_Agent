@@ -1,7 +1,6 @@
 """Tests for lookup_store_product tool against real SQLite KB."""
 
 import pytest_asyncio
-
 from contracts.tool_schemas import LookupStoreProductInput
 from src.ai.kb import get_kb
 from src.ai.tools.lookup_store_product import lookup_store_product, score_products
@@ -32,9 +31,7 @@ async def test_no_match_returns_none(kb):
 
 
 async def test_store_filter(kb):
-    result = await lookup_store_product(
-        kb, LookupStoreProductInput(item_name="chicken", store="costco")
-    )
+    result = await lookup_store_product(kb, LookupStoreProductInput(item_name="chicken", store="costco"))
     if result:
         assert result.store == "costco"
 
@@ -61,7 +58,7 @@ _SAMPLE_ROWS = [
 def test_score_products_returns_matches_above_threshold():
     results = score_products(_SAMPLE_ROWS, "chicken")
     assert len(results) > 0
-    for score, product in results:
+    for score, _product in results:
         assert score >= 60
 
 

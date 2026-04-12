@@ -1,16 +1,14 @@
 """Tests for session + chat API endpoints."""
 
 import uuid
-from contextlib import asynccontextmanager
 from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
-
 from src.ai.types import AgentResult
 from src.backend.main import app
+
 from tests.conftest import _engine, _ensure_tables
 
 
@@ -29,6 +27,7 @@ def _make_kb_ctx_mock(kb_conn: AsyncMock) -> MagicMock:
     ctx.__aexit__ = AsyncMock(return_value=False)
     return ctx
 
+
 _DEV_USER = uuid.UUID("00000000-0000-0000-0000-000000000001")
 
 
@@ -39,17 +38,16 @@ async def _clean_db():
     async with _engine.begin() as conn:
         await conn.execute(text("TRUNCATE users CASCADE"))
         # Seed the dev user
-        await conn.execute(text(
-            "INSERT INTO users (id, email) VALUES (:id, :email)"
-        ), {"id": _DEV_USER, "email": "dev@test.local"})
-        await conn.execute(text(
-            "INSERT INTO user_profiles (user_id) VALUES (:uid)"
-        ), {"uid": _DEV_USER})
+        await conn.execute(
+            text("INSERT INTO users (id, email) VALUES (:id, :email)"), {"id": _DEV_USER, "email": "dev@test.local"}
+        )
+        await conn.execute(text("INSERT INTO user_profiles (user_id) VALUES (:uid)"), {"uid": _DEV_USER})
 
 
 @pytest_asyncio.fixture()
 async def client():
     """Test client with auth + DB dependency overrides."""
+
     async def _override_auth():
         return _DEV_USER
 
@@ -63,6 +61,7 @@ async def client():
     app.dependency_overrides.clear()
     from src.backend.auth import get_current_user_id
     from src.backend.db.engine import get_db
+
     app.dependency_overrides[get_current_user_id] = _override_auth
     app.dependency_overrides[get_db] = _override_db
 
@@ -203,10 +202,12 @@ async def test_grocery_list_happy_path(client):
             mock_kb.return_value = _make_kb_ctx_mock(mock_kb_conn)
             resp = await client.post(
                 f"/session/{sid}/grocery-list",
-                json={"items": [
-                    {"ingredient_name": "chicken", "amount": "1 kg", "recipe_name": "Curry"},
-                    {"ingredient_name": "gochujang", "amount": "3 tbsp", "recipe_name": "Korean BBQ"},
-                ]},
+                json={
+                    "items": [
+                        {"ingredient_name": "chicken", "amount": "1 kg", "recipe_name": "Curry"},
+                        {"ingredient_name": "gochujang", "amount": "3 tbsp", "recipe_name": "Korean BBQ"},
+                    ]
+                },
             )
 
     assert resp.status_code == 200
@@ -293,9 +294,11 @@ async def test_grocery_list_all_unmatched_goes_to_other(client):
             mock_kb.return_value = _make_kb_ctx_mock(mock_kb_conn)
             resp = await client.post(
                 f"/session/{sid}/grocery-list",
-                json={"items": [
-                    {"ingredient_name": "exotic spice", "amount": "1 tsp", "recipe_name": "Fusion"},
-                ]},
+                json={
+                    "items": [
+                        {"ingredient_name": "exotic spice", "amount": "1 tsp", "recipe_name": "Fusion"},
+                    ]
+                },
             )
 
     assert resp.status_code == 200
@@ -309,7 +312,7 @@ async def test_grocery_list_other_user_cannot_access_session(client):
     """Session ownership is enforced — grocery-list on another user's session returns 404."""
     # Create a session under the dev user
     resp = await client.post("/session")
-    sid = resp.json()["session_id"]
+    _ = resp.json()["session_id"]  # created successfully
 
     # Attempt to post to a random (non-existent) session as if another user
     fake_sid = uuid.uuid4()

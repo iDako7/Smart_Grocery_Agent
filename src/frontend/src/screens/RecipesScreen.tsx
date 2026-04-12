@@ -44,18 +44,18 @@ export function RecipesScreen() {
   const sendMessage = session?.sendMessage ?? (() => {});
   const navigateToScreen = session?.navigateToScreen;
   const addLocalTurn = session?.addLocalTurn;
-  const sessionRecipes = session?.screenData?.recipes ?? [];
   const screenState = session?.screenState ?? "idle";
   const screenData = session?.screenData;
   const isComplete = session?.isComplete ?? false;
 
   // Use session recipe data if available, fall back to scenario data
   const RECIPES: RecipeCardData[] = useMemo(() => {
+    const sessionRecipes = session?.screenData?.recipes ?? [];
     if (sessionRecipes.length > 0) {
       return sessionRecipes.map((r, i) => summaryToCardData(r, i));
     }
     return scenario.recipes;
-  }, [sessionRecipes, scenario.recipes]);
+  }, [session?.screenData?.recipes, scenario.recipes]);
 
   const { eyebrow, description } = scenario.recipesHeader;
   const initialAltPool = useMemo(() =>

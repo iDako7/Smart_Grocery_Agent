@@ -10,9 +10,7 @@ import sys
 
 import pytest
 
-_BACKEND_DIR = os.path.normpath(
-    os.path.join(os.path.dirname(__file__), "..", "src", "backend")
-)
+_BACKEND_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__), "..", "src", "backend"))
 
 _DROP_ALL = """\
 DROP TABLE IF EXISTS saved_grocery_lists CASCADE;
@@ -50,8 +48,7 @@ def _run_alembic(*args: str) -> subprocess.CompletedProcess:
 def _drop_all_tables():
     """Drop all app tables + alembic_version via docker exec."""
     subprocess.run(
-        ["docker", "exec", "sga_v2-wt2-backend-db-1",
-         "psql", "-U", "sga", "-d", "sga", "-c", _DROP_ALL],
+        ["docker", "exec", "sga_v2-wt2-backend-db-1", "psql", "-U", "sga", "-d", "sga", "-c", _DROP_ALL],
         capture_output=True,
     )
 
@@ -65,6 +62,7 @@ def _clean_slate():
     _drop_all_tables()
     # Force conftest to recreate tables on next use
     import tests.conftest as c
+
     c._tables_created = False
 
 

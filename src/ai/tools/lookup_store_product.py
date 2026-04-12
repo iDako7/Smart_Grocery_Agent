@@ -1,9 +1,8 @@
 """Store product lookup: fuzzy match against SQLite KB using rapidfuzz."""
 
 import aiosqlite
-from rapidfuzz import fuzz
-
 from contracts.tool_schemas import LookupStoreProductInput, StoreProduct
+from rapidfuzz import fuzz
 
 
 def score_products(
@@ -23,12 +22,17 @@ def score_products(
         cat_score = fuzz.token_sort_ratio(query_lower, (row[3] or "").lower())
         best_score = max(name_score, cat_score)
         if best_score >= threshold:
-            scored.append((best_score, {
-                "name": row[0],
-                "size": row[1] or "",
-                "department": row[2] or "",
-                "store": row[4] or "costco",
-            }))
+            scored.append(
+                (
+                    best_score,
+                    {
+                        "name": row[0],
+                        "size": row[1] or "",
+                        "department": row[2] or "",
+                        "store": row[4] or "costco",
+                    },
+                )
+            )
     scored.sort(key=lambda x: (x[0], -len(x[1]["name"])), reverse=True)
     return scored
 
@@ -54,9 +58,7 @@ async def fuzzy_match_products(
     return score_products(rows, query, threshold)
 
 
-async def lookup_store_product(
-    db: aiosqlite.Connection, input: LookupStoreProductInput
-) -> StoreProduct | None:
+async def lookup_store_product(db: aiosqlite.Connection, input: LookupStoreProductInput) -> StoreProduct | None:
     scored = await fuzzy_match_products(db, input.item_name, store=input.store)
 
     if not scored:

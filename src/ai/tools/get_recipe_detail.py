@@ -3,13 +3,10 @@
 import json
 
 import aiosqlite
-
 from contracts.tool_schemas import GetRecipeDetailInput, Ingredient, RecipeDetail
 
 
-async def get_recipe_detail(
-    db: aiosqlite.Connection, input: GetRecipeDetailInput
-) -> RecipeDetail | None:
+async def get_recipe_detail(db: aiosqlite.Connection, input: GetRecipeDetailInput) -> RecipeDetail | None:
     cursor = await db.execute(
         "SELECT id, name, name_zh, source, source_url, cuisine, cooking_method, "
         "effort_level, time_minutes, flavor_tags, serves, ingredients, instructions, "
@@ -22,8 +19,7 @@ async def get_recipe_detail(
 
     ingredients_raw = json.loads(row[11]) if row[11] else []
     ingredients = [
-        Ingredient(name=i["name"], amount=i.get("amount", ""), pcsv=i.get("pcsv", []))
-        for i in ingredients_raw
+        Ingredient(name=i["name"], amount=i.get("amount", ""), pcsv=i.get("pcsv", [])) for i in ingredients_raw
     ]
 
     return RecipeDetail(

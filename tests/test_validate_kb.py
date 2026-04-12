@@ -3,6 +3,7 @@
 TDD RED phase — tests define the validation script's contract.
 Uses a temp DB created by migrate_kb for isolation.
 """
+
 import sqlite3
 import tempfile
 import unittest
@@ -14,6 +15,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 def _make_valid_db() -> Path:
     """Run migration into a temp DB and return its path."""
     from scripts.migrate_kb import migrate
+
     tmp = tempfile.NamedTemporaryFile(suffix=".sqlite", delete=False)
     tmp.close()
     migrate(db_path=Path(tmp.name))
@@ -38,19 +40,22 @@ def _make_partial_db() -> Path:
 
 
 class TestValidateImport(unittest.TestCase):
-
     def test_validate_is_callable(self):
         from scripts.validate_kb import validate
+
         self.assertTrue(callable(validate))
 
     def test_validate_accepts_db_path(self):
         import inspect
+
         from scripts.validate_kb import validate
+
         sig = inspect.signature(validate)
         self.assertIn("db_path", sig.parameters)
 
     def test_check_result_has_fields(self):
         from scripts.validate_kb import CheckResult
+
         r = CheckResult(name="test", passed=True, detail="ok")
         self.assertEqual(r.name, "test")
         self.assertTrue(r.passed)
@@ -58,11 +63,11 @@ class TestValidateImport(unittest.TestCase):
 
 
 class TestValidateOnValidDB(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.db_path = _make_valid_db()
         from scripts.validate_kb import validate
+
         cls.results = validate(db_path=cls.db_path)
 
     @classmethod
@@ -80,7 +85,8 @@ class TestValidateOnValidDB(unittest.TestCase):
     def test_all_checks_pass(self):
         failures = [r for r in self.results if not r.passed]
         self.assertEqual(
-            failures, [],
+            failures,
+            [],
             f"Failed checks: {[(r.name, r.detail) for r in failures]}",
         )
 
@@ -92,7 +98,9 @@ class TestValidateOnValidDB(unittest.TestCase):
     def test_spot_check_queries_present(self):
         names = {r.name for r in self.results}
         self.assertTrue(any("pcsv" in n.lower() for n in names), "Missing PCSV spot check")
-        self.assertTrue(any("recipe" in n.lower() and "cuisine" in n.lower() for n in names), "Missing recipe cuisine check")
+        self.assertTrue(
+            any("recipe" in n.lower() and "cuisine" in n.lower() for n in names), "Missing recipe cuisine check"
+        )
         self.assertTrue(any("glossary" in n.lower() for n in names), "Missing glossary spot check")
 
     def test_constraint_checks_present(self):
@@ -110,11 +118,11 @@ class TestValidateOnValidDB(unittest.TestCase):
 
 
 class TestValidateDetectsFailures(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         cls.db_path = _make_partial_db()
         from scripts.validate_kb import validate
+
         cls.results = validate(db_path=cls.db_path)
 
     @classmethod
@@ -132,7 +140,6 @@ class TestValidateDetectsFailures(unittest.TestCase):
 
 
 class TestValidateRunnable(unittest.TestCase):
-
     def test_has_main_block(self):
         source = (PROJECT_ROOT / "scripts" / "validate_kb.py").read_text()
         self.assertIn('if __name__ == "__main__"', source)
@@ -149,6 +156,7 @@ class TestTableNameWhitelist(unittest.TestCase):
     def test_allowed_tables_constant_exists(self):
         """ALLOWED_TABLES set must be defined in validate_kb module."""
         import scripts.validate_kb as vmod
+
         self.assertTrue(
             hasattr(vmod, "ALLOWED_TABLES"),
             "validate_kb must expose an ALLOWED_TABLES constant",
@@ -157,6 +165,7 @@ class TestTableNameWhitelist(unittest.TestCase):
     def test_allowed_tables_covers_expected_counts_keys(self):
         """Every key in EXPECTED_COUNTS must appear in ALLOWED_TABLES."""
         import scripts.validate_kb as vmod
+
         for table in vmod.EXPECTED_COUNTS:
             self.assertIn(
                 table,
@@ -167,6 +176,7 @@ class TestTableNameWhitelist(unittest.TestCase):
     def test_check_row_counts_rejects_unknown_table(self):
         """_check_row_counts must raise ValueError for a table not in ALLOWED_TABLES."""
         import sqlite3
+
         import scripts.validate_kb as vmod
 
         conn = sqlite3.connect(":memory:")
@@ -189,8 +199,8 @@ class TestTableNameWhitelist(unittest.TestCase):
 
     def test_allowed_tables_contains_only_safe_identifiers(self):
         """Every name in ALLOWED_TABLES must be a simple alphanumeric/underscore identifier."""
-        import re
         import scripts.validate_kb as vmod
+
         for name in vmod.ALLOWED_TABLES:
             self.assertRegex(
                 name,

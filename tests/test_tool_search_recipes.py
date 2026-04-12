@@ -1,7 +1,6 @@
 """Tests for search_recipes tool against real SQLite KB."""
 
 import pytest_asyncio
-
 from contracts.tool_schemas import SearchRecipesInput
 from src.ai.kb import get_kb
 from src.ai.tools.search_recipes import search_recipes
@@ -24,8 +23,12 @@ async def test_results_sorted_by_match_score(kb):
     if len(result) >= 2:
         # Results should be sorted by match score (descending)
         for i in range(len(result) - 1):
-            have_ratio_a = len(result[i].ingredients_have) / (len(result[i].ingredients_have) + len(result[i].ingredients_need))
-            have_ratio_b = len(result[i + 1].ingredients_have) / (len(result[i + 1].ingredients_have) + len(result[i + 1].ingredients_need))
+            have_ratio_a = len(result[i].ingredients_have) / (
+                len(result[i].ingredients_have) + len(result[i].ingredients_need)
+            )
+            have_ratio_b = len(result[i + 1].ingredients_have) / (
+                len(result[i + 1].ingredients_have) + len(result[i + 1].ingredients_need)
+            )
             assert have_ratio_a >= have_ratio_b
 
 

@@ -1,7 +1,6 @@
 """Substitution lookup from SQLite KB."""
 
 import aiosqlite
-
 from contracts.tool_schemas import GetSubstitutionsInput, Substitution
 
 
@@ -10,9 +9,7 @@ def _escape_like(value: str) -> str:
     return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
 
-async def get_substitutions(
-    db: aiosqlite.Connection, input: GetSubstitutionsInput
-) -> list[Substitution]:
+async def get_substitutions(db: aiosqlite.Connection, input: GetSubstitutionsInput) -> list[Substitution]:
     query = input.ingredient.lower().strip()
     escaped = _escape_like(query)
 
@@ -28,14 +25,16 @@ async def get_substitutions(
     results: list[tuple[bool, Substitution]] = []
     async for row in cursor:
         reason_match = row[3] == input.reason if input.reason else False
-        results.append((
-            reason_match,
-            Substitution(
-                substitute=row[1],
-                match_quality=row[2],
-                notes=row[4] or "",
-            ),
-        ))
+        results.append(
+            (
+                reason_match,
+                Substitution(
+                    substitute=row[1],
+                    match_quality=row[2],
+                    notes=row[4] or "",
+                ),
+            )
+        )
 
     # Sort reason-matched results first
     if input.reason:

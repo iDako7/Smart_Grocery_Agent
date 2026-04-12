@@ -3,7 +3,6 @@
 import uuid
 
 from sqlalchemy import text
-
 from src.backend.db.tables import users
 
 

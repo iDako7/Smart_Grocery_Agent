@@ -2,7 +2,7 @@
 
 import uuid
 
-from src.ai.context import load_context, save_turn, CHARS_PER_TOKEN
+from src.ai.context import load_context, save_turn
 from src.backend.db.tables import sessions
 
 
