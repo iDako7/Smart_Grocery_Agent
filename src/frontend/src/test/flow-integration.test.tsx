@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Routes, Route } from "react-router";
@@ -10,21 +10,42 @@ import { GroceryScreen } from "@/screens/GroceryScreen";
 import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
 import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
 import { ScenarioProvider } from "@/context/scenario-context";
-import { SessionProvider } from "@/context/session-context";
+import { SessionProvider, useSessionOptional } from "@/context/session-context";
 import { createMockChatService } from "./test-utils";
 
-// Prevent cross-test module pollution from api-client's module-level _tokenPromise.
-// When grocery-api.integration.test.ts runs before this file in the same worker,
-// its stubbed fetch can leave a cached auth token that causes real-sse to create a
-// session and set sessionId to non-null. With proper error handling, postGroceryList
-// must succeed (or sessionId must stay null) for navigation to proceed.
-vi.mock("@/services/api-client", async () => {
-  const actual = await vi.importActual("@/services/api-client");
+// Mock session-context to allow per-test sessionId override.
+// By default the real implementation is used (passthrough).
+vi.mock("@/context/session-context", async () => {
+  const actual = await vi.importActual<typeof import("@/context/session-context")>(
+    "@/context/session-context"
+  );
   return {
     ...actual,
-    postGroceryList: vi.fn().mockResolvedValue([]),
+    // useSessionOptional is wrapped in a spy so Flow 5 can override it with
+    // mockImplementationOnce to inject a real sessionId without affecting other tests.
+    useSessionOptional: vi.fn(actual.useSessionOptional),
   };
 });
+
+// Mock the API client so screens don't make real network calls.
+vi.mock("@/services/api-client", () => ({
+  createSession: vi.fn().mockResolvedValue({ session_id: "test-session", created_at: "2026-01-01T00:00:00Z" }),
+  getAuthToken: vi.fn().mockResolvedValue("test-token"),
+  postGroceryList: vi.fn().mockResolvedValue([]),
+  saveMealPlan: vi.fn().mockResolvedValue({ id: "plan-saved-1", name: "Test Plan", recipes: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z" }),
+  saveGroceryList: vi.fn().mockResolvedValue({ id: "list-saved-1", name: "Test List", stores: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z" }),
+  getSavedMealPlan: vi.fn().mockResolvedValue({
+    id: "plan-saved-1", name: "Test Plan", recipes: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z",
+  }),
+  getSavedGroceryList: vi.fn().mockResolvedValue({
+    id: "list-saved-1", name: "Test List", stores: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z",
+  }),
+  listSavedMealPlans: vi.fn().mockResolvedValue([]),
+  listSavedRecipes: vi.fn().mockResolvedValue([]),
+  listSavedGroceryLists: vi.fn().mockResolvedValue([]),
+  resetAuthToken: vi.fn(),
+}));
+
 
 function renderFullApp(options?: { chatService?: ReturnType<typeof createMockChatService>["service"]; initialPath?: string }) {
   return render(
@@ -162,6 +183,31 @@ describe("Flow 4 — Full navigation", () => {
 // ---------------------------------------------------------------------------
 
 describe("Flow 5 — Full flow ends at saved list", () => {
+  beforeEach(() => {
+    // Provide a session ID so GroceryScreen's "Save list" button doesn't bail out.
+    vi.mocked(useSessionOptional).mockImplementation(() => ({
+      sessionId: "test-session",
+      sendMessage: vi.fn(),
+      screenData: { recipes: [], groceryList: [], pcsv: null, explanation: "", thinkingMessage: "", error: null, completionStatus: null, completionReason: null },
+      screenState: "idle" as const,
+      isComplete: false,
+      isLoading: false,
+      isStreaming: false,
+      isError: false,
+      conversationHistory: [],
+      currentScreen: "grocery" as const,
+      navigateToScreen: vi.fn(),
+      resetSession: vi.fn(),
+      addLocalTurn: vi.fn(),
+      dispatch: vi.fn(),
+    }));
+  });
+
+  afterEach(() => {
+    // Restore the real implementation after Flow 5 tests.
+    vi.mocked(useSessionOptional).mockRestore();
+  });
+
   it("navigates Home → Clarify → Recipes → Grocery → Saved grocery list", async () => {
     vi.spyOn(console, "info").mockImplementation(() => {});
     const user = userEvent.setup();

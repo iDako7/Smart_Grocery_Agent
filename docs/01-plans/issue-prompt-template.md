@@ -14,8 +14,7 @@ Read these documents first:
 4. Product spec: `docs/00-specs/product-spec-v2.md`
 5. Orchestrator behaviors: `docs/00-specs/orchestrator-behaviors-v1.md`
 
-Follow the workflow in workflow-guide.md:
-/plan → /tdd per task → /verify per task → /verify integration → /code-review → create PR.
+Follow the workflow in workflow-guide.md.
 
 Ask me clarifying questions before starting if anything in the issue or specs is unclear.
 ```

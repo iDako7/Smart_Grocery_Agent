@@ -2,12 +2,31 @@
 // TDD: these tests are written BEFORE implementation (RED phase)
 
 import React, { useEffect, useRef } from "react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen, act, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router";
 
 // Base-ui mocks (menu + dialog) are in setup.ts
+
+// Mock api-client so HomeScreen's fetchSidebarData resolves without hitting the network.
+// The "HomeScreen sidebar with ScenarioProvider" test (section 8) opens the sidebar and
+// checks for "BBQ weekend" — we supply that item here.
+vi.mock("@/services/api-client", () => ({
+  listSavedMealPlans: vi.fn().mockResolvedValue([
+    { id: "p1", name: "BBQ weekend", recipe_count: 3, created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z" },
+  ]),
+  listSavedRecipes: vi.fn().mockResolvedValue([]),
+  listSavedGroceryLists: vi.fn().mockResolvedValue([]),
+  getAuthToken: vi.fn().mockResolvedValue("test-token"),
+  getSavedMealPlan: vi.fn().mockResolvedValue(null),
+  getSavedRecipe: vi.fn().mockResolvedValue(null),
+  getSavedGroceryList: vi.fn().mockResolvedValue(null),
+  createSession: vi.fn().mockResolvedValue({ session_id: "test-session", created_at: "2026-01-01T00:00:00Z" }),
+  saveMealPlan: vi.fn().mockResolvedValue({}),
+  saveGroceryList: vi.fn().mockResolvedValue({}),
+  resetAuthToken: vi.fn(),
+}));
 
 // ---------------------------------------------------------------------------
 // 1. bbqWeekend mock data — shape & runtime checks

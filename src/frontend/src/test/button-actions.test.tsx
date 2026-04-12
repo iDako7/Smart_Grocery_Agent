@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Routes, Route } from "react-router";
@@ -7,6 +7,18 @@ import { GroceryScreen } from "@/screens/GroceryScreen";
 import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
 import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
 import { renderWithSession } from "./test-utils";
+import * as ApiClient from "@/services/api-client";
+import * as SessionContextModule from "@/context/session-context";
+
+// Module-level mocks for save functions — individual suites configure return values.
+vi.mock("@/services/api-client", async () => {
+  const actual = await vi.importActual<typeof ApiClient>("@/services/api-client");
+  return {
+    ...actual,
+    saveMealPlan: vi.fn(),
+    saveGroceryList: vi.fn(),
+  };
+});
 
 // ---------------------------------------------------------------------------
 // "Save plan" button (RecipesScreen)
@@ -106,6 +118,48 @@ describe('RecipesScreen — "EN/中" language toggle', () => {
 // ---------------------------------------------------------------------------
 
 describe('GroceryScreen — "Save list" navigates to saved grocery list', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Provide a sessionId so the Save list button is enabled
+    vi.spyOn(SessionContextModule, "useSessionOptional").mockReturnValue({
+      sessionId: "test-session-id",
+      sendMessage: vi.fn(),
+      navigateToScreen: vi.fn(),
+      addLocalTurn: vi.fn(),
+      resetSession: vi.fn(),
+      dispatch: vi.fn(),
+      screenState: "idle",
+      screenData: {
+        recipes: [],
+        groceryList: [],
+        pcsv: null,
+        explanation: "",
+        thinkingMessage: "",
+        error: null,
+        completionStatus: null,
+        completionReason: null,
+      },
+      isComplete: false,
+      isLoading: false,
+      isStreaming: false,
+      isError: false,
+      conversationHistory: [],
+      currentScreen: "grocery",
+    } as ReturnType<typeof SessionContextModule.useSessionOptional>);
+    // Mock saveGroceryList to resolve with a known ID so navigation happens
+    vi.mocked(ApiClient.saveGroceryList).mockResolvedValue({
+      id: "list-1",
+      name: "Grocery list",
+      stores: [],
+      created_at: "2026-01-01T00:00:00Z",
+      updated_at: "2026-01-01T00:00:00Z",
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("Save list navigates to saved grocery list and shows toast", async () => {
     const user = userEvent.setup();
     renderWithSession(
@@ -131,6 +185,48 @@ describe('GroceryScreen — "Save list" navigates to saved grocery list', () => 
 });
 
 describe('RecipesScreen — "Save plan" navigates to saved meal plan', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Provide a sessionId so the button is enabled
+    vi.spyOn(SessionContextModule, "useSessionOptional").mockReturnValue({
+      sessionId: "test-session-id",
+      sendMessage: vi.fn(),
+      navigateToScreen: vi.fn(),
+      addLocalTurn: vi.fn(),
+      resetSession: vi.fn(),
+      dispatch: vi.fn(),
+      screenState: "idle",
+      screenData: {
+        recipes: [],
+        groceryList: [],
+        pcsv: null,
+        explanation: "",
+        thinkingMessage: "",
+        error: null,
+        completionStatus: null,
+        completionReason: null,
+      },
+      isComplete: false,
+      isLoading: false,
+      isStreaming: false,
+      isError: false,
+      conversationHistory: [],
+      currentScreen: "recipes",
+    } as ReturnType<typeof SessionContextModule.useSessionOptional>);
+    // Mock saveMealPlan to resolve with a known ID so navigation happens
+    vi.mocked(ApiClient.saveMealPlan).mockResolvedValue({
+      id: "plan-1",
+      name: "Meal plan · 3 dishes",
+      recipes: [],
+      created_at: "2026-01-01T00:00:00Z",
+      updated_at: "2026-01-01T00:00:00Z",
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it("Save plan navigates to saved meal plan and shows toast", async () => {
     const user = userEvent.setup();
     renderWithSession(

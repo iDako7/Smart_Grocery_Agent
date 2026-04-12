@@ -3,7 +3,7 @@
 //
 // TDD: These tests are written BEFORE implementation (RED phase).
 
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Routes, Route } from "react-router";
@@ -15,6 +15,28 @@ import { ClarifyScreen } from "@/screens/ClarifyScreen";
 import { RecipesScreen } from "@/screens/RecipesScreen";
 import { GroceryScreen } from "@/screens/GroceryScreen";
 import { ScenarioProvider } from "@/context/scenario-context";
+
+// Mock api-client so HomeScreen's fetchSidebarData resolves with sidebar items
+// that the navigation tests expect to find and click.
+vi.mock("@/services/api-client", () => ({
+  listSavedMealPlans: vi.fn().mockResolvedValue([
+    { id: "plan-1", name: "BBQ weekend", recipe_count: 3, created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z" },
+  ]),
+  listSavedRecipes: vi.fn().mockResolvedValue([
+    { id: "recipe-1", recipe_name: "Salt & pepper wings", recipe_name_zh: "椒盐鸡翅", created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z" },
+  ]),
+  listSavedGroceryLists: vi.fn().mockResolvedValue([
+    { id: "list-1", name: "BBQ weekend list", item_count: 8, created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z" },
+  ]),
+  getAuthToken: vi.fn().mockResolvedValue("test-token"),
+  getSavedMealPlan: vi.fn().mockResolvedValue(null),
+  getSavedRecipe: vi.fn().mockResolvedValue(null),
+  getSavedGroceryList: vi.fn().mockResolvedValue(null),
+  createSession: vi.fn().mockResolvedValue({ session_id: "test-session", created_at: "2026-01-01T00:00:00Z" }),
+  saveMealPlan: vi.fn().mockResolvedValue({}),
+  saveGroceryList: vi.fn().mockResolvedValue({}),
+  resetAuthToken: vi.fn(),
+}));
 
 // ---------------------------------------------------------------------------
 // Full router helper — mounts all routes so navigation actually works
