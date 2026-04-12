@@ -1,0 +1,118 @@
+name: CI — E2E
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/ci-e2e.yml"
+      - "src/backend/**"
+      - "src/ai/**"
+      - "src/frontend/**"
+      - "contracts/**"
+      - "data/**"
+      - "scripts/**"
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/ci-e2e.yml"
+      - "src/backend/**"
+      - "src/ai/**"
+      - "src/frontend/**"
+      - "contracts/**"
+      - "data/**"
+      - "scripts/**"
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: sga
+          POSTGRES_USER: sga
+          POSTGRES_PASSWORD: sga_dev
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U sga"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 5
+    env:
+      DATABASE_URL: "postgresql+asyncpg://sga:sga_dev@localhost:5432/sga"
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+      KB_SQLITE_PATH: "${{ github.workspace }}/data/kb.sqlite"
+      PYTHONPATH: "."
+      SGA_AUTH_MODE: "dev"
+    steps:
+      - uses: actions/checkout@v4
+
+      # --- Python + backend ---
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Install backend dependencies
+        working-directory: src/backend
+        run: uv sync --frozen
+
+      - name: Build SQLite KB from source data
+        run: uv run --project src/backend python -m scripts.migrate_kb
+
+      - name: Run Alembic migrations
+        run: uv run --project src/backend alembic -c src/backend/alembic.ini upgrade head
+
+      # --- Node + frontend ---
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.x"
+
+      - name: Install frontend dependencies
+        working-directory: src/frontend
+        run: bun install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        working-directory: src/frontend
+        run: bunx playwright install --with-deps chromium
+
+      # --- Start servers ---
+      - name: Start backend
+        run: |
+          uv run --project src/backend uvicorn src.backend.main:app --host 0.0.0.0 --port 8000 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8000/health && break
+            if [ "$i" -eq 30 ]; then echo "Backend failed to start" && exit 1; fi
+            sleep 1
+          done
+
+      - name: Start frontend dev server
+        working-directory: src/frontend
+        run: |
+          bun run dev &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:5173 && break
+            if [ "$i" -eq 30 ]; then echo "Frontend failed to start" && exit 1; fi
+            sleep 1
+          done
+
+      # --- Run E2E tests ---
+      - name: Run Playwright E2E tests
+        working-directory: src/frontend
+        run: bunx playwright test
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: src/frontend/playwright-report/
+          retention-days: 7

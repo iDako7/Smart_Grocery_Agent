@@ -4,12 +4,15 @@ import logging
 import os
 from contextlib import asynccontextmanager
 
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from src.backend.api.auth import router as auth_router
 from src.backend.api.grocery import router as grocery_router
 from src.backend.api.saved import router as saved_router
 from src.backend.api.sessions import router as sessions_router
 from starlette.middleware.cors import CORSMiddleware
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -25,10 +28,7 @@ def _check_config() -> None:
             raise RuntimeError("JWT_SECRET must be set to a real secret (not the default placeholder)")
 
     if not os.environ.get("OPENROUTER_API_KEY"):
-        if os.environ.get("SGA_AUTH_MODE", "dev") == "dev":
-            logger.warning("OPENROUTER_API_KEY is not set — agent calls will fail.")
-        else:
-            raise RuntimeError("OPENROUTER_API_KEY must be set")
+        raise RuntimeError("OPENROUTER_API_KEY must be set. Add it to .env or export it in your shell.")
 
 
 @asynccontextmanager
