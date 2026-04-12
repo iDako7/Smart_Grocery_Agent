@@ -121,7 +121,7 @@ async def chat(
     try:
         kb = await get_kb()
         try:
-            result = await run_agent(body.message, kb, conn, user_id, history=history)
+            result = await run_agent(body.message, kb, conn, user_id, history=history, screen=body.screen)
         finally:
             await kb.close()
     except Exception:

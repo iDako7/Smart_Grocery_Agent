@@ -89,7 +89,7 @@ async def test_context_includes_previous_turns(client):
     mock_result = AgentResult(status="complete", response_text="Got it!", total_iterations=1)
     captured_history = []
 
-    async def mock_run_agent(msg, kb, conn, uid, history=None):
+    async def mock_run_agent(msg, kb, conn, uid, history=None, screen=None):
         captured_history.append(history)
         return mock_result
 

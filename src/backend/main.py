@@ -6,6 +6,8 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from src.backend.api.auth import router as auth_router
+from src.backend.api.grocery import router as grocery_router
 from src.backend.api.saved import router as saved_router
 from src.backend.api.sessions import router as sessions_router
 
@@ -38,7 +40,9 @@ async def _lifespan(app: FastAPI):
 
 app = FastAPI(title="Smart Grocery Assistant V2", version="0.1.0", lifespan=_lifespan)
 
+app.include_router(auth_router)
 app.include_router(sessions_router)
+app.include_router(grocery_router)
 app.include_router(saved_router)
 
 

@@ -7,15 +7,15 @@ import jwt
 from fastapi import Depends, HTTPException, Request
 
 
-_DEV_USER_ID = uuid.UUID("00000000-0000-0000-0000-000000000001")
-_JWT_ALGORITHM = "HS256"
+DEV_USER_ID = uuid.UUID("00000000-0000-0000-0000-000000000001")
+JWT_ALGORITHM = "HS256"
 
 
-def _is_dev_mode() -> bool:
+def is_dev_mode() -> bool:
     return os.environ.get("SGA_AUTH_MODE", "dev") == "dev"
 
 
-def _get_jwt_secret() -> str:
+def get_jwt_secret() -> str:
     return os.environ.get("JWT_SECRET", "")
 
 
@@ -25,20 +25,20 @@ async def get_current_user_id(request: Request) -> uuid.UUID:
     In dev mode: returns a hardcoded dev user UUID (no token required).
     In production: decodes and validates a JWT Bearer token.
     """
-    if _is_dev_mode():
-        return _DEV_USER_ID
+    if is_dev_mode():
+        return DEV_USER_ID
 
     auth_header = request.headers.get("authorization", "")
     if not auth_header.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Missing Bearer token")
 
     token = auth_header[7:]
-    secret = _get_jwt_secret()
+    secret = get_jwt_secret()
     if not secret:
         raise HTTPException(status_code=500, detail="JWT_SECRET not configured")
 
     try:
-        payload = jwt.decode(token, secret, algorithms=[_JWT_ALGORITHM])
+        payload = jwt.decode(token, secret, algorithms=[JWT_ALGORITHM])
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token expired")
     except jwt.InvalidTokenError:

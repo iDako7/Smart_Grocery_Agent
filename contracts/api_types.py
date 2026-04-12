@@ -89,6 +89,20 @@ class SessionStateResponse(BaseModel):
 
 
 # ---------------------------------------------------------------------------
+# Grocery list endpoint
+# ---------------------------------------------------------------------------
+
+class GroceryListItem(BaseModel):
+    ingredient_name: str = Field(max_length=200)
+    amount: str = Field(default="", max_length=100)
+    recipe_name: str = Field(default="", max_length=200)
+    recipe_id: str = Field(default="", max_length=100)
+
+class GroceryListRequest(BaseModel):
+    items: list[GroceryListItem] = Field(min_length=1, max_length=50)
+
+
+# ---------------------------------------------------------------------------
 # Auth endpoints
 # ---------------------------------------------------------------------------
 
