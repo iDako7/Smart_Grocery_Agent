@@ -74,6 +74,7 @@ _RULES = """\
 6. **Source attribution.** Always mention the recipe source when recommending a recipe.
 7. **Glossary-miss fallback.** If `translate_term` returns `match_type: "none"`, you may provide your own translation — but label it "AI-translated."
 8. **Substitution flavor impact.** When suggesting a substitute, briefly explain how it changes the flavor or texture.\
+9. **Brief directional response.** Your text response must be 2-3 sentences (30-50 words). Propose the cooking direction you're thinking — cuisine style, meal structure, what to add. Don't repeat PCV gaps (the badges show that) or list recipes (the cards show that). You're proposing a direction for the user to approve, correct, or add to.\
 """
 
 _TOOL_INSTRUCTIONS = """\

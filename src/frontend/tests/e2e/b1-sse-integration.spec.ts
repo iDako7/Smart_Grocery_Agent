@@ -56,6 +56,15 @@ test.describe.serial("happy path: Home → Clarify → Recipes", () => {
       .first();
 
     await expect(pcvBadge).toBeVisible({ timeout: AGENT_TIMEOUT });
+
+    // Verify explanation is brief (soft guard)
+    const deckText = page
+      .locator('[data-testid="screen-clarify"] .relative p.mt-1\\.5')
+      .first();
+    await expect(deckText).toBeVisible({ timeout: AGENT_TIMEOUT });
+    const explanationText = await deckText.innerText();
+    expect(explanationText.length).toBeGreaterThan(0);
+    expect(explanationText.length).toBeLessThan(500);
   });
 
   /**
@@ -235,6 +244,9 @@ test.describe.serial("happy path: Home → Clarify → Recipes", () => {
 
     const text = await deckText.innerText();
     expect(text.length).toBeGreaterThan(0);
+    // Soft guard: explanation should be a brief directional proposal, not a 500-word essay.
+    // Not a hard gate — LLM output varies — but catches gross prompt regressions.
+    expect(text.length).toBeLessThan(500);
   });
 });
 
