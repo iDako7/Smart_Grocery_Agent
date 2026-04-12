@@ -22,3 +22,4 @@ class AgentResult:
     pcsv: PCSVResult | None = None
     recipes: list[RecipeSummary] = field(default_factory=list)
     grocery_list: list[GroceryStore] = field(default_factory=list)
+    reason: str | None = None

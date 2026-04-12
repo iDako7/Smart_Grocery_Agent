@@ -58,5 +58,5 @@ async def emit_agent_result(result: AgentResult) -> AsyncIterator[str]:
     if result.status == "complete":
         done = DoneEvent(status="complete")
     else:
-        done = DoneEvent(status="partial", reason="max_iterations")
+        done = DoneEvent(status="partial", reason=result.reason)
     yield _sse_line("done", done.model_dump())

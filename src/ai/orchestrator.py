@@ -242,4 +242,5 @@ async def run_agent(
         total_iterations=MAX_ITERATIONS,
         pcsv=pcsv_result,
         recipes=recipe_results,
+        reason="max_iterations",
     )

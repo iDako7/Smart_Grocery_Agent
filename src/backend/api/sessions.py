@@ -120,6 +120,7 @@ async def chat(
         result = AgentResult(
             status="partial",
             response_text="I encountered an error processing your request. Please try again.",
+            reason="agent_error",
         )
 
     # Only persist on success — don't save error messages as assistant turns
