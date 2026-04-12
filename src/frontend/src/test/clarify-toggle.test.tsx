@@ -53,7 +53,8 @@ describe("ClarifyScreen — cooking setup toggle", () => {
     const user = userEvent.setup();
     renderClarify();
 
-    // "Outdoor grill" is pre-selected; select the other two
+    // Select all three individual options
+    await user.click(getChip("Outdoor grill"));
     await user.click(getChip("Oven"));
     await user.click(getChip("Stovetop"));
 
