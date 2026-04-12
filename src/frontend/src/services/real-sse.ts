@@ -135,12 +135,18 @@ export interface SSEService {
 export function createRealSSEService(options?: SSEServiceOptions): SSEService {
   // Session ID lives in closure — shared across all calls from this service instance.
   let sessionIdPromise: Promise<string> | null = null;
+  // Guards against stale onSessionCreated firing after resetSession() is called
+  // while a session creation fetch is still in-flight.
+  let generation = 0;
 
   function getOrCreateSession(): Promise<string> {
     if (!sessionIdPromise) {
+      const thisGeneration = generation;
       sessionIdPromise = createSession()
         .then((r) => {
-          options?.onSessionCreated?.(r.session_id);
+          if (thisGeneration === generation) {
+            options?.onSessionCreated?.(r.session_id);
+          }
           return r.session_id;
         })
         .catch((err) => {
@@ -153,6 +159,7 @@ export function createRealSSEService(options?: SSEServiceOptions): SSEService {
 
   function resetSession(): void {
     sessionIdPromise = null;
+    generation++;
   }
 
   const handler: ChatServiceHandler = function(

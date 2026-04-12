@@ -725,6 +725,61 @@ describe("createRealSSEService — resetSession", () => {
     );
     expect(sessionCalls).toHaveLength(2);
   });
+
+  it("does not fire onSessionCreated for a stale session when resetSession interrupts in-flight creation", async () => {
+    let sessionResolve: ((value: Response) => void) | null = null;
+
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (typeof url === "string" && url.includes("/auth/verify")) {
+        return Promise.resolve({
+          ok: true,
+          body: null,
+          json: async () => AUTH_RESPONSE,
+        });
+      }
+      if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
+        // Hang the session creation — resolve manually
+        return new Promise<Response>((resolve) => {
+          sessionResolve = resolve;
+        });
+      }
+      return Promise.resolve({
+        ok: true,
+        body: makeSseBody([DONE_BLOCK]),
+        json: async () => ({}),
+      });
+    });
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { createRealSSEService } = await import("@/services/real-sse");
+
+    const onSessionCreated = vi.fn();
+    const { handler: service, resetSession } = createRealSSEService({ onSessionCreated });
+
+    // Start first message — session creation is pending
+    service("first", "home", vi.fn(), vi.fn(), vi.fn());
+
+    // Wait a tick for the fetch to be called
+    await new Promise((r) => setTimeout(r, 10));
+    expect(sessionResolve).not.toBeNull();
+
+    // Reset BEFORE the session creation resolves
+    resetSession();
+
+    // Now resolve the stale session creation
+    sessionResolve!({
+      ok: true,
+      body: null,
+      json: async () => SESSION_RESPONSE,
+    } as unknown as Response);
+
+    // Wait for promise chain to settle
+    await new Promise((r) => setTimeout(r, 10));
+
+    // onSessionCreated must NOT have been called — the generation was invalidated
+    expect(onSessionCreated).not.toHaveBeenCalled();
+  });
 });
 
 // ---------------------------------------------------------------------------
