@@ -55,7 +55,7 @@ describe("RecipeCard — remove button", () => {
       />
     );
     expect(
-      screen.getByRole("button", { name: /remove korean bbq/i })
+      screen.getByRole("button", { name: /^remove$/i })
     ).toBeInTheDocument();
   });
 
@@ -68,7 +68,7 @@ describe("RecipeCard — remove button", () => {
       />
     );
     expect(
-      screen.queryByRole("button", { name: /remove korean bbq/i })
+      screen.queryByRole("button", { name: /^remove$/i })
     ).not.toBeInTheDocument();
   });
 
@@ -82,7 +82,7 @@ describe("RecipeCard — remove button", () => {
       />
     );
     expect(
-      screen.queryByRole("button", { name: /remove korean bbq/i })
+      screen.queryByRole("button", { name: /^remove$/i })
     ).not.toBeInTheDocument();
   });
 
@@ -94,7 +94,7 @@ describe("RecipeCard — remove button", () => {
       />
     );
     expect(
-      screen.queryByRole("button", { name: /remove korean bbq/i })
+      screen.queryByRole("button", { name: /^remove$/i })
     ).not.toBeInTheDocument();
   });
 
@@ -109,7 +109,7 @@ describe("RecipeCard — remove button", () => {
         isSwapping={false}
       />
     );
-    await user.click(screen.getByRole("button", { name: /remove korean bbq/i }));
+    await user.click(screen.getByRole("button", { name: /^remove$/i }));
     expect(onRemove).toHaveBeenCalledOnce();
   });
 
@@ -124,7 +124,7 @@ describe("RecipeCard — remove button", () => {
     // Try another is still present and no remove button beside it
     expect(screen.getByText(/try another/i)).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: /remove korean bbq/i })
+      screen.queryByRole("button", { name: /^remove$/i })
     ).not.toBeInTheDocument();
   });
 });
@@ -162,11 +162,9 @@ describe("RecipesScreen integration — addLocalTurn", () => {
     const user = userEvent.setup();
     renderRecipesScreenWithHistory();
 
-    // Get the first recipe name from the rendered card
-    const removeButtons = screen.getAllByRole("button", { name: /^remove /i });
-    // The aria-label is "Remove {name}" — extract the name
-    const firstButtonLabel = removeButtons[0].getAttribute("aria-label") ?? "";
-    const recipeName = firstButtonLabel.replace(/^Remove\s+/i, "");
+    // The first recipe in the BBQ scenario is "Korean BBQ Pork Belly"
+    const recipeName = "Korean BBQ Pork Belly";
+    const removeButtons = screen.getAllByRole("button", { name: /^remove$/i });
 
     await act(async () => {
       await user.click(removeButtons[0]);
@@ -187,7 +185,7 @@ describe("RecipesScreen — remove dish", () => {
     renderRecipesScreen();
 
     // Default BBQ scenario has 3 recipes
-    const initialRemoveButtons = screen.getAllByRole("button", { name: /^remove /i });
+    const initialRemoveButtons = screen.getAllByRole("button", { name: /^remove$/i });
     expect(initialRemoveButtons).toHaveLength(3);
 
     // Remove the first dish
@@ -196,7 +194,7 @@ describe("RecipesScreen — remove dish", () => {
     });
 
     // Now only 2 remove buttons should exist
-    expect(screen.getAllByRole("button", { name: /^remove /i })).toHaveLength(2);
+    expect(screen.getAllByRole("button", { name: /^remove$/i })).toHaveLength(2);
   });
 
   it("dish count in header updates after removal", async () => {
@@ -210,7 +208,7 @@ describe("RecipesScreen — remove dish", () => {
     );
     expect(dishBadge3).toBeInTheDocument();
 
-    const removeButtons = screen.getAllByRole("button", { name: /^remove /i });
+    const removeButtons = screen.getAllByRole("button", { name: /^remove$/i });
     await act(async () => {
       await user.click(removeButtons[0]);
     });
@@ -227,15 +225,15 @@ describe("RecipesScreen — remove dish", () => {
     renderRecipesScreen();
 
     // Remove down to 1 card
-    let removeButtons = screen.getAllByRole("button", { name: /^remove /i });
+    let removeButtons = screen.getAllByRole("button", { name: /^remove$/i });
     await act(async () => { await user.click(removeButtons[0]); });
 
-    removeButtons = screen.getAllByRole("button", { name: /^remove /i });
+    removeButtons = screen.getAllByRole("button", { name: /^remove$/i });
     await act(async () => { await user.click(removeButtons[0]); });
 
     // Only 1 card left — no ✕ button should be visible
     expect(
-      screen.queryByRole("button", { name: /^remove /i })
+      screen.queryByRole("button", { name: /^remove$/i })
     ).not.toBeInTheDocument();
   });
 
@@ -249,7 +247,7 @@ describe("RecipesScreen — remove dish", () => {
     expect(screen.getByText("Classic Smash Burgers")).toBeInTheDocument();
 
     // Remove the first card (Korean BBQ Pork Belly)
-    const removeButtons = screen.getAllByRole("button", { name: /^remove /i });
+    const removeButtons = screen.getAllByRole("button", { name: /^remove$/i });
     await act(async () => {
       await user.click(removeButtons[0]);
     });
