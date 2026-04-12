@@ -93,45 +93,30 @@ export function RecipeCard({
       {/* Ingredient tags */}
       <div className="flex flex-wrap gap-[5px] mt-3">
         {ingredients.map((ing) => {
-          const isExcluded = !ing.have && (excludedIngredients?.has(ing.name) ?? false);
+          // isChecked = ingredient is in the user's possession.
+          // Starts from ing.have; flipped if the ingredient name is in excludedIngredients.
+          const isFlipped = excludedIngredients?.has(ing.name) ?? false;
+          const isChecked = ing.have !== isFlipped; // XOR: flip toggles the original state
 
-          if (ing.have) {
-            // "Have" pills — non-interactive display only
-            return (
-              <span
-                key={ing.name}
-                className="text-[10.5px] font-semibold px-2.5 py-[5px] rounded-full inline-flex items-center gap-[5px] bg-jade-soft text-jade"
-              >
-                <span
-                  aria-hidden="true"
-                  className="w-[5px] h-[5px] rounded-full inline-block bg-jade"
-                />
-                {ing.name}
-              </span>
-            );
-          }
-
-          // "Need" pills — toggleable buttons (orange when active, grey when excluded)
           return (
             <button
               key={ing.name}
               type="button"
               onClick={() => onToggleBuy?.(ing.name)}
-              aria-pressed={!isExcluded}
+              aria-pressed={isChecked}
               className={cn(
                 "text-[10.5px] font-semibold px-2.5 py-[5px] rounded-full inline-flex items-center gap-[5px] border-none cursor-pointer",
-                isExcluded
-                  ? "bg-cream-deep text-ink-3"
+                isChecked
+                  ? "bg-jade-soft text-jade"
                   : "bg-persimmon-soft text-persimmon"
               )}
             >
               <span
                 aria-hidden="true"
-                className={cn(
-                  "w-[5px] h-[5px] rounded-full inline-block",
-                  isExcluded ? "bg-ink-3" : "bg-persimmon"
-                )}
-              />
+                className="text-[9px] leading-none"
+              >
+                {isChecked ? "✓" : "☐"}
+              </span>
               {ing.name}
             </button>
           );

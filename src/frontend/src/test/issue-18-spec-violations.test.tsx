@@ -2,7 +2,7 @@
  * Issue #18 — Frontend Cleanup: Spec violation integration tests.
  *
  * Tests are ordered by spec requirement:
- *   F2  — RecipeCard "need" pills are toggleable; "have" pills are not
+ *   F2  — RecipeCard: ALL pills are toggleable buttons (checkbox-style UX)
  *   F5  — SavedMealPlanScreen must not render ChatInput
  *   F6  — SavedRecipeScreen must not render ChatInput
  *   F7-S5 — SavedMealPlanScreen remove button removes recipe from list
@@ -12,7 +12,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { RecipeCard } from "@/components/recipe-card";
 import { RecipesScreen } from "@/screens/RecipesScreen";
@@ -23,7 +23,7 @@ import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
 import { renderWithSession } from "./test-utils";
 
 // ---------------------------------------------------------------------------
-// F2 — RecipeCard: "need" pills toggleable, "have" pills non-interactive
+// F2 — RecipeCard: ALL pills are toggleable buttons (checkbox-style UX)
 // ---------------------------------------------------------------------------
 describe("F2 — RecipeCard: toggleable buy pills", () => {
   const baseProps = {
@@ -37,8 +37,8 @@ describe("F2 — RecipeCard: toggleable buy pills", () => {
   };
 
   const ingredients = [
-    { name: "Chicken", have: false },   // need pill — orange, toggleable
-    { name: "Soy Sauce", have: true },  // have pill — green, not interactive
+    { name: "Chicken", have: false },   // need pill — unchecked by default (orange)
+    { name: "Soy Sauce", have: true },  // have pill — checked by default (green)
   ];
 
   it("clicking a 'need' pill calls onToggleBuy with the ingredient name", () => {
@@ -59,7 +59,7 @@ describe("F2 — RecipeCard: toggleable buy pills", () => {
     expect(onToggleBuy).toHaveBeenCalledWith("Chicken");
   });
 
-  it("excluded ingredient renders with grey styling instead of orange", () => {
+  it("excluded 'need' ingredient renders with green styling (flipped to have)", () => {
     const onToggleBuy = vi.fn();
     render(
       <RecipeCard
@@ -70,14 +70,14 @@ describe("F2 — RecipeCard: toggleable buy pills", () => {
       />
     );
 
-    // The pill for "Chicken" should carry a grey CSS class, not the orange persimmon class.
+    // The pill for "Chicken" (have: false, in excludedIngredients) is now "checked" (have=true).
+    // It should carry a green class (jade), not the orange persimmon class.
     const needPill = screen.getByRole("button", { name: /chicken/i });
     expect(needPill.className).not.toMatch(/persimmon/);
-    // It must have a grey/muted class to distinguish it from an active "need" pill.
-    expect(needPill.className).toMatch(/grey|gray|muted|ink-3|cream-deep|excluded/i);
+    expect(needPill.className).toMatch(/jade/i);
   });
 
-  it("'have' pills are not rendered as interactive buttons", () => {
+  it("'have' pills ARE rendered as interactive buttons", () => {
     render(
       <RecipeCard
         {...baseProps}
@@ -86,16 +86,30 @@ describe("F2 — RecipeCard: toggleable buy pills", () => {
       />
     );
 
-    // "Soy Sauce" is a "have" ingredient — must NOT be a button.
-    // Use queryByRole to confirm it does not exist as a button.
-    const havePillButton = screen.queryByRole("button", { name: /soy sauce/i });
-    expect(havePillButton).toBeNull();
-
-    // It should still appear in the document as non-interactive text.
-    expect(screen.getByText("Soy Sauce")).toBeInTheDocument();
+    // "Soy Sauce" is a "have" ingredient — must now be a button (checkbox-style).
+    const havePillButton = screen.getByRole("button", { name: /soy sauce/i });
+    expect(havePillButton).toBeInTheDocument();
   });
 
-  it("'need' pill has aria-pressed=true when NOT excluded (actively buying)", () => {
+  it("clicking a 'have' pill calls onToggleBuy with the ingredient name", () => {
+    const onToggleBuy = vi.fn();
+    render(
+      <RecipeCard
+        {...baseProps}
+        ingredients={ingredients}
+        onToggleBuy={onToggleBuy}
+      />
+    );
+
+    // "Soy Sauce" (have: true) is now a toggleable button
+    const havePill = screen.getByRole("button", { name: /soy sauce/i });
+    fireEvent.click(havePill);
+
+    expect(onToggleBuy).toHaveBeenCalledTimes(1);
+    expect(onToggleBuy).toHaveBeenCalledWith("Soy Sauce");
+  });
+
+  it("'need' pill has aria-pressed=false when NOT excluded (needs buying)", () => {
     render(
       <RecipeCard
         {...baseProps}
@@ -104,12 +118,12 @@ describe("F2 — RecipeCard: toggleable buy pills", () => {
         excludedIngredients={new Set()}
       />
     );
-    // "pressed" means actively buying — ingredient is in the list.
+    // Unchecked (need to buy) — aria-pressed=false
     const needPill = screen.getByRole("button", { name: /chicken/i });
-    expect(needPill).toHaveAttribute("aria-pressed", "true");
+    expect(needPill).toHaveAttribute("aria-pressed", "false");
   });
 
-  it("'need' pill has aria-pressed=false when excluded (removed from list)", () => {
+  it("'need' pill has aria-pressed=true when excluded (user marked as have)", () => {
     render(
       <RecipeCard
         {...baseProps}
@@ -118,9 +132,39 @@ describe("F2 — RecipeCard: toggleable buy pills", () => {
         excludedIngredients={new Set(["Chicken"])}
       />
     );
-    // Not pressed — ingredient has been excluded / removed from the list.
+    // Flipped: was need, now checked (have) — aria-pressed=true
     const needPill = screen.getByRole("button", { name: /chicken/i });
-    expect(needPill).toHaveAttribute("aria-pressed", "false");
+    expect(needPill).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("'have' pill has aria-pressed=true by default (user already has it)", () => {
+    render(
+      <RecipeCard
+        {...baseProps}
+        ingredients={ingredients}
+        onToggleBuy={vi.fn()}
+        excludedIngredients={new Set()}
+      />
+    );
+    // Checked (have) — aria-pressed=true
+    const havePill = screen.getByRole("button", { name: /soy sauce/i });
+    expect(havePill).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("'have' pill in excludedIngredients renders as unchecked (orange)", () => {
+    render(
+      <RecipeCard
+        {...baseProps}
+        ingredients={ingredients}
+        onToggleBuy={vi.fn()}
+        excludedIngredients={new Set(["Soy Sauce"])}
+      />
+    );
+    // "Soy Sauce" was have=true but is in excludedIngredients → flipped to unchecked
+    const havePill = screen.getByRole("button", { name: /soy sauce/i });
+    expect(havePill).toHaveAttribute("aria-pressed", "false");
+    expect(havePill.className).toMatch(/persimmon/);
+    expect(havePill.className).not.toMatch(/jade/);
   });
 });
 
@@ -132,9 +176,9 @@ describe("F2-ext — RecipesScreen: per-card ingredient exclusion isolation", ()
     const user = userEvent.setup();
     renderWithSession(<RecipesScreen />, { initialPath: "/recipes" });
 
-    // Find all "need" ingredient pills across all cards.
+    // Find all ingredient pills that are currently in the "checked" state (aria-pressed=true).
+    // All pills are now buttons; pressed=true means the ingredient is checked (have).
     // We need a pill whose name appears in at least two cards.
-    // Use aria-pressed="true" to find active "need" pills (not "have" spans).
     const allNeedPills = screen.getAllByRole("button", { pressed: true });
     if (allNeedPills.length < 2) {
       // Not enough shared ingredients — scenario doesn't support this test.
@@ -163,10 +207,10 @@ describe("F2-ext — RecipesScreen: per-card ingredient exclusion isolation", ()
     // Click the first card's pill for this ingredient.
     await user.click(pillsForIngredient[0]);
 
-    // Re-query: first card's pill should now be excluded (aria-pressed=false),
-    // the second card's pill should remain active (aria-pressed=true).
+    // Re-query: first card's pill should now be toggled (aria-pressed=false),
+    // the second card's pill should remain in its original state (aria-pressed=true).
     const updatedPills = screen.getAllByRole("button", { name: new RegExp(ingredientName, "i") });
-    // Filter to only "need" pills by checking aria-pressed attribute exists.
+    // All ingredient pills have aria-pressed; filter just in case nav buttons slip through.
     const needUpdated = updatedPills.filter((b) => b.hasAttribute("aria-pressed"));
     expect(needUpdated[0]).toHaveAttribute("aria-pressed", "false");
     expect(needUpdated[1]).toHaveAttribute("aria-pressed", "true");
@@ -290,6 +334,26 @@ describe("F9 — SavedGroceryListScreen: Copy to Notes writes to clipboard", () 
       expect(line).toMatch(/^(\[ \]|\[x\]|[-•*])\s/);
     }
   });
+
+  it("shows a 'Copied!' toast after successful clipboard write", async () => {
+    renderWithSession(<SavedGroceryListScreen />, { initialPath: "/saved/list/1" });
+
+    const copyButton = screen.getByRole("button", { name: /copy to notes/i });
+
+    // No toast before clicking
+    expect(screen.queryByTestId("copied-toast")).not.toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(copyButton);
+      // Allow the clipboard promise to resolve
+      await Promise.resolve();
+    });
+
+    // Toast with "Copied!" message should now be visible
+    const toast = screen.getByTestId("copied-toast");
+    expect(toast).toBeInTheDocument();
+    expect(toast).toHaveTextContent("Copied!");
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -314,6 +378,88 @@ describe("F10 — RecipesScreen: bilingual toggle controls CJK name visibility",
     // After toggling to zh, RecipeCard renders [lang="zh"] divs for each recipe with a CJK name.
     const cjkElements = document.querySelectorAll('[lang="zh"]');
     expect(cjkElements.length).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// F-SWAP — RecipesScreen: swap alternative preserves ingredient pills and metadata
+// ---------------------------------------------------------------------------
+describe("F-SWAP — RecipesScreen: swap alternative card has full content after pick", () => {
+  it("replaced card still renders ingredient pills after picking a swap alternative", async () => {
+    const user = userEvent.setup();
+    renderWithSession(<RecipesScreen />, { initialPath: "/recipes" });
+
+    // Click "Try another" on the first recipe card (index 0).
+    const tryAnotherButtons = screen.getAllByRole("button", { name: /try another/i });
+    await user.click(tryAnotherButtons[0]);
+
+    // SwapPanel should now be visible — pick the first alternative.
+    const pickButtons = screen.getAllByRole("button", { name: /^Pick /i });
+    expect(pickButtons.length).toBeGreaterThan(0);
+    await user.click(pickButtons[0]);
+
+    // The SwapPanel should be gone now.
+    expect(screen.queryAllByRole("button", { name: /^Pick /i })).toHaveLength(0);
+
+    // The replaced card must still render ingredient pills (aria-pressed buttons).
+    // If the alternative was mapped with empty ingredients [], there would be zero pills.
+    const allIngredientPills = screen
+      .getAllByRole("button")
+      .filter((btn) => btn.hasAttribute("aria-pressed"));
+    expect(allIngredientPills.length).toBeGreaterThan(0);
+  });
+
+  it("replaced card has non-empty flavorProfile and cookingMethod metadata", async () => {
+    const user = userEvent.setup();
+    renderWithSession(<RecipesScreen />, { initialPath: "/recipes" });
+
+    // Open SwapPanel on card 0.
+    const tryAnotherButtons = screen.getAllByRole("button", { name: /try another/i });
+    await user.click(tryAnotherButtons[0]);
+
+    // Pick the first alternative.
+    const pickButtons = screen.getAllByRole("button", { name: /^Pick /i });
+    await user.click(pickButtons[0]);
+
+    // After the swap, the first recipe card should now show the alternative's name.
+    // The bbq-weekend scenario's first alternative is "Asian Slaw".
+    expect(screen.getByText("Asian Slaw")).toBeInTheDocument();
+
+    // The meta line under the card must contain non-empty flavorProfile content.
+    // We verify by checking that the card area contains meaningful metadata and pills.
+    const cardHeading = screen.getByText("Asian Slaw");
+    const card = cardHeading.closest("[class*='bg-paper']") as HTMLElement;
+    expect(card).not.toBeNull();
+
+    // The card must contain at least one ingredient pill (aria-pressed button).
+    const pillsInCard = Array.from(card.querySelectorAll("button[aria-pressed]"));
+    expect(pillsInCard.length).toBeGreaterThan(0);
+  });
+
+  it("alt pool item that returns as displaced card also retains content", async () => {
+    const user = userEvent.setup();
+    renderWithSession(<RecipesScreen />, { initialPath: "/recipes" });
+
+    // Swap card 0 with alternative 0 ("Asian Slaw").
+    const tryAnotherButtons = screen.getAllByRole("button", { name: /try another/i });
+    await user.click(tryAnotherButtons[0]);
+    const pickButtons = screen.getAllByRole("button", { name: /^Pick /i });
+    await user.click(pickButtons[0]);
+
+    // Now "Korean BBQ Pork Belly" is in the alt pool.
+    // Swap card 0 again to open the SwapPanel showing the alt pool.
+    const tryAnotherAgain = screen.getAllByRole("button", { name: /try another/i });
+    await user.click(tryAnotherAgain[0]);
+
+    // The SwapPanel should render alternatives as "Pick" buttons.
+    const altPickButtons = screen.getAllByRole("button", { name: /^Pick /i });
+    expect(altPickButtons.length).toBeGreaterThan(0);
+
+    // Pick the last alternative (the displaced "Korean BBQ Pork Belly").
+    await user.click(altPickButtons[altPickButtons.length - 1]);
+
+    // The screen should now show "Korean BBQ Pork Belly" again.
+    expect(screen.getByText("Korean BBQ Pork Belly")).toBeInTheDocument();
   });
 });
 

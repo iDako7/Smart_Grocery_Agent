@@ -26,7 +26,7 @@ export function SavedMealPlanScreen() {
       </div>
 
       {/* Saved toast — only shown when arriving via the Save plan button */}
-      {(location.state as { justSaved?: boolean } | null)?.justSaved && <Toast message="Saved!" />}
+      {(location.state as { justSaved?: boolean } | null)?.justSaved && <Toast message="Saved!" testId="saved-toast" />}
 
       {/* Saved plan card */}
       <div className="mx-3.5 my-3.5 bg-paper rounded-2xl overflow-hidden">
@@ -61,7 +61,7 @@ export function SavedMealPlanScreen() {
             name={recipe.name}
             meta={recipe.meta}
             detail={recipe.detail}
-            onRemove={() => setRecipes((prev) => prev.filter((r) => r.name !== recipe.name))}
+            onRemove={() => setRecipes((prev) => prev.filter((r) => r.id !== recipe.id))}
           />
         ))}
       </div>

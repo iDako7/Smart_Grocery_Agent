@@ -60,11 +60,11 @@ export function RecipesScreen() {
       index: 100 + i,
       name: alt.name,
       nameCjk: alt.nameCjk,
-      flavorProfile: "",
-      cookingMethod: "",
-      time: "",
-      ingredients: [],
-      infoFlavorTags: [],
+      flavorProfile: alt.flavorProfile,
+      cookingMethod: alt.cookingMethod,
+      time: alt.time,
+      ingredients: alt.ingredients,
+      infoFlavorTags: alt.infoFlavorTags,
       infoDescription: alt.description,
     })),
     [scenario.swapAlternatives]
@@ -122,6 +122,11 @@ export function RecipesScreen() {
       ...prev.filter((_, i) => i !== altIndex),
       displaced,
     ]);
+    setExcludedByCard((prev) => {
+      const next = new Map(prev);
+      next.delete(swappingIndex);
+      return next;
+    });
     setSwappingIndex(null);
   }
 
@@ -231,7 +236,7 @@ export function RecipesScreen() {
 
       {/* Recipe cards + swap panel interleaved */}
       {displayedRecipes.map((recipe, idx) => (
-        <div key={`recipe-${recipe.name}`}>
+        <div key={`recipe-${idx}`}>
           <RecipeCard
             index={idx}
             name={recipe.name}

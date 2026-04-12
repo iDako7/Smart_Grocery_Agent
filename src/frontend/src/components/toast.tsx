@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 
-export function Toast({ message, duration = 2000 }: { message: string; duration?: number }) {
+interface ToastProps {
+  message: string;
+  duration?: number;
+  testId?: string;
+}
+
+export function Toast({ message, duration = 2000, testId }: ToastProps) {
   const [show, setShow] = useState(true);
 
   useEffect(() => {
@@ -12,8 +18,8 @@ export function Toast({ message, duration = 2000 }: { message: string; duration?
 
   return (
     <div
-      data-testid="saved-toast"
-      className="mx-3.5 mt-1 mb-0.5 px-4 py-2.5 bg-jade text-cream rounded-xl text-[13px] font-semibold text-center"
+      data-testid={testId ?? "toast"}
+      className="mx-3.5 mt-1 mb-0.5 px-3 py-1.5 bg-jade text-cream rounded-xl text-[11px] font-semibold text-center"
     >
       {message}
     </div>
