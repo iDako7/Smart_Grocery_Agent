@@ -138,6 +138,7 @@ export function RecipeCard({
           <button
             type="button"
             onClick={onRemove}
+            aria-label={`Remove ${name}`}
             className="inline-flex items-center gap-1.5 px-3 py-[6px] rounded-full bg-cream-deep text-ink-3 text-[10.5px] font-semibold border-none cursor-pointer hover:bg-cream transition-colors min-h-[30px]"
           >
             Remove

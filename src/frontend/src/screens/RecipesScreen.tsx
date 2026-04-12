@@ -265,7 +265,7 @@ export function RecipesScreen() {
 
       {/* Recipe cards + swap panel interleaved */}
       {displayedRecipes.map((recipe, idx) => (
-        <div key={`recipe-${recipe.name}-${idx}`}>
+        <div key={`recipe-${recipe.name}`}>
           <RecipeCard
             index={idx}
             name={recipe.name}
