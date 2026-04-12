@@ -9,9 +9,8 @@ from src.ai.tools.translate_term import translate_term
 
 @pytest_asyncio.fixture()
 async def kb():
-    db = await get_kb()
-    yield db
-    await db.close()
+    async with get_kb() as db:
+        yield db
 
 
 async def test_en_to_zh_exact(kb):

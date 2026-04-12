@@ -93,8 +93,7 @@ async def generate_grocery_list(
         raise HTTPException(status_code=404, detail="Session not found")
 
     # Pre-fetch all products once, then score each item in-process
-    kb = await get_kb()
-    try:
+    async with get_kb() as kb:
         cursor = await kb.execute(
             "SELECT name, size, department, category, store FROM products"
         )
@@ -110,8 +109,6 @@ async def generate_grocery_list(
                 "recipe_name": item.recipe_name,
                 "product": product,
             })
-    finally:
-        await kb.close()
 
     # Group and build response
     stores = group_items_by_store(matched_items)

@@ -9,9 +9,8 @@ from src.ai.tools.analyze_pcsv import analyze_pcsv
 
 @pytest_asyncio.fixture()
 async def kb():
-    db = await get_kb()
-    yield db
-    await db.close()
+    async with get_kb() as db:
+        yield db
 
 
 async def test_chicken_wings_and_rice(kb):

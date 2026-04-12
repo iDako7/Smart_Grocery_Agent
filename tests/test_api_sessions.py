@@ -1,7 +1,8 @@
 """Tests for session + chat API endpoints."""
 
 import uuid
-from unittest.mock import AsyncMock, patch
+from contextlib import asynccontextmanager
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 import pytest_asyncio
@@ -11,6 +12,22 @@ from sqlalchemy import text
 from src.ai.types import AgentResult
 from src.backend.main import app
 from tests.conftest import _engine, _ensure_tables
+
+
+def _make_kb_ctx_mock(kb_conn: AsyncMock) -> MagicMock:
+    """Return a MagicMock that acts as an async context manager yielding kb_conn.
+
+    Use with patch(...) as the side_effect of the patched get_kb:
+
+        with patch("...get_kb", side_effect=_make_kb_ctx_mock_factory(conn)):
+            ...
+
+    Or simply replace get_kb with a function that returns this object.
+    """
+    ctx = MagicMock()
+    ctx.__aenter__ = AsyncMock(return_value=kb_conn)
+    ctx.__aexit__ = AsyncMock(return_value=False)
+    return ctx
 
 _DEV_USER = uuid.UUID("00000000-0000-0000-0000-000000000001")
 
@@ -95,8 +112,7 @@ async def test_chat_with_mocked_orchestrator(client):
     with patch("src.backend.api.sessions.run_agent", new_callable=AsyncMock, return_value=mock_result):
         with patch("src.backend.api.sessions.get_kb") as mock_kb:
             mock_kb_conn = AsyncMock()
-            mock_kb_conn.close = AsyncMock()
-            mock_kb.return_value = mock_kb_conn
+            mock_kb.return_value = _make_kb_ctx_mock(mock_kb_conn)
 
             resp = await client.post(
                 f"/session/{sid}/chat",
@@ -131,8 +147,7 @@ async def test_get_session_after_chat(client):
     with patch("src.backend.api.sessions.run_agent", new_callable=AsyncMock, return_value=mock_result):
         with patch("src.backend.api.sessions.get_kb") as mock_kb:
             mock_kb_conn = AsyncMock()
-            mock_kb_conn.close = AsyncMock()
-            mock_kb.return_value = mock_kb_conn
+            mock_kb.return_value = _make_kb_ctx_mock(mock_kb_conn)
             await client.post(
                 f"/session/{sid}/chat",
                 json={"message": "I have rice", "screen": "home"},
@@ -154,8 +169,7 @@ async def test_chat_passes_screen_to_run_agent(client):
     with patch("src.backend.api.sessions.run_agent", new_callable=AsyncMock, return_value=mock_result) as mock_run:
         with patch("src.backend.api.sessions.get_kb") as mock_kb:
             mock_kb_conn = AsyncMock()
-            mock_kb_conn.close = AsyncMock()
-            mock_kb.return_value = mock_kb_conn
+            mock_kb.return_value = _make_kb_ctx_mock(mock_kb_conn)
             await client.post(f"/session/{sid}/chat", json={"message": "hi", "screen": "recipes"})
     mock_run.assert_called_once()
     _, kwargs = mock_run.call_args
@@ -186,8 +200,7 @@ async def test_grocery_list_happy_path(client):
             mock_cursor.fetchall = AsyncMock(return_value=[])
             mock_kb_conn = AsyncMock()
             mock_kb_conn.execute = AsyncMock(return_value=mock_cursor)
-            mock_kb_conn.close = AsyncMock()
-            mock_kb.return_value = mock_kb_conn
+            mock_kb.return_value = _make_kb_ctx_mock(mock_kb_conn)
             resp = await client.post(
                 f"/session/{sid}/grocery-list",
                 json={"items": [
@@ -237,8 +250,7 @@ async def test_grocery_list_preserves_existing_snapshot(client):
     with patch("src.backend.api.sessions.run_agent", new_callable=AsyncMock, return_value=mock_result):
         with patch("src.backend.api.sessions.get_kb") as mock_kb:
             mock_kb_conn = AsyncMock()
-            mock_kb_conn.close = AsyncMock()
-            mock_kb.return_value = mock_kb_conn
+            mock_kb.return_value = _make_kb_ctx_mock(mock_kb_conn)
             await client.post(f"/session/{sid}/chat", json={"message": "I have chicken", "screen": "home"})
 
     # Now call grocery-list and verify pcsv key is still in the snapshot
@@ -251,8 +263,7 @@ async def test_grocery_list_preserves_existing_snapshot(client):
             mock_cursor.fetchall = AsyncMock(return_value=[])
             mock_kb_conn = AsyncMock()
             mock_kb_conn.execute = AsyncMock(return_value=mock_cursor)
-            mock_kb_conn.close = AsyncMock()
-            mock_kb.return_value = mock_kb_conn
+            mock_kb.return_value = _make_kb_ctx_mock(mock_kb_conn)
             glr = await client.post(
                 f"/session/{sid}/grocery-list",
                 json={"items": [{"ingredient_name": "chicken", "amount": "1 kg", "recipe_name": "Curry"}]},
@@ -279,8 +290,7 @@ async def test_grocery_list_all_unmatched_goes_to_other(client):
             mock_cursor.fetchall = AsyncMock(return_value=[])
             mock_kb_conn = AsyncMock()
             mock_kb_conn.execute = AsyncMock(return_value=mock_cursor)
-            mock_kb_conn.close = AsyncMock()
-            mock_kb.return_value = mock_kb_conn
+            mock_kb.return_value = _make_kb_ctx_mock(mock_kb_conn)
             resp = await client.post(
                 f"/session/{sid}/grocery-list",
                 json={"items": [
