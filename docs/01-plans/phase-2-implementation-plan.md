@@ -116,9 +116,14 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 
 ### 2.3 Finalize
 
+#### First Priority
+
 - Docker Compose fully wired: frontend build + FastAPI + PostgreSQL
-- Eval suite (`evals/reasoning/`) running against async backend
 - Smoke test all 7 screens with real KB data and real LLM responses
+
+#### Second Priority
+
+- Eval suite (`evals/reasoning/`) running against async backend
 
 ---
 

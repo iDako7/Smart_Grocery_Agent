@@ -1,6 +1,6 @@
 # Smart Grocery Assistant — Architecture Spec V2
 
-**Date:** 2026-04-05 | **Status:** Active | **Owner:** Dako (@iDako7)
+**Date:** 2026-04-11 | **Status:** Active | **Owner:** Dako (@iDako7)
 
 ---
 
@@ -141,13 +141,14 @@ Each layer does what it's best at.
 
 **Future scope:** A separate memory agent for cross-session _reasoning_ over conversation history (e.g., "what did I cook last Thanksgiving?") when saved content accumulates. Different tools, different prompt, different challenge — belongs in Phase 3 at earliest. The structured profile and read path remain unchanged when the memory agent is added.
 
-**System prompt structure:** Three sections maintained as reusable prompt snippets (skill files), concatenated at build time:
+**System prompt structure:** Four sections maintained as reusable prompt snippets (skill files), concatenated at build time:
 
 - **Persona** — thinking partner framing, suggest don't dictate, tolerate vague input
 - **Rules** — hard constraints (dietary restrictions are absolute, PCSV before creativity, prefer KB over generation, flag AI-generated recipes)
 - **Tool instructions** — when to call each tool and in what order
+- **Navigation context** — current screen in the flow (informational, does not constrain agent behavior per ADR-17)
 
-**Prompt assembly rebuilds on every `/chat` call.** The user profile may change mid-session (via `update_user_profile`), so prompt assembly reads the latest profile from PostgreSQL each time rather than caching it at session start.
+**Prompt assembly rebuilds on every `/chat` call.** The user profile may change mid-session (via `update_user_profile`), so prompt assembly reads the latest profile from PostgreSQL each time rather than caching it at session start. Screen context from the request body is also injected as the navigation context section (see system prompt structure above).
 
 Prompt content is designed and refined during Phase 1 through real conversations. No premature lock-down.
 
@@ -267,7 +268,7 @@ event: thinking       → status message ("Analyzing your ingredients...")
 event: pcsv_update    → PCSV category indicators
 event: recipe_card    → one recipe card (emitted per card as available)
 event: explanation    → agent's reasoning text
-event: grocery_list   → store-grouped shopping list
+event: grocery_list   → store-grouped shopping list (reserved in Phase 2 — grocery list generation uses a dedicated endpoint, not the /chat SSE flow; the GroceryStore model is reused as the response type)
 event: error          → error with context
 event: done           → completion signal with status ("complete" | "partial")
 ```
@@ -305,12 +306,15 @@ The orchestration loop runs to completion, then emits all typed events in rapid 
 | `POST /session`           | Create     | Starts a new session, returns `session_id`                     |
 | `POST /session/{id}/chat` | SSE stream | Sends user message + screen context, streams back typed events |
 | `GET /session/{id}`       | Read       | Returns current session state (for page refresh / resume)      |
+| `POST /session/{id}/grocery-list` | Create | Deterministic grocery list generation from checked buy items (no LLM). Returns `GroceryStore[]` |
 | `POST /auth/send-code`    | Auth       | Sends magic link or 6-digit code to email                      |
 | `POST /auth/verify`       | Auth       | Validates code, returns JWT                                    |
 
 Saved content (meal plans, recipes, grocery lists) gets standard CRUD endpoints — no LLM involvement. Saving writes current session state to PostgreSQL.
 
-The `/chat` endpoint is the core. All LLM interactions flow through it: screen transitions, chat corrections, swap requests. The `screen` field in the request body is a context hint for the backend (used for context compression and logging), not a directive for which event types to emit. The backend always emits all relevant event types; the frontend decides what to render based on the current screen.
+The `/grocery-list` endpoint is the only non-chat data generation path. It bypasses the AI layer entirely — fuzzy-matching ingredients against the product KB, grouping by store/department, and returning items not found in an 'Other' section. See `orchestrator-behaviors-v1.md` §2 for the full behavioral spec.
+
+The `/chat` endpoint is the core. All LLM interactions flow through it: screen transitions, chat corrections, swap requests. The `screen` field in the request body is a context hint injected into the system prompt as navigation context (see §4) and used for logging. It does not constrain agent behavior or filter which event types are emitted (ADR-17). The backend always emits all relevant event types; the frontend decides what to render based on the current screen.
 
 ---
 
@@ -347,11 +351,11 @@ App
 │   ├── Recipes        → recipe cards, swap interaction, chat input
 │   └── Grocery        → store-grouped checklist, no chat input
 ├── Screens (saved content — full-screen detail, accessed from Sidebar)
-│   ├── SavedMealPlan  → expandable recipe list, add/remove, chat input
-│   ├── SavedRecipe    → editable recipe card, chat input
+│   ├── SavedMealPlan  → expandable recipe list, no chat input — manual editing only (S5, S6)
+│   ├── SavedRecipe    → editable recipe card, no chat input — in-place edit only (S6)
 │   └── SavedGroceryList → checklist with add/remove, copy to clipboard
 ├── Sidebar            → saved content index (meal plans, recipes, grocery lists)
-├── ChatInput          → shared component on Clarify, Recipes, and saved content screens
+├── ChatInput          → shared component on Clarify and Recipes screens
 └── InfoSheet          → bottom sheet for recipe info (bilingual name, flavor tags, description)
 ```
 
@@ -466,3 +470,12 @@ AWS
 - **Wireframe:** `wireframe-v2.html`
 - **Agent patterns:** [Anthropic — Building Effective Agents](https://www.anthropic.com/research/building-effective-agents)
 - **Tool design guide:** [Anthropic — Writing Effective Tools for Agents](https://www.anthropic.com/engineering/writing-tools-for-agents)
+
+---
+
+## Modification History
+
+| Date | Version | Changes |
+|:-----|:--------|:--------|
+| 2026-04-05 | v1 | Initial architecture spec |
+| 2026-04-11 | v2 | Gap analysis updates: added POST /session/{id}/grocery-list endpoint (§9), navigation context as fourth prompt section (§4), GroceryListEvent reserved note (§8), updated screen field description (§9), saved content screens no chat input (§11). |

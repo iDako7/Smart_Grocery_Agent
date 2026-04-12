@@ -1,7 +1,7 @@
 # SGA V2 — Product Specification
 
-**Last updated:** 2026-04-10
-**Status:** Approved v3
+**Last updated:** 2026-04-11
+**Status:** Approved v4
 **Owner:** Dako (@iDako7)
 
 ---
@@ -20,7 +20,7 @@ A thinking partner that helps you cook delicious food more easily — by making 
 
 ### Interaction Model
 
-Each screen has a **canvas** (structured UI: cards, charts, checklists) and a **chat input**. Chat messages are instructions to the agent that update the canvas — not a conversation thread. The user types "I also have kimchi" → the ingredient list updates. Questions get answered inline.
+Each screen has a **canvas** (structured UI: cards, charts, checklists). Screens in the main flow (Clarify, Recipes) also have a **chat input** — messages are instructions to the agent that update the canvas, not a conversation thread. The user types "I also have kimchi" → the ingredient list updates. Questions get answered inline. Home has only a freeform input (not chat). Grocery and saved content screens have no chat input — they are view/edit only.
 
 Navigation is always sequential: Home → Clarify → Recipes → Grocery. Steps become thin, never skipped. The agent controls how much content each screen shows based on input confidence.
 
@@ -48,9 +48,8 @@ Navigation is always sequential: Home → Clarify → Recipes → Grocery. Steps
 | R1 | Recipes | Recipe Curation | 3-5 coherent meal cards |
 | R2 | Recipes | Recipe Swap | Replace one card via chat |
 | R3 | Recipes | Recipe Info | Bilingual detail bottom sheet |
-| R4 | Recipes | Browse All Recipes | Searchable KB recipe list |
 | R5 | Recipes | Save Meal Plan | Persist current recipe set |
-| R6 | Recipes | Build Grocery List | Extract buy items → Grocery |
+| R6 | Recipes | Build Grocery List | Toggle buy items, generate store-grouped list |
 | G1 | Grocery | Grocery Checklist | Store-grouped list with attribution |
 | G2 | Grocery | Check Off | Mark items as purchased |
 | G3 | Grocery | Save Grocery List | Persist checklist to sidebar |
@@ -60,11 +59,10 @@ Navigation is always sequential: Home → Clarify → Recipes → Grocery. Steps
 | S4 | Saved | Saved Grocery List | Persistent checklist with manual editing |
 | S5 | Saved | Remove Recipe | Delete recipe from meal plan |
 | S6 | Saved | In-Place Edit | Edit recipe text directly |
-| S7 | Saved | Agent Refinement | Chat modifies saved content |
 | S8 | Saved | Copy to Notes | Export grocery list as plain text |
 | A1 | System | Cross-Session Memory | Structured user profile across sessions |
 | A2 | System | Dietary Enforcement | Hard constraints on all suggestions |
-| A3 | System | Bilingual Output | EN + ZH for names and instructions |
+| A3 | System | Bilingual Output | EN + ZH toggle for recipe and ingredient names |
 
 ### Home
 > **Navigation:** Submit input → Clarify
@@ -97,7 +95,7 @@ User types corrections or additions ("I also have kimchi, forgot to mention") �
 > **Constraint:** Cards form a coherent set — varied sauces, cooking methods, PCV coverage
 
 #### R1: Recipe Curation
-User sees 3-5 recipe cards: name, one-line description with effort level, key flavor tags, "have" pills (ingredients on hand, green) and "buy" pills (gap items, orange). Info button on each card.
+User sees 3-5 recipe cards: name, one-line description with effort level, key flavor tags, "have" pills (ingredients on hand, green) and "buy" pills (gap items, orange, toggleable). User can toggle off "buy" pills for items they already have — this affects what goes into the grocery list. Info button on each card.
 
 #### R2: Recipe Swap
 User taps swap on a card → chat pre-fills with contextual message (e.g., "Suggest a different dish for meal 2 (congee)") → card highlights. Three paths: (1) send as-is → 1-2 alternatives inline, (2) edit for specificity ("something quicker") → targeted alternatives, (3) ignore swap and type freely ("make it all Mexican") → agent regenerates all cards.
@@ -105,21 +103,18 @@ User taps swap on a card → chat pre-fills with contextual message (e.g., "Sugg
 #### R3: Recipe Info
 User taps info button → bottom sheet shows bilingual name (EN + ZH), flavor tags as pills, 2-line taste description.
 
-#### R4: Browse All Recipes
-Below the curated cards, a searchable/filterable recipe list from the KB. Secondary to the curated set.
-
 #### R5: Save Meal Plan
 User taps "Save plan" → current recipe set stored as a meal plan, accessible from sidebar.
 
 #### R6: Build Grocery List
-User taps "Build shopping list" → system extracts "buy" items from all recipe cards, cross-references store data, generates store-grouped list → navigates to Grocery screen.
+User reviews "buy" pills across all recipe cards, toggles off any items already on hand. User taps "Build shopping list" → system takes remaining checked "buy" items, cross-references store/product KB for each (fuzzy match), groups found items by store → department with recipe attribution, places unmatched items in an "Other" section → navigates to Grocery screen. This is a deterministic backend operation (`POST /session/{id}/grocery-list`), not an agent/LLM call.
 
 ### Grocery
 > **Navigation:** "Save list" → Saved Grocery List | Back → Recipes (for changes)
 > **Constraint:** No chat input — modifications require going back to Recipes
 
 #### G1: Grocery Checklist
-User sees items grouped by store (Costco, community market), then by department. Each item shows recipe attribution: "Gochujang — for Korean BBQ pork belly."
+User sees items grouped by store (Costco, community market), then by department. Each item shows recipe attribution: "Gochujang — for Korean BBQ pork belly." Items not found in the product KB appear in an "Other" section (no store/department, just ingredient name and recipe attribution).
 
 #### G2: Check Off
 User taps items to mark as purchased.
@@ -134,10 +129,10 @@ User taps "Save list" → checklist persisted and accessible from sidebar.
 User opens sidebar and sees three sections: Meal Plans, Saved Recipes, Grocery Lists. Each section lists saved items by name/date.
 
 #### S2: Saved Meal Plan
-User sees expandable recipe rows. Tap to expand → terse cooking instructions (key ratios, prep technique, cook instruction — no paragraphs, no story). Chat input at bottom for modifications.
+User sees expandable recipe rows. Tap to expand → terse cooking instructions (key ratios, prep technique, cook instruction — no paragraphs, no story). No chat input — modifications are manual (S5, S6).
 
 #### S3: Saved Recipe
-User sees a standalone cooking card in terse format: ratios, temps, times, imperative steps. Like a note pinned to the fridge. Chat input at bottom.
+User sees a standalone cooking card in terse format: ratios, temps, times, imperative steps. Like a note pinned to the fridge. No chat input — modifications via in-place edit (S6).
 
 #### S4: Saved Grocery List
 User sees store-grouped checklist with check-off toggles and manual add/remove capability.
@@ -147,9 +142,6 @@ User taps ✕ on a recipe row in a saved meal plan → recipe removed from the p
 
 #### S6: In-Place Edit
 User taps Edit on a saved recipe → text becomes editable in monospace → Save/Cancel. No rich text editor.
-
-#### S7: Agent Refinement
-User types in chat on a saved meal plan or recipe ("Adjust for 8 people", "Add a dessert") → agent suggests options using swap-style inline alternatives → updates content in-place.
 
 #### S8: Copy to Notes
 User taps "Copy to Notes" on a saved grocery list → list exported as plain checklist for Apple Notes or similar.
@@ -163,7 +155,7 @@ System maintains a structured user profile: dietary restrictions, preferred cuis
 Dietary restrictions are hard constraints. The system never presents non-compliant ingredients, substitutions, or recipes as usable options. Halal = no pork in anything suggested, even if intermediate retrieval returns broader candidates.
 
 #### A3: Bilingual Output
-When bilingual mode is active, dish names and key instructions appear in both EN and ZH. No partial output — either fully bilingual or fully monolingual.
+A toggle button (top-right of the page) appears on the Recipes and Grocery screens. When active, recipe names and ingredient names display Chinese translations alongside English. When inactive, Chinese text is hidden. This is a frontend rendering toggle — data comes from the KB (`name_zh` on recipes, `glossary` table for ingredients). No agent involvement.
 
 ---
 
@@ -175,13 +167,17 @@ When bilingual mode is active, dish names and key instructions appear in both EN
 Home → type "BBQ for 8, I have pork belly and burger patties"
   → Clarify: PCV shows P=good, V=gap; agent suggests gap-filling recipes
   → Recipes: 3-5 cards with have/buy pills covering PCV gaps
-  → Grocery: items grouped by store → department, each with recipe attribution
+  → User toggles off "buy" pills for items already on hand
+  → User taps "Build shopping list" → deterministic backend call
+  → Grocery: items grouped by store → department, each with recipe attribution; unmatched items in "Other"
   → Save: list persisted with unique ID, viewable from sidebar
 
 **Must be true:**
 - AI responses stream via SSE, not a single block
 - PCV analysis returns structured category data with gap indicators
-- Grocery list derived from selected recipes' "buy" ingredients
+- "Buy" pills are toggleable — user controls what goes to grocery list
+- Grocery list generated by deterministic KB lookup, not agent
+- Items not found in product KB appear in "Other" section
 - Save creates a real backend record with unique ID
 
 ### Journey 2: Recipe Refinement
@@ -214,23 +210,19 @@ Recipes → tap "Save plan" → meal plan created
 - Sidebar lists all saved content from backend
 - Saved plan loads real data by ID
 
-### Journey 4: Saved Content Editing
-> Features: S5, S6, S7, S8
+### Journey 4: Saved Content Management
+> Features: S5, S6, S8
 
-Saved meal plan → type "Add a dessert" in chat
-  → Agent suggests options inline → user picks → plan updated
+Saved meal plan → tap ✕ on a recipe row → recipe removed from plan
 
 Saved recipe → tap Edit → text becomes editable monospace
   → Modify → Save → card updates
-
-Saved recipe → type "Adjust for 8 people" in chat
-  → Agent rewrites card with updated quantities
 
 Saved grocery list → add/remove items manually
   → Tap "Copy to Notes" → plain checklist exported
 
 **Must be true:**
-- Agent refinement modifies saved content in-place
+- Remove recipe updates the plan immediately
 - In-place edit preserves terse format
 - Copy exports a plain-text checklist
 
@@ -262,9 +254,11 @@ System → LLM unavailable
 ### Journey 1: Ingredient → Recipes → Grocery → Save
 
 * **[Frontend] Real-Time Streaming (C4, R1):** AI responses arrive via SSE. User sees progressive status updates during processing.
+* **[Frontend] Session Context (F7):** Frontend must append the full assistant SSE explanation response to the session conversation history to maintain multi-turn chat memory on Clarify and Recipes screens.
 * **[Backend] PCV Analysis (C2):** Agent categorizes ingredients into P/C/V, computes gap status per category, returns structured data to frontend.
 * **[Backend] Recipe Curation (R1):** Agent queries KB and returns 3-5 recipe cards forming a coherent set covering identified PCV gaps.
-* **[Backend] Grocery List Generation (R6, G1):** System extracts "buy" ingredients from selected recipes, cross-references store/product data, produces store → department grouped list with recipe attribution.
+* **[Frontend] Toggleable Buy Pills (R1, R6):** "Buy" pills on recipe cards are toggleable. User can deselect items already on hand before building the grocery list.
+* **[Backend] Grocery List Generation (R6, G1):** `POST /session/{id}/grocery-list` receives checked "buy" items, cross-references product KB via fuzzy match, returns store → department grouped list with recipe attribution. Unmatched items in "Other" section.
 * **[Frontend] Dynamic Save (G3):** "Save list" triggers backend POST, navigates to saved view using returned ID.
 * **[Frontend] Saved Content Loading (S4):** Saved views fetch real data from backend by ID.
 
@@ -281,9 +275,9 @@ System → LLM unavailable
 * **[Frontend] Sidebar Listing (S1):** Sidebar fetches and displays all saved plans/recipes/lists from backend.
 * **[Frontend] Detail View (S2):** Tapping a saved item loads full content from backend by ID, renders expandable recipe rows with cooking instructions.
 
-### Journey 4: Saved Content Editing
+### Journey 4: Saved Content Management
 
-* **[Backend] Agent Refinement (S7):** Chat on a saved item loads the item into prompt context, agent modifies content, system persists updates in-place.
+* **[Frontend] Remove Recipe (S5):** Tap ✕ on a recipe row in saved meal plan removes it. Backend DELETE or PUT updates the record.
 * **[Frontend] In-Place Edit (S6):** Edit mode renders recipe text as editable monospace. Save/Cancel controls. No rich text.
 * **[Frontend] Manual List Editing (S4):** Saved grocery list supports manual add/remove items and check-off toggles.
 * **[Frontend] Copy Export (S8):** "Copy to Notes" produces a plain-text checklist in clipboard.
@@ -291,7 +285,7 @@ System → LLM unavailable
 ### Journey 5: Error & Edge Cases
 
 * **[Backend] Vague Input Handling (C3):** Input below confidence threshold triggers clarify questions rather than empty results.
-* **[Backend] Dietary Enforcement (A2):** All tool outputs filtered against user's dietary constraints before returning to frontend.
+* **[Backend] Dietary Enforcement (A2):** Agent enforces dietary constraints via prompt rules and recovery workflows (ADR-10). LLM-driven, no backend post-filter.
 * **[Frontend] Error States:** Network failures and timeouts display a visible error banner with retry option.
 * **[Backend] Graceful Degradation:** When LLM is unavailable, system serves KB-only results with reduced personalization.
 
@@ -315,7 +309,7 @@ Single conversational agent with tool-use loop (not separate REST endpoints). Th
 
 **Streaming:** Status strings during agent loop, typed events after completion. Event types: `thinking`, `pcsv_update`, `recipe_card`, `explanation`, `grocery_list`, `error`, `done`.
 
-**Prompt assembly:** Rebuilt every chat call. Reads latest user profile from database. System prompt = persona + rules + tool instructions.
+**Prompt assembly:** Rebuilt every chat call. Reads latest user profile from database. System prompt = persona + rules + tool instructions + navigation context. The navigation context tells the agent which screen the user is currently on (e.g., "User is on the Recipes screen") so the agent can make informed decisions, but does not constrain the agent to screen-specific actions — the agent remains free to handle any user intent regardless of screen.
 
 **Schema coercion:** `json.loads()` → Pydantic type coercion → field validators → defaults → re-prompt only as last resort.
 
@@ -328,7 +322,6 @@ Single conversational agent with tool-use loop (not separate REST endpoints). Th
 | PCV Mappings | Structural gap detection per ingredient (some multi-role: beans = protein + carb) |
 | Substitutions | "If you can't find X, use Y" with dietary constraint awareness and match quality |
 | Flavor Tags | Variety matching across meals — contrast profiles across the set |
-| Ingredient-Recipe Index | Reverse lookup enabling multi-preparation suggestions for bulk items |
 
 > Full schema: `contracts/kb_schema.sql`
 
@@ -337,15 +330,29 @@ Single conversational agent with tool-use loop (not separate REST endpoints). Th
 - **Recipe accuracy:** KB recipes trusted. LLM-generated flagged as "AI-suggested."
 - **Dietary restrictions:** Hard constraints — never violated in any suggestion, substitution, or recipe.
 - **Quantity awareness:** Don't suggest 5 recipes needing a full pack when user has one pack.
-- **Bilingual consistency:** When active, every name and key instruction in both languages. No partial output.
+- **Bilingual consistency:** When toggle is active, recipe names and ingredient names show Chinese translations. Scope is limited to names only — not instructions or UI chrome.
 - **Transparency:** Briefly explain why each suggestion is made ("Adding vegetables because your list is protein-heavy").
 - **Graceful degradation:** LLM down → KB-only results with reduced personalization.
 
 ---
 
-## 6. Open Questions
+## 6. Out of Scope
 
-- **Bilingual scope:** Currently targeting English-first. Chinese planned for dish names initially. Full i18n pipeline scope TBD.
-- **KB seed strategy:** How many recipes and products to index initially, which cuisines to prioritize first.
-- **Vague input threshold:** Minimum information before the system generates useful suggestions. Deferred to user testing.
-- **Model selection:** Mid-tier non-reasoning model likely needed for structural complexity. Depends on further evaluation.
+The following are explicitly not part of this product. They are not deferred features — they are non-goals for the current product definition.
+
+- **Agent refinement on saved content (S7):** Saved content (meal plans, recipes, grocery lists) is for reference and manual editing only. No agent/LLM involvement on saved content screens.
+- **Browse All Recipes (R4):** No searchable/filterable KB recipe list. Users interact with agent-curated recipes only.
+- **Multi-preparation awareness:** No dedicated logic for suggesting varied cooking methods for the same protein. The KB naturally contains diverse preparations, but no explicit tooling or prompt engineering for this.
+- **Backend dietary post-filter:** Dietary enforcement is LLM-driven via prompt rules (ADR-10). No systematic backend filtering of tool outputs against dietary constraints.
+- **User profile editing UI:** No frontend screen for directly editing the user profile. Profile is updated by the agent during conversation via `update_user_profile` tool only.
+- **Full i18n pipeline:** Bilingual support is limited to a frontend toggle showing Chinese translations for recipe names and ingredient names. No full internationalization of UI chrome, instructions, or agent responses.
+- **Model selection:** Deferred to evaluation phase. Current default is configurable via `SGA_MODEL` environment variable.
+
+---
+
+## Modification History
+
+| Date | Version | Changes |
+|:-----|:--------|:--------|
+| 2026-04-10 | v3 | Initial approved spec: feature catalog, user journeys, acceptance criteria |
+| 2026-04-11 | v4 | Gap analysis corrections: removed R4 (Browse All Recipes), S7 (Agent Refinement). Clarified interaction model (chat input only on Clarify/Recipes). Rewrote R6/G1 grocery pipeline (toggleable buy pills → deterministic `POST /session/{id}/grocery-list` → "Other" section for unmatched). Simplified A3 bilingual (frontend toggle, names only). Added navigation context to prompt assembly. Removed Ingredient-Recipe Index from KB. Rewrote Journey 4 as manual-only. Updated acceptance criteria for dietary enforcement (LLM-driven, no backend filter). Replaced §6 Open Questions (all resolved) with §6 Out of Scope. Added F7 session context acceptance criterion to Journey 1. |

@@ -1,7 +1,7 @@
 # Architecture Decision Records
 
 **Project:** Smart Grocery Assistant V2
-**Last updated:** 2026-04-07 | **Owner:** Dako (@iDako7)
+**Last updated:** 2026-04-11 | **Owner:** Dako (@iDako7)
 
 ---
 
@@ -31,6 +31,9 @@
 | ADR-20 | `rapidfuzz` Over `thefuzz` / FTS5 for Product Search | Decided | WT2 planning |
 | ADR-21 | Transaction-Rollback PostgreSQL Tests Over In-Memory SQLite | Decided | WT2 planning |
 | ADR-22 | Token-Based Context Truncation Over Fixed Turn Count | Decided | WT2 planning |
+| ADR-23 | Deterministic Grocery List Generation Over Agent-Driven | Decided | Phase 2 gap analysis |
+| ADR-24 | Screen Navigation Context Without Behavioral Constraints | Decided | Phase 2 gap analysis, extends ADR-17 |
+| ADR-25 | Saved Content as Manual-Only, No Agent Refinement | Decided | Phase 2 gap analysis |
 
 ---
 
@@ -456,6 +459,59 @@ VPS
 - *No truncation (full history):* Works for short sessions but token costs grow unbounded. A 20-turn session with tool results could hit 50K+ tokens per iteration.
 
 **Risk:** Approximate token counting may over- or under-truncate by ~20%. Acceptable — the budget is a guideline. If a specific session feels lossy, the Phase 3 summary approach addresses it properly.
+
+---
+
+## ADR-23: Deterministic Grocery List Generation Over Agent-Driven
+
+**Decision:** Grocery list generation uses a dedicated `POST /session/{id}/grocery-list` endpoint with deterministic KB lookups, not the agent `/chat` SSE flow.
+
+**Context:** The product spec (R6) requires extracting "buy" items from recipe cards, cross-referencing store/product data, and grouping by store -> department. Three approaches were considered: (a) agent-driven via /chat where the LLM calls `lookup_store_product` per ingredient across multiple iterations, (b) a dedicated deterministic endpoint, (c) frontend-driven with batch lookup.
+
+**Why:** The LLM adds zero value — this is purely deterministic lookups + grouping. A dedicated endpoint is fast (~50ms vs ~10-30s for agent-driven), free (no token cost), and easily testable. The response reuses the existing `GroceryStore` type from `contracts/sse_events.py`.
+
+**Why not alternatives:**
+
+- *Agent-driven via /chat:* Each ingredient requires an LLM iteration (N items x ~2s). Expensive and slow for a task that needs no judgment.
+- *Frontend-driven with batch lookup:* Splits business logic between frontend and backend. Frontend can't access SQLite KB directly. Grouping logic becomes harder to maintain.
+
+**Trade-off:** The `GroceryListEvent` SSE type becomes unused in Phase 2 (reserved for potential Phase 3 progressive streaming). The grocery screen has no chat input, consistent with this being a non-agent operation.
+
+---
+
+## ADR-24: Screen Navigation Context Without Behavioral Constraints
+
+> *Extends ADR-17 — ADR-17 decided event emission is screen-agnostic; this ADR decides prompt assembly is also screen-agnostic (informational context, not behavioral constraints).*
+
+**Decision:** The system prompt includes a navigation context section telling the agent which screen the user is on, but this does NOT constrain the agent to screen-specific actions. The agent remains free to handle any user intent regardless of current screen.
+
+**Context:** Gap analysis revealed the agent had no awareness of the user's position in the Home -> Clarify -> Recipes -> Grocery flow. Three approaches were considered: (a) screen-specific prompt snippets that constrain behavior per screen, (b) navigation context as informational only, (c) no screen awareness at all.
+
+**Why:** The agent needs context to make informed decisions (e.g., user on Recipes screen mentions needing baby food -> agent should regenerate recipes, not just answer in text). But constraining behavior per screen would limit the agent's flexibility and contradict ADR-17 (screen-agnostic API). Informational context gives the agent the "where" without limiting the "what."
+
+**Why not alternatives:**
+
+- *Screen-specific prompt snippets:* Would need a different instruction set per screen. Hard to maintain, limits agent flexibility. "You're on the Recipes screen so only suggest recipes" breaks when the user wants to go back and adjust ingredients.
+- *No screen awareness:* Agent can't distinguish "user just started" from "user is reviewing recipes." Loses valuable context for making better decisions.
+
+**Trade-off:** The agent might occasionally produce output that doesn't match the current screen's UI (e.g., PCV analysis on Recipes screen). The frontend reducer handles this by ignoring events it can't render on the current screen — marginal bandwidth cost, no UX impact (per ADR-17).
+
+---
+
+## ADR-25: Saved Content as Manual-Only, No Agent Refinement
+
+**Decision:** Saved content (meal plans, recipes, grocery lists) is for reference and manual editing only. No agent/LLM involvement on saved content screens. No chat input on saved meal plan or saved recipe screens.
+
+**Context:** The original product spec (v3) included S7 (Agent Refinement) — chat on saved items that modifies content in-place via the agent. Gap analysis revealed this would require: loading saved items into agent context via target_id, running the agent against them, and persisting modifications. This is a significant scope increase with three implementation gaps (B3: target_id unused, B4: no saved-item context loading, no modification persistence path).
+
+**Why:** Saved content serves a different purpose than the conversational flow. The conversational flow (Home -> Clarify -> Recipes -> Grocery) is where the agent adds value — reasoning about ingredients, suggesting recipes, filling PCV gaps. Saved content is the OUTPUT of that flow, stored for reference. Users edit saved content manually (S5: remove recipe, S6: in-place text edit, S8: copy to notes). Agent refinement on saved content is a separate product capability that doesn't justify the implementation complexity for Phase 2 validation.
+
+**Why not alternatives:**
+
+- *Full agent refinement (S7):* Requires target_id -> orchestrator -> saved item context loading -> modification -> persistence. Three backend gaps to fill, new prompt mode, new state management. High complexity for a feature that isn't on the critical validation path.
+- *Partial (agent on saved meal plans only):* Still requires target_id plumbing and context loading. Half the benefit for most of the complexity.
+
+**Trade-off:** Users can't say "adjust this plan for 8 people" on a saved meal plan. They can return to a new session and regenerate. This is an explicit product non-goal — documented in product spec section 6 Out of Scope.
 
 ---
 
