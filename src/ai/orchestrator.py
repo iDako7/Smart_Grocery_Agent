@@ -21,6 +21,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 
 logger = logging.getLogger(__name__)
 
+from contracts.api_types import Screen
 from contracts.tool_schemas import (
     TOOLS,
     AnalyzePcsvInput,
@@ -155,10 +156,11 @@ async def run_agent(
     pg: AsyncConnection,
     user_id: uuid.UUID,
     history: list[dict] | None = None,
+    screen: Screen | None = None,
 ) -> AgentResult:
     """Run the agent orchestration loop for a single user message."""
     profile = await get_user_profile(pg, user_id)
-    system = build_system_prompt(profile)
+    system = build_system_prompt(profile, screen=screen)
 
     messages: list[dict] = [{"role": "system", "content": system}]
     if history:

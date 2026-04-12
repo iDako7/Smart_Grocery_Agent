@@ -14,9 +14,8 @@ from src.ai.orchestrator import run_agent
 
 @pytest_asyncio.fixture()
 async def kb():
-    db = await get_kb()
-    yield db
-    await db.close()
+    async with get_kb() as db:
+        yield db
 
 
 def _make_response(content=None, tool_calls=None, finish_reason="stop"):

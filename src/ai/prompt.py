@@ -4,12 +4,31 @@ Rebuilds the system prompt every /chat call by reading the latest user
 profile from PostgreSQL.
 """
 
+from contracts.api_types import Screen
 from contracts.tool_schemas import UserProfile
 
 
-def build_system_prompt(profile: UserProfile) -> str:
-    """Build the full system prompt with profile section."""
-    return f"{_PERSONA}\n\n{_RULES}\n\n{_build_profile_section(profile)}\n\n{_TOOL_INSTRUCTIONS}"
+def build_system_prompt(profile: UserProfile, screen: Screen | None = None) -> str:
+    """Build the full system prompt with profile section.
+
+    Args:
+        profile: The user's persisted profile.
+        screen: Optional current screen name (home, clarify, recipes, grocery).
+                When provided a 'Current Screen' section is appended so the
+                agent knows the user's navigation context.
+    """
+    parts = [_PERSONA, _RULES, _build_profile_section(profile), _TOOL_INSTRUCTIONS]
+    if screen is not None:
+        parts.append(_build_screen_section(screen))
+    return "\n\n".join(parts)
+
+
+def _build_screen_section(screen: Screen) -> str:
+    return (
+        f"## Current Screen\n"
+        f"The user is currently on the {screen} screen.\n"
+        f"Flow: Home → Clarify → Recipes → Grocery"
+    )
 
 
 def _build_profile_section(profile: UserProfile) -> str:

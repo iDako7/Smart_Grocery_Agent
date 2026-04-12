@@ -9,9 +9,8 @@ from src.ai.tools.get_recipe_detail import get_recipe_detail
 
 @pytest_asyncio.fixture()
 async def kb():
-    db = await get_kb()
-    yield db
-    await db.close()
+    async with get_kb() as db:
+        yield db
 
 
 async def test_valid_recipe_id(kb):

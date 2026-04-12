@@ -119,11 +119,8 @@ async def chat(
     # Run agent (collect phase)
     agent_failed = False
     try:
-        kb = await get_kb()
-        try:
-            result = await run_agent(body.message, kb, conn, user_id, history=history)
-        finally:
-            await kb.close()
+        async with get_kb() as kb:
+            result = await run_agent(body.message, kb, conn, user_id, history=history, screen=body.screen)
     except Exception:
         logger.exception("Agent execution failed for session %s", session_id)
         agent_failed = True

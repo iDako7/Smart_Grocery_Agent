@@ -45,3 +45,25 @@ async def test_prompt_with_pg_profile(seeded_user, db):
     profile = await get_user_profile(db, seeded_user)
     prompt = build_system_prompt(profile)
     assert "Household size: 2" in prompt
+
+
+def test_prompt_without_screen_has_no_screen_section():
+    """Backward compat: no screen → no 'Current Screen' section."""
+    profile = UserProfile()
+    result = build_system_prompt(profile)
+    assert "Current Screen" not in result
+
+
+def test_prompt_with_screen_includes_screen_section():
+    """Screen param → 'Current Screen' section with screen name."""
+    profile = UserProfile()
+    result = build_system_prompt(profile, screen="recipes")
+    assert "Current Screen" in result
+    assert "recipes" in result
+
+
+def test_prompt_screen_section_includes_flow():
+    """Screen section includes navigation flow."""
+    profile = UserProfile()
+    result = build_system_prompt(profile, screen="clarify")
+    assert "Flow:" in result
