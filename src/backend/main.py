@@ -5,6 +5,7 @@ import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 from src.backend.api.auth import router as auth_router
 from src.backend.api.grocery import router as grocery_router
@@ -39,6 +40,20 @@ async def _lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Smart Grocery Assistant V2", version="0.1.0", lifespan=_lifespan)
+
+_CORS_ORIGINS = [
+    o.strip()
+    for o in os.environ.get("SGA_CORS_ORIGINS", "http://localhost:5173,http://localhost:4173").split(",")
+    if o.strip()
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth_router)
 app.include_router(sessions_router)

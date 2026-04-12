@@ -11,6 +11,10 @@ evals/reasoning/results*.json
 node_modules/
 dist/
 
+# Playwright
+playwright-report/
+test-results/
+
 # Docker
 postgres_data/
 

@@ -2,7 +2,7 @@
 //
 // Implements ChatServiceHandler using the actual FastAPI backend.
 // Session ID is maintained in closure — lazy creation on first call.
-// No auth header needed (SGA_AUTH_MODE=dev).
+// Auth header: Bearer JWT obtained from getAuthToken() in api-client.
 //
 // Wire format from backend:
 //   event: thinking
@@ -13,7 +13,7 @@
 
 import type { ChatServiceHandler } from "@/context/session-context";
 import type { SSEEvent, ErrorEvent } from "@/types/sse";
-import { getApiBase, createSession } from "@/services/api-client";
+import { getApiBase, createSession, getAuthToken } from "@/services/api-client";
 import type { Screen } from "@/types/api";
 
 // ---------------------------------------------------------------------------
@@ -144,10 +144,14 @@ export function createRealSSEService(): ChatServiceHandler {
 
         if (abort.signal.aborted) return;
 
+        const token = await getAuthToken();
         const url = `${getApiBase()}/session/${sessionId}/chat`;
         const response = await fetch(url, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
           body: JSON.stringify({ message, screen }),
           signal: abort.signal,
         });
@@ -166,6 +170,7 @@ export function createRealSSEService(): ChatServiceHandler {
         await consumeSseStream(response.body, abort.signal, onEvent, onDone, onError);
       } catch (err) {
         if (abort.signal.aborted) return;
+        console.error("[real-sse] connection error:", err);
         onError("Network error");
       }
     })();

@@ -100,13 +100,31 @@ const ERROR_RECOVERABLE_BLOCK = sseBlock("error", {
 // Mock fetch helpers
 // ---------------------------------------------------------------------------
 
+const AUTH_RESPONSE = { token: "test-jwt", user_id: "u1" };
+
 const SESSION_RESPONSE = {
   session_id: "test-session-123",
   created_at: "2026-04-11T00:00:00.000Z",
 };
 
+/**
+ * Builds a fetch mock that handles all three calls in order:
+ *   1. POST /auth/verify  → AUTH_RESPONSE
+ *   2. POST /session      → SESSION_RESPONSE
+ *   3. POST /session/.../chat → sseBody
+ *
+ * URL-based matching used so that session-reuse tests (which skip call 2 on
+ * the second message) still resolve correctly.
+ */
 function mockFetchWithSessionAndChat(sseBody: ReadableStream<Uint8Array>) {
   return vi.fn().mockImplementation((url: string) => {
+    if (typeof url === "string" && url.includes("/auth/verify")) {
+      return Promise.resolve({
+        ok: true,
+        body: null,
+        json: async () => AUTH_RESPONSE,
+      });
+    }
     if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
       return Promise.resolve({
         ok: true,
@@ -127,8 +145,10 @@ function mockFetchWithSessionAndChat(sseBody: ReadableStream<Uint8Array>) {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — happy path", () => {
-  afterEach(() => {
+  afterEach(async () => {
     vi.unstubAllGlobals();
+    const { resetAuthToken } = await import("@/services/api-client");
+    resetAuthToken();
   });
 
   it("dispatches thinking, pcsv_update, recipe_card, explanation in order and calls onDone", async () => {
@@ -173,26 +193,35 @@ describe("createRealSSEService — happy path", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — network failure", () => {
-  afterEach(() => {
+  afterEach(async () => {
     vi.unstubAllGlobals();
+    const { resetAuthToken } = await import("@/services/api-client");
+    resetAuthToken();
   });
 
   it("calls onError and never calls onDone when fetch rejects", async () => {
-    // Session creation succeeds; chat fetch fails
+    // Auth succeeds, session creation succeeds, chat fetch fails
     let callCount = 0;
     vi.stubGlobal(
       "fetch",
-      vi.fn().mockImplementation(() => {
+      vi.fn().mockImplementation((url: string) => {
         callCount++;
-        if (callCount === 1) {
-          // First call: session creation
+        if (typeof url === "string" && url.includes("/auth/verify")) {
+          return Promise.resolve({
+            ok: true,
+            body: null,
+            json: async () => AUTH_RESPONSE,
+          });
+        }
+        if (callCount === 2) {
+          // Second call: session creation
           return Promise.resolve({
             ok: true,
             body: null,
             json: async () => SESSION_RESPONSE,
           });
         }
-        // Second call: chat — network error
+        // Third call: chat — network error
         return Promise.reject(new Error("Network error"));
       })
     );
@@ -223,8 +252,10 @@ describe("createRealSSEService — network failure", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — non-recoverable error event", () => {
-  afterEach(() => {
+  afterEach(async () => {
     vi.unstubAllGlobals();
+    const { resetAuthToken } = await import("@/services/api-client");
+    resetAuthToken();
   });
 
   it("routes non-recoverable error to onError and never calls onEvent", async () => {
@@ -256,8 +287,10 @@ describe("createRealSSEService — non-recoverable error event", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — recoverable error event", () => {
-  afterEach(() => {
+  afterEach(async () => {
     vi.unstubAllGlobals();
+    const { resetAuthToken } = await import("@/services/api-client");
+    resetAuthToken();
   });
 
   it("routes recoverable error to onEvent and then calls onDone", async () => {
@@ -292,8 +325,10 @@ describe("createRealSSEService — recoverable error event", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — session creation", () => {
-  afterEach(() => {
+  afterEach(async () => {
     vi.unstubAllGlobals();
+    const { resetAuthToken } = await import("@/services/api-client");
+    resetAuthToken();
   });
 
   it("calls POST /session before POST /session/.../chat on first call", async () => {
@@ -313,14 +348,18 @@ describe("createRealSSEService — session creation", () => {
     const calls = fetchMock.mock.calls as [string, RequestInit][];
     expect(calls.length).toBeGreaterThanOrEqual(2);
 
-    // First call must be session creation
-    const firstUrl = calls[0][0];
-    expect(firstUrl).toMatch(/\/session$/);
-    expect(calls[0][1]?.method).toBe("POST");
+    // Find session creation call (not /auth/verify, not /chat)
+    const sessionCall = calls.find(
+      ([url]) => typeof url === "string" && /\/session$/.test(url)
+    );
+    expect(sessionCall).toBeDefined();
+    expect(sessionCall![1]?.method).toBe("POST");
 
-    // Second call must be the chat endpoint
-    const secondUrl = calls[1][0];
-    expect(secondUrl).toMatch(/\/session\/.+\/chat/);
+    // Find chat call
+    const chatCall = calls.find(
+      ([url]) => typeof url === "string" && url.includes("/chat")
+    );
+    expect(chatCall).toBeDefined();
   });
 });
 
@@ -329,8 +368,10 @@ describe("createRealSSEService — session creation", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — session reuse", () => {
-  afterEach(() => {
+  afterEach(async () => {
     vi.unstubAllGlobals();
+    const { resetAuthToken } = await import("@/services/api-client");
+    resetAuthToken();
   });
 
   it("calls POST /session exactly once across two sendMessage calls", async () => {
@@ -338,6 +379,13 @@ describe("createRealSSEService — session reuse", () => {
 
     let chatCallCount = 0;
     const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (typeof url === "string" && url.includes("/auth/verify")) {
+        return Promise.resolve({
+          ok: true,
+          body: null,
+          json: async () => AUTH_RESPONSE,
+        });
+      }
       if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
         return Promise.resolve({
           ok: true,
@@ -360,12 +408,12 @@ describe("createRealSSEService — session reuse", () => {
 
     // First call
     await new Promise<void>((resolve) => {
-      service("first", "home", vi.fn(), (_s: "complete" | "partial", _r: string | null) => { resolve(); }, vi.fn());
+      service("first", "home", vi.fn(), () => { resolve(); }, vi.fn());
     });
 
     // Second call
     await new Promise<void>((resolve) => {
-      service("second", "home", vi.fn(), (_s: "complete" | "partial", _r: string | null) => { resolve(); }, vi.fn());
+      service("second", "home", vi.fn(), () => { resolve(); }, vi.fn());
     });
 
     // Count how many times /session (not /chat) was called
@@ -382,21 +430,37 @@ describe("createRealSSEService — session reuse", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — cancel / abort", () => {
-  afterEach(() => {
+  afterEach(async () => {
     vi.unstubAllGlobals();
+    const { resetAuthToken } = await import("@/services/api-client");
+    resetAuthToken();
   });
 
   it("passing cancel() causes fetch to be called with an AbortSignal that was aborted", async () => {
     // fetch never resolves — we cancel immediately
     let capturedSignal: AbortSignal | null = null;
-    const fetchMock = vi.fn().mockImplementation((_url: string, init?: RequestInit) => {
+    const fetchMock = vi.fn().mockImplementation((url: string, init?: RequestInit) => {
+      if (typeof url === "string" && url.includes("/auth/verify")) {
+        return Promise.resolve({
+          ok: true,
+          body: null,
+          json: async () => AUTH_RESPONSE,
+        });
+      }
+      if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
+        return Promise.resolve({
+          ok: true,
+          body: null,
+          json: async () => SESSION_RESPONSE,
+        });
+      }
+      // Chat fetch — capture the signal, never resolves
       if (init?.signal) {
         capturedSignal = init.signal as AbortSignal;
       }
-      // Return a promise that resolves but with a stream that never sends data
       return Promise.resolve({
         ok: true,
-        body: new ReadableStream<Uint8Array>({ start(_controller: ReadableStreamDefaultController<Uint8Array>) {} }), // never closes
+        body: new ReadableStream<Uint8Array>({ start() {} }), // never closes
         json: async () => SESSION_RESPONSE,
       });
     });
@@ -443,8 +507,7 @@ describe("F12 — SessionProvider stores explanation in assistant turn", () => {
       _message: string,
       _screen: unknown,
       onEvent: (e: { event_type: string; text?: string }) => void,
-      onDone: (status: "complete" | "partial", reason: string | null) => void,
-      _onError: (msg: string) => void
+      onDone: (status: "complete" | "partial", reason: string | null) => void
     ) => {
       // Use microtask to simulate async emission
       Promise.resolve().then(() => {
