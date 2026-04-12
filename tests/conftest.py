@@ -53,7 +53,6 @@ def dev_user_id() -> uuid.UUID:
 
 @pytest_asyncio.fixture()
 async def seeded_user(db: AsyncConnection, dev_user_id: uuid.UUID) -> uuid.UUID:
-
     # Use INSERT ... ON CONFLICT to be idempotent (safe if API tests left data)
     await db.execute(
         text("INSERT INTO users (id, email) VALUES (:id, :email) ON CONFLICT (id) DO NOTHING"),

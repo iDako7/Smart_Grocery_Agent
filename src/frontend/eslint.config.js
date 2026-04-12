@@ -20,4 +20,18 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  // Context files export both provider components and hooks — standard pattern
+  {
+    files: ['**/context/**/*.{ts,tsx}'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
+  // Test files: outer-variable capture in render helpers is intentional
+  {
+    files: ['**/*.test.{ts,tsx}', '**/test/**/*.{ts,tsx}'],
+    rules: {
+      'react-hooks/globals': 'off',
+    },
+  },
 ])

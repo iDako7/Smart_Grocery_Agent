@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
     paths:
+      - ".github/workflows/ci-backend.yml"
       - "src/backend/**"
       - "src/ai/**"
       - "contracts/**"
@@ -13,6 +14,7 @@ on:
   pull_request:
     branches: [main]
     paths:
+      - ".github/workflows/ci-backend.yml"
       - "src/backend/**"
       - "src/ai/**"
       - "contracts/**"
@@ -34,10 +36,10 @@ jobs:
       - uses: astral-sh/setup-uv@v4
 
       - name: Lint
-        run: uvx ruff@0.11 check src/backend/ src/ai/ contracts/ tests/
+        run: uvx ruff@0.11.6 check src/backend/ src/ai/ contracts/ tests/
 
       - name: Format check
-        run: uvx ruff@0.11 format --check src/backend/ src/ai/ contracts/ tests/
+        run: uvx ruff@0.11.6 format --check src/backend/ src/ai/ contracts/ tests/
 
   test:
     name: Pytest

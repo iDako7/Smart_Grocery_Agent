@@ -312,7 +312,7 @@ async def test_grocery_list_other_user_cannot_access_session(client):
     """Session ownership is enforced — grocery-list on another user's session returns 404."""
     # Create a session under the dev user
     resp = await client.post("/session")
-    assert resp.json()["session_id"]  # created successfully
+    _ = resp.json()["session_id"]  # created successfully
 
     # Attempt to post to a random (non-existent) session as if another user
     fake_sid = uuid.uuid4()

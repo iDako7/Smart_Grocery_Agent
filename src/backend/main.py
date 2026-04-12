@@ -5,12 +5,11 @@ import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
-
 from src.backend.api.auth import router as auth_router
 from src.backend.api.grocery import router as grocery_router
 from src.backend.api.saved import router as saved_router
 from src.backend.api.sessions import router as sessions_router
+from starlette.middleware.cors import CORSMiddleware
 
 logger = logging.getLogger(__name__)
 

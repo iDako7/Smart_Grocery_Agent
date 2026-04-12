@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 
 interface ChatInputProps {
   placeholder: string;
@@ -9,14 +9,16 @@ interface ChatInputProps {
 
 export function ChatInput({ placeholder, hint, onSend, defaultValue = "" }: ChatInputProps) {
   const [value, setValue] = useState(defaultValue);
-  const prevDefaultRef = useRef(defaultValue);
+  const [prevDefault, setPrevDefault] = useState(defaultValue);
 
-  useEffect(() => {
-    if (defaultValue !== prevDefaultRef.current) {
-      prevDefaultRef.current = defaultValue;
-      if (!value) setValue(defaultValue);
+  // Adjust state during render when defaultValue changes (supported React pattern).
+  // If the input is currently empty, adopt the new default.
+  if (defaultValue !== prevDefault) {
+    setPrevDefault(defaultValue);
+    if (!value) {
+      setValue(defaultValue);
     }
-  }, [defaultValue, value]);
+  }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter" && value.trim()) {

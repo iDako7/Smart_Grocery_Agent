@@ -15,21 +15,35 @@ from pathlib import Path
 
 from contracts.api_types import (
     ChatRequest,
+    ConversationTurn,  # noqa: F401
     CreateSessionRequest,
+    CreateSessionResponse,  # noqa: F401
+    SavedGroceryList,  # noqa: F401
+    SavedGroceryListSummary,  # noqa: F401
+    SavedMealPlan,  # noqa: F401
+    SavedMealPlanSummary,  # noqa: F401
+    SavedRecipe,  # noqa: F401
+    SavedRecipeSummary,  # noqa: F401
     SaveGroceryListRequest,
     SaveMealPlanRequest,
     SaveRecipeRequest,
     SendCodeRequest,
+    SendCodeResponse,  # noqa: F401
+    SessionStateResponse,  # noqa: F401
     UpdateGroceryListRequest,
     UpdateMealPlanRequest,
     UpdateSavedRecipeRequest,
     VerifyRequest,
+    VerifyResponse,  # noqa: F401
 )
 from contracts.sse_events import (
     DoneEvent,
     ErrorEvent,
     ExplanationEvent,
+    GroceryDepartment,  # noqa: F401
+    GroceryItem,  # noqa: F401
     GroceryListEvent,
+    GroceryStore,  # noqa: F401
     PcsvUpdateEvent,
     RecipeCardEvent,
     ThinkingEvent,
@@ -43,7 +57,9 @@ from contracts.tool_schemas import (
     AnalyzePcsvInput,
     GetRecipeDetailInput,
     GetSubstitutionsInput,
+    Ingredient,  # noqa: F401
     LookupStoreProductInput,
+    PCSVCategory,  # noqa: F401
     PCSVResult,
     RecipeDetail,
     RecipeSummary,
