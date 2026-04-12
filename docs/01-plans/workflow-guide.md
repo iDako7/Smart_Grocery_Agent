@@ -10,9 +10,18 @@ This document defines how each issue in `phase-2-integration-plan.md` is impleme
 
 ---
 
-## Per-Issue Orchestration
+## Orchestrator Rules
 
-Claude Code Opus acts as the orchestrator within each session. It reads the issue scope, plans the work, delegates to specialized agents, and manages the workflow end-to-end.
+Opus is a **judge and commander — never a competitor.** It reads, plans, delegates, and verifies, but does not implement.
+
+- **MUST NOT** use `Edit`, `Write`, or `Bash` to modify source files. All implementation goes through sub-agents (`/tdd`, `build-error-resolver`, `e2e-runner`).
+- **MAY** use `Read`, `Grep`, `Glob`, `Bash` (read-only commands), and `/verify` directly — these are observation, not implementation.
+- **MAY** create PRs and write PR descriptions — these are orchestration artifacts, not source code.
+- If Opus catches itself about to edit a file, it must stop and delegate to the appropriate agent instead.
+
+---
+
+## Per-Issue Orchestration
 
 ```
 Opus reads issue + specs
@@ -21,26 +30,24 @@ Opus reads issue + specs
 │   └── You confirm before implementation starts
 │
 ├── Per task (parallel if tasks are independent):
-│   ├── /tdd → RED (write tests) → GREEN (implement) → REFACTOR
-│   │   └── if build breaks → build-error-resolver agent
-│   └── /verify (per-task gate)
-│       └── if fail → build-error-resolver → re-verify
+│   ├── /tdd agent → RED (write tests) → GREEN (implement) → REFACTOR
+│   │   Input: task description, file paths, contract refs, acceptance criteria, test type
+│   │   Output: pass/fail, changed files, coverage
+│   └── /verify (Opus runs directly — read-only checks)
+│       └── if fail → Opus spawns build-error-resolver → re-verify
 │
 ├── /verify (integration gate — full codebase)
-│   └── if fail → build-error-resolver → re-verify
+│   └── if fail → Opus spawns build-error-resolver → re-verify
 │
 ├── For Phase B issues:
 │   └── e2e-runner agent → write + run Playwright test for the user flow
 │
-├── /code-review (whole PR — reads full diff, not per-task fragments)
+├── code-reviewer agent (mandatory — all severities, no exceptions)
 │   ├── APPROVE → proceed to PR
-│   ├── REQUEST CHANGES → fix → re-verify → re-review
-│   └── BLOCK → fix critical issues → re-verify → re-review
+│   ├── REQUEST CHANGES → Opus delegates fix to /tdd → re-verify → re-review
+│   └── BLOCK → Opus delegates fix to /tdd → re-verify → re-review
 │
 ├── Create PR with description
-│
-├── You open new session → /code-review {PR number} → review + comments
-│   └── Agent addresses comments → re-verify → re-review until approved
 │
 └── You verify (browser / curl) → merge
 ```
@@ -49,14 +56,14 @@ Opus reads issue + specs
 
 ## Agent & Skill Reference
 
-| Agent/Skill | When Opus Calls It | What It Does |
-|-------------|-------------------|--------------|
-| `/plan` | Start of issue | Creates implementation plan with tasks, test strategy. Waits for your confirmation. |
-| `/tdd` | Each task from the plan | RED → GREEN → REFACTOR cycle. Tests written before implementation. 80%+ coverage. |
-| `build-error-resolver` | When build or type check fails | Fixes build/type errors with minimal diffs. No refactoring. Gets the build green. |
-| `/verify` | After each task + after all tasks | Runs build, type check, lint, tests. Reports pass/fail with file:line for errors. |
-| `e2e-runner` | Phase B issues, after integration verify | Writes Playwright E2E tests. Uses semantic locators. Uploads artifacts. |
-| `/code-review` | After all tasks pass verify | Reviews full diff. Findings by severity (CRITICAL/HIGH/MEDIUM/LOW). Verdict: APPROVE/REQUEST CHANGES/BLOCK. |
+| Agent/Skill | Who Runs It | What It Does |
+|-------------|------------|--------------|
+| `/plan` | Opus directly | Creates implementation plan with tasks + test strategy. Waits for your confirmation. |
+| `/tdd` (agent) | Opus spawns | RED → GREEN → REFACTOR. Opus passes: task desc, file paths, contract refs, acceptance criteria, test type. |
+| `build-error-resolver` (agent) | Opus spawns | Fixes build/type errors only. Minimal diffs. Opus spawns when `/verify` fails. |
+| `/verify` (skill) | Opus directly | Runs build, type check, lint, tests. Read-only — no source changes. Reports pass/fail with file:line. |
+| `e2e-runner` (agent) | Opus spawns | Phase B only. Writes Playwright E2E tests after integration verify passes. |
+| `code-reviewer` (agent) | Opus spawns | Mandatory pre-PR gate. Reviews full git diff, all severities. Verdict: APPROVE/REQUEST CHANGES/BLOCK. |
 
 ---
 
@@ -104,25 +111,20 @@ This forces the decision at planning time, not during implementation.
 | **Per-task** | After each /tdd task completes | `build + types + lint + tests` for affected area | `build-error-resolver` fixes, re-verify |
 | **Integration** | After all tasks in the issue complete | Full codebase: `build + types + lint + all tests` | `build-error-resolver` fixes, re-verify |
 | **E2E** | Phase B issues only, after integration verify | Playwright happy-path for the user flow | Fix failing assertions, re-run |
-| **Code review** | After all verification passes | Full git diff: security, quality, patterns | Address review comments, re-verify, re-review |
+| **Code review** | After all verification passes | Full git diff: all severities, mandatory | Opus delegates fixes to /tdd, re-verify, re-review |
 
 ---
 
 ## PR Review Process
 
-Two sessions, separate context — the reviewer has no bias from having written the code.
+Single session — code-reviewer agent acts as mandatory gate before PR creation.
 
-**Implementation session:**
-1. Opus implements all tasks
-2. All verification passes
-3. Opus creates PR with description
-
-**Review session (you open a new Claude Code session):**
-1. `/code-review {PR number}` — agent reads full diff, runs validation, posts findings
-2. If REQUEST CHANGES — agent in implementation session fixes, re-verifies
-3. Re-review until APPROVE
-4. You verify manually (browser for frontend, curl for backend)
-5. You merge
+1. All tasks complete, integration `/verify` passes
+2. Opus spawns `code-reviewer` agent on full git diff — all severities, no exceptions
+3. If APPROVE → Opus creates PR
+4. If REQUEST CHANGES or BLOCK → Opus delegates fixes to `/tdd` → re-verify → re-review until APPROVE
+5. You verify manually (browser for frontend, curl for backend)
+6. You merge
 
 ---
 
@@ -130,13 +132,14 @@ Two sessions, separate context — the reviewer has no bias from having written 
 
 | Step | Automated? | Who Does It |
 |------|-----------|-------------|
-| /plan | No — you confirm | Interactive with Opus |
-| /tdd implementation | Yes | Opus delegates to tdd-guide |
-| /verify after each task | Yes | Opus runs automatically |
-| /verify integration | Yes | Opus runs automatically |
-| PR creation | Yes | Opus creates after verify passes |
-| PR review | Semi — you spawn new session | Review agent in fresh session |
-| Fix review comments | Yes | Opus in implementation session |
+| /plan | No — you confirm | Opus directly |
+| /tdd implementation | Yes — delegated | Opus spawns tdd-guide agent |
+| /verify after each task | Yes | Opus runs directly (read-only) |
+| /verify integration | Yes | Opus runs directly (read-only) |
+| build-error-resolver | Yes — on verify fail | Opus spawns agent |
+| code-reviewer (pre-PR gate) | Yes — mandatory | Opus spawns agent, all severities |
+| PR creation | Yes | Opus creates after reviewer approves |
+| Fix review findings | Yes — delegated | Opus spawns tdd-guide agent |
 | Your verification | No — you do this | Browser / curl |
 | Merge | No — you decide | Manual |
 
