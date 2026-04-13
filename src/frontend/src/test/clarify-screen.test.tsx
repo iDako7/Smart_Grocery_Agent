@@ -389,11 +389,10 @@ describe("ClarifyScreen — integration: dietary None exclusive", () => {
 // ---------------------------------------------------------------------------
 
 describe("ClarifyScreen — navigation: back button", () => {
-  it("clicking back button navigates to /", async () => {
+  it("clicking back button opens the confirm-reset dialog (does not navigate)", async () => {
     const user = userEvent.setup();
     const mock = createMockChatService();
 
-    // Use routes option so we can assert location change
     renderWithSession(<ClarifyScreen />, {
       chatService: mock.service,
       routes: (
@@ -408,7 +407,10 @@ describe("ClarifyScreen — navigation: back button", () => {
     const backBtn = screen.getByRole("button", { name: /go back/i });
     await user.click(backBtn);
 
-    // After clicking back, the home screen should be visible
-    expect(screen.getByTestId("home-screen")).toBeInTheDocument();
+    // Dialog opens — still on Clarify, not Home.
+    expect(
+      screen.getByText("Start a new conversation?")
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId("home-screen")).not.toBeInTheDocument();
   });
 });

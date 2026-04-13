@@ -8,6 +8,7 @@ import { PcvBadge } from "@/components/pcv-badge";
 import { ChatInput } from "@/components/chat-input";
 import { InfoSheet } from "@/components/info-sheet";
 import { ErrorBanner } from "@/components/error-banner";
+import { ConfirmResetDialog } from "@/components/confirm-reset-dialog";
 import { useSessionOptional } from "@/context/session-context";
 
 // ---------------------------------------------------------------------------
@@ -63,11 +64,18 @@ export function ClarifyScreen() {
   const screenData = session?.screenData;
   const screenState = session?.screenState ?? "idle";
   const isComplete = session?.isComplete ?? false;
+  const resetSession = session?.resetSession;
 
   // Chip state — empty start, no defaults
   const [selectedSetup, setSelectedSetup] = useState<string[]>([]);
   const [selectedDiet, setSelectedDiet] = useState<string[]>([]);
   const [pcvInfoOpen, setPcvInfoOpen] = useState(false);
+  const [resetOpen, setResetOpen] = useState(false);
+
+  function handleStartOver() {
+    resetSession?.();
+    navigate("/");
+  }
 
   // ---------------------------------------------------------------------------
   // Derived rendering flags
@@ -157,7 +165,7 @@ export function ClarifyScreen() {
         <button
           type="button"
           aria-label="Go back"
-          onClick={() => navigate("/")}
+          onClick={() => setResetOpen(true)}
           className="flex items-center justify-center min-w-[36px] min-h-[44px] text-ink-2 hover:text-ink transition-colors bg-transparent border-none cursor-pointer"
         >
           <ArrowLeft size={20} />
@@ -364,6 +372,13 @@ export function ClarifyScreen() {
       <div className="text-center px-4 pt-3 pb-[22px] text-[10px] text-ink-3 font-medium mt-auto">
         Smart Grocery <span className="text-persimmon mx-[5px]">·</span> Vancouver
       </div>
+
+      {/* Confirm reset dialog — opens on back button click */}
+      <ConfirmResetDialog
+        open={resetOpen}
+        onOpenChange={setResetOpen}
+        onConfirm={handleStartOver}
+      />
 
       {/* PCV info sheet */}
       <InfoSheet
