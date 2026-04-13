@@ -204,8 +204,31 @@ def test_emit_clarify_turn_in_tools_list():
     assert "selection_mode" in items_required
     assert "options" in items_required
 
+    assert q_props["selection_mode"].get("enum") == ["single", "multi"], \
+        "selection_mode must declare enum=['single','multi'] for OpenAI function-calling to constrain the LLM"
+
     # Check options items schema
     option_items = q_props["options"]["items"]
     assert option_items["type"] == "object"
     assert "label" in option_items["properties"]
     assert "label" in option_items["required"]
+
+
+# ---------------------------------------------------------------------------
+# Test 5: W2 regression — ClarifyTurnEvent parses without questions key
+# ---------------------------------------------------------------------------
+
+
+def test_clarify_turn_event_deserializes_without_questions_key():
+    """W2 regression: a JSON payload that omits the `questions` key should
+    still parse, defaulting to an empty list. Guards against serializer
+    fragility where an empty array might be omitted."""
+    from pydantic import TypeAdapter
+    from contracts.sse_events import ClarifyTurnEvent, SSEEvent
+
+    # Minimal payload — no questions key at all
+    payload_json = '{"event_type": "clarify_turn", "explanation": "Here is the direction: Korean BBQ."}'
+    event = TypeAdapter(SSEEvent).validate_json(payload_json)
+    assert isinstance(event, ClarifyTurnEvent)
+    assert event.questions == []
+    assert event.explanation == "Here is the direction: Korean BBQ."

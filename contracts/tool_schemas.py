@@ -484,7 +484,6 @@ TOOLS: list[dict] = [
                                             "is_exclusive": {
                                                 "type": "boolean",
                                                 "description": "When selected, clears all other options in the same question (e.g., 'None').",
-                                                "default": False,
                                             },
                                         },
                                         "required": ["label"],
