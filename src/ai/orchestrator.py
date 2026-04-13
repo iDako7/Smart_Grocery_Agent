@@ -215,6 +215,7 @@ async def run_agent(
 
         # Process tool calls
         tool_messages = []
+        clarify_turn_payload: ClarifyTurnPayload | None = None
         for tc in message.tool_calls:
             result_dict, tool_call_record = await _dispatch_tool(
                 tc.function.name, tc.function.arguments, kb, pg, user_id
@@ -226,6 +227,8 @@ async def run_agent(
                 pcsv_result = PCSVResult.model_validate(result_dict)
             elif tc.function.name == "search_recipes" and isinstance(result_dict, list):
                 recipe_results = [RecipeSummary.model_validate(r) if isinstance(r, dict) else r for r in result_dict]
+            elif tc.function.name == "emit_clarify_turn" and isinstance(result_dict, dict) and "error" not in result_dict:
+                clarify_turn_payload = ClarifyTurnPayload.model_validate(result_dict)
 
             content = json.dumps(result_dict, ensure_ascii=False, default=str)
             tool_messages.append(
@@ -238,6 +241,18 @@ async def run_agent(
 
         messages.append(message.model_dump())
         messages.extend(tool_messages)
+
+        # Terminal action: emit_clarify_turn stops the loop immediately
+        if clarify_turn_payload is not None:
+            return AgentResult(
+                status="complete",
+                response_text="",
+                tool_calls=all_tool_calls,
+                total_iterations=iteration + 1,
+                pcsv=pcsv_result,
+                recipes=recipe_results,
+                clarify_turn=clarify_turn_payload,
+            )
 
     # Max iterations reached
     return AgentResult(

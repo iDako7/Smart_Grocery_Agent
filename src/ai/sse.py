@@ -9,6 +9,7 @@ from collections.abc import AsyncIterator
 
 from contracts.sse_events import (
     AgentErrorCategory,
+    ClarifyTurnEvent,
     DoneEvent,
     ExplanationEvent,
     GroceryListEvent,
@@ -49,8 +50,15 @@ async def emit_agent_result(
         event = RecipeCardEvent(recipe=recipe)
         yield _sse_line("recipe_card", event.model_dump())
 
-    # Explanation (the assistant's response text)
-    if result.response_text:
+    # Clarify turn (mutually exclusive with explanation)
+    if result.clarify_turn is not None:
+        event = ClarifyTurnEvent(
+            explanation=result.clarify_turn.explanation,
+            questions=result.clarify_turn.questions,
+        )
+        yield _sse_line("clarify_turn", event.model_dump())
+    elif result.response_text:
+        # Explanation (the assistant's response text) — only when clarify_turn not set
         event = ExplanationEvent(text=result.response_text)
         yield _sse_line("explanation", event.model_dump())
 

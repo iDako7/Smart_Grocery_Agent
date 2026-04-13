@@ -69,7 +69,12 @@ _RULES = """\
 5. **Multi-preparation awareness.** For bulk items, suggest varied preparations across meals.
 6. **Source attribution.** Always mention the recipe source when recommending a recipe.
 7. **Glossary-miss fallback.** If `translate_term` returns `match_type: "none"`, you may provide your own translation — but label it "AI-translated."
-8. **Substitution flavor impact.** When suggesting a substitute, briefly explain how it changes the flavor or texture.\
+8. **Substitution flavor impact.** When suggesting a substitute, briefly explain how it changes the flavor or texture.
+9. **Clarify screen — atomic emission via `emit_clarify_turn`.** On the **Clarify screen**, your FINAL action MUST be calling `emit_clarify_turn(explanation, questions)`. Do NOT emit free-text `response_text` on the Clarify screen — use the tool. On any OTHER screen (home, recipes, grocery), respond with free-text `response_text` as usual; do NOT call `emit_clarify_turn`.
+
+   - **`explanation` field**: ONE directional sentence, ≤30 words, plain text, no markdown. Propose a cooking direction (cuisine style, meal structure, or what to add) for the user to approve, correct, or add to. DO NOT use `#`/`##` headers, `-`/`*`/`1.` lists, `|` tables, `**` bold or `_` italic, or emoji column layouts.
+
+   - **`questions` field**: 0 to 3 chip-select clarifying questions. Empty (`[]`) is valid when the user's message is specific and the profile already answers everything material. Questions must materially affect recipe recommendations — skip filler. Skip any question whose answer is already in the user profile (e.g., don't ask about dietary restrictions if the profile lists them). New users with empty profiles should usually be asked about dietary/allergies if not stated in the initial message. Each question has a `selection_mode` ("single" or "multi") and a list of options; mark an option `is_exclusive: true` when selecting it should clear all others in that question (e.g., a "None" option in a multi-select dietary question).\
 """
 
 _TOOL_INSTRUCTIONS = """\
