@@ -384,5 +384,141 @@ test.describe(
         // for this test. The key assertions are the 0-questions structural checks.
       }
     });
+    // -------------------------------------------------------------------------
+    // Test 3: Long, detailed input → emit_clarify_turn regression guard
+    //
+    // Bug 2 regression: on long/complex inputs the LLM was bypassing
+    // emit_clarify_turn and emitting free-text markdown instead. The fix in
+    // src/ai/prompt.py (Rule #9) adds a strong "EVEN IF detailed and complete"
+    // guard. This test locks in that regression by exercising a detailed,
+    // multi-ingredient, multi-constraint input.
+    //
+    // Assertions (structural, not content):
+    //   1. Navigates to /clarify and screen renders.
+    //   2. clarify_turn SSE event arrives (CTA visible).
+    //   3. Explanation text does NOT contain raw markdown tokens (**  ## |).
+    //   4. "Looks good, show recipes" CTA is visible.
+    //   5. 0-3 chip elements render (0 is valid — LLM may need no clarification).
+    //      If 0: explanation text + ChatInput must be visible (Bug 2b guard).
+    //
+    // Gate: real-LLM test — opt-in via RUN_LIVE_LLM=1 env var.
+    // -------------------------------------------------------------------------
+    test("long detailed input: emit_clarify_turn used (not free-text markdown) — Bug 2 regression", async ({
+      page,
+    }) => {
+      test.skip(
+        !process.env.RUN_LIVE_LLM,
+        "Real-LLM test — set RUN_LIVE_LLM=1 to run"
+      );
+
+      const longInput =
+        "I'd like to make a dish with chicken thighs that has some Southeast Asian flavors, but I want it to be savory, not sweet. The dish should be enough for two people. I have lemongrass and cilantro on hand.";
+
+      // ---- Navigate to ClarifyScreen ----
+      await goToClarify(page, longInput);
+
+      // ---- Wait for SSE stream to complete ----
+      await waitForStreamComplete(page);
+
+      // ---- Assertion 1: screen-clarify rendered (already guaranteed by goToClarify) ----
+      await expect(page.locator('[data-testid="screen-clarify"]')).toBeVisible();
+
+      // ---- Assertion 4: "Looks good, show recipes" CTA visible ----
+      // This button only renders when clarifyTurn state is populated, proving that
+      // emit_clarify_turn was used (not free-text markdown bypass).
+      const looksGoodBtn = page.locator(
+        'button:has-text("Looks good, show recipes")'
+      );
+      await expect(looksGoodBtn).toBeVisible({
+        timeout: 5_000,
+      });
+
+      // ---- Assertion 2: clarify_turn populated (CTA visible = clarifyTurn set) ----
+      // The CTA only renders when screenData.clarifyTurn is non-null — the CTA
+      // being visible is the functional proof that emit_clarify_turn was called.
+
+      // ---- Assertion 3: explanation text must not contain raw markdown tokens ----
+      // The explanation field in clarify_turn must be plain text (≤30 words, no
+      // markdown). If the LLM emits free-text markdown, ** or ## or | will appear
+      // in the rendered DOM text.
+      const screenClarify = page.locator('[data-testid="screen-clarify"]');
+      const allText = await screenClarify.textContent();
+      expect(
+        allText,
+        "Explanation contains '**' (markdown bold) — LLM bypassed emit_clarify_turn and emitted free-text markdown"
+      ).not.toContain("**");
+      expect(
+        allText,
+        "Explanation contains '##' (markdown heading) — LLM bypassed emit_clarify_turn and emitted free-text markdown"
+      ).not.toContain("##");
+      expect(
+        allText,
+        "Explanation contains '|' (markdown table) — LLM bypassed emit_clarify_turn and emitted free-text markdown"
+      ).not.toContain("|");
+
+      // ---- Assertion 5: 0-3 chip *questions* render (0 is valid per revised design) ----
+      // The orchestrator enforces emit_clarify_turn is always called (commit 885fd99),
+      // but the LLM may legitimately decide 0 questions are needed for clear inputs.
+      // Note: chipCount = total option buttons across all questions (each question
+      // can have multiple options). The contract limit of 3 is on *question count*,
+      // not total option count. We must derive questionCount first.
+      const allChipButtons = page.locator('[data-testid^="chip-"]');
+      const chipCount = await allChipButtons.count();
+
+      // Derive distinct question IDs (same algorithm as Tests 1+2).
+      // Test IDs: "chip-{questionId}-{label}" where questionId uses snake_case/lowercase.
+      const questionIds = new Set<string>();
+      for (let i = 0; i < chipCount; i++) {
+        const testId =
+          (await allChipButtons.nth(i).getAttribute("data-testid")) ?? "";
+        const withoutPrefix = testId.replace(/^chip-/, "");
+        const parts = withoutPrefix.split("-");
+        const idParts: string[] = [];
+        for (const part of parts) {
+          if (/^[a-z0-9_]+$/.test(part)) {
+            idParts.push(part);
+          } else {
+            break;
+          }
+        }
+        const questionId = idParts.join("-");
+        if (questionId) questionIds.add(questionId);
+      }
+
+      const questionCount = questionIds.size;
+
+      // Contract upper bound: max 3 *questions* (not options).
+      expect(
+        questionCount,
+        `Question count ${questionCount} exceeds contract maximum of 3`
+      ).toBeLessThanOrEqual(3);
+
+      if (questionCount === 0) {
+        // Bug 2b guard: when LLM emits 0 questions, the UI must still render
+        // clarifyTurn.explanation (not an empty card) and ChatInput must be visible.
+        // This proves emit_clarify_turn was called with explanation text,
+        // and the ClarifyScreen is rendering the complete-state UI correctly.
+        const screenClarify = page.locator('[data-testid="screen-clarify"]');
+
+        // Explanation text element: ClarifyScreen renders explanation in a <p>
+        // or div within the clarify card. Assert at least some visible text exists.
+        const explanationText = screenClarify
+          .locator("p, div.mt-2, div.text-sm")
+          .filter({ hasText: /.{5,}/ })
+          .first();
+        await expect(
+          explanationText,
+          "Bug 2b: clarifyTurn.explanation not visible when questionCount === 0 — empty card rendered"
+        ).toBeVisible({ timeout: 5_000 });
+
+        // ChatInput must be visible and enabled (screenState === "complete")
+        const chatInput = screenClarify.locator('input[type="text"]');
+        await expect(
+          chatInput,
+          "Bug 2b: ChatInput not visible when questionCount === 0"
+        ).toBeVisible();
+        await expect(chatInput).not.toBeDisabled();
+      }
+    });
   }
 );
