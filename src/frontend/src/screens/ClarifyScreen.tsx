@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import Markdown from "react-markdown";
@@ -71,6 +71,16 @@ export function ClarifyScreen() {
   const [selectedDiet, setSelectedDiet] = useState<string[]>([]);
   const [pcvInfoOpen, setPcvInfoOpen] = useState(false);
   const [resetOpen, setResetOpen] = useState(false);
+  const backButtonRef = useRef<HTMLButtonElement>(null);
+  const prevResetOpen = useRef(false);
+
+  // Restore focus to the back button when the dialog closes (a11y).
+  useEffect(() => {
+    if (prevResetOpen.current && !resetOpen) {
+      backButtonRef.current?.focus();
+    }
+    prevResetOpen.current = resetOpen;
+  }, [resetOpen]);
 
   function handleStartOver() {
     resetSession?.();
@@ -163,6 +173,7 @@ export function ClarifyScreen() {
       {/* Nav bar */}
       <div className="flex justify-between items-center px-[14px] pt-3 pb-1">
         <button
+          ref={backButtonRef}
           type="button"
           aria-label="Go back"
           onClick={() => setResetOpen(true)}

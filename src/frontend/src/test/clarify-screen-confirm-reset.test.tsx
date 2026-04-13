@@ -7,7 +7,6 @@
 //   - Start over calls resetSession and navigates to "/".
 //   - Multiple back clicks re-open the dialog (no one-shot semantics).
 
-import React from "react";
 import { describe, it, expect, vi } from "vitest";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
@@ -26,12 +25,21 @@ vi.mock("@base-ui/react/alert-dialog", async () => {
   );
   return {
     AlertDialog: {
-      Root: ({ open, onOpenChange, children }: RootProps) =>
-        open ? (
+      Root: ({ open, onOpenChange, children }: RootProps) => {
+        React.useEffect(() => {
+          if (!open) return;
+          const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") onOpenChange?.(false);
+          };
+          document.addEventListener("keydown", handleKeyDown);
+          return () => document.removeEventListener("keydown", handleKeyDown);
+        }, [open, onOpenChange]);
+        return open ? (
           <RootCtx.Provider value={onOpenChange}>
             <div data-testid="alert-dialog-root">{children}</div>
           </RootCtx.Provider>
-        ) : null,
+        ) : null;
+      },
       Trigger: ({ children }: Props) => <>{children}</>,
       Portal: ({ children }: Props) => <>{children}</>,
       Backdrop: ({ children, className }: Props) => (
@@ -165,6 +173,27 @@ describe("ClarifyScreen confirm-reset dialog — no one-shot", () => {
     await user.click(screen.getByRole("button", { name: "Cancel" }));
     await user.click(screen.getByRole("button", { name: /go back/i }));
     expect(screen.getByText("Start a new conversation?")).toBeInTheDocument();
+  });
+});
+
+describe("ClarifyScreen confirm-reset dialog — Escape key", () => {
+  it("pressing Escape closes the dialog without calling onConfirm or navigating", async () => {
+    const user = userEvent.setup();
+    renderClarifyWithHome();
+
+    await user.click(screen.getByRole("button", { name: /go back/i }));
+    expect(screen.getByText("Start a new conversation?")).toBeInTheDocument();
+
+    await user.keyboard("{Escape}");
+
+    // Dialog closed.
+    expect(
+      screen.queryByText("Start a new conversation?")
+    ).not.toBeInTheDocument();
+
+    // Still on Clarify — Home route not rendered.
+    expect(screen.queryByTestId("home-screen")).not.toBeInTheDocument();
+    expect(screen.getByTestId("screen-clarify")).toBeInTheDocument();
   });
 });
 
