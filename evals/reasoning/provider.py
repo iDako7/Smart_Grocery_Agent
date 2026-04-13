@@ -1,4 +1,25 @@
-"""promptfoo custom provider for SGA V2 agent."""
+"""promptfoo custom provider for SGA V2 agent.
+
+⚠️  SYSTEMATIC REVIEW REQUIRED BEFORE USE ⚠️
+
+This provider imports from `archive/prototype/`, which holds the Phase 1
+agent implementation — NOT the current `src/ai/` agent. Running this eval
+suite today measures Phase 1 behavior against Phase 1 assertions, which
+is useful as a frozen historical baseline but does NOT validate the
+current production agent in `src/ai/`.
+
+Before trusting results from this suite, confirm the intent:
+  • Historical baseline regression check → OK to run as-is.
+  • Validating current src/ai/ agent → REWRITE REQUIRED. The provider
+    must be repointed to src/ai/orchestrator.run_agent, which has a
+    different signature (requires kb + pg + user_id), and the 14 test
+    YAMLs under tests/ must be re-reviewed for continued relevance.
+
+Archived on: 2026-04-13
+Archived because: prototype/ moved to archive/prototype/ to prevent
+sub-agent hallucination of Phase 1 patterns into Phase 2 code.
+See PR #0-TBD.
+"""
 
 import json
 import os
@@ -12,8 +33,8 @@ from dotenv import load_dotenv
 
 load_dotenv(REPO_ROOT / ".env")
 
-from prototype.orchestrator import run_agent
-from prototype.schema import UserProfile
+from archive.prototype.orchestrator import run_agent
+from archive.prototype.schema import UserProfile
 
 
 def call_api(prompt: str, options: dict, context: dict) -> dict:

@@ -1,3 +1,5 @@
+# ⚠️  STALE BASELINE: runs against archive/prototype/ (Phase 1 agent), NOT src/ai/ (Phase 2).
+# See provider.py header for systematic-review requirements before trusting results.
 # yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
 description: 'SGA V2 reasoning quality evals — 13 scenarios across tool sequencing, dietary constraints, and bilingual behavior'
 

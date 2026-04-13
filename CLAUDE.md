@@ -49,7 +49,7 @@ src/ai/             ← Agent orchestrator, prompt assembly (WT2)
 src/frontend/       ← React SPA, Vite + Bun + Tailwind + shadcn/ui (WT3)
 data/               ← KB source data (WT1)
 scripts/            ← Migration scripts (WT1)
-prototype/          ← Phase 1 prototype (read-only reference)
+archive/prototype/  ← Phase 1 prototype (archived, reference only — do NOT import from src/)
 evals/              ← promptfoo eval suite
 docs/               ← Specs, plans, archives
 ```
@@ -114,6 +114,6 @@ docker compose up
 # Frontend (standalone dev server)
 cd src/frontend && bun dev
 
-# Evals (prototype, Phase 1)
-cd prototype && uv run promptfoo eval -c ../evals/reasoning/promptfooconfig.yaml
+# Evals (Phase 1 historical baseline — see evals/reasoning/README.md before trusting results)
+cd archive/prototype && uv run promptfoo eval -c ../../evals/reasoning/promptfooconfig.yaml
 ```
