@@ -28,23 +28,30 @@ vi.mock("@/context/session-context", async () => {
 });
 
 // Mock the API client so screens don't make real network calls.
-vi.mock("@/services/api-client", () => ({
-  createSession: vi.fn().mockResolvedValue({ session_id: "test-session", created_at: "2026-01-01T00:00:00Z" }),
-  getAuthToken: vi.fn().mockResolvedValue("test-token"),
-  postGroceryList: vi.fn().mockResolvedValue([]),
-  saveMealPlan: vi.fn().mockResolvedValue({ id: "plan-saved-1", name: "Test Plan", recipes: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z" }),
-  saveGroceryList: vi.fn().mockResolvedValue({ id: "list-saved-1", name: "Test List", stores: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z" }),
-  getSavedMealPlan: vi.fn().mockResolvedValue({
-    id: "plan-saved-1", name: "Test Plan", recipes: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z",
-  }),
-  getSavedGroceryList: vi.fn().mockResolvedValue({
-    id: "list-saved-1", name: "Test List", stores: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z",
-  }),
-  listSavedMealPlans: vi.fn().mockResolvedValue([]),
-  listSavedRecipes: vi.fn().mockResolvedValue([]),
-  listSavedGroceryLists: vi.fn().mockResolvedValue([]),
-  resetAuthToken: vi.fn(),
-}));
+// Uses importActual to preserve non-mocked exports (e.g. getApiBase used by real-sse).
+vi.mock("@/services/api-client", async () => {
+  const actual = await vi.importActual<typeof import("@/services/api-client")>(
+    "@/services/api-client"
+  );
+  return {
+    ...actual,
+    createSession: vi.fn().mockResolvedValue({ session_id: "test-session", created_at: "2026-01-01T00:00:00Z" }),
+    getAuthToken: vi.fn().mockResolvedValue("test-token"),
+    postGroceryList: vi.fn().mockResolvedValue([]),
+    saveMealPlan: vi.fn().mockResolvedValue({ id: "plan-saved-1", name: "Test Plan", recipes: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z" }),
+    saveGroceryList: vi.fn().mockResolvedValue({ id: "list-saved-1", name: "Test List", stores: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z" }),
+    getSavedMealPlan: vi.fn().mockResolvedValue({
+      id: "plan-saved-1", name: "Test Plan", recipes: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z",
+    }),
+    getSavedGroceryList: vi.fn().mockResolvedValue({
+      id: "list-saved-1", name: "Test List", stores: [], created_at: "2026-01-01T00:00:00Z", updated_at: "2026-01-01T00:00:00Z",
+    }),
+    listSavedMealPlans: vi.fn().mockResolvedValue([]),
+    listSavedRecipes: vi.fn().mockResolvedValue([]),
+    listSavedGroceryLists: vi.fn().mockResolvedValue([]),
+    resetAuthToken: vi.fn(),
+  };
+});
 
 
 function renderFullApp(options?: { chatService?: ReturnType<typeof createMockChatService>["service"]; initialPath?: string }) {
@@ -120,7 +127,9 @@ describe("Flow 2 — Recipe swap then build list", () => {
 
     // Navigate to grocery
     await user.click(screen.getByText(/Build list/i));
-    expect(screen.getByTestId("screen-grocery")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByTestId("screen-grocery")).toBeInTheDocument()
+    );
   });
 });
 

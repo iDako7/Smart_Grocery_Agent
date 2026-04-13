@@ -16,6 +16,7 @@ export function SavedRecipeScreen() {
 
   useEffect(() => {
     if (!id) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     getSavedRecipe(id)
       .then((data) => {
