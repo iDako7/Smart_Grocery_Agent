@@ -82,6 +82,26 @@ async def test_thinking_events_per_tool_call():
     assert len(thinking_events) == 2
 
 
+async def test_clarify_enforcement_failure_emits_error_event():
+    """Partial result with reason=clarify_turn_enforcement_failed emits an error event before done."""
+    result = AgentResult(
+        status="partial",
+        reason="clarify_turn_enforcement_failed",
+        response_text="",
+        clarify_turn=None,
+    )
+    events = await _collect_events(result)
+    types = [_parse_event(e)[0] for e in events]
+    assert "error" in types, f"expected error event, got {types}"
+    # Error must come before done
+    assert types.index("error") < types.index("done")
+    # Error payload contains user-facing message and code
+    error_raw = next(e for e in events if _parse_event(e)[0] == "error")
+    _, error_data = _parse_event(error_raw)
+    assert "clarify_turn_enforcement_failed" in error_data
+    assert "couldn't prepare" in error_data or "could not prepare" in error_data.lower()
+
+
 async def test_sse_format():
     """Events follow SSE format: event: <type>\\ndata: <json>\\n\\n."""
     result = AgentResult(status="complete", response_text="Test.")

@@ -227,6 +227,8 @@ async def run_agent(
                             result_dict, tc_record = await _dispatch_tool(
                                 tc.function.name, tc.function.arguments, kb, pg, user_id
                             )
+                            # Terminal retry — no follow-up LLM call, so we skip the tool_messages
+                            # append that the main loop uses to feed results back to the model.
                             all_tool_calls.append(tc_record)
                             if isinstance(result_dict, dict) and "error" not in result_dict:
                                 clarify_payload = ClarifyTurnPayload.model_validate(result_dict)

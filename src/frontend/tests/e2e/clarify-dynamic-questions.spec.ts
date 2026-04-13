@@ -440,19 +440,26 @@ test.describe(
       // ---- Assertion 3: explanation text must not contain raw markdown tokens ----
       // The explanation field in clarify_turn must be plain text (≤30 words, no
       // markdown). If the LLM emits free-text markdown, ** or ## or | will appear
-      // in the rendered DOM text.
+      // in the rendered DOM text. Narrow the check to the explanation container
+      // only (same selector Test 2 uses for the explanation-only path) so we don't
+      // false-positive on pipes that may legitimately appear elsewhere on the
+      // screen (e.g., chip labels, aria-labels).
       const screenClarify = page.locator('[data-testid="screen-clarify"]');
-      const allText = await screenClarify.textContent();
+      const explanationEl = screenClarify
+        .locator("div.mt-2")
+        .filter({ hasText: /.{10,}/ })
+        .first();
+      const explanationText = (await explanationEl.textContent()) ?? "";
       expect(
-        allText,
+        explanationText,
         "Explanation contains '**' (markdown bold) — LLM bypassed emit_clarify_turn and emitted free-text markdown"
       ).not.toContain("**");
       expect(
-        allText,
+        explanationText,
         "Explanation contains '##' (markdown heading) — LLM bypassed emit_clarify_turn and emitted free-text markdown"
       ).not.toContain("##");
       expect(
-        allText,
+        explanationText,
         "Explanation contains '|' (markdown table) — LLM bypassed emit_clarify_turn and emitted free-text markdown"
       ).not.toContain("|");
 

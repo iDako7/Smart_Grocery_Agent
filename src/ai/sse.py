@@ -11,6 +11,7 @@ from contracts.sse_events import (
     AgentErrorCategory,
     ClarifyTurnEvent,
     DoneEvent,
+    ErrorEvent,
     ExplanationEvent,
     GroceryListEvent,
     PcsvUpdateEvent,
@@ -66,6 +67,16 @@ async def emit_agent_result(
     if result.grocery_list:
         event = GroceryListEvent(stores=result.grocery_list)
         yield _sse_line("grocery_list", event.model_dump())
+
+    # Clarify enforcement retry failure — emit an error event so the frontend
+    # routes through its error UI instead of rendering an empty ghost card.
+    if result.status == "partial" and result.reason == "clarify_turn_enforcement_failed":
+        err = ErrorEvent(
+            message="Sorry — I couldn't prepare your clarification. Please try rephrasing.",
+            code="clarify_turn_enforcement_failed",
+            recoverable=True,
+        )
+        yield _sse_line("error", err.model_dump())
 
     # Done
     if result.status == "complete":
