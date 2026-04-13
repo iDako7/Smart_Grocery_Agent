@@ -8,7 +8,6 @@ import { vi } from "vitest";
 import { render } from "@testing-library/react";
 import { MemoryRouter } from "react-router";
 
-import { ScenarioProvider } from "@/context/scenario-context";
 import { SessionProvider } from "@/context/session-context";
 import type { ChatServiceHandler } from "@/context/session-context";
 import type { SSEEvent } from "@/types/sse";
@@ -54,7 +53,7 @@ export function createMockChatService() {
 }
 
 /**
- * Render a component wrapped in ScenarioProvider + SessionProvider + MemoryRouter.
+ * Render a component wrapped in SessionProvider + MemoryRouter.
  * Use this for integration tests that need the full provider stack.
  *
  * Pass `initialState` to simulate location.state (e.g. `{ justSaved: true }`).
@@ -75,13 +74,11 @@ export function renderWithSession(
     : (options?.initialPath ?? "/");
 
   const Wrapper = ({ children }: { children: ReactNode }) => (
-    <ScenarioProvider>
-      <SessionProvider chatService={options?.chatService}>
-        <MemoryRouter initialEntries={[initialEntry]}>
-          {children}
-        </MemoryRouter>
-      </SessionProvider>
-    </ScenarioProvider>
+    <SessionProvider chatService={options?.chatService}>
+      <MemoryRouter initialEntries={[initialEntry]}>
+        {children}
+      </MemoryRouter>
+    </SessionProvider>
   );
 
   return options?.routes

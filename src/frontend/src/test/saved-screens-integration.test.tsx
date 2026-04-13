@@ -1,6 +1,6 @@
 // Integration tests for saved detail screens wired to real API.
 // These tests verify that each screen:
-//   1. Fetches data by ID from URL params (not scenario mock data)
+//   1. Fetches data by ID from URL params (not static mock data)
 //   2. Shows a loading state while fetching
 //   3. Shows the fetched data once resolved
 //   4. Shows an error/not-found state on API failure

@@ -6,9 +6,7 @@ import { GroceryScreen } from "@/screens/GroceryScreen";
 import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
 import { SavedRecipeScreen } from "@/screens/SavedRecipeScreen";
 import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
-import { ScenarioProvider } from "@/context/scenario-context";
 import { SessionProvider } from "@/context/session-context";
-import { ScenarioSwitcher } from "@/components/scenario-switcher";
 
 function AppShell() {
   return (
@@ -23,18 +21,13 @@ function AppShell() {
           <Route path="/saved/recipe/:id" element={<SavedRecipeScreen />} />
           <Route path="/saved/list/:id" element={<SavedGroceryListScreen />} />
         </Routes>
-        <ScenarioSwitcher />
       </SessionProvider>
     </BrowserRouter>
   );
 }
 
 function App() {
-  return (
-    <ScenarioProvider>
-      <AppShell />
-    </ScenarioProvider>
-  );
+  return <AppShell />;
 }
 
 export default App;

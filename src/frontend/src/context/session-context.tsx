@@ -138,9 +138,7 @@ export function SessionProvider({
   // Accumulates the explanation text during streaming; written to assistant turn on done.
   const explanationRef = useRef<string>("");
 
-  // H2: Cancel stale SSE events when chatService changes (scenario switch).
-  // Old setTimeout chains from the previous mock SSE service would otherwise
-  // fire callbacks into the new scenario's state.
+  // H2: Cancel stale SSE events when chatService changes.
   useEffect(() => {
     return () => {
       if (cancelRef.current) {
