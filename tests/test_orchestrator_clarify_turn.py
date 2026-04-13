@@ -136,3 +136,176 @@ async def test_orchestrator_non_terminal_tools_still_loop(kb, seeded_user, db):
     assert result.clarify_turn is None
     # Both LLM calls were made (tool call + follow-up)
     assert mock_client.chat.completions.create.call_count == 2
+
+
+# ---------------------------------------------------------------------------
+# Clarify-screen enforcement tests (issue-46)
+#
+# Canonical decisions for the implementer:
+#   - reason string for "retry also failed": "clarify_turn_enforcement_failed"
+#   - The forced retry happens AFTER the main for-loop exits (post-loop check), NOT
+#     inside the iteration loop
+#   - Only ONE retry attempt — no retry-of-retry
+#   - The forced retry uses the SAME message history built so far (including the
+#     free-text assistant message that was the bad response)
+#   - Forced retry passes: tool_choice={"type": "function", "function": {"name": "emit_clarify_turn"}}
+# ---------------------------------------------------------------------------
+
+
+async def test_clarify_screen_freetext_response_forces_retry_with_tool_choice(
+    kb, seeded_user, db
+):
+    """When screen=clarify and LLM ends with free-text (no tool call), orchestrator
+    must make ONE additional forced LLM call with tool_choice=emit_clarify_turn.
+    If the retry succeeds, AgentResult has clarify_turn populated."""
+    # First call: free-text response — no tool calls, finish_reason="stop"
+    response_freetext = _make_response(
+        content="Here are some meal ideas for you!", finish_reason="stop"
+    )
+    # Second call (forced retry): proper emit_clarify_turn tool call
+    clarify_tool_call = _make_tool_call("emit_clarify_turn", _CLARIFY_ARGS, call_id="call_forced")
+    response_clarify = _make_response(
+        tool_calls=[clarify_tool_call], finish_reason="tool_calls"
+    )
+
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(
+        side_effect=[response_freetext, response_clarify]
+    )
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        result = await run_agent(
+            "I have chicken and peppers, what should I make?",
+            kb,
+            db,
+            seeded_user,
+            screen="clarify",
+        )
+
+    # Exactly TWO LLM calls were made
+    assert mock_client.chat.completions.create.call_count == 2
+
+    # The second call must include tool_choice forcing emit_clarify_turn
+    second_call_kwargs = mock_client.chat.completions.create.call_args_list[1].kwargs
+    assert second_call_kwargs.get("tool_choice") == {
+        "type": "function",
+        "function": {"name": "emit_clarify_turn"},
+    }
+
+    # AgentResult reflects the forced tool call result
+    assert result.status == "complete"
+    assert result.clarify_turn is not None
+    assert result.clarify_turn.explanation == _CLARIFY_ARGS["explanation"]
+    assert len(result.clarify_turn.questions) == 1
+
+
+async def test_clarify_screen_freetext_retry_also_fails_returns_error(
+    kb, seeded_user, db
+):
+    """When screen=clarify and BOTH the normal call AND the forced retry return
+    free-text (pathological model), orchestrator must return status='partial'
+    with reason='clarify_turn_enforcement_failed' and clarify_turn=None."""
+    # Both calls return free-text — forced retry also fails
+    response_freetext_1 = _make_response(
+        content="Here are some meal ideas!", finish_reason="stop"
+    )
+    response_freetext_2 = _make_response(
+        content="Still just text, no tool call.", finish_reason="stop"
+    )
+
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(
+        side_effect=[response_freetext_1, response_freetext_2]
+    )
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        result = await run_agent(
+            "I have chicken and peppers, what should I make?",
+            kb,
+            db,
+            seeded_user,
+            screen="clarify",
+        )
+
+    # status must signal failure — "partial" matches existing AgentResult convention
+    assert result.status == "partial"
+    # Canonical reason string the implementer must use
+    assert result.reason == "clarify_turn_enforcement_failed"
+    assert result.clarify_turn is None
+
+
+async def test_non_clarify_screen_freetext_response_does_not_retry(
+    kb, seeded_user, db
+):
+    """When screen != 'clarify', a free-text LLM response must NOT trigger a retry.
+    Exactly ONE LLM call is made and response_text is returned as-is."""
+    response_freetext = _make_response(
+        content="Here are recipe suggestions!", finish_reason="stop"
+    )
+    # Define a second response to detect if a spurious second call is made
+    response_second = _make_response(
+        content="This should never be called.", finish_reason="stop"
+    )
+
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(
+        side_effect=[response_freetext, response_second]
+    )
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        result = await run_agent(
+            "What recipes can I make with chicken?",
+            kb,
+            db,
+            seeded_user,
+            screen="recipes",
+        )
+
+    # Exactly ONE LLM call — no retry on non-clarify screen
+    assert mock_client.chat.completions.create.call_count == 1
+    assert result.status == "complete"
+    assert result.response_text == "Here are recipe suggestions!"
+    assert result.clarify_turn is None
+
+
+async def test_clarify_screen_tool_calls_then_emit_clarify_turn_no_retry(
+    kb, seeded_user, db
+):
+    """Regression guard for the clarify-screen happy path: when the LLM calls
+    emit_clarify_turn organically (after other tool calls), the loop exits
+    normally with no forced retry. Three LLM calls total — NOT four."""
+    # Iteration 1: analyze_pcsv
+    tc1 = _make_tool_call("analyze_pcsv", {"ingredients": ["chicken", "peppers"]}, call_id="call_1")
+    response_1 = _make_response(tool_calls=[tc1], finish_reason="tool_calls")
+
+    # Iteration 2: search_recipes
+    tc2 = _make_tool_call(
+        "search_recipes",
+        {"ingredients": ["chicken", "peppers"], "max_results": 3},
+        call_id="call_2",
+    )
+    response_2 = _make_response(tool_calls=[tc2], finish_reason="tool_calls")
+
+    # Iteration 3: emit_clarify_turn — terminates loop
+    tc3 = _make_tool_call("emit_clarify_turn", _CLARIFY_ARGS, call_id="call_3")
+    response_3 = _make_response(tool_calls=[tc3], finish_reason="tool_calls")
+
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(
+        side_effect=[response_1, response_2, response_3]
+    )
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        result = await run_agent(
+            "I have chicken and peppers, help me plan dinner",
+            kb,
+            db,
+            seeded_user,
+            screen="clarify",
+        )
+
+    # Exactly 3 LLM calls — no forced 4th retry
+    assert mock_client.chat.completions.create.call_count == 3
+    assert result.status == "complete"
+    assert result.clarify_turn is not None
+    assert result.clarify_turn.explanation == _CLARIFY_ARGS["explanation"]

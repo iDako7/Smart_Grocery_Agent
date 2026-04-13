@@ -12,7 +12,7 @@
 //   T5/T6: chat input disabled during loading, enabled on complete
 //   T7:    fallback — no hardcoded chip strings in error state
 
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
@@ -78,12 +78,16 @@ vi.mock("@base-ui/react/alert-dialog", async () => {
 });
 
 import React, { useEffect } from "react";
-import { Routes, Route } from "react-router";
+import { render } from "@testing-library/react";
+import { Routes, Route, MemoryRouter } from "react-router";
 
 import { ClarifyScreen } from "@/screens/ClarifyScreen";
 import { renderWithSession, createMockChatService } from "@/test/test-utils";
 import { useSessionOptional } from "@/context/session-context";
-import type { ClarifyQuestion } from "@/types/sse";
+import * as sessionContextModule from "@/context/session-context";
+import { initialScreenData } from "@/hooks/use-screen-state";
+import type { ClarifyQuestion, PcsvUpdateEvent } from "@/types/sse";
+import type { PCSVResult } from "@/types/tools";
 
 // ---------------------------------------------------------------------------
 // Test fixtures
@@ -430,6 +434,92 @@ describe("ClarifyScreen — W1 regression: empty questions list hides header", (
   });
 });
 
+// ---------------------------------------------------------------------------
+// Bug 2b: clarify_turn with empty questions must render explanation text
+// Fix approach: Option A — reducer copies clarifyTurn.explanation →
+// screenData.explanation; render gate drops the `!clarifyTurn` guard.
+// ---------------------------------------------------------------------------
+
+// Helper: drives session to complete with clarifyTurn.questions = [] and
+// a non-empty explanation — the exact bug 2b scenario.
+function ClarifyWithEmptyQuestions() {
+  const session = useSessionOptional();
+
+  useEffect(() => {
+    if (!session) return;
+    session.dispatch({ type: "start_loading" });
+    session.dispatch({ type: "start_streaming" });
+    session.dispatch({
+      type: "receive_event",
+      event: {
+        event_type: "clarify_turn",
+        explanation: "Sounds great — balanced plan, let me find recipes.",
+        questions: [],
+      },
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return <ClarifyScreen />;
+}
+
+describe("Bug2b-TClarifyExplanation: renders clarifyTurn.explanation when questions empty", () => {
+  // Test 1: explanation text must be visible when questions is []
+  it("renders clarifyTurn explanation text when questions is empty array", () => {
+    const mock = createMockChatService();
+
+    renderWithSession(<ClarifyWithEmptyQuestions />, {
+      chatService: mock.service,
+      initialPath: "/clarify",
+    });
+
+    // The explanation from the clarify_turn event must appear in the DOM.
+    // Currently FAILS because:
+    //   1. reducer does NOT copy clarifyTurn.explanation → screenData.explanation
+    //   2. render gate requires `!clarifyTurn` which is false when clarifyTurn is set
+    expect(
+      screen.getByText(/Sounds great — balanced plan, let me find recipes\./i)
+    ).toBeInTheDocument();
+  });
+
+  // Test 2: no chip questions section rendered when questions is []
+  it("does not render chip questions section when questions empty", () => {
+    const mock = createMockChatService();
+
+    renderWithSession(<ClarifyWithEmptyQuestions />, {
+      chatService: mock.service,
+      initialPath: "/clarify",
+    });
+
+    // "A few quick questions" header must NOT appear (already guarded by questions.length > 0)
+    expect(screen.queryByText(/A few quick questions/i)).toBeNull();
+
+    // No chip buttons
+    expect(screen.queryAllByTestId(/^chip-/)).toHaveLength(0);
+  });
+
+  // Test 3: CTA and ChatInput still visible even with empty questions
+  it("CTA and ChatInput still visible when clarifyTurn populated with empty questions", () => {
+    const mock = createMockChatService();
+
+    renderWithSession(<ClarifyWithEmptyQuestions />, {
+      chatService: mock.service,
+      initialPath: "/clarify",
+    });
+
+    // "Looks good, show recipes →" button — visible because clarifyTurn is non-null
+    expect(
+      screen.getByRole("button", { name: /looks good, show recipes/i })
+    ).toBeInTheDocument();
+
+    // ChatInput with the kimchi placeholder — visible because screenState === "complete"
+    const input = screen.getByRole("textbox", {
+      name: /I also have kimchi/i,
+    });
+    expect(input).toBeInTheDocument();
+    expect(input).not.toBeDisabled();
+  });
+});
+
 // T7: fallback — no hardcoded chip strings when clarifyTurn is null + error
 describe("ClarifyScreen — T7: fallback no hardcoded chip strings", () => {
   it("test_clarify_screen_fallback_no_hardcoded_chip_strings", () => {
@@ -446,5 +536,180 @@ describe("ClarifyScreen — T7: fallback no hardcoded chip strings", () => {
     expect(screen.queryByText("Vegetarian")).toBeNull();
     expect(screen.queryByText("Vegan")).toBeNull();
     expect(screen.queryByText("Gluten-free")).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Bug 1: error state should render ONLY the ErrorBanner —
+//         no "Here's what I see" heading, no ChatInput.
+// ---------------------------------------------------------------------------
+
+// Fixture: a sample PCSVResult used to verify pcsv data does not leak into
+// the error render when screenData.pcsv is populated before the error fires.
+const samplePcsv: PCSVResult = {
+  protein: { status: "ok", items: ["chicken"] },
+  carb: { status: "gap", items: [] },
+  veggie: { status: "low", items: ["spinach"] },
+  sauce: { status: "ok", items: [] },
+};
+
+// Helper: drives session to error state AFTER a pcsv_update event has been
+// received, so screenData.pcsv is non-null when the error fires.
+// Path: idle → loading → streaming → receive_event(pcsv_update)
+//             → receive_event(error, recoverable:false)
+function ClarifyInErrorWithPcsv() {
+  const session = useSessionOptional();
+
+  useEffect(() => {
+    if (!session) return;
+    const pcsvEvent: PcsvUpdateEvent = {
+      event_type: "pcsv_update",
+      pcsv: samplePcsv,
+    };
+    session.dispatch({ type: "start_loading" });
+    session.dispatch({ type: "start_streaming" });
+    session.dispatch({ type: "receive_event", event: pcsvEvent });
+    session.dispatch({
+      type: "receive_event",
+      event: {
+        event_type: "error",
+        message: "Network error — please try again.",
+        code: null,
+        recoverable: false,
+      },
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return <ClarifyScreen />;
+}
+
+// Note: sessionContextModule, initialScreenData, render, and MemoryRouter are
+// imported at the top of the file for use in Bug1-T3 below.
+
+// Bug 1 — Test 1:
+// renders only error banner; heading and ChatInput must NOT appear in error state.
+describe("ClarifyScreen — Bug1-T1: error state renders only ErrorBanner", () => {
+  it("renders only error banner when screenState is error — no heading, no ChatInput", () => {
+    const mock = createMockChatService();
+
+    renderWithSession(<ClarifyInState targetState="error" />, {
+      chatService: mock.service,
+      initialPath: "/clarify",
+    });
+
+    // ErrorBanner is visible with the error message
+    expect(
+      screen.getByText("Something went wrong. Please try again.")
+    ).toBeInTheDocument();
+    expect(screen.getByRole("alert")).toBeInTheDocument();
+
+    // The card header content must NOT be in the DOM.
+    // The heading "Here's what I see" is split across DOM nodes (span for "see"),
+    // so we query by role "heading" — there should be no h1 in error state.
+    expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
+    // Also confirm the eyebrow "Your ingredients" label is not rendered.
+    expect(screen.queryByText(/Your ingredients/i)).toBeNull();
+
+    // ChatInput (textbox) must NOT be in the DOM
+    expect(
+      screen.queryByPlaceholderText("I also have kimchi, forgot to mention…")
+    ).toBeNull();
+    expect(screen.queryByRole("textbox")).toBeNull();
+  });
+});
+
+// Bug 1 — Test 2:
+// PCV badges must NOT render when screenState is "error", even if pcsv data arrived before the error.
+describe("ClarifyScreen — Bug1-T2: error state suppresses PCV badges even with pcsv data", () => {
+  it("does not render PCV badges when screenState is error even if pcsv data is present", () => {
+    const mock = createMockChatService();
+
+    renderWithSession(<ClarifyInErrorWithPcsv />, {
+      chatService: mock.service,
+      initialPath: "/clarify",
+    });
+
+    // ErrorBanner is present
+    expect(
+      screen.getByText("Network error — please try again.")
+    ).toBeInTheDocument();
+
+    // The card header content must NOT be in the DOM
+    expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
+    expect(screen.queryByText(/Your ingredients/i)).toBeNull();
+
+    // PcvBadge buttons (Protein / Carb / Veggie) must not appear
+    expect(screen.queryByText("Protein")).toBeNull();
+    expect(screen.queryByText("Carb")).toBeNull();
+    expect(screen.queryByText("Veggie")).toBeNull();
+
+    // ChatInput must not appear
+    expect(
+      screen.queryByPlaceholderText("I also have kimchi, forgot to mention…")
+    ).toBeNull();
+  });
+});
+
+// Bug 1 — Test 3:
+// ClarifyTurn chips must NOT render when screenState is "error".
+// Tested via useSessionOptional spy to inject an impossible-but-defensive
+// state combination: screenState="error" WITH screenData.clarifyTurn populated.
+describe("ClarifyScreen — Bug1-T3: error state suppresses ClarifyTurn chips even with clarifyTurn data", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
+      screenState: "error",
+      screenData: {
+        ...initialScreenData,
+        error: "Upstream error.",
+        pcsv: null,
+        clarifyTurn: {
+          explanation: "I need more info.",
+          questions: [q1, q2],
+        },
+      },
+      isLoading: false,
+      isStreaming: false,
+      isComplete: false,
+      isError: true,
+      sessionId: null,
+      conversationHistory: [],
+      currentScreen: "clarify",
+      sendMessage: vi.fn(),
+      navigateToScreen: vi.fn(),
+      resetSession: vi.fn(),
+      addLocalTurn: vi.fn(),
+      dispatch: vi.fn(),
+    });
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+  });
+
+  it("does not render ClarifyTurn chips when screenState is error even if clarifyTurn data is present", () => {
+    render(
+      <MemoryRouter initialEntries={["/clarify"]}>
+        <ClarifyScreen />
+      </MemoryRouter>
+    );
+
+    // ErrorBanner with the injected error message is present
+    expect(screen.getByText("Upstream error.")).toBeInTheDocument();
+
+    // No chip buttons — even though clarifyTurn.questions has q1 and q2
+    expect(screen.queryAllByTestId(/^chip-/)).toHaveLength(0);
+
+    // "A few quick questions" header must not appear
+    expect(screen.queryByText(/A few quick questions/i)).toBeNull();
+
+    // "Here's what I see" h1 heading must not appear
+    expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
+
+    // "Looks good" CTA must not appear
+    expect(
+      screen.queryByRole("button", { name: /looks good, show recipes/i })
+    ).toBeNull();
   });
 });
