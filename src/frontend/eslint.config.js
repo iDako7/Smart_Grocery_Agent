@@ -25,7 +25,6 @@ export default defineConfig([
     files: ['**/context/**/*.{ts,tsx}'],
     rules: {
       'react-refresh/only-export-components': 'off',
-      'react-hooks/refs': 'off',
     },
   },
   // Test files: outer-variable capture in render helpers is intentional

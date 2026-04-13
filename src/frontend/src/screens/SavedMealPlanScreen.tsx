@@ -16,7 +16,6 @@ export function SavedMealPlanScreen() {
 
   useEffect(() => {
     if (!id) return;
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLoading(true);
     getSavedMealPlan(id)
       .then(setPlan)
