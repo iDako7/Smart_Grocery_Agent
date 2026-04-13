@@ -1,4 +1,4 @@
-# Status: frozen
+# Status: frozen (additive changes permitted per CHANGELOG 2026-04-13)
 # Pydantic models for all 7 tool inputs/outputs and OpenAI function-calling TOOLS list.
 # Evolved from prototype/schema.py + prototype/tools/definitions.py.
 # Breaking changes require a PR to main + contracts/CHANGELOG.md entry.
@@ -190,6 +190,44 @@ class TranslateTermResult(BaseModel):
     translation: str
     direction: Literal["en_to_zh", "zh_to_en"]
     match_type: TranslateMatchType
+
+
+# ---------------------------------------------------------------------------
+# Clarify-turn models (additive, 2026-04-13, issue #46)
+# ---------------------------------------------------------------------------
+
+
+class ClarifyOption(BaseModel):
+    label: str
+    is_exclusive: bool = Field(
+        default=False,
+        description="When selected, clears all other options in the same question (e.g., 'None' in a multi-select dietary question).",
+    )
+
+
+class ClarifyQuestion(BaseModel):
+    id: str = Field(description="Stable slug like 'cooking_setup', 'dietary', or an LLM-generated id.")
+    text: str = Field(description="The question text shown to the user, e.g., \"What's your cooking setup?\"")
+    selection_mode: Literal["single", "multi"]
+    options: list[ClarifyOption]
+
+
+class ClarifyTurnPayload(BaseModel):
+    explanation: str = Field(
+        description="ONE directional sentence, ≤30 words, plain text, no markdown. Same constraint as today's rule #9 but on the emit_clarify_turn surface instead of response_text.",
+    )
+    questions: list[ClarifyQuestion] = Field(
+        default_factory=list,
+        description="0–3 chip-select questions. May be empty if the user's message is specific and the profile is complete.",
+    )
+
+    @model_validator(mode="after")
+    def _check_question_count(self) -> "ClarifyTurnPayload":
+        if len(self.questions) > 3:
+            raise ValueError(
+                f"emit_clarify_turn accepts at most 3 questions, got {len(self.questions)}"
+            )
+        return self
 
 
 # ---------------------------------------------------------------------------
@@ -394,6 +432,69 @@ TOOLS: list[dict] = [
                     },
                 },
                 "required": ["term"],
+            },
+        },
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "emit_clarify_turn",
+            "description": (
+                "On the Clarify screen, call this as your TERMINAL action to deliver a directional summary and (optionally) up to 3 chip-select clarifying questions atomically. "
+                "The `explanation` field must be ONE directional sentence, ≤30 words, plain text — no markdown. "
+                "The `questions` field must be 0 to 3 questions; each question has a `selection_mode` (single/multi) and a list of options; "
+                "an option can be marked `is_exclusive` to clear other selections when picked (e.g., a 'None' option in a multi-select dietary question). "
+                "This tool is ONLY for the Clarify screen. On other screens, respond with free-text `response_text` as usual."
+            ),
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "explanation": {
+                        "type": "string",
+                        "description": "ONE directional sentence, ≤30 words, plain text, no markdown.",
+                    },
+                    "questions": {
+                        "type": "array",
+                        "description": "0–3 chip-select clarifying questions. Empty array is valid.",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string",
+                                    "description": "Stable slug like 'cooking_setup', 'dietary', or an LLM-generated id.",
+                                },
+                                "text": {
+                                    "type": "string",
+                                    "description": "The question text shown to the user.",
+                                },
+                                "selection_mode": {
+                                    "type": "string",
+                                    "enum": ["single", "multi"],
+                                    "description": "Whether the user can pick one or multiple options.",
+                                },
+                                "options": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "label": {
+                                                "type": "string",
+                                                "description": "Display label for the chip option.",
+                                            },
+                                            "is_exclusive": {
+                                                "type": "boolean",
+                                                "description": "When selected, clears all other options in the same question (e.g., 'None').",
+                                            },
+                                        },
+                                        "required": ["label"],
+                                    },
+                                },
+                            },
+                            "required": ["id", "text", "selection_mode", "options"],
+                        },
+                    },
+                },
+                "required": ["explanation", "questions"],
             },
         },
     },
