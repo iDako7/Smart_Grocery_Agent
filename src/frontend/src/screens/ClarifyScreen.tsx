@@ -294,8 +294,9 @@ export function ClarifyScreen() {
                   key={opt}
                   type="button"
                   aria-pressed={selectedSetup.includes(opt)}
+                  disabled={screenState === "loading"}
                   onClick={() => toggleSetup(opt)}
-                  className={`px-4 py-2 rounded-full text-[11px] font-semibold cursor-pointer min-h-[34px] flex items-center border-none transition-colors ${
+                  className={`px-4 py-2 rounded-full text-[11px] font-semibold cursor-pointer min-h-[34px] flex items-center border-none transition-colors disabled:opacity-50 disabled:pointer-events-none ${
                     selectedSetup.includes(opt)
                       ? "bg-shoyu text-cream"
                       : "bg-cream-deep text-ink"
@@ -318,8 +319,9 @@ export function ClarifyScreen() {
                   key={opt}
                   type="button"
                   aria-pressed={selectedDiet.includes(opt)}
+                  disabled={screenState === "loading"}
                   onClick={() => toggleDiet(opt)}
-                  className={`px-4 py-2 rounded-full text-[11px] font-semibold cursor-pointer min-h-[34px] flex items-center border-none transition-colors ${
+                  className={`px-4 py-2 rounded-full text-[11px] font-semibold cursor-pointer min-h-[34px] flex items-center border-none transition-colors disabled:opacity-50 disabled:pointer-events-none ${
                     selectedDiet.includes(opt)
                       ? "bg-shoyu text-cream"
                       : "bg-cream-deep text-ink"

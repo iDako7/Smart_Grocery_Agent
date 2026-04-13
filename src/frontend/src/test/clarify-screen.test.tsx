@@ -70,12 +70,6 @@ describe("ClarifyScreen — state: loading", () => {
     const mock = createMockChatService();
     renderWithSession(<ClarifyScreen />, { chatService: mock.service });
 
-    // Trigger loading by clicking a chip and submitting
-    act(() => {
-      // Directly drive state via the mock service pattern:
-      // Send a message by clicking a chip + "Looks good"
-    });
-
     // Drive to loading via sendMessage — click Oven chip then Looks good
     const ovenChip = screen.getByRole("button", { name: /^Oven$/i });
     act(() => {
@@ -96,6 +90,17 @@ describe("ClarifyScreen — state: loading", () => {
       screen.queryByRole("status") !== null;
 
     expect(hasThinkingText || hasLoadingElement).toBe(true);
+
+    // Chip UI must be disabled during loading per issue #38 spec
+    const setupChips = screen.getAllByRole("button", {
+      name: /^(Outdoor grill|Oven|Stovetop|All of the above)$/,
+    });
+    setupChips.forEach((chip) => expect(chip).toBeDisabled());
+
+    const dietChips = screen.getAllByRole("button", {
+      name: /^(None|Halal|Vegetarian|Vegan|Gluten-free)$/,
+    });
+    dietChips.forEach((chip) => expect(chip).toBeDisabled());
   });
 });
 
