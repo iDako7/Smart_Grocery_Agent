@@ -25,6 +25,7 @@ from contracts.api_types import Screen
 from contracts.tool_schemas import (
     TOOLS,
     AnalyzePcsvInput,
+    ClarifyTurnPayload,
     GetRecipeDetailInput,
     GetSubstitutionsInput,
     LookupStoreProductInput,
@@ -42,6 +43,7 @@ from src.ai.tools.get_substitutions import get_substitutions
 from src.ai.tools.lookup_store_product import lookup_store_product
 from src.ai.tools.search_recipes import search_recipes
 from src.ai.tools.translate_term import translate_term
+from src.ai.tools.emit_clarify_turn import emit_clarify_turn
 from src.ai.tools.update_user_profile import update_user_profile
 from src.ai.types import AgentResult, ToolCall
 from src.backend.db.crud import get_user_profile
@@ -75,6 +77,7 @@ _TOOL_REGISTRY: dict[str, tuple[type, str]] = {
     "translate_term": (TranslateTermInput, "kb"),
     "lookup_store_product": (LookupStoreProductInput, "kb"),
     "update_user_profile": (UpdateUserProfileInput, "pg"),
+    "emit_clarify_turn": (ClarifyTurnPayload, "none"),
 }
 
 
@@ -138,6 +141,8 @@ async def _dispatch_tool(
             result = await lookup_store_product(kb, parsed)
         elif name == "update_user_profile":
             result = await update_user_profile(pg, user_id, parsed)
+        elif name == "emit_clarify_turn":
+            result = await emit_clarify_turn(parsed)
         else:
             result = {"error": f"Unhandled tool: {name}"}
     except Exception as e:
