@@ -3,6 +3,9 @@
 import logging
 import uuid
 
+import openai
+import pydantic
+
 from contracts.api_types import (
     ChatRequest,
     ConversationTurn,
@@ -10,6 +13,7 @@ from contracts.api_types import (
     CreateSessionResponse,
     SessionStateResponse,
 )
+from contracts.sse_events import AgentErrorCategory
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from sqlalchemy import select
@@ -111,16 +115,29 @@ async def chat(
 
     # Run agent (collect phase)
     agent_failed = False
+    category: AgentErrorCategory | None = None
     try:
         async with get_kb() as kb:
             result = await run_agent(body.message, kb, conn, user_id, history=history, screen=body.screen)
+    except RuntimeError:
+        logger.exception("Agent config error for session %s", session_id)
+        category = "config"
+    except openai.APIError:
+        logger.exception("Agent LLM error for session %s", session_id)
+        category = "llm"
+    except pydantic.ValidationError:
+        logger.exception("Agent validation error for session %s", session_id)
+        category = "validation"
     except Exception:
         logger.exception("Agent execution failed for session %s", session_id)
+        category = "unknown"
+
+    if category is not None:
         agent_failed = True
         result = AgentResult(
             status="partial",
             response_text="I encountered an error processing your request. Please try again.",
-            reason="agent_error",
+            reason=f"agent_error:{category}",
         )
 
     # Only persist on success — don't save error messages as assistant turns
@@ -144,6 +161,6 @@ async def chat(
 
     # Emit phase — stream SSE events
     return StreamingResponse(
-        emit_agent_result(result),
+        emit_agent_result(result, error_category=category),
         media_type="text/event-stream",
     )

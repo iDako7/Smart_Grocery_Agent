@@ -40,6 +40,9 @@ class GroceryStore(BaseModel):
 # ---------------------------------------------------------------------------
 
 
+AgentErrorCategory = Literal["config", "llm", "validation", "unknown"]
+
+
 class ThinkingEvent(BaseModel):
     event_type: Literal["thinking"] = "thinking"
     message: str
@@ -77,7 +80,11 @@ class DoneEvent(BaseModel):
     status: Literal["complete", "partial"]
     reason: str | None = Field(
         default=None,
-        description="Populated on partial: 'llm_error', 'max_iterations', etc.",
+        description="Populated on partial. Chat handler uses 'agent_error:<category>' format; orchestrator may use 'max_iterations'.",
+    )
+    error_category: AgentErrorCategory | None = Field(
+        default=None,
+        description="Error taxonomy when status='partial'. None on success.",
     )
 
 

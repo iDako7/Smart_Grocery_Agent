@@ -8,6 +8,7 @@ import json
 from collections.abc import AsyncIterator
 
 from contracts.sse_events import (
+    AgentErrorCategory,
     DoneEvent,
     ExplanationEvent,
     GroceryListEvent,
@@ -24,7 +25,11 @@ def _sse_line(event_type: str, data: dict) -> str:
     return f"event: {event_type}\ndata: {payload}\n\n"
 
 
-async def emit_agent_result(result: AgentResult) -> AsyncIterator[str]:
+async def emit_agent_result(
+    result: AgentResult,
+    *,
+    error_category: AgentErrorCategory | None = None,
+) -> AsyncIterator[str]:
     """Emit SSE events from a completed AgentResult.
 
     Sequence: thinking* → pcsv_update → recipe_card(s) → explanation → grocery_list → done
@@ -56,7 +61,9 @@ async def emit_agent_result(result: AgentResult) -> AsyncIterator[str]:
 
     # Done
     if result.status == "complete":
+        if error_category is not None:
+            raise ValueError("error_category must be None when status='complete'")
         done = DoneEvent(status="complete")
     else:
-        done = DoneEvent(status="partial", reason=result.reason)
+        done = DoneEvent(status="partial", reason=result.reason, error_category=error_category)
     yield _sse_line("done", done.model_dump())

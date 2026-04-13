@@ -22,10 +22,15 @@ def _check_config() -> None:
         logger.warning(
             "SGA_AUTH_MODE is 'dev' — authentication is DISABLED. Set SGA_AUTH_MODE=prod for production deployments."
         )
+        if not os.environ.get("DATABASE_URL"):
+            raise RuntimeError(
+                "DATABASE_URL must be set in dev mode. Add to .env or export in shell. See .env.example."
+            )
     else:
         jwt_secret = os.getenv("JWT_SECRET", "")
         if not jwt_secret or jwt_secret == "change-me-in-production":
             raise RuntimeError("JWT_SECRET must be set to a real secret (not the default placeholder)")
+        # TODO(#47 follow-up): validate DATABASE_URL in prod mode too — currently only enforced in dev.
 
     if not os.environ.get("OPENROUTER_API_KEY"):
         raise RuntimeError("OPENROUTER_API_KEY must be set. Add it to .env or export it in your shell.")

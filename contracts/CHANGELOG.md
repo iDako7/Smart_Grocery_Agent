@@ -9,4 +9,4 @@ YYYY-MM-DD | file | description
 
 ---
 
-(No entries yet)
+2026-04-12 | sse_events.py | sse_events: DoneEvent gains optional error_category (config|llm|validation|unknown). Additive, non-breaking. (#47)
