@@ -18,7 +18,7 @@ import type {
   UseScreenStateReturn,
 } from "@/hooks/use-screen-state";
 
-import type { SSEEvent } from "@/types/sse";
+import type { SSEEvent, GroceryStore } from "@/types/sse";
 import type { PCSVResult, RecipeSummary } from "@/types/tools";
 
 // ---------------------------------------------------------------------------
