@@ -292,20 +292,36 @@ test.describe(
               .locator("text=A few quick questions")
           ).not.toBeVisible();
         } else {
-          // Profile-aware skip rule: the LLM must NOT ask about dietary
-          // restrictions when the user already stated "halal" in the input.
+          // Profile-aware skip rule: the LLM must NOT re-ask dietary status
+          // when the user already stated "halal" in the input.
           // This is the core behavioral guarantee being tested here.
+          //
+          // The agent should NOT re-ask whether the user keeps halal/kosher/has
+          // allergies — the user already stated "halal" in the message. It IS
+          // fine if the agent MENTIONS the word "halal" in another context (e.g.,
+          // "Which halal proteins do you want to grill?") because that's the
+          // agent respecting the constraint, not re-asking about it.
+          const DIETARY_REASK_PATTERNS = [
+            /\bare you\b.*\b(halal|kosher|vegetarian|vegan|pescatarian)\b/i,
+            /\bdo you keep\b.*\b(halal|kosher)\b/i,
+            /\bdo you have\b.*\b(dietary|food)\b.*\brestrictions?\b/i,
+            /\bany\b.*\b(dietary|food)\b.*\brestrictions?\b/i,
+            /\bany\b.*\ballerg(ies|y)\b/i,
+            /\bfollow\b.*\b(halal|kosher|vegetarian|vegan)\b/i,
+          ];
+
           const questionTextEls = page.locator(
             '[data-testid="screen-clarify"] .text-\\[12px\\].font-medium.text-ink'
           );
           const qtCount = await questionTextEls.count();
           for (let i = 0; i < qtCount; i++) {
-            const qText = (
-              (await questionTextEls.nth(i).textContent()) ?? ""
-            ).toLowerCase();
-            expect(qText).not.toMatch(
-              /halal|dietary restriction|allerg|kosher/
-            );
+            const qText = (await questionTextEls.nth(i).textContent()) ?? "";
+            for (const pattern of DIETARY_REASK_PATTERNS) {
+              expect(
+                qText,
+                `Agent re-asked about dietary status despite "halal" being in the user's message. Question: "${qText}"`
+              ).not.toMatch(pattern);
+            }
           }
         }
 
