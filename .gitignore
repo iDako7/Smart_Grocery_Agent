@@ -10,6 +10,11 @@ evals/reasoning/results*.json
 # Frontend
 node_modules/
 dist/
+coverage/
+
+# Editor
+.cursor/
+.claude/scheduled_tasks.lock
 
 # Playwright
 playwright-report/
