@@ -8,6 +8,7 @@ import { PcvBadge } from "@/components/pcv-badge";
 import { InfoSheet } from "@/components/info-sheet";
 import { ErrorBanner } from "@/components/error-banner";
 import { ConfirmResetDialog } from "@/components/confirm-reset-dialog";
+import { ChipQuestion } from "@/components/chip-question";
 import { useSessionOptional } from "@/context/session-context";
 
 // ---------------------------------------------------------------------------
@@ -40,6 +41,7 @@ export function ClarifyScreen() {
   const session = useSessionOptional();
 
   const sendMessage = session?.sendMessage ?? (() => {});
+  const navigateToScreen = session?.navigateToScreen;
   const screenData = session?.screenData;
   const screenState = session?.screenState ?? "idle";
   const isComplete = session?.isComplete ?? false;
@@ -47,6 +49,7 @@ export function ClarifyScreen() {
 
   const [pcvInfoOpen, setPcvInfoOpen] = useState(false);
   const [resetOpen, setResetOpen] = useState(false);
+  const [selections, setSelections] = useState<Record<string, string[]>>({});
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const prevResetOpen = useRef(false);
 
@@ -61,6 +64,28 @@ export function ClarifyScreen() {
   function handleStartOver() {
     resetSession?.();
     navigate("/");
+  }
+
+  function updateSelection(questionId: string, newSelected: string[]) {
+    setSelections((prev) => ({ ...prev, [questionId]: newSelected }));
+  }
+
+  function handleLooksGood() {
+    const questions = screenData?.clarifyTurn?.questions ?? [];
+    const clauses = questions
+      .map((q) => {
+        const sel = selections[q.id] ?? [];
+        if (sel.length === 0) return null;
+        return `${q.text} ${sel.join(", ")}.`;
+      })
+      .filter(Boolean);
+    const msg =
+      clauses.length > 0
+        ? `Looks good, show recipes. ${clauses.join(" ")}`
+        : "Looks good, show recipes.";
+    navigateToScreen?.("recipes");
+    sendMessage(msg);
+    navigate("/recipes");
   }
 
   // ---------------------------------------------------------------------------
@@ -208,7 +233,38 @@ export function ClarifyScreen() {
           </div>
         )}
 
+        {/* Dynamic chip questions — shown when clarifyTurn arrives and state is complete */}
+        {screenData?.clarifyTurn && screenState === "complete" && (
+          <div className="px-5 pt-3">
+            <div className="text-[11px] font-bold tracking-[0.06em] uppercase text-ink-3 mb-2">
+              A few quick questions
+            </div>
+            {screenData.clarifyTurn.questions.map((q) => (
+              <div key={q.id} className="mb-2.5">
+                <ChipQuestion
+                  question={q}
+                  selected={selections[q.id] ?? []}
+                  onChange={(newSel) => updateSelection(q.id, newSel)}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
       </div>
+
+      {/* Looks good CTA — shown when clarifyTurn is populated and state is complete */}
+      {screenData?.clarifyTurn && screenState === "complete" && (
+        <div className="px-5 py-3 flex justify-end">
+          <button
+            type="button"
+            onClick={handleLooksGood}
+            className="px-6 py-[11px] bg-shoyu text-cream border-none rounded-full font-sans text-[13px] font-semibold cursor-pointer"
+          >
+            Looks good, show recipes →
+          </button>
+        </div>
+      )}
 
       {/* Footer */}
       <div className="text-center px-4 pt-3 pb-[22px] text-[10px] text-ink-3 font-medium mt-auto">
