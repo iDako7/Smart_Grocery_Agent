@@ -34,8 +34,8 @@ export function ConfirmResetDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="max-w-[300px] sm:max-w-[320px]">
-        <AlertDialogHeader>
+      <AlertDialogContent size="sm">
+        <AlertDialogHeader className="sm:place-items-start sm:text-left">
           <AlertDialogTitle>Start a new conversation?</AlertDialogTitle>
           <AlertDialogDescription>
             Your current progress will be lost. You can also resume the session
