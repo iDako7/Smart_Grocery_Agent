@@ -62,8 +62,8 @@ _CLARIFY_ARGS = {
             "text": "What's your cooking setup?",
             "selection_mode": "single",
             "options": [
-                {"label": "Wok", "value": "wok", "is_exclusive": False},
-                {"label": "Pan", "value": "pan", "is_exclusive": False},
+                {"label": "Wok", "is_exclusive": False},
+                {"label": "Pan", "is_exclusive": False},
             ],
         },
     ],

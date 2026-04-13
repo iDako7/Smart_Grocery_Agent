@@ -211,8 +211,8 @@ export function ClarifyScreen() {
                 </>
               )}
 
-              {/* Explanation — rendered with markdown; shown when text is available */}
-              {screenData?.explanation && (
+              {/* Explanation — rendered with markdown; shown when text is available and no clarifyTurn */}
+              {screenData?.explanation && !screenData?.clarifyTurn && (
                 <div className="mt-2 text-[13px] text-ink-2 leading-[1.5]">
                   <Markdown
                     allowedElements={["p", "strong", "em", "ul", "ol", "li", "a"]}
@@ -247,7 +247,7 @@ export function ClarifyScreen() {
             )}
 
             {/* Dynamic chip questions — shown when clarifyTurn arrives and state is complete */}
-            {screenData?.clarifyTurn && screenState === "complete" && (
+            {screenData?.clarifyTurn && screenState === "complete" && screenData.clarifyTurn.questions.length > 0 && (
               <div className="px-5 pt-3">
                 <div className="text-[11px] font-bold tracking-[0.06em] uppercase text-ink-3 mb-2">
                   A few quick questions

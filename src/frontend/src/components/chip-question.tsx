@@ -46,7 +46,6 @@ export function ChipQuestion({
     }
   }
 
-  // Sanitize label to create a safe testid segment (replace spaces with dashes, etc.)
   function chipTestId(label: string) {
     return `chip-${question.id}-${label}`;
   }

@@ -412,6 +412,24 @@ describe("ClarifyScreen — T6: chat input enabled on complete", () => {
   });
 });
 
+// W1 regression: empty questions list — header must NOT render
+describe("ClarifyScreen — W1 regression: empty questions list hides header", () => {
+  it("does not render 'A few quick questions' header when clarifyTurn.questions is empty", () => {
+    const mock = createMockChatService();
+
+    renderWithSession(<ClarifyWithClarifyTurn questions={[]} />, {
+      chatService: mock.service,
+      initialPath: "/clarify",
+    });
+
+    // The orphaned header must not appear when there are no questions
+    expect(screen.queryByText(/A few quick questions/i)).toBeNull();
+
+    // No chip buttons either
+    expect(screen.queryAllByTestId(/^chip-/)).toHaveLength(0);
+  });
+});
+
 // T7: fallback — no hardcoded chip strings when clarifyTurn is null + error
 describe("ClarifyScreen — T7: fallback no hardcoded chip strings", () => {
   it("test_clarify_screen_fallback_no_hardcoded_chip_strings", () => {
