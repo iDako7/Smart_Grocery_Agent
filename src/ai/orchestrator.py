@@ -81,17 +81,20 @@ _TOOL_REGISTRY: dict[str, tuple[type, str]] = {
 }
 
 
-async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens):
+async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens, tool_choice=None):
     """Call LLM with one retry + exponential backoff on transient errors."""
     last_error = None
     for attempt in range(LLM_MAX_RETRIES + 1):
         try:
-            return await client.chat.completions.create(
+            kwargs = dict(
                 model=model,
                 messages=messages,
                 tools=tools,
                 max_tokens=max_tokens,
             )
+            if tool_choice is not None:
+                kwargs["tool_choice"] = tool_choice
+            return await client.chat.completions.create(**kwargs)
         except _RETRYABLE_ERRORS as e:
             last_error = e
             if attempt < LLM_MAX_RETRIES:
@@ -204,6 +207,49 @@ async def run_agent(
 
         # Done — no tool calls
         if choice.finish_reason != "tool_calls" and not message.tool_calls:
+            if screen == "clarify":
+                forced_tc = {"type": "function", "function": {"name": "emit_clarify_turn"}}
+                messages.append(message.model_dump())
+                retry_response = await _llm_call_with_retry(
+                    client,
+                    model=MODEL,
+                    messages=messages,
+                    tools=TOOLS,
+                    max_tokens=4096,
+                    tool_choice=forced_tc,
+                )
+                retry_choice = retry_response.choices[0]
+                retry_message = retry_choice.message
+                clarify_payload = None
+                if retry_message.tool_calls:
+                    for tc in retry_message.tool_calls:
+                        if tc.function.name == "emit_clarify_turn":
+                            result_dict, tc_record = await _dispatch_tool(
+                                tc.function.name, tc.function.arguments, kb, pg, user_id
+                            )
+                            all_tool_calls.append(tc_record)
+                            if isinstance(result_dict, dict) and "error" not in result_dict:
+                                clarify_payload = ClarifyTurnPayload.model_validate(result_dict)
+                            break
+                if clarify_payload is not None:
+                    return AgentResult(
+                        status="complete",
+                        response_text="",
+                        tool_calls=all_tool_calls,
+                        total_iterations=iteration + 1,
+                        pcsv=pcsv_result,
+                        recipes=recipe_results,
+                        clarify_turn=clarify_payload,
+                    )
+                return AgentResult(
+                    status="partial",
+                    response_text="",
+                    tool_calls=all_tool_calls,
+                    total_iterations=iteration + 1,
+                    pcsv=pcsv_result,
+                    recipes=recipe_results,
+                    reason="clarify_turn_enforcement_failed",
+                )
             return AgentResult(
                 status="complete",
                 response_text=message.content or "",
