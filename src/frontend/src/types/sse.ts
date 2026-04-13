@@ -61,10 +61,13 @@ export type ErrorEvent = {
   recoverable: boolean;
 };
 
+export type AgentErrorCategory = "config" | "llm" | "validation" | "unknown";
+
 export type DoneEvent = {
   event_type: "done";
   status: "complete" | "partial";
   reason: string | null;
+  error_category: AgentErrorCategory | null;
 };
 
 // ---------------------------------------------------------------------------
