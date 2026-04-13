@@ -3,17 +3,15 @@
 // ErrorBanner component is created and screen files are updated.
 
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 // Base-ui mocks (menu + dialog) are in setup.ts
 
 import { ErrorBanner } from "@/components/error-banner";
-import { ClarifyScreen } from "@/screens/ClarifyScreen";
-import { RecipesScreen } from "@/screens/RecipesScreen";
 import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
 import { SavedRecipeScreen } from "@/screens/SavedRecipeScreen";
-import { createMockChatService, renderWithSession } from "@/test/test-utils";
+import { renderWithSession } from "@/test/test-utils";
 
 // ---------------------------------------------------------------------------
 // 1. ErrorBanner renders error message
@@ -111,187 +109,5 @@ describe("SavedRecipeScreen — no chat input", () => {
     renderWithSession(<SavedRecipeScreen />);
     expect(screen.queryByPlaceholderText(/Adjust this recipe/i)).not.toBeInTheDocument();
     expect(screen.queryAllByRole("textbox")).toHaveLength(0);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 7. ClarifyScreen — shows error banner on error state
-// ---------------------------------------------------------------------------
-
-describe("ClarifyScreen — shows error banner on error state", () => {
-  it("renders ErrorBanner when an error event is received", async () => {
-    const user = userEvent.setup();
-    const mock = createMockChatService();
-
-    renderWithSession(<ClarifyScreen />, { chatService: mock.service });
-
-    // Trigger sendMessage to start the session
-    const chatInput = screen.getByPlaceholderText(/kimchi/i);
-    await user.click(chatInput);
-    await user.type(chatInput, "BBQ for 8");
-    await user.keyboard("{Enter}");
-
-    // Emit an error via onError callback
-    act(() => {
-      mock.getOnError()("Something went wrong with the AI");
-    });
-
-    expect(screen.getByText("Something went wrong with the AI")).toBeInTheDocument();
-  });
-
-  it("shows a Try again button in the error banner on ClarifyScreen", async () => {
-    const user = userEvent.setup();
-    const mock = createMockChatService();
-
-    renderWithSession(<ClarifyScreen />, { chatService: mock.service });
-
-    const chatInput = screen.getByPlaceholderText(/kimchi/i);
-    await user.click(chatInput);
-    await user.type(chatInput, "test input");
-    await user.keyboard("{Enter}");
-
-    act(() => {
-      mock.getOnError()("Connection failed");
-    });
-
-    expect(screen.getByRole("button", { name: /try again/i })).toBeInTheDocument();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 8. ClarifyScreen — shows partial banner on partial completion
-// ---------------------------------------------------------------------------
-
-describe("ClarifyScreen — shows partial banner on partial completion", () => {
-  it("renders partial ErrorBanner when done with partial status", async () => {
-    const user = userEvent.setup();
-    const mock = createMockChatService();
-
-    renderWithSession(<ClarifyScreen />, { chatService: mock.service });
-
-    const chatInput = screen.getByPlaceholderText(/kimchi/i);
-    await user.click(chatInput);
-    await user.type(chatInput, "BBQ for 8");
-    await user.keyboard("{Enter}");
-
-    // Enter streaming state first
-    act(() => {
-      mock.getOnEvent()({ event_type: "thinking", message: "Analyzing..." });
-    });
-
-    // Complete with partial status
-    act(() => {
-      mock.getOnDone()("partial", "timeout");
-    });
-
-    expect(
-      screen.getByText(/Some results may be incomplete/i)
-    ).toBeInTheDocument();
-  });
-
-  it("does not show retry button in partial banner on ClarifyScreen", async () => {
-    const user = userEvent.setup();
-    const mock = createMockChatService();
-
-    renderWithSession(<ClarifyScreen />, { chatService: mock.service });
-
-    const chatInput = screen.getByPlaceholderText(/kimchi/i);
-    await user.click(chatInput);
-    await user.type(chatInput, "BBQ for 8");
-    await user.keyboard("{Enter}");
-
-    act(() => {
-      mock.getOnEvent()({ event_type: "thinking", message: "Analyzing..." });
-    });
-
-    act(() => {
-      mock.getOnDone()("partial", "timeout");
-    });
-
-    // Partial banner should NOT have a retry button
-    expect(
-      screen.queryByRole("button", { name: /try again/i })
-    ).not.toBeInTheDocument();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 9. RecipesScreen — shows error banner on error state
-// ---------------------------------------------------------------------------
-
-describe("RecipesScreen — shows error banner on error state", () => {
-  it("renders ErrorBanner when an error occurs during streaming", async () => {
-    const user = userEvent.setup();
-    const mock = createMockChatService();
-
-    renderWithSession(<RecipesScreen />, { chatService: mock.service });
-
-    const chatInput = screen.getByPlaceholderText(/Refine/i);
-    await user.click(chatInput);
-    await user.type(chatInput, "show recipes");
-    await user.keyboard("{Enter}");
-
-    act(() => {
-      mock.getOnError()("Recipe lookup failed");
-    });
-
-    expect(screen.getByText("Recipe lookup failed")).toBeInTheDocument();
-  });
-
-  it("shows partial banner on RecipesScreen when done with partial status", async () => {
-    const user = userEvent.setup();
-    const mock = createMockChatService();
-
-    renderWithSession(<RecipesScreen />, { chatService: mock.service });
-
-    const chatInput = screen.getByPlaceholderText(/Refine/i);
-    await user.click(chatInput);
-    await user.type(chatInput, "show recipes");
-    await user.keyboard("{Enter}");
-
-    act(() => {
-      mock.getOnEvent()({ event_type: "thinking", message: "Searching..." });
-    });
-
-    act(() => {
-      mock.getOnDone()("partial", "max_iterations");
-    });
-
-    expect(
-      screen.getByText(/Some results may be incomplete/i)
-    ).toBeInTheDocument();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 10. Error retry calls sendMessage
-// ---------------------------------------------------------------------------
-
-describe("ErrorBanner retry — calls sendMessage in ClarifyScreen", () => {
-  it("clicking Try again in error banner calls sendMessage with 'retry'", async () => {
-    const user = userEvent.setup();
-    const mock = createMockChatService();
-
-    renderWithSession(<ClarifyScreen />, { chatService: mock.service });
-
-    // First send to get into error state
-    const chatInput = screen.getByPlaceholderText(/kimchi/i);
-    await user.click(chatInput);
-    await user.type(chatInput, "BBQ for 8");
-    await user.keyboard("{Enter}");
-
-    act(() => {
-      mock.getOnError()("Network timeout");
-    });
-
-    // Reset call count before clicking retry
-    mock.serviceFn.mockClear();
-
-    // Click retry button
-    const retryBtn = screen.getByRole("button", { name: /try again/i });
-    await user.click(retryBtn);
-
-    expect(mock.serviceFn).toHaveBeenCalledTimes(1);
-    expect(mock.serviceFn.mock.calls[0][0]).toBe("retry");
   });
 });

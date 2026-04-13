@@ -13,24 +13,21 @@ import { GroceryScreen } from "@/screens/GroceryScreen";
 import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
 import { SavedRecipeScreen } from "@/screens/SavedRecipeScreen";
 import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
-import { ScenarioProvider } from "@/context/scenario-context";
 
 // Mirrors the route table in App.tsx so any future mismatch is caught here.
 function TestRouter({ initialPath }: { initialPath: string }) {
   return (
-    <ScenarioProvider>
-      <MemoryRouter initialEntries={[initialPath]}>
-        <Routes>
-          <Route path="/" element={<HomeScreen />} />
-          <Route path="/clarify" element={<ClarifyScreen />} />
-          <Route path="/recipes" element={<RecipesScreen />} />
-          <Route path="/grocery" element={<GroceryScreen />} />
-          <Route path="/saved/plan/:id" element={<SavedMealPlanScreen />} />
-          <Route path="/saved/recipe/:id" element={<SavedRecipeScreen />} />
-          <Route path="/saved/list/:id" element={<SavedGroceryListScreen />} />
-        </Routes>
-      </MemoryRouter>
-    </ScenarioProvider>
+    <MemoryRouter initialEntries={[initialPath]}>
+      <Routes>
+        <Route path="/" element={<HomeScreen />} />
+        <Route path="/clarify" element={<ClarifyScreen />} />
+        <Route path="/recipes" element={<RecipesScreen />} />
+        <Route path="/grocery" element={<GroceryScreen />} />
+        <Route path="/saved/plan/:id" element={<SavedMealPlanScreen />} />
+        <Route path="/saved/recipe/:id" element={<SavedRecipeScreen />} />
+        <Route path="/saved/list/:id" element={<SavedGroceryListScreen />} />
+      </Routes>
+    </MemoryRouter>
   );
 }
 
