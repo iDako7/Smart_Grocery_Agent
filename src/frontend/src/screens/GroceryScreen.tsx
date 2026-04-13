@@ -6,11 +6,13 @@ import { ChecklistRow } from "@/components/checklist-row";
 import { StoreSection } from "@/components/store-section";
 import { useScenario } from "@/context/scenario-context";
 import { useSessionOptional } from "@/context/session-context";
+import { saveGroceryList } from "@/services/api-client";
 
 export function GroceryScreen() {
   const navigate = useNavigate();
   const { scenario } = useScenario();
   const session = useSessionOptional();
+  const sessionId = session?.sessionId ?? null;
   // Use session grocery data when available (from SSE grocery_list event),
   // fall back to scenario data for mock/Stage 3.
   const sessionGrocery = session?.screenData?.groceryList ?? [];
@@ -34,6 +36,7 @@ export function GroceryScreen() {
   // once grocery items include name_zh fields from the KB. Currently a UI stub.
   const [lang, setLang] = useState<"en" | "zh">("en");
   const [checked, setChecked] = useState<Set<string>>(new Set());
+  const [saving, setSaving] = useState(false);
 
   function handleToggle(id: string) {
     setChecked((prev) => {
@@ -47,11 +50,17 @@ export function GroceryScreen() {
     });
   }
 
-  function handleSave() {
-    // TODO(Issue #22): POST payload to save endpoint, use returned ID for navigation.
-    // Extract session?.screenData?.recipes and bundle as linked save payload:
-    // { groceryStores: sessionGrocery, recipes: session?.screenData?.recipes }
-    navigate("/saved/list/1", { state: { justSaved: true } });
+  async function handleSave() {
+    if (!sessionId || saving) return;
+    setSaving(true);
+    try {
+      const result = await saveGroceryList("Grocery list", sessionId);
+      navigate(`/saved/list/${result.id}`, { state: { justSaved: true } });
+    } catch {
+      // TODO: surface error to user
+    } finally {
+      setSaving(false);
+    }
   }
 
   const costcoItems = GROCERY_ITEMS.filter((i) => i.store === "costco");
@@ -152,11 +161,11 @@ export function GroceryScreen() {
       </StoreSection>
 
       {/* Save list button */}
-      {/* TODO(Issue #22): replace hardcoded id with real saved list id returned by POST */}
       <button
         type="button"
         onClick={handleSave}
-        className="mx-3.5 mt-1.5 mb-3 py-[13px] bg-shoyu text-cream border-none rounded-md font-sans text-[13px] font-semibold cursor-pointer min-h-[44px]"
+        disabled={!sessionId || saving}
+        className={`mx-3.5 mt-1.5 mb-3 py-[13px] bg-shoyu text-cream border-none rounded-md font-sans text-[13px] font-semibold min-h-[44px] ${!sessionId || saving ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
       >
         Save list
       </button>

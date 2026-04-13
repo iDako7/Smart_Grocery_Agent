@@ -1,16 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate } from "react-router";
-import { useScenario } from "@/context/scenario-context";
+import { useNavigate, useParams } from "react-router";
+import { getSavedRecipe } from "@/services/api-client";
+import type { SavedRecipe } from "@/types/api";
 
 export function SavedRecipeScreen() {
   const navigate = useNavigate();
-  const { scenario } = useScenario();
-  const { name, nameCjk, deckText, cookingMethodPill, sourcePill, recipeText: RECIPE_TEXT } =
-    scenario.savedRecipe;
+  const { id } = useParams<{ id: string }>();
+
+  const [recipe, setRecipe] = useState<SavedRecipe | null>(null);
+  const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(RECIPE_TEXT);
-  const [savedText, setSavedText] = useState(RECIPE_TEXT);
+  const [editText, setEditText] = useState("");
+  const [savedText, setSavedText] = useState("");
+
+  useEffect(() => {
+    if (!id) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLoading(true);
+    getSavedRecipe(id)
+      .then((data) => {
+        setRecipe(data);
+        const instructions = data.recipe_snapshot.instructions;
+        setEditText(instructions);
+        setSavedText(instructions);
+      })
+      .catch(() => setRecipe(null))
+      .finally(() => setLoading(false));
+  }, [id]);
 
   function handleEdit() {
     setIsEditing(true);
@@ -45,65 +62,85 @@ export function SavedRecipeScreen() {
         </button>
       </div>
 
+      {/* Loading state */}
+      {loading && (
+        <div className="flex flex-1 items-center justify-center">
+          <span data-testid="loading-indicator" className="text-[13px] text-ink-2">
+            Loading...
+          </span>
+        </div>
+      )}
+
+      {/* Not found state */}
+      {!loading && !recipe && (
+        <div className="flex flex-1 items-center justify-center">
+          <span data-testid="not-found-message" className="text-[13px] text-ink-2">
+            Recipe not found.
+          </span>
+        </div>
+      )}
+
       {/* Recipe card */}
-      <div className="mx-3.5 my-3.5 bg-paper rounded-2xl overflow-hidden">
-        {/* Header */}
-        <div className="px-5 pt-5 pb-3">
-          <h1 className="text-[20px] font-bold tracking-tight text-ink">
-            {name}
-          </h1>
-          <p lang="zh" className="font-cjk text-[14px] font-medium text-ink-3 mt-1 tracking-[0.02em]">
-            {nameCjk}
-          </p>
-          <p className="mt-[5px] text-[12px] text-ink-3">
-            {deckText}
-          </p>
+      {!loading && recipe && (
+        <div className="mx-3.5 my-3.5 bg-paper rounded-2xl overflow-hidden">
+          {/* Header */}
+          <div className="px-5 pt-5 pb-3">
+            <h1 className="text-[20px] font-bold tracking-tight text-ink">
+              {recipe.recipe_snapshot.name}
+            </h1>
+            <p lang="zh" className="font-cjk text-[14px] font-medium text-ink-3 mt-1 tracking-[0.02em]">
+              {recipe.recipe_snapshot.name_zh}
+            </p>
+            <p className="mt-[5px] text-[12px] text-ink-3">
+              {recipe.recipe_snapshot.cuisine} · serves {recipe.recipe_snapshot.serves}
+            </p>
+          </div>
+
+          {/* Pills */}
+          <div className="flex flex-wrap gap-1.5 px-5 pb-3.5">
+            <span className="bg-jade-soft text-jade px-3 py-[5px] rounded-full text-[10.5px] font-semibold">
+              {recipe.recipe_snapshot.cooking_method}
+            </span>
+            <span className="bg-cream-deep text-ink-2 px-3 py-[5px] rounded-full text-[10.5px] font-semibold">
+              {recipe.recipe_snapshot.source}
+            </span>
+          </div>
+
+          {/* View mode */}
+          {!isEditing && (
+            <pre className="font-mono text-[11.5px] leading-[1.7] text-ink-2 whitespace-pre bg-tofu px-5 py-4 border-t border-t-[0.5px] border-t-cream-deep overflow-x-auto border-b border-b-[0.5px] border-b-cream-deep">
+              {savedText}
+            </pre>
+          )}
+
+          {/* Edit mode */}
+          {isEditing && (
+            <>
+              <textarea
+                value={editText}
+                onChange={(e) => setEditText(e.target.value)}
+                className="w-full font-mono text-[11.5px] leading-[1.7] text-ink-2 bg-tofu border-none outline-none resize-none px-5 py-4 min-h-[180px] block"
+              />
+              <div className="flex gap-2 px-[18px] pt-2.5 pb-4">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="flex-1 py-3 bg-cream-deep border-none rounded-md font-sans text-[13px] font-semibold text-ink cursor-pointer min-h-[44px]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  className="flex-[1.5] py-3 bg-shoyu border-none rounded-md font-sans text-[13px] font-semibold text-cream cursor-pointer min-h-[44px]"
+                >
+                  Save
+                </button>
+              </div>
+            </>
+          )}
         </div>
-
-        {/* Pills */}
-        <div className="flex flex-wrap gap-1.5 px-5 pb-3.5">
-          <span className="bg-jade-soft text-jade px-3 py-[5px] rounded-full text-[10.5px] font-semibold">
-            {cookingMethodPill}
-          </span>
-          <span className="bg-cream-deep text-ink-2 px-3 py-[5px] rounded-full text-[10.5px] font-semibold">
-            {sourcePill}
-          </span>
-        </div>
-
-        {/* View mode */}
-        {!isEditing && (
-          <pre className="font-mono text-[11.5px] leading-[1.7] text-ink-2 whitespace-pre bg-tofu px-5 py-4 border-t border-t-[0.5px] border-t-cream-deep overflow-x-auto border-b border-b-[0.5px] border-b-cream-deep">
-            {savedText}
-          </pre>
-        )}
-
-        {/* Edit mode */}
-        {isEditing && (
-          <>
-            <textarea
-              value={editText}
-              onChange={(e) => setEditText(e.target.value)}
-              className="w-full font-mono text-[11.5px] leading-[1.7] text-ink-2 bg-tofu border-none outline-none resize-none px-5 py-4 min-h-[180px] block"
-            />
-            <div className="flex gap-2 px-[18px] pt-2.5 pb-4">
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="flex-1 py-3 bg-cream-deep border-none rounded-md font-sans text-[13px] font-semibold text-ink cursor-pointer min-h-[44px]"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={handleSave}
-                className="flex-[1.5] py-3 bg-shoyu border-none rounded-md font-sans text-[13px] font-semibold text-cream cursor-pointer min-h-[44px]"
-              >
-                Save
-              </button>
-            </div>
-          </>
-        )}
-      </div>
+      )}
 
       {/* Footer */}
       <div className="text-center px-4 pt-3 pb-[22px] text-[10px] text-ink-3 font-medium mt-auto">

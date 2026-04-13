@@ -1,22 +1,52 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { QuickStartChip } from "@/components/quick-start-chip";
-import { Sidebar, type SidebarItemType } from "@/components/sidebar";
-import { useScenario } from "@/context/scenario-context";
+import { Sidebar, type SidebarItem, type SidebarItemType } from "@/components/sidebar";
 import { useSessionOptional } from "@/context/session-context";
+import { listSavedMealPlans, listSavedRecipes, listSavedGroceryLists } from "@/services/api-client";
 
 const QUICK_STARTS = ["Weekend BBQ", "Weeknight meals", "Use my leftovers"];
 
 export function HomeScreen() {
   const navigate = useNavigate();
-  const { scenario } = useScenario();
   const session = useSessionOptional();
   const sendMessage = session?.sendMessage ?? (() => {});
   const navigateToScreen = session?.navigateToScreen;
-  const { mealPlans: MOCK_MEAL_PLANS, savedRecipes: MOCK_SAVED_RECIPES, groceryLists: MOCK_GROCERY_LISTS } =
-    scenario.sidebar;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [mealPlans, setMealPlans] = useState<SidebarItem[]>([]);
+  const [savedRecipes, setSavedRecipes] = useState<SidebarItem[]>([]);
+  const [groceryLists, setGroceryLists] = useState<SidebarItem[]>([]);
+
+  useEffect(() => {
+    async function fetchSidebarData() {
+      try {
+        const [plans, recipes, lists] = await Promise.all([
+          listSavedMealPlans(),
+          listSavedRecipes(),
+          listSavedGroceryLists(),
+        ]);
+        setMealPlans(plans.map(p => ({
+          id: p.id,
+          name: p.name,
+          meta: `${p.recipe_count} recipes`,
+        })));
+        setSavedRecipes(recipes.map(r => ({
+          id: r.id,
+          name: r.recipe_name,
+          meta: new Date(r.created_at).toLocaleDateString(),
+        })));
+        setGroceryLists(lists.map(l => ({
+          id: l.id,
+          name: l.name,
+          meta: `${l.item_count} items`,
+        })));
+      } catch {
+        // Sidebar data is non-critical — fail silently with empty lists
+      }
+    }
+    void fetchSidebarData();
+  }, []);
 
   function handleSend(text: string) {
     const trimmed = text.trim();
@@ -115,9 +145,9 @@ export function HomeScreen() {
       <Sidebar
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
-        mealPlans={MOCK_MEAL_PLANS}
-        savedRecipes={MOCK_SAVED_RECIPES}
-        groceryLists={MOCK_GROCERY_LISTS}
+        mealPlans={mealPlans}
+        savedRecipes={savedRecipes}
+        groceryLists={groceryLists}
         onItemClick={handleSidebarItemClick}
       />
     </div>

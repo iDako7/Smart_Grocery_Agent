@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowLeft } from "lucide-react";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useLocation, useParams } from "react-router";
 import { ChecklistRow } from "@/components/checklist-row";
 import { StoreSection } from "@/components/store-section";
 import { Toast } from "@/components/toast";
-import { useScenario } from "@/context/scenario-context";
+import { getSavedGroceryList } from "@/services/api-client";
+import type { SavedGroceryList } from "@/types/api";
 
 type ListItem = {
   id: string;
@@ -13,35 +14,65 @@ type ListItem = {
   store: "costco" | "market";
 };
 
+function mapStoreToItems(list: SavedGroceryList): ListItem[] {
+  return list.stores.flatMap((store) =>
+    store.departments.flatMap((dept) =>
+      dept.items.map((item) => ({
+        id: item.id,
+        name: item.name,
+        subtitle: item.amount,
+        store: store.store_name.toLowerCase().includes("costco")
+          ? ("costco" as const)
+          : ("market" as const),
+      }))
+    )
+  );
+}
+
 export function SavedGroceryListScreen() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { scenario } = useScenario();
-  const { name, savedDate, items: INITIAL_ITEMS } = scenario.savedGroceryList;
-  const [items, setItems] = useState<ListItem[]>(INITIAL_ITEMS);
+  const { id } = useParams<{ id: string }>();
+
+  const [list, setList] = useState<SavedGroceryList | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState<ListItem[]>([]);
   const [checked, setChecked] = useState<Set<string>>(new Set());
   const [addCostco, setAddCostco] = useState("");
   const [addMarket, setAddMarket] = useState("");
   const [copyCount, setCopyCount] = useState(0);
   const [copyFailed, setCopyFailed] = useState(false);
 
-  function handleToggle(id: string) {
+  useEffect(() => {
+    if (!id) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLoading(true);
+    getSavedGroceryList(id)
+      .then((data) => {
+        setList(data);
+        setItems(mapStoreToItems(data));
+      })
+      .catch(() => setList(null))
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  function handleToggle(itemId: string) {
     setChecked((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
+      if (next.has(itemId)) {
+        next.delete(itemId);
       } else {
-        next.add(id);
+        next.add(itemId);
       }
       return next;
     });
   }
 
-  function handleRemove(id: string) {
-    setItems((prev) => prev.filter((i) => i.id !== id));
+  function handleRemove(itemId: string) {
+    setItems((prev) => prev.filter((i) => i.id !== itemId));
     setChecked((prev) => {
       const next = new Set(prev);
-      next.delete(id);
+      next.delete(itemId);
       return next;
     });
   }
@@ -98,104 +129,130 @@ export function SavedGroceryListScreen() {
       {(location.state as { justSaved?: boolean } | null)?.justSaved && <Toast message="Saved!" testId="saved-toast" />}
       {copyCount > 0 && <Toast key={copyCount} message={copyFailed ? "Copy failed" : "Copied!"} testId="copied-toast" />}
 
-      {/* Header card */}
-      <div className="mx-3.5 my-2.5 px-5 py-[18px] bg-paper rounded-2xl relative overflow-hidden">
-        <div
-          aria-hidden="true"
-          className="absolute -top-5 -right-5 w-[110px] h-[110px] rounded-full pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(circle, var(--color-jade-soft) 0%, transparent 70%)",
-            opacity: 0.45,
-          }}
-        />
-        <div className="relative z-[1]">
-          <div className="inline-flex items-center gap-1.5 bg-shoyu text-cream px-[11px] py-[5px] rounded-full text-[10px] font-semibold tracking-[0.04em] mb-2.5">
-            <span className="text-apricot">✶</span> {savedDate}
+      {/* Loading state */}
+      {loading && (
+        <div className="flex flex-1 items-center justify-center">
+          <span data-testid="loading-indicator" className="text-[13px] text-ink-2">
+            Loading...
+          </span>
+        </div>
+      )}
+
+      {/* Not found state */}
+      {!loading && !list && (
+        <div className="flex flex-1 items-center justify-center">
+          <span data-testid="not-found-message" className="text-[13px] text-ink-2">
+            List not found.
+          </span>
+        </div>
+      )}
+
+      {/* Content */}
+      {!loading && list && (
+        <>
+          {/* Header card */}
+          <div className="mx-3.5 my-2.5 px-5 py-[18px] bg-paper rounded-2xl relative overflow-hidden">
+            <div
+              aria-hidden="true"
+              className="absolute -top-5 -right-5 w-[110px] h-[110px] rounded-full pointer-events-none"
+              style={{
+                background:
+                  "radial-gradient(circle, var(--color-jade-soft) 0%, transparent 70%)",
+                opacity: 0.45,
+              }}
+            />
+            <div className="relative z-[1]">
+              <div className="inline-flex items-center gap-1.5 bg-shoyu text-cream px-[11px] py-[5px] rounded-full text-[10px] font-semibold tracking-[0.04em] mb-2.5">
+                <span className="text-apricot">✶</span>{" "}
+                {new Date(list.created_at).toLocaleDateString()}
+              </div>
+              <h1 className="text-[20px] font-bold tracking-tight text-ink leading-[1.15]">
+                {list.name} <span className="text-persimmon">list</span>.
+              </h1>
+              <p className="mt-1.5 text-[13px] text-ink-2">
+                {items.length} items · {new Set(items.map((i) => i.store)).size} stores
+              </p>
+            </div>
           </div>
-          <h1 className="text-[20px] font-bold tracking-tight text-ink leading-[1.15]">
-            {name} <span className="text-persimmon">list</span>.
-          </h1>
-          <p className="mt-1.5 text-[13px] text-ink-2">{items.length} items · {new Set(items.map((i) => i.store)).size} stores</p>
-        </div>
-      </div>
 
-      {/* Toolbar */}
-      <div className="flex gap-2 px-3.5 pb-2">
-        <button
-          type="button"
-          onClick={handleCopyToNotes}
-          className="bg-paper border border-cream-deep rounded-full px-4 py-2 text-[11px] font-semibold text-ink cursor-pointer min-h-[36px]"
-        >
-          Copy to Notes
-        </button>
-      </div>
+          {/* Toolbar */}
+          <div className="flex gap-2 px-3.5 pb-2">
+            <button
+              type="button"
+              onClick={handleCopyToNotes}
+              className="bg-paper border border-cream-deep rounded-full px-4 py-2 text-[11px] font-semibold text-ink cursor-pointer min-h-[36px]"
+            >
+              Copy to Notes
+            </button>
+          </div>
 
-      {/* Costco section */}
-      <StoreSection storeName="COSTCO">
-        {costcoItems.map((item) => (
-          <ChecklistRow
-            key={item.id}
-            id={item.id}
-            name={item.name}
-            subtitle={item.subtitle || undefined}
-            checked={checked.has(item.id)}
-            onToggle={handleToggle}
-            onRemove={handleRemove}
-          />
-        ))}
-        {/* Add row inside Costco */}
-        <div className="flex items-center gap-2.5 px-4 py-2.5 border-t border-t-[0.5px] border-t-dashed border-t-cream-deep bg-tofu min-h-[44px] rounded-b-[10px]">
-          <input
-            type="text"
-            value={addCostco}
-            onChange={(e) => setAddCostco(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAddCostco()}
-            placeholder="Add to Costco..."
-            className="flex-1 border-none bg-transparent outline-none font-sans text-[13px] text-ink placeholder:text-ink-3"
-          />
-          <button
-            type="button"
-            onClick={handleAddCostco}
-            className="bg-shoyu text-cream border-none rounded-full px-4 py-2 text-[11px] font-semibold cursor-pointer font-sans min-h-[34px]"
-          >
-            Add
-          </button>
-        </div>
-      </StoreSection>
+          {/* Costco section */}
+          <StoreSection storeName="COSTCO">
+            {costcoItems.map((item) => (
+              <ChecklistRow
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                subtitle={item.subtitle || undefined}
+                checked={checked.has(item.id)}
+                onToggle={handleToggle}
+                onRemove={handleRemove}
+              />
+            ))}
+            {/* Add row inside Costco */}
+            <div className="flex items-center gap-2.5 px-4 py-2.5 border-t border-t-[0.5px] border-t-dashed border-t-cream-deep bg-tofu min-h-[44px] rounded-b-[10px]">
+              <input
+                type="text"
+                value={addCostco}
+                onChange={(e) => setAddCostco(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleAddCostco()}
+                placeholder="Add to Costco..."
+                className="flex-1 border-none bg-transparent outline-none font-sans text-[13px] text-ink placeholder:text-ink-3"
+              />
+              <button
+                type="button"
+                onClick={handleAddCostco}
+                className="bg-shoyu text-cream border-none rounded-full px-4 py-2 text-[11px] font-semibold cursor-pointer font-sans min-h-[34px]"
+              >
+                Add
+              </button>
+            </div>
+          </StoreSection>
 
-      {/* Community Market section */}
-      <StoreSection storeName="COMMUNITY MARKET">
-        {marketItems.map((item) => (
-          <ChecklistRow
-            key={item.id}
-            id={item.id}
-            name={item.name}
-            subtitle={item.subtitle || undefined}
-            checked={checked.has(item.id)}
-            onToggle={handleToggle}
-            onRemove={handleRemove}
-          />
-        ))}
-        {/* Add row inside Market */}
-        <div className="flex items-center gap-2.5 px-4 py-2.5 border-t border-t-[0.5px] border-t-dashed border-t-cream-deep bg-tofu min-h-[44px] rounded-b-[10px]">
-          <input
-            type="text"
-            value={addMarket}
-            onChange={(e) => setAddMarket(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAddMarket()}
-            placeholder="Add to Market..."
-            className="flex-1 border-none bg-transparent outline-none font-sans text-[13px] text-ink placeholder:text-ink-3"
-          />
-          <button
-            type="button"
-            onClick={handleAddMarket}
-            className="bg-shoyu text-cream border-none rounded-full px-4 py-2 text-[11px] font-semibold cursor-pointer font-sans min-h-[34px]"
-          >
-            Add
-          </button>
-        </div>
-      </StoreSection>
+          {/* Community Market section */}
+          <StoreSection storeName="COMMUNITY MARKET">
+            {marketItems.map((item) => (
+              <ChecklistRow
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                subtitle={item.subtitle || undefined}
+                checked={checked.has(item.id)}
+                onToggle={handleToggle}
+                onRemove={handleRemove}
+              />
+            ))}
+            {/* Add row inside Market */}
+            <div className="flex items-center gap-2.5 px-4 py-2.5 border-t border-t-[0.5px] border-t-dashed border-t-cream-deep bg-tofu min-h-[44px] rounded-b-[10px]">
+              <input
+                type="text"
+                value={addMarket}
+                onChange={(e) => setAddMarket(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleAddMarket()}
+                placeholder="Add to Market..."
+                className="flex-1 border-none bg-transparent outline-none font-sans text-[13px] text-ink placeholder:text-ink-3"
+              />
+              <button
+                type="button"
+                onClick={handleAddMarket}
+                className="bg-shoyu text-cream border-none rounded-full px-4 py-2 text-[11px] font-semibold cursor-pointer font-sans min-h-[34px]"
+              >
+                Add
+              </button>
+            </div>
+          </StoreSection>
+        </>
+      )}
 
       {/* Footer */}
       <div className="text-center px-4 pt-3 pb-[22px] text-[10px] text-ink-3 font-medium mt-auto">

@@ -12,15 +12,82 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter, Routes, Route } from "react-router";
 import { RecipeCard } from "@/components/recipe-card";
 import { RecipesScreen } from "@/screens/RecipesScreen";
 import { GroceryScreen } from "@/screens/GroceryScreen";
 import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
 import { SavedRecipeScreen } from "@/screens/SavedRecipeScreen";
 import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
+import { ScenarioProvider } from "@/context/scenario-context";
+import { SessionProvider } from "@/context/session-context";
 import { renderWithSession } from "./test-utils";
+
+// Mock the API client so saved screens can fetch without real network calls.
+vi.mock("@/services/api-client", () => ({
+  getSavedMealPlan: vi.fn().mockResolvedValue({
+    id: "plan-1",
+    name: "BBQ weekend",
+    recipes: [
+      { id: "r1", name: "Korean BBQ Pork Belly", name_zh: "韩式烤五花肉", source: "KB", source_url: "", cuisine: "Korean", cooking_method: "grill", effort_level: "medium", time_minutes: 30, flavor_tags: [], serves: 8, ingredients: [], instructions: "grill the pork.", is_ai_generated: false },
+      { id: "r2", name: "Grilled Corn & Cucumber Salad", name_zh: "烤玉米", source: "KB", source_url: "", cuisine: "Side", cooking_method: "grill", effort_level: "quick", time_minutes: 15, flavor_tags: [], serves: 8, ingredients: [], instructions: "grill corn.", is_ai_generated: false },
+      { id: "r3", name: "Classic Smash Burgers", name_zh: "汉堡", source: "KB", source_url: "", cuisine: "American", cooking_method: "cast iron", effort_level: "quick", time_minutes: 15, flavor_tags: [], serves: 8, ingredients: [], instructions: "smash it.", is_ai_generated: false },
+    ],
+    created_at: "2026-03-29T00:00:00Z",
+    updated_at: "2026-03-29T00:00:00Z",
+  }),
+  getSavedRecipe: vi.fn().mockResolvedValue({
+    id: "recipe-1",
+    recipe_snapshot: { id: "r1", name: "Test Recipe", name_zh: "测试", source: "KB", source_url: "", cuisine: "Chinese", cooking_method: "wok", effort_level: "medium", time_minutes: 20, flavor_tags: [], serves: 4, ingredients: [], instructions: "Cook it.", is_ai_generated: false },
+    notes: "",
+    created_at: "2026-03-29T00:00:00Z",
+    updated_at: "2026-03-29T00:00:00Z",
+  }),
+  getSavedGroceryList: vi.fn().mockResolvedValue({
+    id: "list-1",
+    name: "BBQ weekend",
+    stores: [
+      { store_name: "Costco", departments: [{ name: "Produce", items: [
+        { id: "sl1", name: "Corn on the cob", amount: "12-pack", recipe_context: "", checked: false },
+        { id: "sl2", name: "Cheese slices", amount: "For burgers", recipe_context: "", checked: false },
+      ] }] },
+      { store_name: "Community Market", departments: [{ name: "Produce", items: [
+        { id: "sl3", name: "Cucumber (2)", amount: "For salad", recipe_context: "", checked: false },
+      ] }] },
+    ],
+    created_at: "2026-03-29T00:00:00Z",
+    updated_at: "2026-03-29T00:00:00Z",
+  }),
+  createSession: vi.fn().mockResolvedValue({ session_id: "test-session", created_at: "2026-01-01T00:00:00Z" }),
+  getAuthToken: vi.fn().mockResolvedValue("test-token"),
+  saveMealPlan: vi.fn().mockResolvedValue({}),
+  saveGroceryList: vi.fn().mockResolvedValue({}),
+  listSavedMealPlans: vi.fn().mockResolvedValue([]),
+  listSavedRecipes: vi.fn().mockResolvedValue([]),
+  listSavedGroceryLists: vi.fn().mockResolvedValue([]),
+  resetAuthToken: vi.fn(),
+}));
+
+// Helper: render a saved screen with routing so useParams works.
+function renderSavedScreen(
+  routePattern: string,
+  initialPath: string,
+  element: React.ReactElement
+) {
+  return render(
+    <ScenarioProvider>
+      <SessionProvider>
+        <MemoryRouter initialEntries={[initialPath]}>
+          <Routes>
+            <Route path={routePattern} element={element} />
+          </Routes>
+        </MemoryRouter>
+      </SessionProvider>
+    </ScenarioProvider>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // F2 — RecipeCard: ALL pills are toggleable buttons (checkbox-style UX)
@@ -222,7 +289,7 @@ describe("F2-ext — RecipesScreen: per-card ingredient exclusion isolation", ()
 // ---------------------------------------------------------------------------
 describe("F5 — SavedMealPlanScreen: no chat input", () => {
   it("does not render a chat input element", () => {
-    renderWithSession(<SavedMealPlanScreen />, { initialPath: "/saved/plan/1" });
+    renderSavedScreen("/saved/plan/:id", "/saved/plan/1", <SavedMealPlanScreen />);
 
     // ChatInput renders an <input> with aria-label equal to its placeholder.
     // If ChatInput is present, one of these will exist.
@@ -236,7 +303,7 @@ describe("F5 — SavedMealPlanScreen: no chat input", () => {
 // ---------------------------------------------------------------------------
 describe("F6 — SavedRecipeScreen: no chat input", () => {
   it("does not render a chat input element", () => {
-    renderWithSession(<SavedRecipeScreen />, { initialPath: "/saved/recipe/1" });
+    renderSavedScreen("/saved/recipe/:id", "/saved/recipe/1", <SavedRecipeScreen />);
 
     // SavedRecipeScreen has an in-place textarea in edit mode only.
     // In view mode (default), no textbox at all should be present.
@@ -251,20 +318,27 @@ describe("F6 — SavedRecipeScreen: no chat input", () => {
 // F7-S5 — SavedMealPlanScreen: remove button removes recipe from list
 // ---------------------------------------------------------------------------
 describe("F7-S5 — SavedMealPlanScreen: onRemove wired to ExpandableRecipe", () => {
-  it("renders remove buttons for each recipe", () => {
-    renderWithSession(<SavedMealPlanScreen />, { initialPath: "/saved/plan/1" });
+  it("renders remove buttons for each recipe", async () => {
+    renderSavedScreen("/saved/plan/:id", "/saved/plan/1", <SavedMealPlanScreen />);
 
-    // The mock scenario has 3 recipes in savedPlan.recipes.
     // ExpandableRecipe renders aria-label="Remove <name>" when onRemove is provided.
-    const removeButtons = screen.getAllByRole("button", { name: /^Remove /i });
-    expect(removeButtons.length).toBeGreaterThan(0);
+    // Wait for data to load first.
+    await waitFor(() => {
+      const removeButtons = screen.getAllByRole("button", { name: /^Remove /i });
+      expect(removeButtons.length).toBeGreaterThan(0);
+    });
   });
 
-  it("clicking the remove button removes that recipe from the list", () => {
-    renderWithSession(<SavedMealPlanScreen />, { initialPath: "/saved/plan/1" });
+  it("clicking the remove button removes that recipe from the list", async () => {
+    renderSavedScreen("/saved/plan/:id", "/saved/plan/1", <SavedMealPlanScreen />);
 
-    // Find the first recipe's name before removing.
-    const firstRemoveButton = screen.getAllByRole("button", { name: /^Remove /i })[0];
+    // Wait for remove buttons to appear after data loads.
+    const firstRemoveButton = await waitFor(() => {
+      const btns = screen.getAllByRole("button", { name: /^Remove /i });
+      expect(btns.length).toBeGreaterThan(0);
+      return btns[0];
+    });
+
     // Extract the recipe name from the aria-label: "Remove <name>"
     const ariaLabel = firstRemoveButton.getAttribute("aria-label") ?? "";
     const removedName = ariaLabel.replace(/^Remove /, "");
@@ -275,10 +349,15 @@ describe("F7-S5 — SavedMealPlanScreen: onRemove wired to ExpandableRecipe", ()
     expect(screen.queryByText(removedName)).not.toBeInTheDocument();
   });
 
-  it("removing one recipe does not remove the others", () => {
-    renderWithSession(<SavedMealPlanScreen />, { initialPath: "/saved/plan/1" });
+  it("removing one recipe does not remove the others", async () => {
+    renderSavedScreen("/saved/plan/:id", "/saved/plan/1", <SavedMealPlanScreen />);
 
-    const removeButtons = screen.getAllByRole("button", { name: /^Remove /i });
+    // Wait for remove buttons to appear after data loads.
+    const removeButtons = await waitFor(() => {
+      const btns = screen.getAllByRole("button", { name: /^Remove /i });
+      expect(btns.length).toBeGreaterThan(0);
+      return btns;
+    });
     const initialCount = removeButtons.length;
 
     // Remove the first recipe.
@@ -303,26 +382,30 @@ describe("F9 — SavedGroceryListScreen: Copy to Notes writes to clipboard", () 
     });
   });
 
-  it("calls navigator.clipboard.writeText when Copy to Notes is clicked", () => {
-    renderWithSession(<SavedGroceryListScreen />, { initialPath: "/saved/list/1" });
+  it("calls navigator.clipboard.writeText when Copy to Notes is clicked", async () => {
+    renderSavedScreen("/saved/list/:id", "/saved/list/1", <SavedGroceryListScreen />);
 
-    const copyButton = screen.getByRole("button", { name: /copy to notes/i });
+    const copyButton = await waitFor(() =>
+      screen.getByRole("button", { name: /copy to notes/i })
+    );
     fireEvent.click(copyButton);
 
     expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
   });
 
-  it("formats items as a plain-text checklist (one line per item)", () => {
-    renderWithSession(<SavedGroceryListScreen />, { initialPath: "/saved/list/1" });
+  it("formats items as a plain-text checklist (one line per item)", async () => {
+    renderSavedScreen("/saved/list/:id", "/saved/list/1", <SavedGroceryListScreen />);
 
-    const copyButton = screen.getByRole("button", { name: /copy to notes/i });
+    const copyButton = await waitFor(() =>
+      screen.getByRole("button", { name: /copy to notes/i })
+    );
     fireEvent.click(copyButton);
 
     const writtenText = (navigator.clipboard.writeText as ReturnType<typeof vi.fn>).mock
       .calls[0][0] as string;
 
     // Each item should appear on its own line prefixed with a checkbox marker.
-    // The default bbq-weekend scenario includes these grocery items.
+    // The mock data includes these grocery items.
     expect(writtenText).toContain("Corn on the cob");
     expect(writtenText).toContain("Cheese slices");
 
@@ -336,9 +419,11 @@ describe("F9 — SavedGroceryListScreen: Copy to Notes writes to clipboard", () 
   });
 
   it("shows a 'Copied!' toast after successful clipboard write", async () => {
-    renderWithSession(<SavedGroceryListScreen />, { initialPath: "/saved/list/1" });
+    renderSavedScreen("/saved/list/:id", "/saved/list/1", <SavedGroceryListScreen />);
 
-    const copyButton = screen.getByRole("button", { name: /copy to notes/i });
+    const copyButton = await waitFor(() =>
+      screen.getByRole("button", { name: /copy to notes/i })
+    );
 
     // No toast before clicking
     expect(screen.queryByTestId("copied-toast")).not.toBeInTheDocument();

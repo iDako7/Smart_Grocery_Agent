@@ -8,7 +8,7 @@ export default defineConfig({
   workers: 1, // sequential — shared backend state
   reporter: [["html", { outputFolder: "playwright-report" }]],
   use: {
-    baseURL: "http://localhost:5173",
+    baseURL: process.env.BASE_URL ?? "http://localhost:5173",
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",

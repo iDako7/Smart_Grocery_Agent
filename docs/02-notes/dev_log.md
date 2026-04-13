@@ -152,3 +152,25 @@ Rewrote `product-spec-v2.md` as a structured, agent-friendly format (Approved v3
 The lesson: a prototype is not just a frontend reference — it's a critical backend reference too. A full-scope prototype in a single code space means one agent session has seen the entire product. That's the best way to prevent gaps between frontend and backend. Next time: draw wireframes in Figma → let Claude Code Desktop generate a full artifact from the wireframe + product spec → use that artifact as the single source of truth for the implementation plan.
 
 **Specs must meet human standards, not agent standards.** I had a persistent feeling the product spec wasn't good enough, but assumed the agent would handle the ambiguity. It didn't — the agent produced exactly what the spec described, including the vagueness. The spec is the command system I build for the agents. If I can't use it to clearly verify what's right and what's wrong, neither can the agent. The standard for documentation is not "can an agent parse this" — it's "can I, as the commander, use this to know where things stand at a glance."
+
+## Day 11 (Apr 12) — Integration fixes and the mock-data trap
+
+### What happened
+
+Focused on fixing integration issues. Found that **frontend mock data makes integration work deceptively easy**: coding agents can lean on mocks like a cheat sheet, satisfy tests and UI checks, and **never wire the real backend**. Example: mock data already existed for the recipe screen; the agent reused it and skipped API/SSE integration. The UI rendered “correctly,” so tests did not surface the bug.
+
+### Diagnosis
+
+The design gap was **not planning the lifecycle of mocks** — where they live, how they are toggled off, and how tests prove the real path. Mocks that ship inline in the app are **hard to delete** and easy for both humans and agents to forget.
+
+### Ideas for next time
+
+1. **Prototype vs product split:** In the throwaway prototype, mocks are fine. Once work shifts to “real” implementation, **default to no client-side fixture data** (or a single explicit dev flag), and require tests that hit the API contract (or MSW against a recorded OpenAPI fixture that still exercises the client adapter).
+
+2. **Prefer seed/fixture data on the server:** Keeps one removal lever (“turn off seed routes / use empty DB”) and avoids the UI silently looking healthy while disconnected.
+
+3. **Recurring hygiene task:** A standing checklist item or script to **find all mock/static/demo data** (`mock`, `fixture`, `MOCK_`, `__mocks__`, hardcoded arrays) before calling integration “done” — because it is otherwise very easy to forget.
+
+### Takeaway
+
+Mock data is not neutral scaffolding; it is **an alternate implementation** that can satisfy agents and shallow tests without proving the system works. Treat mocks like temporary infrastructure with an explicit exit criteria, not as permanent UI content.

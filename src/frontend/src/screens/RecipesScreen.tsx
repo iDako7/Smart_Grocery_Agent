@@ -9,7 +9,7 @@ import { InfoSheet } from "@/components/info-sheet";
 import { ErrorBanner } from "@/components/error-banner";
 import { useScenario } from "@/context/scenario-context";
 import { useSessionOptional } from "@/context/session-context";
-import { postGroceryList } from "@/services/api-client";
+import { postGroceryList, saveMealPlan } from "@/services/api-client";
 import { collectBuyItems } from "@/services/grocery-helpers";
 import type { RecipeCardData } from "@/mocks/scenarios";
 import type { RecipeSummary, EffortLevel } from "@/types/tools";
@@ -51,6 +51,7 @@ export function RecipesScreen() {
   const isComplete = session?.isComplete ?? false;
   const dispatch = session?.dispatch;
   const sessionId = session?.sessionId ?? null;
+  const [saving, setSaving] = useState(false);
 
   // Use session recipe data if available, fall back to scenario data
   const RECIPES: RecipeCardData[] = useMemo(() => {
@@ -215,6 +216,20 @@ export function RecipesScreen() {
     navigate("/grocery");
   }
 
+  async function handleSavePlan() {
+    if (!sessionId || saving) return;
+    setSaving(true);
+    try {
+      const planName = `Meal plan · ${displayedRecipes.length} dishes`;
+      const result = await saveMealPlan(planName, sessionId);
+      navigate(`/saved/plan/${result.id}`, { state: { justSaved: true } });
+    } catch {
+      // TODO: surface error to user
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
     <div data-testid="screen-recipes" className="min-h-screen bg-cream flex flex-col">
       {/* Nav bar */}
@@ -362,9 +377,9 @@ export function RecipesScreen() {
       <div className="flex gap-2.5 px-3.5 pt-1 pb-2.5">
         <button
           type="button"
-          onClick={() => { // TODO(stage-4): replace hardcoded id with real saved plan id
-            navigate("/saved/plan/1", { state: { justSaved: true } }); }}
-          className="flex-1 py-3 rounded-md bg-paper text-ink border border-cream-deep font-sans text-[13px] font-semibold cursor-pointer min-h-[44px]"
+          onClick={handleSavePlan}
+          disabled={!sessionId || saving}
+          className={`flex-1 py-3 rounded-md bg-paper text-ink border border-cream-deep font-sans text-[13px] font-semibold min-h-[44px] ${!sessionId || saving ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
         >
           Save plan
         </button>

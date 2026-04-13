@@ -6,10 +6,55 @@
 // to capture callbacks and simulate events arriving from the SSE service.
 
 import type { ReactNode } from "react";
-import { describe, it, expect } from "vitest";
-import { render, screen, act } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import { render, screen, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Routes, Route } from "react-router";
+
+// Mock the API client so saved screens can fetch data without real network calls.
+vi.mock("@/services/api-client", () => ({
+  getSavedMealPlan: vi.fn().mockResolvedValue({
+    id: "plan-1",
+    name: "BBQ weekend",
+    recipes: [
+      { id: "r1", name: "Korean BBQ Pork Belly", name_zh: "韩式烤五花肉", source: "KB", source_url: "", cuisine: "Korean", cooking_method: "grill", effort_level: "medium", time_minutes: 30, flavor_tags: [], serves: 8, ingredients: [], instructions: "slice pork belly 3-4mm thick\n\ngrill high heat, 2-3 min/side\nchar marks = done", is_ai_generated: false },
+      { id: "r2", name: "Grilled Corn & Cucumber Salad", name_zh: "烤玉米黄瓜沙拉", source: "KB", source_url: "", cuisine: "Side", cooking_method: "grill", effort_level: "quick", time_minutes: 15, flavor_tags: [], serves: 8, ingredients: [], instructions: "grill corn and toss.", is_ai_generated: false },
+      { id: "r3", name: "Classic Smash Burgers", name_zh: "经典手压汉堡", source: "KB", source_url: "", cuisine: "American", cooking_method: "cast iron", effort_level: "quick", time_minutes: 15, flavor_tags: [], serves: 8, ingredients: [], instructions: "smash and cook.", is_ai_generated: false },
+    ],
+    created_at: "2026-03-29T00:00:00Z",
+    updated_at: "2026-03-29T00:00:00Z",
+  }),
+  getSavedRecipe: vi.fn().mockResolvedValue({
+    id: "recipe-1",
+    recipe_snapshot: { id: "r-wings", name: "Salt & Pepper Chicken Wings", name_zh: "椒盐炸鸡翅", source: "Kenji / The Wok", source_url: "", cuisine: "Chinese", cooking_method: "air fryer or oven", effort_level: "long", time_minutes: 30, flavor_tags: [], serves: 4, ingredients: [], instructions: "baking powder : starch : salt = 1:1:0.5\ntoss wings", is_ai_generated: false },
+    notes: "",
+    created_at: "2026-03-29T00:00:00Z",
+    updated_at: "2026-03-29T00:00:00Z",
+  }),
+  getSavedGroceryList: vi.fn().mockResolvedValue({
+    id: "list-1",
+    name: "BBQ weekend",
+    stores: [
+      { store_name: "Costco", departments: [{ name: "Produce", items: [
+        { id: "sl1", name: "Corn on the cob", amount: "12-pack", recipe_context: "", checked: false },
+        { id: "sl2", name: "Cheese slices", amount: "For burgers", recipe_context: "", checked: false },
+      ] }] },
+      { store_name: "Community Market", departments: [{ name: "Produce", items: [
+        { id: "sl3", name: "Cucumber (2)", amount: "For salad", recipe_context: "", checked: false },
+      ] }] },
+    ],
+    created_at: "2026-03-29T00:00:00Z",
+    updated_at: "2026-03-29T00:00:00Z",
+  }),
+  createSession: vi.fn().mockResolvedValue({ session_id: "test-session", created_at: "2026-01-01T00:00:00Z" }),
+  getAuthToken: vi.fn().mockResolvedValue("test-token"),
+  saveMealPlan: vi.fn().mockResolvedValue({}),
+  saveGroceryList: vi.fn().mockResolvedValue({}),
+  listSavedMealPlans: vi.fn().mockResolvedValue([]),
+  listSavedRecipes: vi.fn().mockResolvedValue([]),
+  listSavedGroceryLists: vi.fn().mockResolvedValue([]),
+  resetAuthToken: vi.fn(),
+}));
 
 // Base-ui mocks (menu + dialog) are in setup.ts
 
@@ -739,12 +784,14 @@ describe("SavedGroceryListScreen — add items via keyboard", () => {
     render(
       <ScenarioProvider>
         <MemoryRouter initialEntries={["/saved/list/1"]}>
-          <SavedGroceryListScreen />
+          <Routes>
+            <Route path="/saved/list/:id" element={<SavedGroceryListScreen />} />
+          </Routes>
         </MemoryRouter>
       </ScenarioProvider>
     );
 
-    const costcoInput = screen.getByPlaceholderText(/Add to Costco/i);
+    const costcoInput = await waitFor(() => screen.getByPlaceholderText(/Add to Costco/i));
     await user.click(costcoInput);
     await user.type(costcoInput, "Ribeye steak");
     await user.keyboard("{Enter}");
@@ -758,12 +805,14 @@ describe("SavedGroceryListScreen — add items via keyboard", () => {
     render(
       <ScenarioProvider>
         <MemoryRouter initialEntries={["/saved/list/1"]}>
-          <SavedGroceryListScreen />
+          <Routes>
+            <Route path="/saved/list/:id" element={<SavedGroceryListScreen />} />
+          </Routes>
         </MemoryRouter>
       </ScenarioProvider>
     );
 
-    const marketInput = screen.getByPlaceholderText(/Add to Market/i);
+    const marketInput = await waitFor(() => screen.getByPlaceholderText(/Add to Market/i));
     await user.click(marketInput);
     await user.type(marketInput, "Organic kale");
     await user.keyboard("{Enter}");
@@ -777,12 +826,14 @@ describe("SavedGroceryListScreen — add items via keyboard", () => {
     render(
       <ScenarioProvider>
         <MemoryRouter initialEntries={["/saved/list/1"]}>
-          <SavedGroceryListScreen />
+          <Routes>
+            <Route path="/saved/list/:id" element={<SavedGroceryListScreen />} />
+          </Routes>
         </MemoryRouter>
       </ScenarioProvider>
     );
 
-    const marketInput = screen.getByPlaceholderText(/Add to Market/i) as HTMLInputElement;
+    const marketInput = (await waitFor(() => screen.getByPlaceholderText(/Add to Market/i))) as HTMLInputElement;
     await user.click(marketInput);
     await user.type(marketInput, "Lemon");
 
@@ -801,11 +852,17 @@ describe("SavedRecipeScreen — edit mode textarea change", () => {
     render(
       <ScenarioProvider>
         <MemoryRouter initialEntries={["/saved/recipe/1"]}>
-          <SavedRecipeScreen />
+          <Routes>
+            <Route path="/saved/recipe/:id" element={<SavedRecipeScreen />} />
+          </Routes>
         </MemoryRouter>
       </ScenarioProvider>
     );
 
+    // Wait for recipe to load before interacting
+    await waitFor(() =>
+      expect(screen.getByText("Salt & Pepper Chicken Wings")).toBeInTheDocument()
+    );
     await user.click(screen.getByText("Edit"));
     const textarea = screen.getByRole("textbox", { name: "" }) as HTMLTextAreaElement;
     await user.clear(textarea);
@@ -826,15 +883,22 @@ describe("SavedMealPlanScreen — recipe expansion", () => {
     render(
       <ScenarioProvider>
         <MemoryRouter initialEntries={["/saved/plan/1"]}>
-          <SavedMealPlanScreen />
+          <Routes>
+            <Route path="/saved/plan/:id" element={<SavedMealPlanScreen />} />
+          </Routes>
         </MemoryRouter>
       </ScenarioProvider>
     );
 
-    // Use aria-expanded to target the expand toggle button (not the remove button)
-    const recipeBtn = screen
-      .getAllByRole("button", { name: /Korean BBQ Pork Belly/i })
-      .find((btn) => btn.hasAttribute("aria-expanded"))!;
+    // Wait for recipe rows to load from API
+    const recipeBtn = await waitFor(() => {
+      const btn = screen
+        .getAllByRole("button", { name: /Korean BBQ Pork Belly/i })
+        .find((b) => b.hasAttribute("aria-expanded"))!;
+      expect(btn).toBeTruthy();
+      return btn;
+    });
+
     // Expand
     await user.click(recipeBtn);
     expect(screen.getByText(/char marks/i)).toBeInTheDocument();

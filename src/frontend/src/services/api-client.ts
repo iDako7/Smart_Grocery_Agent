@@ -3,7 +3,15 @@
 // All endpoints talk to the FastAPI backend.
 // Auth header: Bearer JWT obtained from POST /auth/verify (dev credentials).
 
-import type { GroceryListItem } from "@/types/api";
+import type {
+  GroceryListItem,
+  SavedMealPlan,
+  SavedMealPlanSummary,
+  SavedRecipe,
+  SavedRecipeSummary,
+  SavedGroceryList,
+  SavedGroceryListSummary,
+} from "@/types/api";
 import type { GroceryStore } from "@/types/sse";
 
 // ---------------------------------------------------------------------------
@@ -94,4 +102,128 @@ export async function postGroceryList(
     throw new Error(`Failed to generate grocery list: ${response.status}`);
   }
   return response.json() as Promise<GroceryStore[]>;
+}
+
+// ---------------------------------------------------------------------------
+// Saved content — POST (create from session)
+// ---------------------------------------------------------------------------
+
+export async function saveMealPlan(name: string, sessionId: string): Promise<SavedMealPlan> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/saved/meal-plans`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, session_id: sessionId }),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to save meal plan: ${response.status}`);
+  }
+  return response.json() as Promise<SavedMealPlan>;
+}
+
+export async function saveGroceryList(name: string, sessionId: string): Promise<SavedGroceryList> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/saved/grocery-lists`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, session_id: sessionId }),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to save grocery list: ${response.status}`);
+  }
+  return response.json() as Promise<SavedGroceryList>;
+}
+
+// ---------------------------------------------------------------------------
+// Saved content — GET list
+// ---------------------------------------------------------------------------
+
+export async function listSavedMealPlans(): Promise<SavedMealPlanSummary[]> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/saved/meal-plans`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to list saved meal plans: ${response.status}`);
+  }
+  return response.json() as Promise<SavedMealPlanSummary[]>;
+}
+
+export async function listSavedRecipes(): Promise<SavedRecipeSummary[]> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/saved/recipes`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to list saved recipes: ${response.status}`);
+  }
+  return response.json() as Promise<SavedRecipeSummary[]>;
+}
+
+export async function listSavedGroceryLists(): Promise<SavedGroceryListSummary[]> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/saved/grocery-lists`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to list saved grocery lists: ${response.status}`);
+  }
+  return response.json() as Promise<SavedGroceryListSummary[]>;
+}
+
+// ---------------------------------------------------------------------------
+// Saved content — GET by ID
+// ---------------------------------------------------------------------------
+
+export async function getSavedMealPlan(id: string): Promise<SavedMealPlan> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/saved/meal-plans/${id}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to get saved meal plan: ${response.status}`);
+  }
+  return response.json() as Promise<SavedMealPlan>;
+}
+
+export async function getSavedRecipe(id: string): Promise<SavedRecipe> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/saved/recipes/${id}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to get saved recipe: ${response.status}`);
+  }
+  return response.json() as Promise<SavedRecipe>;
+}
+
+export async function getSavedGroceryList(id: string): Promise<SavedGroceryList> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/saved/grocery-lists/${id}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to get saved grocery list: ${response.status}`);
+  }
+  return response.json() as Promise<SavedGroceryList>;
 }
