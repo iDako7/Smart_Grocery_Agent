@@ -183,7 +183,9 @@ describe("Flow 4 — Full navigation", () => {
 
     // Click "Build list"
     await user.click(screen.getByText(/Build list/i));
-    expect(screen.getByTestId("screen-grocery")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByTestId("screen-grocery")).toBeInTheDocument()
+    );
   });
 });
 
@@ -238,7 +240,9 @@ describe("Flow 5 — Full flow ends at saved list", () => {
 
     // Click "Build list"
     await user.click(screen.getByText(/Build list/i));
-    expect(screen.getByTestId("screen-grocery")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByTestId("screen-grocery")).toBeInTheDocument()
+    );
 
     // Click "Save list"
     await user.click(screen.getByRole("button", { name: /save list/i }));
