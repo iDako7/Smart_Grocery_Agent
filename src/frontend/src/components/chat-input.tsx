@@ -5,9 +5,10 @@ interface ChatInputProps {
   hint?: string;
   onSend: (message: string) => void;
   defaultValue?: string;
+  disabled?: boolean;
 }
 
-export function ChatInput({ placeholder, hint, onSend, defaultValue = "" }: ChatInputProps) {
+export function ChatInput({ placeholder, hint, onSend, defaultValue = "", disabled = false }: ChatInputProps) {
   const [value, setValue] = useState(defaultValue);
   const [prevDefault, setPrevDefault] = useState(defaultValue);
 
@@ -21,6 +22,7 @@ export function ChatInput({ placeholder, hint, onSend, defaultValue = "" }: Chat
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (disabled) return;
     if (e.key === "Enter" && value.trim()) {
       onSend(value.trim());
       setValue("");
@@ -28,6 +30,7 @@ export function ChatInput({ placeholder, hint, onSend, defaultValue = "" }: Chat
   }
 
   function handleSendClick() {
+    if (disabled) return;
     if (value.trim()) {
       onSend(value.trim());
       setValue("");
@@ -36,18 +39,19 @@ export function ChatInput({ placeholder, hint, onSend, defaultValue = "" }: Chat
 
   return (
     <div>
-      <div className="flex items-center gap-2.5 mx-3.5 mt-1 px-4 py-[13px] bg-paper rounded-md">
+      <div className={`flex items-center gap-2.5 mx-3.5 mt-1 px-4 py-[13px] bg-paper rounded-md${disabled ? " opacity-50" : ""}`}>
         <span className="text-[18px] text-ink-3 shrink-0" aria-hidden="true">›</span>
         <input
           type="text"
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => { if (!disabled) setValue(e.target.value); }}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
-          className="flex-1 border-none bg-transparent outline-none font-sans text-[13px] text-ink placeholder:text-ink-3"
+          disabled={disabled}
+          className="flex-1 border-none bg-transparent outline-none font-sans text-[13px] text-ink placeholder:text-ink-3 disabled:cursor-not-allowed"
           aria-label={placeholder}
         />
-        {value.trim() && (
+        {value.trim() && !disabled && (
           <button
             type="button"
             onClick={handleSendClick}

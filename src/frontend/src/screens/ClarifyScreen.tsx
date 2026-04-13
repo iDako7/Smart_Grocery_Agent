@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Markdown from "react-markdown";
 
 import { StepProgress } from "@/components/step-progress";
@@ -9,6 +9,7 @@ import { InfoSheet } from "@/components/info-sheet";
 import { ErrorBanner } from "@/components/error-banner";
 import { ConfirmResetDialog } from "@/components/confirm-reset-dialog";
 import { ChipQuestion } from "@/components/chip-question";
+import { ChatInput } from "@/components/chat-input";
 import { useSessionOptional } from "@/context/session-context";
 
 // ---------------------------------------------------------------------------
@@ -135,7 +136,7 @@ export function ClarifyScreen() {
 
       {/* Clarify card */}
       <div className="mx-3.5 my-2.5 bg-paper rounded-2xl overflow-hidden">
-        {/* Card header */}
+        {/* Card header — decorative gradients always visible */}
         <div className="px-5 py-[18px] pb-3.5 relative overflow-hidden">
           <div
             aria-hidden="true"
@@ -155,102 +156,125 @@ export function ClarifyScreen() {
               opacity: 0.4,
             }}
           />
-          <div className="relative z-[1]">
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-1.5 bg-shoyu text-cream px-[11px] py-[5px] rounded-full text-[10px] font-semibold tracking-[0.04em] mb-2.5">
-              <span className="text-apricot">✶</span> Your ingredients
+
+          {/* Mutually exclusive: loading/streaming shows spinner; otherwise shows card content */}
+          {(isLoading || isStreaming) ? (
+            <div
+              data-testid="clarify-loading-spinner"
+              role="status"
+              aria-label="Checking your ingredients for balance"
+              className="flex flex-col items-center justify-center py-16 px-6 relative z-[1]"
+            >
+              <Loader2 className="w-8 h-8 text-persimmon animate-spin" />
+              <p className="mt-3 text-[12px] text-ink-2 font-medium text-center">
+                Checking your ingredients for balance…
+              </p>
             </div>
-
-            {/* Heading */}
-            <h1 className="text-[20px] font-bold tracking-tight text-ink leading-[1.15]">
-              Here&apos;s what I <span className="text-persimmon">see</span>.
-            </h1>
-
-            {/* PCV badges — shown only when pcsv_update has arrived */}
-            {showPcv && screenData?.pcsv && (
-              <>
-                {/* PCV badges */}
-                <div className="flex gap-2 mt-3 flex-wrap">
-                  <PcvBadge
-                    category="Protein"
-                    status={pcsvStatusToBadge(screenData.pcsv.protein.status)}
-                  />
-                  <PcvBadge
-                    category="Carb"
-                    status={pcsvStatusToBadge(screenData.pcsv.carb.status)}
-                  />
-                  <PcvBadge
-                    category="Veggie"
-                    status={pcsvStatusToBadge(screenData.pcsv.veggie.status)}
-                  />
-                  <button
-                    type="button"
-                    aria-label="PCV info"
-                    onClick={() => setPcvInfoOpen(true)}
-                    className="w-4 h-4 rounded-full bg-cream-deep text-ink-3 text-[9px] font-bold border-none cursor-pointer shrink-0 mt-[1px] inline-flex items-center justify-center self-center"
-                  >
-                    ?
-                  </button>
-                </div>
-              </>
-            )}
-
-            {/* Explanation — rendered with markdown; shown when text is available */}
-            {screenData?.explanation && (
-              <div className="mt-2 text-[13px] text-ink-2 leading-[1.5]">
-                <Markdown
-                  allowedElements={["p", "strong", "em", "ul", "ol", "li", "a"]}
-                  unwrapDisallowed
-                >
-                  {screenData.explanation}
-                </Markdown>
+          ) : (
+            <div className="relative z-[1]">
+              {/* Eyebrow */}
+              <div className="inline-flex items-center gap-1.5 bg-shoyu text-cream px-[11px] py-[5px] rounded-full text-[10px] font-semibold tracking-[0.04em] mb-2.5">
+                <span className="text-apricot">✶</span> Your ingredients
               </div>
-            )}
-          </div>
+
+              {/* Heading */}
+              <h1 className="text-[20px] font-bold tracking-tight text-ink leading-[1.15]">
+                Here&apos;s what I <span className="text-persimmon">see</span>.
+              </h1>
+
+              {/* PCV badges — shown only when pcsv_update has arrived */}
+              {showPcv && screenData?.pcsv && (
+                <>
+                  {/* PCV badges */}
+                  <div className="flex gap-2 mt-3 flex-wrap">
+                    <PcvBadge
+                      category="Protein"
+                      status={pcsvStatusToBadge(screenData.pcsv.protein.status)}
+                    />
+                    <PcvBadge
+                      category="Carb"
+                      status={pcsvStatusToBadge(screenData.pcsv.carb.status)}
+                    />
+                    <PcvBadge
+                      category="Veggie"
+                      status={pcsvStatusToBadge(screenData.pcsv.veggie.status)}
+                    />
+                    <button
+                      type="button"
+                      aria-label="PCV info"
+                      onClick={() => setPcvInfoOpen(true)}
+                      className="w-4 h-4 rounded-full bg-cream-deep text-ink-3 text-[9px] font-bold border-none cursor-pointer shrink-0 mt-[1px] inline-flex items-center justify-center self-center"
+                    >
+                      ?
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {/* Explanation — rendered with markdown; shown when text is available */}
+              {screenData?.explanation && (
+                <div className="mt-2 text-[13px] text-ink-2 leading-[1.5]">
+                  <Markdown
+                    allowedElements={["p", "strong", "em", "ul", "ol", "li", "a"]}
+                    unwrapDisallowed
+                  >
+                    {screenData.explanation}
+                  </Markdown>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Error banner — shown when in error state */}
-        {isError && screenData?.error && (
-          <div className="px-5 py-4">
-            <ErrorBanner message={screenData.error} onRetry={handleRetry} />
-          </div>
-        )}
+        {/* The following sections are only shown when NOT in loading/streaming */}
+        {!(isLoading || isStreaming) && (
+          <>
+            {/* Error banner — shown when in error state */}
+            {isError && screenData?.error && (
+              <div className="px-5 py-4">
+                <ErrorBanner message={screenData.error} onRetry={handleRetry} />
+              </div>
+            )}
 
-        {/* Partial completion banner */}
-        {isComplete && screenData?.completionStatus === "partial" && (
-          <div className="px-5 pt-3">
-            <ErrorBanner
-              message="Some results may be incomplete"
-              variant="partial"
-            />
-          </div>
-        )}
-
-        {/* Thinking message — shown during loading/streaming when available */}
-        {(isLoading || isStreaming) && screenData?.thinkingMessage && (
-          <div className="px-5 py-2 text-[12px] text-ink-2 italic">
-            {screenData.thinkingMessage}
-          </div>
-        )}
-
-        {/* Dynamic chip questions — shown when clarifyTurn arrives and state is complete */}
-        {screenData?.clarifyTurn && screenState === "complete" && (
-          <div className="px-5 pt-3">
-            <div className="text-[11px] font-bold tracking-[0.06em] uppercase text-ink-3 mb-2">
-              A few quick questions
-            </div>
-            {screenData.clarifyTurn.questions.map((q) => (
-              <div key={q.id} className="mb-2.5">
-                <ChipQuestion
-                  question={q}
-                  selected={selections[q.id] ?? []}
-                  onChange={(newSel) => updateSelection(q.id, newSel)}
+            {/* Partial completion banner */}
+            {isComplete && screenData?.completionStatus === "partial" && (
+              <div className="px-5 pt-3">
+                <ErrorBanner
+                  message="Some results may be incomplete"
+                  variant="partial"
                 />
               </div>
-            ))}
-          </div>
-        )}
+            )}
 
+            {/* Dynamic chip questions — shown when clarifyTurn arrives and state is complete */}
+            {screenData?.clarifyTurn && screenState === "complete" && (
+              <div className="px-5 pt-3">
+                <div className="text-[11px] font-bold tracking-[0.06em] uppercase text-ink-3 mb-2">
+                  A few quick questions
+                </div>
+                {screenData.clarifyTurn.questions.map((q) => (
+                  <div key={q.id} className="mb-2.5">
+                    <ChipQuestion
+                      question={q}
+                      selected={selections[q.id] ?? []}
+                      onChange={(newSel) => updateSelection(q.id, newSel)}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Chat input — visible in all non-loading states; disabled unless complete */}
+            <div className="pb-3">
+              <ChatInput
+                placeholder="I also have kimchi, forgot to mention…"
+                hint="Add details or corrections"
+                onSend={(text) => sendMessage(text)}
+                disabled={screenState !== "complete"}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       {/* Looks good CTA — shown when clarifyTurn is populated and state is complete */}
