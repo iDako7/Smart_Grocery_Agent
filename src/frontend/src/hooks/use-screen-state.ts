@@ -17,7 +17,7 @@
 import { useReducer } from "react";
 import type { Dispatch } from "react";
 
-import type { SSEEvent, GroceryStore } from "@/types/sse";
+import type { SSEEvent, GroceryStore, ClarifyQuestion } from "@/types/sse";
 import type { PCSVResult, RecipeSummary } from "@/types/tools";
 
 // ---------------------------------------------------------------------------
@@ -44,6 +44,7 @@ export type ScreenData = {
   error: string | null;
   completionStatus: "complete" | "partial" | null;
   completionReason: string | null;
+  clarifyTurn: { explanation: string; questions: ClarifyQuestion[] } | null;
 };
 
 export type UseScreenStateReturn = {
@@ -78,6 +79,7 @@ export const initialScreenData: ScreenData = {
   error: null,
   completionStatus: null,
   completionReason: null,
+  clarifyTurn: null,
 };
 
 const initialReducerState: ReducerState = {
@@ -213,6 +215,19 @@ function applySSEEvent(current: ReducerState, event: SSEEvent): ReducerState {
       return {
         state,
         data: { ...data, explanation: event.text, error: null },
+      };
+
+    case "clarify_turn":
+      return {
+        state: "complete",
+        data: {
+          ...data,
+          clarifyTurn: {
+            explanation: event.explanation,
+            questions: event.questions,
+          },
+          error: null,
+        },
       };
 
     case "grocery_list":

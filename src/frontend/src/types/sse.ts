@@ -54,6 +54,24 @@ export type GroceryListEvent = {
   stores: GroceryStore[];
 };
 
+export type ClarifyOption = {
+  label: string;
+  is_exclusive: boolean;
+};
+
+export type ClarifyQuestion = {
+  id: string;
+  text: string;
+  selection_mode: "single" | "multi";
+  options: ClarifyOption[];
+};
+
+export type ClarifyTurnEvent = {
+  event_type: "clarify_turn";
+  explanation: string;
+  questions: ClarifyQuestion[];
+};
+
 export type ErrorEvent = {
   event_type: "error";
   message: string;
@@ -80,5 +98,6 @@ export type SSEEvent =
   | RecipeCardEvent
   | ExplanationEvent
   | GroceryListEvent
+  | ClarifyTurnEvent
   | ErrorEvent
   | DoneEvent;
