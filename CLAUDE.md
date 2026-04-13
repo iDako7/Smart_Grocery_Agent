@@ -101,6 +101,10 @@ Three worktrees develop in parallel, each with its own `CLAUDE.md` defining scop
 - `docs/00-specs/ai-layer-architecture-v2.md` — agent internals, ADRs (7 decisions documented)
 - `docs/01-plans/phase-2-implementation-plan.md` — phase plan, worktree protocol, sync points
 
+## GitHub Operations
+
+Prefer `mcp__github__*` tools over `gh` CLI for GitHub API calls — `gh` may hit deprecated GraphQL endpoints.
+
 ## Running Locally
 
 ```bash
