@@ -1,38 +1,20 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Markdown from "react-markdown";
 
 import { StepProgress } from "@/components/step-progress";
 import { PcvBadge } from "@/components/pcv-badge";
-import { ChatInput } from "@/components/chat-input";
 import { InfoSheet } from "@/components/info-sheet";
 import { ErrorBanner } from "@/components/error-banner";
 import { ConfirmResetDialog } from "@/components/confirm-reset-dialog";
+import { ChipQuestion } from "@/components/chip-question";
+import { ChatInput } from "@/components/chat-input";
 import { useSessionOptional } from "@/context/session-context";
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
-
-const COOKING_SETUP_OPTIONS = [
-  "Outdoor grill",
-  "Oven",
-  "Stovetop",
-  "All of the above",
-] as const;
-
-const DIETARY_OPTIONS = [
-  "None",
-  "Halal",
-  "Vegetarian",
-  "Vegan",
-  "Gluten-free",
-] as const;
-
-const INDIVIDUAL_SETUP_OPTIONS = COOKING_SETUP_OPTIONS.filter(
-  (o) => o !== "All of the above"
-);
 
 const PCV_INFO = {
   name: "How PCV analysis works",
@@ -66,11 +48,9 @@ export function ClarifyScreen() {
   const isComplete = session?.isComplete ?? false;
   const resetSession = session?.resetSession;
 
-  // Chip state — empty start, no defaults
-  const [selectedSetup, setSelectedSetup] = useState<string[]>([]);
-  const [selectedDiet, setSelectedDiet] = useState<string[]>([]);
   const [pcvInfoOpen, setPcvInfoOpen] = useState(false);
   const [resetOpen, setResetOpen] = useState(false);
+  const [selections, setSelections] = useState<Record<string, string[]>>({});
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const prevResetOpen = useRef(false);
 
@@ -87,6 +67,28 @@ export function ClarifyScreen() {
     navigate("/");
   }
 
+  function updateSelection(questionId: string, newSelected: string[]) {
+    setSelections((prev) => ({ ...prev, [questionId]: newSelected }));
+  }
+
+  function handleLooksGood() {
+    const questions = screenData?.clarifyTurn?.questions ?? [];
+    const clauses = questions
+      .map((q) => {
+        const sel = selections[q.id] ?? [];
+        if (sel.length === 0) return null;
+        return `${q.text} ${sel.join(", ")}.`;
+      })
+      .filter(Boolean);
+    const msg =
+      clauses.length > 0
+        ? `Looks good, show recipes. ${clauses.join(" ")}`
+        : "Looks good, show recipes.";
+    navigateToScreen?.("recipes");
+    sendMessage(msg);
+    navigate("/recipes");
+  }
+
   // ---------------------------------------------------------------------------
   // Derived rendering flags
   // ---------------------------------------------------------------------------
@@ -100,65 +102,8 @@ export function ClarifyScreen() {
   const showPcv = hasRealData;
 
   // ---------------------------------------------------------------------------
-  // Chip toggle handlers (lifted from pre-deletion file, initial state changed)
-  // ---------------------------------------------------------------------------
-
-  function toggleSetup(option: string) {
-    setSelectedSetup((prev) => {
-      if (option === "All of the above") {
-        if (prev.includes("All of the above")) {
-          return [];
-        }
-        return [...INDIVIDUAL_SETUP_OPTIONS, "All of the above"];
-      }
-      const toggled = prev.includes(option)
-        ? prev.filter((o) => o !== option)
-        : [...prev.filter((o) => o !== "All of the above"), option];
-      // Auto-select "All of the above" if all individual options are selected
-      const allIndividualSelected = INDIVIDUAL_SETUP_OPTIONS.every((o) =>
-        toggled.includes(o)
-      );
-      if (allIndividualSelected) {
-        return [...toggled, "All of the above"];
-      }
-      return toggled.filter((o) => o !== "All of the above");
-    });
-  }
-
-  function toggleDiet(option: string) {
-    setSelectedDiet((prev) => {
-      if (option === "None") {
-        // None is exclusive — selecting it clears everything else
-        if (prev.includes("None")) {
-          return [];
-        }
-        return ["None"];
-      }
-      const withoutNone = prev.filter((o) => o !== "None");
-      const toggled = withoutNone.includes(option)
-        ? withoutNone.filter((o) => o !== option)
-        : [...withoutNone, option];
-      return toggled;
-    });
-  }
-
-  // ---------------------------------------------------------------------------
   // Actions
   // ---------------------------------------------------------------------------
-
-  function handleLooksGood() {
-    const resolvedSetup = selectedSetup.includes("All of the above")
-      ? INDIVIDUAL_SETUP_OPTIONS
-      : selectedSetup.filter((o) => o !== "All of the above");
-    const setup = resolvedSetup.join(", ");
-    const diet = selectedDiet.filter((d) => d !== "None").join(", ");
-    const setupClause = setup ? ` Setup: ${setup}.` : "";
-    const dietClause = diet ? ` Dietary: ${diet}.` : "";
-    const msg = `Looks good, show recipes.${setupClause}${dietClause}`;
-    navigateToScreen?.("recipes");
-    sendMessage(msg);
-    navigate("/recipes");
-  }
 
   function handleRetry() {
     sendMessage("retry");
@@ -191,7 +136,7 @@ export function ClarifyScreen() {
 
       {/* Clarify card */}
       <div className="mx-3.5 my-2.5 bg-paper rounded-2xl overflow-hidden">
-        {/* Card header */}
+        {/* Card header — decorative gradients always visible */}
         <div className="px-5 py-[18px] pb-3.5 relative overflow-hidden">
           <div
             aria-hidden="true"
@@ -211,163 +156,131 @@ export function ClarifyScreen() {
               opacity: 0.4,
             }}
           />
-          <div className="relative z-[1]">
-            {/* Eyebrow */}
-            <div className="inline-flex items-center gap-1.5 bg-shoyu text-cream px-[11px] py-[5px] rounded-full text-[10px] font-semibold tracking-[0.04em] mb-2.5">
-              <span className="text-apricot">✶</span> Your ingredients
+
+          {/* Mutually exclusive: loading/streaming → spinner; error → nothing (ErrorBanner renders below); otherwise → card content */}
+          {(isLoading || isStreaming) ? (
+            <div
+              data-testid="clarify-loading-spinner"
+              role="status"
+              aria-label="Checking your ingredients for balance"
+              className="flex flex-col items-center justify-center py-16 px-6 relative z-[1]"
+            >
+              <Loader2 className="w-8 h-8 text-persimmon animate-spin" />
+              <p className="mt-3 text-[12px] text-ink-2 font-medium text-center">
+                Checking your ingredients for balance…
+              </p>
             </div>
-
-            {/* Heading */}
-            <h1 className="text-[20px] font-bold tracking-tight text-ink leading-[1.15]">
-              Here&apos;s what I <span className="text-persimmon">see</span>.
-            </h1>
-
-            {/* Loading skeleton — shown while waiting for first SSE event */}
-            {isLoading && (
-              <div
-                data-testid="clarify-loading-skeleton"
-                role="status"
-                aria-label="Thinking…"
-                className="mt-3 space-y-2"
-              >
-                <div className="h-3 bg-cream-deep rounded animate-pulse w-4/5" />
-                <div className="h-3 bg-cream-deep rounded animate-pulse w-3/5" />
-                <div className="h-3 bg-cream-deep rounded animate-pulse w-2/3" />
+          ) : isError ? null : (
+            <div className="relative z-[1]">
+              {/* Eyebrow */}
+              <div className="inline-flex items-center gap-1.5 bg-shoyu text-cream px-[11px] py-[5px] rounded-full text-[10px] font-semibold tracking-[0.04em] mb-2.5">
+                <span className="text-apricot">✶</span> Your ingredients
               </div>
-            )}
 
-            {/* PCV badges — shown only when pcsv_update has arrived */}
-            {showPcv && screenData?.pcsv && (
-              <>
-                {/* PCV badges */}
-                <div className="flex gap-2 mt-3 flex-wrap">
-                  <PcvBadge
-                    category="Protein"
-                    status={pcsvStatusToBadge(screenData.pcsv.protein.status)}
-                  />
-                  <PcvBadge
-                    category="Carb"
-                    status={pcsvStatusToBadge(screenData.pcsv.carb.status)}
-                  />
-                  <PcvBadge
-                    category="Veggie"
-                    status={pcsvStatusToBadge(screenData.pcsv.veggie.status)}
-                  />
-                  <button
-                    type="button"
-                    aria-label="PCV info"
-                    onClick={() => setPcvInfoOpen(true)}
-                    className="w-4 h-4 rounded-full bg-cream-deep text-ink-3 text-[9px] font-bold border-none cursor-pointer shrink-0 mt-[1px] inline-flex items-center justify-center self-center"
+              {/* Heading */}
+              <h1 className="text-[20px] font-bold tracking-tight text-ink leading-[1.15]">
+                Here&apos;s what I <span className="text-persimmon">see</span>.
+              </h1>
+
+              {/* PCV badges — shown only when pcsv_update has arrived */}
+              {showPcv && screenData?.pcsv && (
+                <>
+                  {/* PCV badges */}
+                  <div className="flex gap-2 mt-3 flex-wrap">
+                    <PcvBadge
+                      category="Protein"
+                      status={pcsvStatusToBadge(screenData.pcsv.protein.status)}
+                    />
+                    <PcvBadge
+                      category="Carb"
+                      status={pcsvStatusToBadge(screenData.pcsv.carb.status)}
+                    />
+                    <PcvBadge
+                      category="Veggie"
+                      status={pcsvStatusToBadge(screenData.pcsv.veggie.status)}
+                    />
+                    <button
+                      type="button"
+                      aria-label="PCV info"
+                      onClick={() => setPcvInfoOpen(true)}
+                      className="w-4 h-4 rounded-full bg-cream-deep text-ink-3 text-[9px] font-bold border-none cursor-pointer shrink-0 mt-[1px] inline-flex items-center justify-center self-center"
+                    >
+                      ?
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {/* Explanation — rendered with markdown; shown whenever text is available */}
+              {screenData?.explanation && (
+                <div className="mt-2 text-[13px] text-ink-2 leading-[1.5]">
+                  <Markdown
+                    allowedElements={["p", "strong", "em", "ul", "ol", "li", "a"]}
+                    unwrapDisallowed
                   >
-                    ?
-                  </button>
+                    {screenData.explanation}
+                  </Markdown>
                 </div>
-              </>
-            )}
+              )}
+            </div>
+          )}
+        </div>
 
-            {/* Explanation — rendered with markdown; shown when text is available */}
-            {screenData?.explanation && (
-              <div className="mt-2 text-[13px] text-ink-2 leading-[1.5]">
-                <Markdown
-                  allowedElements={["p", "strong", "em", "ul", "ol", "li", "a"]}
-                  unwrapDisallowed
-                >
-                  {screenData.explanation}
-                </Markdown>
+        {/* The following sections are only shown when NOT in loading/streaming */}
+        {!(isLoading || isStreaming) && (
+          <>
+            {/* Error banner — shown when in error state */}
+            {isError && screenData?.error && (
+              <div className="px-5 py-4">
+                <ErrorBanner message={screenData.error} onRetry={handleRetry} />
               </div>
             )}
-          </div>
-        </div>
 
-        {/* Error banner — shown when in error state */}
-        {isError && screenData?.error && (
-          <div className="px-5 py-4">
-            <ErrorBanner message={screenData.error} onRetry={handleRetry} />
-          </div>
+            {/* Partial completion banner */}
+            {isComplete && screenData?.completionStatus === "partial" && (
+              <div className="px-5 pt-3">
+                <ErrorBanner
+                  message="Some results may be incomplete"
+                  variant="partial"
+                />
+              </div>
+            )}
+
+            {/* Dynamic chip questions — shown when clarifyTurn arrives and state is complete */}
+            {screenData?.clarifyTurn && screenState === "complete" && screenData.clarifyTurn.questions.length > 0 && (
+              <div className="px-5 pt-3">
+                <div className="text-[11px] font-bold tracking-[0.06em] uppercase text-ink-3 mb-2">
+                  A few quick questions
+                </div>
+                {screenData.clarifyTurn.questions.map((q) => (
+                  <div key={q.id} className="mb-2.5">
+                    <ChipQuestion
+                      question={q}
+                      selected={selections[q.id] ?? []}
+                      onChange={(newSel) => updateSelection(q.id, newSel)}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Chat input — visible in all non-loading, non-error states; disabled unless complete */}
+            {!isError && (
+              <div className="pb-3">
+                <ChatInput
+                  placeholder="I also have kimchi, forgot to mention…"
+                  hint="Add details or corrections"
+                  onSend={(text) => sendMessage(text)}
+                  disabled={screenState !== "complete"}
+                />
+              </div>
+            )}
+          </>
         )}
+      </div>
 
-        {/* Partial completion banner */}
-        {isComplete && screenData?.completionStatus === "partial" && (
-          <div className="px-5 pt-3">
-            <ErrorBanner
-              message="Some results may be incomplete"
-              variant="partial"
-            />
-          </div>
-        )}
-
-        {/* Quick questions chip section */}
-        <div className="px-5 pt-3">
-          <div className="text-[11px] font-bold tracking-[0.06em] uppercase text-ink-3 mb-2">
-            A few quick questions
-          </div>
-
-          {/* Cooking setup */}
-          <div className="mb-2.5">
-            <div className="text-[12px] font-medium text-ink mb-1.5">
-              What&apos;s your cooking setup?
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {COOKING_SETUP_OPTIONS.map((opt) => (
-                <button
-                  key={opt}
-                  type="button"
-                  aria-pressed={selectedSetup.includes(opt)}
-                  disabled={screenState === "loading"}
-                  onClick={() => toggleSetup(opt)}
-                  className={`px-4 py-2 rounded-full text-[11px] font-semibold cursor-pointer min-h-[34px] flex items-center border-none transition-colors disabled:opacity-50 disabled:pointer-events-none ${
-                    selectedSetup.includes(opt)
-                      ? "bg-shoyu text-cream"
-                      : "bg-cream-deep text-ink"
-                  }`}
-                >
-                  {opt}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Dietary restrictions */}
-          <div className="mb-3">
-            <div className="text-[12px] font-medium text-ink mb-1.5">
-              Any dietary restrictions?
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {DIETARY_OPTIONS.map((opt) => (
-                <button
-                  key={opt}
-                  type="button"
-                  aria-pressed={selectedDiet.includes(opt)}
-                  disabled={screenState === "loading"}
-                  onClick={() => toggleDiet(opt)}
-                  className={`px-4 py-2 rounded-full text-[11px] font-semibold cursor-pointer min-h-[34px] flex items-center border-none transition-colors disabled:opacity-50 disabled:pointer-events-none ${
-                    selectedDiet.includes(opt)
-                      ? "bg-shoyu text-cream"
-                      : "bg-cream-deep text-ink"
-                  }`}
-                >
-                  {opt}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Thinking message — shown during loading/streaming when available */}
-        {(isLoading || isStreaming) && screenData?.thinkingMessage && (
-          <div className="px-5 py-2 text-[12px] text-ink-2 italic">
-            {screenData.thinkingMessage}
-          </div>
-        )}
-
-        {/* Chat input */}
-        <ChatInput
-          placeholder="I also have kimchi, forgot to mention…"
-          hint="Add details or corrections"
-          onSend={(text) => sendMessage(text)}
-        />
-
-        {/* Looks good CTA */}
+      {/* Looks good CTA — shown when clarifyTurn is populated and state is complete */}
+      {screenData?.clarifyTurn && screenState === "complete" && (
         <div className="px-5 py-3 flex justify-end">
           <button
             type="button"
@@ -377,7 +290,7 @@ export function ClarifyScreen() {
             Looks good, show recipes →
           </button>
         </div>
-      </div>
+      )}
 
       {/* Footer */}
       <div className="text-center px-4 pt-3 pb-[22px] text-[10px] text-ink-3 font-medium mt-auto">

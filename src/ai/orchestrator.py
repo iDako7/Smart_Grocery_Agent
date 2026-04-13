@@ -25,6 +25,7 @@ from contracts.api_types import Screen
 from contracts.tool_schemas import (
     TOOLS,
     AnalyzePcsvInput,
+    ClarifyTurnPayload,
     GetRecipeDetailInput,
     GetSubstitutionsInput,
     LookupStoreProductInput,
@@ -42,6 +43,7 @@ from src.ai.tools.get_substitutions import get_substitutions
 from src.ai.tools.lookup_store_product import lookup_store_product
 from src.ai.tools.search_recipes import search_recipes
 from src.ai.tools.translate_term import translate_term
+from src.ai.tools.emit_clarify_turn import emit_clarify_turn
 from src.ai.tools.update_user_profile import update_user_profile
 from src.ai.types import AgentResult, ToolCall
 from src.backend.db.crud import get_user_profile
@@ -75,20 +77,24 @@ _TOOL_REGISTRY: dict[str, tuple[type, str]] = {
     "translate_term": (TranslateTermInput, "kb"),
     "lookup_store_product": (LookupStoreProductInput, "kb"),
     "update_user_profile": (UpdateUserProfileInput, "pg"),
+    "emit_clarify_turn": (ClarifyTurnPayload, "none"),
 }
 
 
-async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens):
+async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens, tool_choice=None):
     """Call LLM with one retry + exponential backoff on transient errors."""
     last_error = None
     for attempt in range(LLM_MAX_RETRIES + 1):
         try:
-            return await client.chat.completions.create(
+            kwargs = dict(
                 model=model,
                 messages=messages,
                 tools=tools,
                 max_tokens=max_tokens,
             )
+            if tool_choice is not None:
+                kwargs["tool_choice"] = tool_choice
+            return await client.chat.completions.create(**kwargs)
         except _RETRYABLE_ERRORS as e:
             last_error = e
             if attempt < LLM_MAX_RETRIES:
@@ -138,6 +144,8 @@ async def _dispatch_tool(
             result = await lookup_store_product(kb, parsed)
         elif name == "update_user_profile":
             result = await update_user_profile(pg, user_id, parsed)
+        elif name == "emit_clarify_turn":
+            result = await emit_clarify_turn(parsed)
         else:
             result = {"error": f"Unhandled tool: {name}"}
     except Exception as e:
@@ -199,6 +207,51 @@ async def run_agent(
 
         # Done — no tool calls
         if choice.finish_reason != "tool_calls" and not message.tool_calls:
+            if screen == "clarify":
+                forced_tc = {"type": "function", "function": {"name": "emit_clarify_turn"}}
+                messages.append(message.model_dump())
+                retry_response = await _llm_call_with_retry(
+                    client,
+                    model=MODEL,
+                    messages=messages,
+                    tools=TOOLS,
+                    max_tokens=4096,
+                    tool_choice=forced_tc,
+                )
+                retry_choice = retry_response.choices[0]
+                retry_message = retry_choice.message
+                clarify_payload = None
+                if retry_message.tool_calls:
+                    for tc in retry_message.tool_calls:
+                        if tc.function.name == "emit_clarify_turn":
+                            result_dict, tc_record = await _dispatch_tool(
+                                tc.function.name, tc.function.arguments, kb, pg, user_id
+                            )
+                            # Terminal retry — no follow-up LLM call, so we skip the tool_messages
+                            # append that the main loop uses to feed results back to the model.
+                            all_tool_calls.append(tc_record)
+                            if isinstance(result_dict, dict) and "error" not in result_dict:
+                                clarify_payload = ClarifyTurnPayload.model_validate(result_dict)
+                            break
+                if clarify_payload is not None:
+                    return AgentResult(
+                        status="complete",
+                        response_text="",
+                        tool_calls=all_tool_calls,
+                        total_iterations=iteration + 1,
+                        pcsv=pcsv_result,
+                        recipes=recipe_results,
+                        clarify_turn=clarify_payload,
+                    )
+                return AgentResult(
+                    status="partial",
+                    response_text="",
+                    tool_calls=all_tool_calls,
+                    total_iterations=iteration + 1,
+                    pcsv=pcsv_result,
+                    recipes=recipe_results,
+                    reason="clarify_turn_enforcement_failed",
+                )
             return AgentResult(
                 status="complete",
                 response_text=message.content or "",
@@ -210,6 +263,7 @@ async def run_agent(
 
         # Process tool calls
         tool_messages = []
+        clarify_turn_payload: ClarifyTurnPayload | None = None
         for tc in message.tool_calls:
             result_dict, tool_call_record = await _dispatch_tool(
                 tc.function.name, tc.function.arguments, kb, pg, user_id
@@ -221,6 +275,8 @@ async def run_agent(
                 pcsv_result = PCSVResult.model_validate(result_dict)
             elif tc.function.name == "search_recipes" and isinstance(result_dict, list):
                 recipe_results = [RecipeSummary.model_validate(r) if isinstance(r, dict) else r for r in result_dict]
+            elif tc.function.name == "emit_clarify_turn" and isinstance(result_dict, dict) and "error" not in result_dict:
+                clarify_turn_payload = ClarifyTurnPayload.model_validate(result_dict)
 
             content = json.dumps(result_dict, ensure_ascii=False, default=str)
             tool_messages.append(
@@ -233,6 +289,18 @@ async def run_agent(
 
         messages.append(message.model_dump())
         messages.extend(tool_messages)
+
+        # Terminal action: emit_clarify_turn stops the loop immediately
+        if clarify_turn_payload is not None:
+            return AgentResult(
+                status="complete",
+                response_text="",
+                tool_calls=all_tool_calls,
+                total_iterations=iteration + 1,
+                pcsv=pcsv_result,
+                recipes=recipe_results,
+                clarify_turn=clarify_turn_payload,
+            )
 
     # Max iterations reached
     return AgentResult(

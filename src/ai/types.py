@@ -3,7 +3,7 @@
 from dataclasses import dataclass, field
 
 from contracts.sse_events import GroceryStore
-from contracts.tool_schemas import PCSVResult, RecipeSummary
+from contracts.tool_schemas import ClarifyTurnPayload, PCSVResult, RecipeSummary
 
 
 @dataclass
@@ -22,4 +22,5 @@ class AgentResult:
     pcsv: PCSVResult | None = None
     recipes: list[RecipeSummary] = field(default_factory=list)
     grocery_list: list[GroceryStore] = field(default_factory=list)
+    clarify_turn: ClarifyTurnPayload | None = None
     reason: str | None = None

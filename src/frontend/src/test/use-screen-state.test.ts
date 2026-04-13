@@ -951,7 +951,7 @@ describe("useScreenState — exported types are usable", () => {
     expect(actions).toHaveLength(7);
   });
 
-  it("ScreenData type has all 8 expected fields", () => {
+  it("ScreenData type has all 9 expected fields", () => {
     const data: ScreenData = {
       pcsv: null,
       recipes: [],
@@ -961,8 +961,9 @@ describe("useScreenState — exported types are usable", () => {
       error: null,
       completionStatus: null,
       completionReason: null,
+      clarifyTurn: null,
     };
-    expect(Object.keys(data)).toHaveLength(8);
+    expect(Object.keys(data)).toHaveLength(9);
   });
 
   it("UseScreenStateReturn shape matches hook output", () => {
@@ -975,5 +976,145 @@ describe("useScreenState — exported types are usable", () => {
     expect(typeof ret.isStreaming).toBe("boolean");
     expect(typeof ret.isComplete).toBe("boolean");
     expect(typeof ret.isError).toBe("boolean");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// 12. clarify_turn SSE event handling (Phase 2d)
+// ---------------------------------------------------------------------------
+
+describe("screenReducer — clarify_turn event", () => {
+  it("test_session_reducer_clarify_turn_event: populates clarifyTurn and sets screenState to complete", () => {
+    // Start in streaming state (receive_event only fires in streaming)
+    const state = { state: "streaming" as ScreenState, data: { ...initialScreenData } };
+
+    const event: SSEEvent = {
+      event_type: "clarify_turn",
+      explanation: "Let me ask a couple of quick questions before I proceed.",
+      questions: [
+        {
+          id: "cooking_setup",
+          text: "What's your cooking setup?",
+          selection_mode: "single",
+          options: [
+            { label: "Full kitchen", is_exclusive: false },
+            { label: "Hot plate only", is_exclusive: false },
+          ],
+        },
+        {
+          id: "dietary",
+          text: "Any dietary restrictions?",
+          selection_mode: "multi",
+          options: [
+            { label: "None", is_exclusive: true },
+            { label: "Vegetarian", is_exclusive: false },
+            { label: "Gluten-free", is_exclusive: false },
+          ],
+        },
+      ],
+    };
+
+    const next = screenReducer(state, { type: "receive_event", event });
+
+    // clarifyTurn should be populated with explanation and questions
+    expect(next.data.clarifyTurn).not.toBeNull();
+    expect(next.data.clarifyTurn?.explanation).toBe(
+      "Let me ask a couple of quick questions before I proceed."
+    );
+    expect(next.data.clarifyTurn?.questions).toHaveLength(2);
+    expect(next.data.clarifyTurn?.questions[0].id).toBe("cooking_setup");
+    expect(next.data.clarifyTurn?.questions[0].selection_mode).toBe("single");
+    expect(next.data.clarifyTurn?.questions[1].id).toBe("dietary");
+    expect(next.data.clarifyTurn?.questions[1].selection_mode).toBe("multi");
+    expect(next.data.clarifyTurn?.questions[1].options[0].is_exclusive).toBe(true);
+
+    // screenState should be complete
+    expect(next.state).toBe("complete");
+
+    // Other screenData fields should be untouched (still at initial values)
+    expect(next.data.pcsv).toBeNull();
+    expect(next.data.recipes).toEqual([]);
+    expect(next.data.explanation).toBe(
+      "Let me ask a couple of quick questions before I proceed."
+    );
+    expect(next.data.error).toBeNull();
+  });
+
+  // ---------------------------------------------------------------------------
+  // Bug2b: clarify_turn must copy explanation into screenData.explanation
+  // (Option A fix: reducer-level copy so the render gate stays simple)
+  // ---------------------------------------------------------------------------
+
+  it("Bug2b: clarify_turn action exposes explanation text via screenData.explanation", () => {
+    // When the backend sends clarify_turn with a non-empty explanation and
+    // empty questions, the reducer must copy explanation → screenData.explanation
+    // so the ClarifyScreen render gate `{explanation && ...}` evaluates to truthy.
+    const state = { state: "streaming" as ScreenState, data: { ...initialScreenData } };
+
+    const event: SSEEvent = {
+      event_type: "clarify_turn",
+      explanation: "Sounds great — balanced plan, let me find recipes.",
+      questions: [],
+    };
+
+    const next = screenReducer(state, { type: "receive_event", event });
+
+    // Option A requires the explanation to be promoted to screenData.explanation
+    expect(next.data.explanation).toBe(
+      "Sounds great — balanced plan, let me find recipes."
+    );
+    // clarifyTurn should also carry the explanation
+    expect(next.data.clarifyTurn?.explanation).toBe(
+      "Sounds great — balanced plan, let me find recipes."
+    );
+    // State transitions to complete
+    expect(next.state).toBe("complete");
+  });
+
+  it("Bug2b: clarify_turn with non-empty questions also copies explanation into screenData.explanation", () => {
+    // The copy must happen regardless of questions length.
+    const state = { state: "streaming" as ScreenState, data: { ...initialScreenData } };
+
+    const event: SSEEvent = {
+      event_type: "clarify_turn",
+      explanation: "I need a bit more info to suggest the best recipes.",
+      questions: [
+        {
+          id: "cooking_setup",
+          text: "What's your cooking setup?",
+          selection_mode: "single",
+          options: [{ label: "Full kitchen", is_exclusive: false }],
+        },
+      ],
+    };
+
+    const next = screenReducer(state, { type: "receive_event", event });
+
+    expect(next.data.explanation).toBe(
+      "I need a bit more info to suggest the best recipes."
+    );
+    expect(next.data.clarifyTurn?.questions).toHaveLength(1);
+    expect(next.state).toBe("complete");
+  });
+
+  it("test_session_reducer_explanation_event_still_works: explanation handler is untouched, clarifyTurn stays null", () => {
+    // Regression guard: ensure the explanation handler for non-Clarify screens is not broken
+    const state = { state: "streaming" as ScreenState, data: { ...initialScreenData } };
+
+    const event: SSEEvent = {
+      event_type: "explanation",
+      text: "Here are your recommended recipes.",
+    };
+
+    const next = screenReducer(state, { type: "receive_event", event });
+
+    // explanation field should be populated
+    expect(next.data.explanation).toBe("Here are your recommended recipes.");
+
+    // clarifyTurn should remain null — untouched
+    expect(next.data.clarifyTurn).toBeNull();
+
+    // State stays streaming (explanation does not flip to complete)
+    expect(next.state).toBe("streaming");
   });
 });

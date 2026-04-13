@@ -9,7 +9,9 @@ from collections.abc import AsyncIterator
 
 from contracts.sse_events import (
     AgentErrorCategory,
+    ClarifyTurnEvent,
     DoneEvent,
+    ErrorEvent,
     ExplanationEvent,
     GroceryListEvent,
     PcsvUpdateEvent,
@@ -49,8 +51,15 @@ async def emit_agent_result(
         event = RecipeCardEvent(recipe=recipe)
         yield _sse_line("recipe_card", event.model_dump())
 
-    # Explanation (the assistant's response text)
-    if result.response_text:
+    # Clarify turn (mutually exclusive with explanation)
+    if result.clarify_turn is not None:
+        event = ClarifyTurnEvent(
+            explanation=result.clarify_turn.explanation,
+            questions=result.clarify_turn.questions,
+        )
+        yield _sse_line("clarify_turn", event.model_dump())
+    elif result.response_text:
+        # Explanation (the assistant's response text) — only when clarify_turn not set
         event = ExplanationEvent(text=result.response_text)
         yield _sse_line("explanation", event.model_dump())
 
@@ -58,6 +67,16 @@ async def emit_agent_result(
     if result.grocery_list:
         event = GroceryListEvent(stores=result.grocery_list)
         yield _sse_line("grocery_list", event.model_dump())
+
+    # Clarify enforcement retry failure — emit an error event so the frontend
+    # routes through its error UI instead of rendering an empty ghost card.
+    if result.status == "partial" and result.reason == "clarify_turn_enforcement_failed":
+        err = ErrorEvent(
+            message="Sorry — I couldn't prepare your clarification. Please try rephrasing.",
+            code="clarify_turn_enforcement_failed",
+            recoverable=True,
+        )
+        yield _sse_line("error", err.model_dump())
 
     # Done
     if result.status == "complete":
