@@ -2,6 +2,8 @@
 # Pydantic models for SSE event types.
 # Each model represents the JSON payload inside `data:` of one SSE event.
 # Breaking changes require a PR to main + contracts/CHANGELOG.md entry.
+# Note: on the Clarify screen specifically, `clarify_turn` replaces `explanation`;
+# on all other screens (home, recipes, grocery), `explanation` continues to be emitted.
 
 from __future__ import annotations
 
@@ -9,7 +11,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field
 
-from contracts.tool_schemas import PCSVResult, RecipeSummary
+from contracts.tool_schemas import ClarifyQuestion, PCSVResult, RecipeSummary
 
 # ---------------------------------------------------------------------------
 # Grocery list structure (Store > Department > Item)
@@ -68,6 +70,12 @@ class GroceryListEvent(BaseModel):
     stores: list[GroceryStore]
 
 
+class ClarifyTurnEvent(BaseModel):
+    event_type: Literal["clarify_turn"] = "clarify_turn"
+    explanation: str
+    questions: list[ClarifyQuestion]
+
+
 class ErrorEvent(BaseModel):
     event_type: Literal["error"] = "error"
     message: str
@@ -93,6 +101,6 @@ class DoneEvent(BaseModel):
 # ---------------------------------------------------------------------------
 
 SSEEvent = Annotated[
-    ThinkingEvent | PcsvUpdateEvent | RecipeCardEvent | ExplanationEvent | GroceryListEvent | ErrorEvent | DoneEvent,
+    ThinkingEvent | PcsvUpdateEvent | RecipeCardEvent | ExplanationEvent | GroceryListEvent | ClarifyTurnEvent | ErrorEvent | DoneEvent,
     Field(discriminator="event_type"),
 ]
