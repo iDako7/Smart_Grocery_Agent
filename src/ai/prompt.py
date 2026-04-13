@@ -70,7 +70,6 @@ _RULES = """\
 6. **Source attribution.** Always mention the recipe source when recommending a recipe.
 7. **Glossary-miss fallback.** If `translate_term` returns `match_type: "none"`, you may provide your own translation — but label it "AI-translated."
 8. **Substitution flavor impact.** When suggesting a substitute, briefly explain how it changes the flavor or texture.\
-9. **Brief directional response — plain text only.** Your `response_text` becomes the `explanation` SSE field on the Clarify screen: ONE short directional sentence, ≤30 words, proposing a cooking direction (cuisine style, meal structure, or what to add) for the user to approve, correct, or add to. Good example: "Here's the direction: a Southeast Asian BBQ spread — Chicken Satay as the star, with grilled veggies and rice for balance." DO NOT use markdown of any kind — no tables or `|` pipes, no `#`/`##` headers, no `-`/`*`/`1.` lists, no `**` bold or `_` italic, no emoji column layouts. DO NOT repeat PCV gap info (badges show that) or list recipes, ingredients, or grocery items — those belong in `recipe_card` and `grocery_list` SSE events.\
 """
 
 _TOOL_INSTRUCTIONS = """\

@@ -5,7 +5,6 @@ import Markdown from "react-markdown";
 
 import { StepProgress } from "@/components/step-progress";
 import { PcvBadge } from "@/components/pcv-badge";
-import { ChatInput } from "@/components/chat-input";
 import { InfoSheet } from "@/components/info-sheet";
 import { ErrorBanner } from "@/components/error-banner";
 import { ConfirmResetDialog } from "@/components/confirm-reset-dialog";
@@ -14,25 +13,6 @@ import { useSessionOptional } from "@/context/session-context";
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
-
-const COOKING_SETUP_OPTIONS = [
-  "Outdoor grill",
-  "Oven",
-  "Stovetop",
-  "All of the above",
-] as const;
-
-const DIETARY_OPTIONS = [
-  "None",
-  "Halal",
-  "Vegetarian",
-  "Vegan",
-  "Gluten-free",
-] as const;
-
-const INDIVIDUAL_SETUP_OPTIONS = COOKING_SETUP_OPTIONS.filter(
-  (o) => o !== "All of the above"
-);
 
 const PCV_INFO = {
   name: "How PCV analysis works",
@@ -60,15 +40,11 @@ export function ClarifyScreen() {
   const session = useSessionOptional();
 
   const sendMessage = session?.sendMessage ?? (() => {});
-  const navigateToScreen = session?.navigateToScreen;
   const screenData = session?.screenData;
   const screenState = session?.screenState ?? "idle";
   const isComplete = session?.isComplete ?? false;
   const resetSession = session?.resetSession;
 
-  // Chip state — empty start, no defaults
-  const [selectedSetup, setSelectedSetup] = useState<string[]>([]);
-  const [selectedDiet, setSelectedDiet] = useState<string[]>([]);
   const [pcvInfoOpen, setPcvInfoOpen] = useState(false);
   const [resetOpen, setResetOpen] = useState(false);
   const backButtonRef = useRef<HTMLButtonElement>(null);
@@ -100,65 +76,8 @@ export function ClarifyScreen() {
   const showPcv = hasRealData;
 
   // ---------------------------------------------------------------------------
-  // Chip toggle handlers (lifted from pre-deletion file, initial state changed)
-  // ---------------------------------------------------------------------------
-
-  function toggleSetup(option: string) {
-    setSelectedSetup((prev) => {
-      if (option === "All of the above") {
-        if (prev.includes("All of the above")) {
-          return [];
-        }
-        return [...INDIVIDUAL_SETUP_OPTIONS, "All of the above"];
-      }
-      const toggled = prev.includes(option)
-        ? prev.filter((o) => o !== option)
-        : [...prev.filter((o) => o !== "All of the above"), option];
-      // Auto-select "All of the above" if all individual options are selected
-      const allIndividualSelected = INDIVIDUAL_SETUP_OPTIONS.every((o) =>
-        toggled.includes(o)
-      );
-      if (allIndividualSelected) {
-        return [...toggled, "All of the above"];
-      }
-      return toggled.filter((o) => o !== "All of the above");
-    });
-  }
-
-  function toggleDiet(option: string) {
-    setSelectedDiet((prev) => {
-      if (option === "None") {
-        // None is exclusive — selecting it clears everything else
-        if (prev.includes("None")) {
-          return [];
-        }
-        return ["None"];
-      }
-      const withoutNone = prev.filter((o) => o !== "None");
-      const toggled = withoutNone.includes(option)
-        ? withoutNone.filter((o) => o !== option)
-        : [...withoutNone, option];
-      return toggled;
-    });
-  }
-
-  // ---------------------------------------------------------------------------
   // Actions
   // ---------------------------------------------------------------------------
-
-  function handleLooksGood() {
-    const resolvedSetup = selectedSetup.includes("All of the above")
-      ? INDIVIDUAL_SETUP_OPTIONS
-      : selectedSetup.filter((o) => o !== "All of the above");
-    const setup = resolvedSetup.join(", ");
-    const diet = selectedDiet.filter((d) => d !== "None").join(", ");
-    const setupClause = setup ? ` Setup: ${setup}.` : "";
-    const dietClause = diet ? ` Dietary: ${diet}.` : "";
-    const msg = `Looks good, show recipes.${setupClause}${dietClause}`;
-    navigateToScreen?.("recipes");
-    sendMessage(msg);
-    navigate("/recipes");
-  }
 
   function handleRetry() {
     sendMessage("retry");
@@ -222,20 +141,6 @@ export function ClarifyScreen() {
               Here&apos;s what I <span className="text-persimmon">see</span>.
             </h1>
 
-            {/* Loading skeleton — shown while waiting for first SSE event */}
-            {isLoading && (
-              <div
-                data-testid="clarify-loading-skeleton"
-                role="status"
-                aria-label="Thinking…"
-                className="mt-3 space-y-2"
-              >
-                <div className="h-3 bg-cream-deep rounded animate-pulse w-4/5" />
-                <div className="h-3 bg-cream-deep rounded animate-pulse w-3/5" />
-                <div className="h-3 bg-cream-deep rounded animate-pulse w-2/3" />
-              </div>
-            )}
-
             {/* PCV badges — shown only when pcsv_update has arrived */}
             {showPcv && screenData?.pcsv && (
               <>
@@ -296,63 +201,6 @@ export function ClarifyScreen() {
           </div>
         )}
 
-        {/* Quick questions chip section */}
-        <div className="px-5 pt-3">
-          <div className="text-[11px] font-bold tracking-[0.06em] uppercase text-ink-3 mb-2">
-            A few quick questions
-          </div>
-
-          {/* Cooking setup */}
-          <div className="mb-2.5">
-            <div className="text-[12px] font-medium text-ink mb-1.5">
-              What&apos;s your cooking setup?
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {COOKING_SETUP_OPTIONS.map((opt) => (
-                <button
-                  key={opt}
-                  type="button"
-                  aria-pressed={selectedSetup.includes(opt)}
-                  disabled={screenState === "loading"}
-                  onClick={() => toggleSetup(opt)}
-                  className={`px-4 py-2 rounded-full text-[11px] font-semibold cursor-pointer min-h-[34px] flex items-center border-none transition-colors disabled:opacity-50 disabled:pointer-events-none ${
-                    selectedSetup.includes(opt)
-                      ? "bg-shoyu text-cream"
-                      : "bg-cream-deep text-ink"
-                  }`}
-                >
-                  {opt}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Dietary restrictions */}
-          <div className="mb-3">
-            <div className="text-[12px] font-medium text-ink mb-1.5">
-              Any dietary restrictions?
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {DIETARY_OPTIONS.map((opt) => (
-                <button
-                  key={opt}
-                  type="button"
-                  aria-pressed={selectedDiet.includes(opt)}
-                  disabled={screenState === "loading"}
-                  onClick={() => toggleDiet(opt)}
-                  className={`px-4 py-2 rounded-full text-[11px] font-semibold cursor-pointer min-h-[34px] flex items-center border-none transition-colors disabled:opacity-50 disabled:pointer-events-none ${
-                    selectedDiet.includes(opt)
-                      ? "bg-shoyu text-cream"
-                      : "bg-cream-deep text-ink"
-                  }`}
-                >
-                  {opt}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* Thinking message — shown during loading/streaming when available */}
         {(isLoading || isStreaming) && screenData?.thinkingMessage && (
           <div className="px-5 py-2 text-[12px] text-ink-2 italic">
@@ -360,23 +208,6 @@ export function ClarifyScreen() {
           </div>
         )}
 
-        {/* Chat input */}
-        <ChatInput
-          placeholder="I also have kimchi, forgot to mention…"
-          hint="Add details or corrections"
-          onSend={(text) => sendMessage(text)}
-        />
-
-        {/* Looks good CTA */}
-        <div className="px-5 py-3 flex justify-end">
-          <button
-            type="button"
-            onClick={handleLooksGood}
-            className="px-6 py-[11px] bg-shoyu text-cream border-none rounded-full font-sans text-[13px] font-semibold cursor-pointer"
-          >
-            Looks good, show recipes →
-          </button>
-        </div>
       </div>
 
       {/* Footer */}
