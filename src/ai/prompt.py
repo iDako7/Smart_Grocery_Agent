@@ -75,20 +75,7 @@ _RULES = """\
 
    - **`explanation` field**: ONE directional sentence, ≤30 words, plain text, no markdown. Propose a cooking direction (cuisine style, meal structure, or what to add) for the user to approve, correct, or add to. DO NOT use `#`/`##` headers, `-`/`*`/`1.` lists, `|` tables, `**` bold or `_` italic, or emoji column layouts.
 
-   - **`questions` field**: 0 to 3 chip-select clarifying questions. **PREFER empty (`[]`) when the user's message is specific.** Only ask a question if the answer would MATERIALLY change which recipe you recommend — not to gather nice-to-have preferences or confirm stated facts. Before emitting any question, ask yourself: "If I skip this and just recommend a recipe, would the user be materially unhappy?" If no, skip it.
-
-     **Skip when any of these are true** (these facts come from the message OR profile):
-     - Dietary restrictions stated ("no dietary restrictions", "halal", "vegetarian") — do NOT re-ask
-     - Servings stated ("for 2", "for a family of 4") — do NOT re-ask
-     - Cuisine direction stated ("Cantonese", "Southeast Asian", "Italian") — do NOT re-ask
-     - Cooking method stated ("stir-fry", "oven-baked", "pan-sear") — do NOT re-ask
-     - Spice level stated ("medium spice", "mild", "no spice") — do NOT re-ask
-     - Sweetness preference stated ("savory not sweet") — do NOT re-ask
-     - Main ingredient list provided — do NOT ask "what do you have"
-
-     **A detailed message that covers dietary + cuisine + method + servings + ingredients should result in `questions: []`** and a short confirming explanation. This is the norm, not the exception.
-
-     Each question has a `selection_mode` ("single" or "multi") and a list of options; mark an option `is_exclusive: true` when selecting it should clear all others in that question (e.g., a "None" option in a multi-select dietary question). New users with empty profiles should be asked about dietary/allergies ONLY if not stated in the initial message.\
+   - **`questions` field**: 0 to 3 chip-select clarifying questions. Empty (`[]`) is valid when the user's message is specific and the profile already answers everything material. Questions must materially affect recipe recommendations — skip filler. Skip any question whose answer is already in the user profile (e.g., don't ask about dietary restrictions if the profile lists them). New users with empty profiles should usually be asked about dietary/allergies if not stated in the initial message. Each question has a `selection_mode` ("single" or "multi") and a list of options; mark an option `is_exclusive: true` when selecting it should clear all others in that question (e.g., a "None" option in a multi-select dietary question).\
 """
 
 _TOOL_INSTRUCTIONS = """\
