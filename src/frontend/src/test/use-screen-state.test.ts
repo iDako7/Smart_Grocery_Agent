@@ -1034,8 +1034,67 @@ describe("screenReducer — clarify_turn event", () => {
     // Other screenData fields should be untouched (still at initial values)
     expect(next.data.pcsv).toBeNull();
     expect(next.data.recipes).toEqual([]);
-    expect(next.data.explanation).toBe("");
+    expect(next.data.explanation).toBe(
+      "Let me ask a couple of quick questions before I proceed."
+    );
     expect(next.data.error).toBeNull();
+  });
+
+  // ---------------------------------------------------------------------------
+  // Bug2b: clarify_turn must copy explanation into screenData.explanation
+  // (Option A fix: reducer-level copy so the render gate stays simple)
+  // ---------------------------------------------------------------------------
+
+  it("Bug2b: clarify_turn action exposes explanation text via screenData.explanation", () => {
+    // When the backend sends clarify_turn with a non-empty explanation and
+    // empty questions, the reducer must copy explanation → screenData.explanation
+    // so the ClarifyScreen render gate `{explanation && ...}` evaluates to truthy.
+    const state = { state: "streaming" as ScreenState, data: { ...initialScreenData } };
+
+    const event: SSEEvent = {
+      event_type: "clarify_turn",
+      explanation: "Sounds great — balanced plan, let me find recipes.",
+      questions: [],
+    };
+
+    const next = screenReducer(state, { type: "receive_event", event });
+
+    // Option A requires the explanation to be promoted to screenData.explanation
+    expect(next.data.explanation).toBe(
+      "Sounds great — balanced plan, let me find recipes."
+    );
+    // clarifyTurn should also carry the explanation
+    expect(next.data.clarifyTurn?.explanation).toBe(
+      "Sounds great — balanced plan, let me find recipes."
+    );
+    // State transitions to complete
+    expect(next.state).toBe("complete");
+  });
+
+  it("Bug2b: clarify_turn with non-empty questions also copies explanation into screenData.explanation", () => {
+    // The copy must happen regardless of questions length.
+    const state = { state: "streaming" as ScreenState, data: { ...initialScreenData } };
+
+    const event: SSEEvent = {
+      event_type: "clarify_turn",
+      explanation: "I need a bit more info to suggest the best recipes.",
+      questions: [
+        {
+          id: "cooking_setup",
+          text: "What's your cooking setup?",
+          selection_mode: "single",
+          options: [{ label: "Full kitchen", is_exclusive: false }],
+        },
+      ],
+    };
+
+    const next = screenReducer(state, { type: "receive_event", event });
+
+    expect(next.data.explanation).toBe(
+      "I need a bit more info to suggest the best recipes."
+    );
+    expect(next.data.clarifyTurn?.questions).toHaveLength(1);
+    expect(next.state).toBe("complete");
   });
 
   it("test_session_reducer_explanation_event_still_works: explanation handler is untouched, clarifyTurn stays null", () => {

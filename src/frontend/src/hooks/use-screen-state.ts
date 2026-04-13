@@ -226,6 +226,7 @@ function applySSEEvent(current: ReducerState, event: SSEEvent): ReducerState {
             explanation: event.explanation,
             questions: event.questions,
           },
+          explanation: event.explanation,
           error: null,
         },
       };

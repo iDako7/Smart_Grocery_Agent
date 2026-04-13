@@ -211,8 +211,8 @@ export function ClarifyScreen() {
                 </>
               )}
 
-              {/* Explanation — rendered with markdown; shown when text is available and no clarifyTurn */}
-              {screenData?.explanation && !screenData?.clarifyTurn && (
+              {/* Explanation — rendered with markdown; shown whenever text is available */}
+              {screenData?.explanation && (
                 <div className="mt-2 text-[13px] text-ink-2 leading-[1.5]">
                   <Markdown
                     allowedElements={["p", "strong", "em", "ul", "ol", "li", "a"]}
