@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import { ArrowLeft, X } from "lucide-react";
 import { StepProgress } from "@/components/step-progress";
@@ -9,6 +9,8 @@ import { InfoSheet } from "@/components/info-sheet";
 import { ErrorBanner } from "@/components/error-banner";
 import { useScenario } from "@/context/scenario-context";
 import { useSessionOptional } from "@/context/session-context";
+import { postGroceryList } from "@/services/api-client";
+import { collectBuyItems } from "@/services/grocery-helpers";
 import type { RecipeCardData } from "@/mocks/scenarios";
 import type { RecipeSummary, EffortLevel } from "@/types/tools";
 
@@ -47,6 +49,8 @@ export function RecipesScreen() {
   const screenState = session?.screenState ?? "idle";
   const screenData = session?.screenData;
   const isComplete = session?.isComplete ?? false;
+  const dispatch = session?.dispatch;
+  const sessionId = session?.sessionId ?? null;
 
   // Use session recipe data if available, fall back to scenario data
   const RECIPES: RecipeCardData[] = useMemo(() => {
@@ -75,6 +79,14 @@ export function RecipesScreen() {
   const [displayedRecipes, setDisplayedRecipes] = useState<RecipeCardData[]>(RECIPES);
   const [altPool, setAltPool] = useState<RecipeCardData[]>(initialAltPool);
   const [swappingIndex, setSwappingIndex] = useState<number | null>(null);
+  const [buildingList, setBuildingList] = useState(false);
+  const [buildListError, setBuildListError] = useState<string | null>(null);
+  const mountedRef = useRef(true);
+
+  // Unmount safety: prevent state updates on unmounted component
+  useEffect(() => {
+    return () => { mountedRef.current = false; };
+  }, []);
 
   // Sync displayed recipes when source data changes (scenario switch or SSE)
   useEffect(() => {
@@ -166,6 +178,41 @@ export function RecipesScreen() {
   function handleInfoClick(recipe: RecipeCardData) {
     setInfoRecipe(recipe);
     setInfoOpen(true);
+  }
+
+  async function handleBuildList() {
+    navigateToScreen?.("grocery");
+
+    if (!sessionId) {
+      navigate("/grocery");
+      return;
+    }
+
+    const items = collectBuyItems(displayedRecipes, excludedByCard);
+
+    if (items.length === 0) {
+      navigate("/grocery");
+      return;
+    }
+
+    setBuildingList(true);
+    setBuildListError(null);
+    try {
+      const stores = await postGroceryList(sessionId, items);
+      if (!mountedRef.current) return;
+      dispatch?.({ type: "set_grocery_list", stores });
+    } catch (err) {
+      if (!mountedRef.current) return;
+      console.error("[RecipesScreen] grocery list generation failed:", err);
+      setBuildListError("Could not generate grocery list. Please try again.");
+      return;
+    } finally {
+      if (mountedRef.current) {
+        setBuildingList(false);
+      }
+    }
+
+    navigate("/grocery");
   }
 
   return (
@@ -304,6 +351,13 @@ export function RecipesScreen() {
         onSend={(text) => sendMessage(text)}
       />
 
+      {/* Build list error banner */}
+      {buildListError && (
+        <div className="mx-3.5 mb-2">
+          <ErrorBanner message={buildListError} onRetry={handleBuildList} />
+        </div>
+      )}
+
       {/* Actions */}
       <div className="flex gap-2.5 px-3.5 pt-1 pb-2.5">
         <button
@@ -316,10 +370,11 @@ export function RecipesScreen() {
         </button>
         <button
           type="button"
-          onClick={() => { navigateToScreen?.("grocery"); navigate("/grocery"); }}
-          className="flex-[1.3] py-3 rounded-md bg-shoyu text-cream border-none font-sans text-[13px] font-semibold cursor-pointer flex items-center justify-center gap-2 min-h-[44px]"
+          onClick={handleBuildList}
+          disabled={buildingList}
+          className="flex-[1.3] py-3 rounded-md bg-shoyu text-cream border-none font-sans text-[13px] font-semibold cursor-pointer flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-50"
         >
-          Build list <span className="text-apricot text-[14px]">→</span>
+          {buildingList ? "Building..." : "Build list"} {!buildingList && <span className="text-apricot text-[14px]">→</span>}
         </button>
       </div>
 
