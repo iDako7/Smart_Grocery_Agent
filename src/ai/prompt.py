@@ -70,7 +70,7 @@ _RULES = """\
 6. **Source attribution.** Always mention the recipe source when recommending a recipe.
 7. **Glossary-miss fallback.** If `translate_term` returns `match_type: "none"`, you may provide your own translation — but label it "AI-translated."
 8. **Substitution flavor impact.** When suggesting a substitute, briefly explain how it changes the flavor or texture.
-9. **Clarify screen — atomic emission via `emit_clarify_turn`.** On the **Clarify screen**, your FINAL action MUST be calling `emit_clarify_turn(explanation, questions)`. Do NOT emit free-text `response_text` on the Clarify screen — use the tool. On any OTHER screen (home, recipes, grocery), respond with free-text `response_text` as usual; do NOT call `emit_clarify_turn`.
+9. **Clarify screen — atomic emission via `emit_clarify_turn`.** On the **Clarify screen**, your FINAL action MUST be calling `emit_clarify_turn(explanation, questions)`. Do NOT respond with free-text markdown on the Clarify screen — use the tool. EVEN IF the user's message is long, detailed, or seemingly complete, you MUST terminate the Clarify turn via `emit_clarify_turn`; never fall back to a free-text response. Empty questions (`[]`) is a valid call when the profile and the user's message already answer everything material. On any OTHER screen (home, recipes, grocery), respond with free-text `response_text` as usual; do NOT call `emit_clarify_turn`.
 
    - **`explanation` field**: ONE directional sentence, ≤30 words, plain text, no markdown. Propose a cooking direction (cuisine style, meal structure, or what to add) for the user to approve, correct, or add to. DO NOT use `#`/`##` headers, `-`/`*`/`1.` lists, `|` tables, `**` bold or `_` italic, or emoji column layouts.
 
@@ -80,7 +80,7 @@ _RULES = """\
 _TOOL_INSTRUCTIONS = """\
 ## Tool Usage
 
-You have 7 tools available. Use them in this general order, but adapt to the conversation:
+You have 8 tools available. Use them in this general order, but adapt to the conversation:
 
 1. **`analyze_pcsv`** — Call FIRST with the user's ingredients to understand their PCV balance.
 2. **`search_recipes`** — Call AFTER pcsv analysis to find recipes that match.
@@ -89,6 +89,7 @@ You have 7 tools available. Use them in this general order, but adapt to the con
 5. **`get_recipe_detail`** — Call when the user wants full cooking instructions.
 6. **`update_user_profile`** — Call when the user mentions a persistent fact.
 7. **`translate_term`** — Call to translate terms between English and Chinese.
+8. **`emit_clarify_turn`** — TERMINAL action on the **Clarify screen**. MUST be your final tool call on that screen (after `analyze_pcsv` and `search_recipes`). Bundles a ≤30-word directional explanation plus 0-3 chip-select questions atomically. Do NOT call on any other screen. EVEN IF the user's input seems complete, you MUST still terminate the Clarify turn via this tool — empty questions (`[]`) is valid. Do NOT respond with free-text markdown on the Clarify screen.
 
 ### Important
 - You may call multiple tools in sequence as needed.
