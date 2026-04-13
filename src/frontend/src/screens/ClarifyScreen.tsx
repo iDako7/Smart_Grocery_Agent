@@ -157,7 +157,7 @@ export function ClarifyScreen() {
             }}
           />
 
-          {/* Mutually exclusive: loading/streaming shows spinner; otherwise shows card content */}
+          {/* Mutually exclusive: loading/streaming → spinner; error → nothing (ErrorBanner renders below); otherwise → card content */}
           {(isLoading || isStreaming) ? (
             <div
               data-testid="clarify-loading-spinner"
@@ -170,7 +170,7 @@ export function ClarifyScreen() {
                 Checking your ingredients for balance…
               </p>
             </div>
-          ) : (
+          ) : isError ? null : (
             <div className="relative z-[1]">
               {/* Eyebrow */}
               <div className="inline-flex items-center gap-1.5 bg-shoyu text-cream px-[11px] py-[5px] rounded-full text-[10px] font-semibold tracking-[0.04em] mb-2.5">
@@ -264,15 +264,17 @@ export function ClarifyScreen() {
               </div>
             )}
 
-            {/* Chat input — visible in all non-loading states; disabled unless complete */}
-            <div className="pb-3">
-              <ChatInput
-                placeholder="I also have kimchi, forgot to mention…"
-                hint="Add details or corrections"
-                onSend={(text) => sendMessage(text)}
-                disabled={screenState !== "complete"}
-              />
-            </div>
+            {/* Chat input — visible in all non-loading, non-error states; disabled unless complete */}
+            {!isError && (
+              <div className="pb-3">
+                <ChatInput
+                  placeholder="I also have kimchi, forgot to mention…"
+                  hint="Add details or corrections"
+                  onSend={(text) => sendMessage(text)}
+                  disabled={screenState !== "complete"}
+                />
+              </div>
+            )}
           </>
         )}
       </div>
