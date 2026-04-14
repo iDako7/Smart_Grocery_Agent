@@ -543,6 +543,184 @@ describe("RecipesScreen — T10: info button opens InfoSheet with summary data",
 // T11: swap button rendered but disabled
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// T12: back button → ConfirmResetDialog → confirm → resetSession + navigate /
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T12: confirm reset calls resetSession and navigates home", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+  const resetSessionSpy = vi.fn();
+
+  beforeEach(() => {
+    resetSessionSpy.mockClear();
+    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
+      screenState: "complete",
+      screenData: {
+        ...initialScreenData,
+        recipes: [recipe1],
+        completionStatus: "complete",
+      },
+      isLoading: false,
+      isStreaming: false,
+      isComplete: true,
+      isError: false,
+      sessionId: null,
+      conversationHistory: [],
+      currentScreen: "recipes",
+      sendMessage: vi.fn(),
+      navigateToScreen: vi.fn(),
+      resetSession: resetSessionSpy,
+      addLocalTurn: vi.fn(),
+      dispatch: vi.fn(),
+    });
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+  });
+
+  it("test_recipes_screen_back_confirm_resets_and_navigates_home", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter initialEntries={["/recipes"]}>
+        <Routes>
+          <Route path="/recipes" element={<RecipesScreen />} />
+          <Route
+            path="/"
+            element={<div data-testid="screen-home">Home route</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // Click back button to open the dialog
+    const backBtn = screen.getByRole("button", { name: /go back/i });
+    await user.click(backBtn);
+
+    // Click "Start over" in the dialog
+    const confirmBtn = screen.getByRole("button", { name: /start over/i });
+    await user.click(confirmBtn);
+
+    expect(resetSessionSpy).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId("screen-home")).toBeInTheDocument();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T13: error retry → sendMessage("retry")
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T13: error retry calls sendMessage('retry')", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+  const sendMessageSpy = vi.fn();
+
+  beforeEach(() => {
+    sendMessageSpy.mockClear();
+    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
+      screenState: "error",
+      screenData: {
+        ...initialScreenData,
+        error: "Something went wrong. Please try again.",
+      },
+      isLoading: false,
+      isStreaming: false,
+      isComplete: false,
+      isError: true,
+      sessionId: null,
+      conversationHistory: [],
+      currentScreen: "recipes",
+      sendMessage: sendMessageSpy,
+      navigateToScreen: vi.fn(),
+      resetSession: vi.fn(),
+      addLocalTurn: vi.fn(),
+      dispatch: vi.fn(),
+    });
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+  });
+
+  it("test_recipes_screen_error_retry_sends_retry_message", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter initialEntries={["/recipes"]}>
+        <RecipesScreen />
+      </MemoryRouter>
+    );
+
+    const retryBtn = screen.getByRole("button", { name: /try again/i });
+    await user.click(retryBtn);
+
+    expect(sendMessageSpy).toHaveBeenCalledWith("retry");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T14: InfoSheet close button clears infoRecipe
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T14: InfoSheet close clears infoRecipe", () => {
+  it("test_recipes_screen_info_sheet_close_clears", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(
+      <RecipesWith
+        drive={{ kind: "complete", recipes: [recipe1] }}
+      />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    // Open the info sheet
+    const infoButton = screen.getByRole("button", {
+      name: /info about garlic shrimp stir-fry/i,
+    });
+    await user.click(infoButton);
+
+    // Close button inside InfoSheet
+    const closeBtn = screen.getByRole("button", { name: /^close$/i });
+    await user.click(closeBtn);
+
+    // Description text from sheet should no longer be visible
+    expect(
+      screen.queryByText(/Chinese.*Stir-fry.*quick.*serves 2/i)
+    ).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T15: back button focus restoration after dialog cancel + EN lang toggle
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T15: dialog cancel restores back-button focus", () => {
+  it("test_recipes_screen_dialog_cancel_focus_restored", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(
+      <RecipesWith drive={{ kind: "complete", recipes: [recipe1] }} />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    // Click EN lang toggle (covers the en setLang arrow function)
+    const enButton = screen.getByRole("button", { name: /^EN$/ });
+    await user.click(enButton);
+
+    const backBtn = screen.getByRole("button", { name: /go back/i });
+    await user.click(backBtn);
+
+    // Cancel the dialog
+    const cancelBtn = screen.getByRole("button", { name: /cancel/i });
+    await user.click(cancelBtn);
+
+    // After dialog closes, focus should return to back button
+    expect(document.activeElement).toBe(backBtn);
+  });
+});
+
 describe("RecipesScreen — T11: swap button disabled", () => {
   it("test_recipes_screen_swap_disabled", () => {
     const mock = createMockChatService();
