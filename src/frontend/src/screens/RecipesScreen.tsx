@@ -29,9 +29,14 @@ import type { RecipeSummary, EffortLevel } from "@/types/tools";
 // ---------------------------------------------------------------------------
 
 function effortToTime(level: EffortLevel): string {
-  if (level === "quick") return "20 min";
-  if (level === "medium") return "35 min";
-  return "60 min";
+  switch (level) {
+    case "quick":
+      return "20 min";
+    case "medium":
+      return "35 min";
+    case "long":
+      return "60 min";
+  }
 }
 
 function recipeToIngredientTags(r: RecipeSummary): { name: string; have: boolean }[] {
@@ -259,7 +264,7 @@ export function RecipesScreen() {
               : infoRecipe.name
             : ""
         }
-        nameCjk={infoRecipe?.name_zh}
+        nameCjk={lang === "zh" ? undefined : infoRecipe?.name_zh}
         flavorTags={infoRecipe?.flavor_tags ?? []}
         description={
           infoRecipe

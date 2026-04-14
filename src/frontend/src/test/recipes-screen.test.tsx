@@ -284,6 +284,11 @@ describe("RecipesScreen — T4: complete renders all cards, CTA enabled", () => 
     expect(screen.getByText("Braise")).toBeInTheDocument();
     expect(screen.getByText("Roast")).toBeInTheDocument();
 
+    // Time strings rendered by effortToTime — one per effort level
+    expect(screen.getByText("20 min")).toBeInTheDocument();
+    expect(screen.getByText("35 min")).toBeInTheDocument();
+    expect(screen.getByText("60 min")).toBeInTheDocument();
+
     // CTA is enabled
     const cta = screen.getByRole("button", { name: /build list/i });
     expect(cta).toBeInTheDocument();
