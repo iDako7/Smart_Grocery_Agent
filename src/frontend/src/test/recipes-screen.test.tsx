@@ -130,6 +130,7 @@ type Drive =
       kind: "complete";
       recipes: RecipeSummary[];
       completionStatus?: "complete" | "partial";
+      completionReason?: string;
     }
   | { kind: "error" };
 
@@ -163,6 +164,7 @@ function RecipesWith({ drive }: { drive: Drive }) {
       session.dispatch({
         type: "complete",
         status: drive.completionStatus ?? "complete",
+        reason: drive.completionReason ?? null,
       });
       return;
     }
@@ -422,6 +424,7 @@ describe("RecipesScreen — T8: partial completion banner", () => {
           kind: "complete",
           recipes: [recipe1, recipe2],
           completionStatus: "partial",
+          completionReason: "max_iterations",
         }}
       />,
       { chatService: mock.service, initialPath: "/recipes" }
@@ -810,7 +813,7 @@ describe("RecipesScreen — swap interactions", () => {
     expect(screen.queryByText("Shrimp Lo Mein")).toBeNull();
   });
 
-  it("test_recipes_screen_swap_pick_replaces_card_and_closes", async () => {
+  it("test_recipes_screen_swap_select_updates_card_and_auto_closes", async () => {
     const user = userEvent.setup();
     const mock = createMockChatService();
 
@@ -819,15 +822,18 @@ describe("RecipesScreen — swap interactions", () => {
       { chatService: mock.service, initialPath: "/recipes" }
     );
 
+    // Open swap panel for r2
     const swapButtons = screen.getAllByRole("button", { name: /try another/i });
     await user.click(swapButtons[1]);
+    expect(screen.getByTestId("swap-panel")).toBeInTheDocument();
 
-    const pickBtn = screen.getByRole("button", { name: /pick chicken mole/i });
-    await user.click(pickBtn);
-
-    expect(screen.queryByText("Chicken Tinga Tacos")).toBeNull();
-    expect(screen.getByText("Chicken Mole")).toBeInTheDocument();
+    // Select "Chicken Mole" — panel auto-closes on pick
+    await user.click(screen.getByRole("button", { name: /select chicken mole/i }));
     expect(screen.queryByTestId("swap-panel")).toBeNull();
+
+    // Card now shows override "Chicken Mole"; original "Chicken Tinga Tacos" is gone
+    expect(screen.getByText("Chicken Mole")).toBeInTheDocument();
+    expect(screen.queryByText("Chicken Tinga Tacos")).toBeNull();
   });
 
   it("test_recipes_screen_swap_lang_toggle_updates_card_and_panel", async () => {
@@ -845,7 +851,8 @@ describe("RecipesScreen — swap interactions", () => {
     const zhButton = screen.getByRole("button", { name: /^中$/ });
     await user.click(zhButton);
 
-    expect(screen.getByText("雞肉墨西哥捲")).toBeInTheDocument();
+    // "雞肉墨西哥捲" appears in both the RecipeCard (original) and SwapPanel (original option)
+    expect(screen.getAllByText("雞肉墨西哥捲").length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("雞肉莫雷")).toBeInTheDocument();
     expect(screen.getByText("雞肉乳酪餅")).toBeInTheDocument();
   });
@@ -911,9 +918,9 @@ describe("RecipesScreen — swap interactions", () => {
 
     const swapButtons = screen.getAllByRole("button", { name: /try another/i });
     await user.click(swapButtons[1]);
-    const pickBtn = screen.getByRole("button", { name: /pick chicken mole/i });
-    await user.click(pickBtn);
-    expect(screen.getByText("Chicken Mole")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /select chicken mole/i }));
+    // Chicken Mole is now in both card and panel
+    expect(screen.getAllByText("Chicken Mole").length).toBeGreaterThanOrEqual(1);
 
     await user.click(screen.getByTestId("advance-phase"));
 
@@ -940,5 +947,132 @@ describe("RecipesScreen — swap interactions", () => {
     await user.keyboard("{Escape}");
 
     expect(screen.queryByTestId("swap-panel")).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T-Remove: remove a recipe from the list
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T-Remove: remove recipe", () => {
+  it("test_recipes_screen_remove_hides_recipe_from_list", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(
+      <RecipesWith
+        drive={{ kind: "complete", recipes: [recipe1, recipe2, recipe3] }}
+      />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    // All 3 cards visible initially
+    expect(screen.getByText("Garlic Shrimp Stir-Fry")).toBeInTheDocument();
+    expect(screen.getByText("Chicken Tinga Tacos")).toBeInTheDocument();
+    expect(screen.getByText("Summer Ratatouille")).toBeInTheDocument();
+
+    // Remove recipe1
+    await user.click(
+      screen.getByRole("button", { name: /remove garlic shrimp stir-fry/i })
+    );
+
+    // recipe1 gone; recipe2 and recipe3 remain
+    expect(screen.queryByText("Garlic Shrimp Stir-Fry")).toBeNull();
+    expect(screen.getByText("Chicken Tinga Tacos")).toBeInTheDocument();
+    expect(screen.getByText("Summer Ratatouille")).toBeInTheDocument();
+  });
+
+  it("test_recipes_screen_remove_two_keeps_cta_enabled", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(
+      <RecipesWith
+        drive={{ kind: "complete", recipes: [recipe1, recipe2] }}
+      />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    // Remove recipe1 — one recipe remains
+    await user.click(
+      screen.getByRole("button", { name: /remove garlic shrimp stir-fry/i })
+    );
+
+    // recipe2 still shown; CTA still enabled
+    expect(screen.getByText("Chicken Tinga Tacos")).toBeInTheDocument();
+    const cta = screen.getByRole("button", { name: /build list/i });
+    expect(cta).not.toBeDisabled();
+  });
+
+  it("test_recipes_screen_fresh_session_clears_removed_recipes", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    function HarnessRemove() {
+      const session = useSessionOptional();
+      const [phase, setPhase] = React.useState<1 | 2>(1);
+
+      useEffect(() => {
+        if (!session) return;
+        session.dispatch({ type: "start_loading" });
+        session.dispatch({ type: "start_streaming" });
+        session.dispatch({
+          type: "receive_event",
+          event: { event_type: "recipe_card", recipe: recipe1 },
+        });
+        session.dispatch({
+          type: "receive_event",
+          event: { event_type: "recipe_card", recipe: recipe2 },
+        });
+        session.dispatch({ type: "complete", status: "complete" });
+      }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+      useEffect(() => {
+        if (!session || phase !== 2) return;
+        session.dispatch({ type: "reset" });
+        session.dispatch({ type: "start_loading" });
+        session.dispatch({ type: "start_streaming" });
+        session.dispatch({
+          type: "receive_event",
+          event: {
+            event_type: "recipe_card",
+            recipe: makeRecipeSummary({ id: "r_fresh2", name: "Fresh Bowl" }),
+          },
+        });
+        session.dispatch({ type: "complete", status: "complete" });
+      }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+
+      return (
+        <>
+          <button
+            type="button"
+            data-testid="advance-phase"
+            onClick={() => setPhase(2)}
+          >
+            advance
+          </button>
+          <RecipesScreen />
+        </>
+      );
+    }
+
+    renderWithSession(<HarnessRemove />, {
+      chatService: mock.service,
+      initialPath: "/recipes",
+    });
+
+    // Remove recipe1
+    await user.click(
+      screen.getByRole("button", { name: /remove garlic shrimp stir-fry/i })
+    );
+    expect(screen.queryByText("Garlic Shrimp Stir-Fry")).toBeNull();
+
+    // Advance to fresh session
+    await user.click(screen.getByTestId("advance-phase"));
+
+    // Fresh Bowl appears; Garlic Shrimp Stir-Fry is gone (still no duplicate)
+    expect(screen.getByText("Fresh Bowl")).toBeInTheDocument();
+    expect(screen.queryByText("Garlic Shrimp Stir-Fry")).toBeNull();
+    expect(screen.queryByText("Chicken Tinga Tacos")).toBeNull();
   });
 });
