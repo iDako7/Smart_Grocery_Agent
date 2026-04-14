@@ -20,15 +20,20 @@ services:
       context: .
       dockerfile: src/backend/Dockerfile.dev
     volumes:
-      - ./src/backend:/app
-      - ./src/ai:/app/ai
+      - ./src/backend:/app/src/backend
+      - ./src/ai:/app/src/ai
       - ./contracts:/app/contracts
+      - backend_venv:/app/.venv
     ports:
       - "8000:8000"
     env_file: .env
+    environment:
+      # Override localhost URL from .env — inside the container, Postgres is reachable via the service name
+      DATABASE_URL: postgresql+asyncpg://sga:sga_dev@db:5432/sga
     depends_on:
       db:
         condition: service_healthy
 
 volumes:
   postgres_data:
+  backend_venv:
