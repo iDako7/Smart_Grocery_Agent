@@ -85,7 +85,7 @@ import { Routes, Route, MemoryRouter } from "react-router";
 
 import { RecipesScreen } from "@/screens/RecipesScreen";
 import { getRecipeDetail } from "@/services/api-client";
-import { __resetRecipeCacheForTests } from "@/components/recipe-info-sheet";
+import { resetRecipeCacheForTests } from "@/components/recipe-cache";
 import { renderWithSession, createMockChatService } from "@/test/test-utils";
 import { useSessionOptional } from "@/context/session-context";
 import * as sessionContextModule from "@/context/session-context";
@@ -526,7 +526,7 @@ describe("RecipesScreen — T9: Build list navigates to grocery", () => {
 
 describe("RecipesScreen — T10: info button triggers getRecipeDetail fetch", () => {
   beforeEach(() => {
-    __resetRecipeCacheForTests();
+    resetRecipeCacheForTests();
     vi.mocked(getRecipeDetail).mockClear();
   });
 
@@ -679,7 +679,7 @@ describe("RecipesScreen — T13: error retry calls sendMessage('retry')", () => 
 
 describe("RecipesScreen — T14: info button fetches correct recipe id", () => {
   beforeEach(() => {
-    __resetRecipeCacheForTests();
+    resetRecipeCacheForTests();
     vi.mocked(getRecipeDetail).mockClear();
   });
 

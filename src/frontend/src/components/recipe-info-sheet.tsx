@@ -12,17 +12,7 @@ import {
 import { ErrorBanner } from "@/components/error-banner";
 import { getRecipeDetail, RecipeNotFoundError } from "@/services/api-client";
 import type { RecipeDetail } from "@/types/tools";
-
-// ---------------------------------------------------------------------------
-// Module-level cache (persists across renders, cleared by test seam below)
-// ---------------------------------------------------------------------------
-
-const _recipeCache = new Map<string, RecipeDetail>();
-
-/** Test seam — resets the module-level cache between test cases. */
-export function __resetRecipeCacheForTests(): void {
-  _recipeCache.clear();
-}
+import { recipeCache } from "@/components/recipe-cache";
 
 // ---------------------------------------------------------------------------
 // Internal state machine
@@ -86,8 +76,8 @@ export function RecipeInfoSheet({
 
   const fetchDetail = useCallback((id: string) => {
     // Cache hit — instant ready, no network call
-    if (_recipeCache.has(id)) {
-      setState({ status: "ready", detail: _recipeCache.get(id)! });
+    if (recipeCache.has(id)) {
+      setState({ status: "ready", detail: recipeCache.get(id)! });
       return;
     }
 
@@ -97,7 +87,7 @@ export function RecipeInfoSheet({
     getRecipeDetail(id).then(
       (detail) => {
         if (currentIdRef.current !== id) return; // stale
-        _recipeCache.set(id, detail);
+        recipeCache.set(id, detail);
         setState({ status: "ready", detail });
       },
       (err: unknown) => {

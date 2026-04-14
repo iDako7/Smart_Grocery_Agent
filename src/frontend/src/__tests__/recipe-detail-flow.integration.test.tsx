@@ -17,10 +17,10 @@ import React, { useEffect } from "react";
 
 // ---------------------------------------------------------------------------
 // Reset the module-level recipe cache before every test so tests are
-// independent.  The seam is exported from the production component.
+// independent.  The seam is exported from recipe-cache.ts.
 // ---------------------------------------------------------------------------
 
-import { __resetRecipeCacheForTests } from "@/components/recipe-info-sheet";
+import { resetRecipeCacheForTests } from "@/components/recipe-cache";
 
 // ---------------------------------------------------------------------------
 // Import AFTER cache-reset import so mock hoisting doesn't break things.
@@ -132,7 +132,7 @@ function buildFetchMock() {
 // ---------------------------------------------------------------------------
 
 beforeEach(async () => {
-  __resetRecipeCacheForTests();
+  resetRecipeCacheForTests();
   // Also reset the api-client auth token cache so each test starts clean.
   const { resetAuthToken } = await import("@/services/api-client");
   resetAuthToken();

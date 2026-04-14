@@ -34,10 +34,8 @@ vi.mock("@/services/api-client", () => ({
 // Import AFTER mocks are hoisted
 // ---------------------------------------------------------------------------
 
-import {
-  RecipeInfoSheet,
-  __resetRecipeCacheForTests,
-} from "@/components/recipe-info-sheet";
+import { RecipeInfoSheet } from "@/components/recipe-info-sheet";
+import { resetRecipeCacheForTests } from "@/components/recipe-cache";
 import { getRecipeDetail, RecipeNotFoundError } from "@/services/api-client";
 import type { RecipeDetail } from "@/types/tools";
 
@@ -101,7 +99,7 @@ function renderSheet(
 
 beforeEach(() => {
   vi.clearAllMocks();
-  __resetRecipeCacheForTests();
+  resetRecipeCacheForTests();
 });
 
 // ---------------------------------------------------------------------------
