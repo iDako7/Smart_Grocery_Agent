@@ -256,3 +256,23 @@ export async function getSavedGroceryList(id: string): Promise<SavedGroceryList>
   }
   return response.json() as Promise<SavedGroceryList>;
 }
+
+export async function updateSavedGroceryList(
+  id: string,
+  payload: { name?: string; stores?: SavedGroceryList["stores"] },
+): Promise<SavedGroceryList> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/saved/grocery-lists/${id}`;
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to update saved grocery list: ${response.status}`);
+  }
+  return response.json() as Promise<SavedGroceryList>;
+}
