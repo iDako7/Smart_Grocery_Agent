@@ -2,7 +2,7 @@
 // Displays RecipeDetail fetched via getRecipeDetail() with loading / ready / error / not_found states.
 // In-memory cache at module scope: same recipeId → instant render, no refetch.
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   Sheet,
@@ -84,7 +84,7 @@ export function RecipeInfoSheet({
   // Track current recipeId to avoid stale fetch updates
   const currentIdRef = useRef<string | null>(null);
 
-  function fetchDetail(id: string) {
+  const fetchDetail = useCallback((id: string) => {
     // Cache hit — instant ready, no network call
     if (_recipeCache.has(id)) {
       setState({ status: "ready", detail: _recipeCache.get(id)! });
@@ -113,12 +113,12 @@ export function RecipeInfoSheet({
         }
       }
     );
-  }
+  }, []);
 
   useEffect(() => {
     if (!open || recipeId === null) return;
     fetchDetail(recipeId);
-  }, [open, recipeId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [open, recipeId, fetchDetail]);
 
   // Reset to idle when closed
   useEffect(() => {
