@@ -24,6 +24,7 @@ interface RecipeCardProps {
   excludedIngredients?: Set<string>;
   onRemove?: () => void;
   canRemove?: boolean;
+  swapDisabled?: boolean;
 }
 
 export function RecipeCard({
@@ -42,6 +43,7 @@ export function RecipeCard({
   excludedIngredients,
   onRemove,
   canRemove = false,
+  swapDisabled = false,
 }: RecipeCardProps) {
   const ordinal = ORDINALS[index] ?? String(index + 1);
 
@@ -156,7 +158,15 @@ export function RecipeCard({
           <button
             type="button"
             onClick={onSwap}
-            className="inline-flex items-center gap-1.5 px-3 py-[6px] rounded-full bg-cream-deep text-ink-2 text-[10.5px] font-semibold border-none cursor-pointer hover:bg-cream transition-colors min-h-[30px]"
+            disabled={swapDisabled}
+            aria-disabled={swapDisabled || undefined}
+            title={swapDisabled ? "Coming soon" : undefined}
+            className={cn(
+              "inline-flex items-center gap-1.5 px-3 py-[6px] rounded-full bg-cream-deep text-ink-2 text-[10.5px] font-semibold border-none min-h-[30px]",
+              swapDisabled
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer hover:bg-cream transition-colors"
+            )}
           >
             <RefreshCw size={12} />
             Try another

@@ -1,26 +1,28 @@
 name: CI — E2E
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/ci-e2e.yml"
-      - "src/backend/**"
-      - "src/ai/**"
-      - "src/frontend/**"
-      - "contracts/**"
-      - "data/**"
-      - "scripts/**"
-  pull_request:
-    branches: [main]
-    paths:
-      - ".github/workflows/ci-e2e.yml"
-      - "src/backend/**"
-      - "src/ai/**"
-      - "src/frontend/**"
-      - "contracts/**"
-      - "data/**"
-      - "scripts/**"
+  # TEMPORARILY DISABLED — restore push/pull_request triggers later.
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+  #   paths:
+  #     - ".github/workflows/ci-e2e.yml"
+  #     - "src/backend/**"
+  #     - "src/ai/**"
+  #     - "src/frontend/**"
+  #     - "contracts/**"
+  #     - "data/**"
+  #     - "scripts/**"
+  # pull_request:
+  #   branches: [main]
+  #   paths:
+  #     - ".github/workflows/ci-e2e.yml"
+  #     - "src/backend/**"
+  #     - "src/ai/**"
+  #     - "src/frontend/**"
+  #     - "contracts/**"
+  #     - "data/**"
+  #     - "scripts/**"
 
 concurrency:
   group: e2e-${{ github.ref }}

@@ -523,7 +523,7 @@ describe("useScreenState — data accumulation via receive_event", () => {
     act(() =>
       result.current.dispatch({
         type: "receive_event",
-        event: { event_type: "done", status: "complete", reason: null },
+        event: { event_type: "done", status: "complete", reason: null, error_category: null },
       })
     );
     // State stays streaming — done events don't auto-complete via receive_event

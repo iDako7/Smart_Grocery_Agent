@@ -348,11 +348,12 @@ describe("sse.ts — event types", () => {
   });
 
   it("DoneEvent has event_type='done', status, and nullable reason", () => {
-    const complete: DoneEvent = { event_type: "done", status: "complete", reason: null };
+    const complete: DoneEvent = { event_type: "done", status: "complete", reason: null, error_category: null };
     const partial: DoneEvent = {
       event_type: "done",
       status: "partial",
       reason: "max_iterations",
+      error_category: null,
     };
     expect(complete.status).toBe("complete");
     expect(partial.reason).toBe("max_iterations");
@@ -362,7 +363,7 @@ describe("sse.ts — event types", () => {
     const events: SSEEvent[] = [
       { event_type: "thinking", message: "..." },
       { event_type: "explanation", text: "..." },
-      { event_type: "done", status: "complete", reason: null },
+      { event_type: "done", status: "complete", reason: null, error_category: null },
     ];
     expect(events.map((e) => e.event_type)).toEqual([
       "thinking",

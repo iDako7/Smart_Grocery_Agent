@@ -477,6 +477,23 @@ describe("RecipeCard", () => {
     render(<RecipeCard {...defaultProps} isSwapping={true} />);
     expect(screen.getByLabelText("swapping indicator")).toBeInTheDocument();
   });
+
+  it("disables Try another when swapDisabled=true and does not fire onSwap on click", async () => {
+    const user = userEvent.setup();
+    const onSwap = vi.fn();
+    render(<RecipeCard {...defaultProps} onSwap={onSwap} swapDisabled={true} />);
+    const button = screen.getByRole("button", { name: /try another/i });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute("title", "Coming soon");
+    await user.click(button);
+    expect(onSwap).not.toHaveBeenCalled();
+  });
+
+  it("swapping state wins over swapDisabled", () => {
+    render(<RecipeCard {...defaultProps} swapDisabled={true} isSwapping={true} />);
+    expect(screen.getByLabelText("swapping indicator")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /try another/i })).not.toBeInTheDocument();
+  });
 });
 
 // ---------------------------------------------------------------------------
