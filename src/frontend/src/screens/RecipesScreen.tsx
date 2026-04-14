@@ -29,6 +29,8 @@ import { ErrorBanner } from "@/components/error-banner";
 import { ConfirmResetDialog } from "@/components/confirm-reset-dialog";
 import { useSessionOptional } from "@/context/session-context";
 import { partialBannerMessage } from "@/lib/partial-message";
+import { postGroceryList } from "@/services/api-client";
+import { collectBuyItems } from "@/services/grocery-helpers";
 import type { RecipeSummary, EffortLevel } from "@/types/tools";
 
 // ---------------------------------------------------------------------------
@@ -79,8 +81,10 @@ export function RecipesScreen() {
   const session = useSessionOptional();
 
   const navigateToScreen = session?.navigateToScreen;
-  const sendMessage = session?.sendMessage ?? (() => {});
   const resetSession = session?.resetSession;
+  const sendMessage = session?.sendMessage ?? (() => {});
+  const dispatch = session?.dispatch;
+  const sessionId = session?.sessionId ?? null;
   const screenData = session?.screenData;
   const screenState = session?.screenState ?? "idle";
   const isComplete = session?.isComplete ?? false;
@@ -93,6 +97,8 @@ export function RecipesScreen() {
   const [swapOpenFor, setSwapOpenFor] = useState<string | null>(null);
   const [overrides, setOverrides] = useState<Record<string, RecipeSummary>>({});
   const [removedIds, setRemovedIds] = useState<Set<string>>(new Set());
+  const [isBuilding, setIsBuilding] = useState(false);
+  const [buildError, setBuildError] = useState<string | null>(null);
 
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const prevResetOpen = useRef(false);
@@ -122,10 +128,27 @@ export function RecipesScreen() {
     sendMessage("retry");
   }
 
-  function handleBuildList() {
-    navigateToScreen?.("grocery");
-    sendMessage("Build my grocery list.", "grocery");
-    navigate("/grocery");
+  async function handleBuildList() {
+    if (!sessionId || !dispatch) return;
+    setIsBuilding(true);
+    setBuildError(null);
+    try {
+      const items = collectBuyItems(
+        displayedRecipes.map((r) => {
+          const shown = overrides[r.id] ?? r;
+          return { name: shown.name, id: shown.id, ingredients: recipeToIngredientTags(shown) };
+        }),
+        new Map()
+      );
+      const stores = await postGroceryList(sessionId, items);
+      navigateToScreen?.("grocery");
+      dispatch({ type: "set_grocery_list", stores });
+      navigate("/grocery");
+    } catch {
+      setBuildError("Couldn't build your grocery list. Please try again.");
+    } finally {
+      setIsBuilding(false);
+    }
   }
 
   const isLoading = screenState === "loading";
@@ -277,20 +300,27 @@ export function RecipesScreen() {
         </div>
       )}
 
+      {/* Build list error banner */}
+      {buildError && (
+        <div className="px-5 pt-3">
+          <ErrorBanner message={buildError} />
+        </div>
+      )}
+
       {/* CTA — visible when there are displayed recipes */}
       {showCta && (
         <div className="px-5 py-3 flex justify-end">
           <button
             type="button"
             onClick={handleBuildList}
-            disabled={!ctaEnabled}
+            disabled={!ctaEnabled || isBuilding}
             className={`px-6 py-[11px] border-none rounded-full font-sans text-[13px] font-semibold ${
-              ctaEnabled
+              ctaEnabled && !isBuilding
                 ? "bg-shoyu text-cream cursor-pointer"
                 : "bg-cream-deep text-ink-3 cursor-not-allowed opacity-60"
             }`}
           >
-            Build list →
+            {isBuilding ? "Building…" : "Build list →"}
           </button>
         </div>
       )}
