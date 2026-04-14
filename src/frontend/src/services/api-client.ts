@@ -13,6 +13,7 @@ import type {
   SavedGroceryListSummary,
 } from "@/types/api";
 import type { GroceryStore } from "@/types/sse";
+import type { RecipeDetail } from "@/types/tools";
 
 // ---------------------------------------------------------------------------
 // Base URL
@@ -213,6 +214,32 @@ export async function getSavedRecipe(id: string): Promise<SavedRecipe> {
     throw new Error(`Failed to get saved recipe: ${response.status}`);
   }
   return response.json() as Promise<SavedRecipe>;
+}
+
+// ---------------------------------------------------------------------------
+// Recipe detail — GET /recipe/{id}
+// ---------------------------------------------------------------------------
+
+export class RecipeNotFoundError extends Error {
+  constructor(public recipeId: string) {
+    super(`Recipe not found: ${recipeId}`);
+    this.name = "RecipeNotFoundError";
+  }
+}
+
+export async function getRecipeDetail(recipeId: string): Promise<RecipeDetail> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/recipe/${encodeURIComponent(recipeId)}`;
+  const response = await fetch(url, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (response.status === 404) {
+    throw new RecipeNotFoundError(recipeId);
+  }
+  if (!response.ok) {
+    throw new Error(`Failed to get recipe detail: ${response.status}`);
+  }
+  return response.json() as Promise<RecipeDetail>;
 }
 
 export async function getSavedGroceryList(id: string): Promise<SavedGroceryList> {

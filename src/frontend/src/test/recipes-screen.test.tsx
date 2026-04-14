@@ -6,6 +6,19 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { screen, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
+// Mock api-client so RecipeInfoSheet (child of RecipesScreen) doesn't hit network.
+// Phase 3 owns RecipeInfoSheet's full coverage — here we only assert call-through.
+vi.mock("@/services/api-client", async () => {
+  const actual =
+    await vi.importActual<typeof import("@/services/api-client")>(
+      "@/services/api-client"
+    );
+  return {
+    ...actual,
+    getRecipeDetail: vi.fn(() => new Promise(() => {})), // pending forever
+  };
+});
+
 // Base-ui mock for alert-dialog (matches clarify-screen.test.tsx pattern).
 vi.mock("@base-ui/react/alert-dialog", async () => {
   const React = await import("react");
@@ -71,6 +84,8 @@ import React, { useEffect } from "react";
 import { Routes, Route, MemoryRouter } from "react-router";
 
 import { RecipesScreen } from "@/screens/RecipesScreen";
+import { getRecipeDetail } from "@/services/api-client";
+import { __resetRecipeCacheForTests } from "@/components/recipe-info-sheet";
 import { renderWithSession, createMockChatService } from "@/test/test-utils";
 import { useSessionOptional } from "@/context/session-context";
 import * as sessionContextModule from "@/context/session-context";
@@ -509,8 +524,13 @@ describe("RecipesScreen — T9: Build list navigates to grocery", () => {
 // T10: click info on card 2 → InfoSheet opens with card 2 fields
 // ---------------------------------------------------------------------------
 
-describe("RecipesScreen — T10: info button opens InfoSheet with summary data", () => {
-  it("test_recipes_screen_info_sheet_opens_with_card_data", async () => {
+describe("RecipesScreen — T10: info button triggers getRecipeDetail fetch", () => {
+  beforeEach(() => {
+    __resetRecipeCacheForTests();
+    vi.mocked(getRecipeDetail).mockClear();
+  });
+
+  it("test_recipes_screen_info_button_calls_get_recipe_detail", async () => {
     const user = userEvent.setup();
     const mock = createMockChatService();
 
@@ -527,18 +547,10 @@ describe("RecipesScreen — T10: info button opens InfoSheet with summary data",
     });
     await user.click(infoButton);
 
-    // InfoSheet shows recipe2 data: name, flavor tags, synthesized description
-    // Name appears in both the card and the sheet — use getAllByText for "Chicken Tinga Tacos"
-    expect(screen.getAllByText("Chicken Tinga Tacos").length).toBeGreaterThanOrEqual(1);
-
-    // Flavor tags from recipe2
-    expect(screen.getAllByText("Smoky").length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText("Spicy").length).toBeGreaterThanOrEqual(1);
-
-    // Synthesized description contains cuisine, cooking_method, effort_level, serves
-    expect(
-      screen.getByText(/Mexican.*Braise.*medium.*serves 2/i)
-    ).toBeInTheDocument();
+    // RecipeInfoSheet (Phase 3 component) fetches full detail by id.
+    // Phase 3 owns assertions about rendered content — here we only verify
+    // the call-through with the correct recipe id.
+    expect(getRecipeDetail).toHaveBeenCalledWith("r_tacos");
   });
 });
 
@@ -665,15 +677,18 @@ describe("RecipesScreen — T13: error retry calls sendMessage('retry')", () => 
 // T14: InfoSheet close button clears infoRecipe
 // ---------------------------------------------------------------------------
 
-describe("RecipesScreen — T14: InfoSheet close clears infoRecipe", () => {
-  it("test_recipes_screen_info_sheet_close_clears", async () => {
+describe("RecipesScreen — T14: info button fetches correct recipe id", () => {
+  beforeEach(() => {
+    __resetRecipeCacheForTests();
+    vi.mocked(getRecipeDetail).mockClear();
+  });
+
+  it("test_recipes_screen_info_button_fetches_recipe1_id", async () => {
     const user = userEvent.setup();
     const mock = createMockChatService();
 
     renderWithSession(
-      <RecipesWith
-        drive={{ kind: "complete", recipes: [recipe1] }}
-      />,
+      <RecipesWith drive={{ kind: "complete", recipes: [recipe1] }} />,
       { chatService: mock.service, initialPath: "/recipes" }
     );
 
@@ -683,14 +698,9 @@ describe("RecipesScreen — T14: InfoSheet close clears infoRecipe", () => {
     });
     await user.click(infoButton);
 
-    // Close button inside InfoSheet
-    const closeBtn = screen.getByRole("button", { name: /^close$/i });
-    await user.click(closeBtn);
-
-    // Description text from sheet should no longer be visible
-    expect(
-      screen.queryByText(/Chinese.*Stir-fry.*quick.*serves 2/i)
-    ).toBeNull();
+    // RecipeInfoSheet (Phase 3) handles rendering/close — here we assert the
+    // wiring: the recipe id flows through to getRecipeDetail.
+    expect(getRecipeDetail).toHaveBeenCalledWith("r_shrimp");
   });
 });
 

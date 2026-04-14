@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from src.backend.api.auth import router as auth_router
 from src.backend.api.grocery import router as grocery_router
+from src.backend.api.recipes import router as recipes_router
 from src.backend.api.saved import router as saved_router
 from src.backend.api.sessions import router as sessions_router
 from starlette.middleware.cors import CORSMiddleware
@@ -62,6 +63,7 @@ app.include_router(auth_router)
 app.include_router(sessions_router)
 app.include_router(grocery_router)
 app.include_router(saved_router)
+app.include_router(recipes_router)
 
 
 @app.get("/health")
