@@ -240,7 +240,7 @@ export function ClarifyScreen() {
             {isComplete && screenData?.completionStatus === "partial" && (
               <div className="px-5 pt-3">
                 <ErrorBanner
-                  message="Some results may be incomplete"
+                  message="The assistant hit its thinking limit. Some results may be incomplete."
                   variant="partial"
                 />
               </div>

@@ -68,21 +68,21 @@ describe("ErrorBanner — no retry button when onRetry not provided", () => {
 describe("ErrorBanner — partial variant styling", () => {
   it("uses apricot background for partial variant", () => {
     const { container } = render(
-      <ErrorBanner message="Some results may be incomplete" variant="partial" />
+      <ErrorBanner message="The assistant hit its thinking limit. Some results may be incomplete." variant="partial" />
     );
     expect(container.firstChild).toHaveClass("bg-apricot");
   });
 
   it("does not use persimmon-soft for partial variant", () => {
     const { container } = render(
-      <ErrorBanner message="Some results may be incomplete" variant="partial" />
+      <ErrorBanner message="The assistant hit its thinking limit. Some results may be incomplete." variant="partial" />
     );
     expect(container.firstChild).not.toHaveClass("bg-persimmon-soft");
   });
 
   it("partial variant uses ink text color", () => {
     const { container } = render(
-      <ErrorBanner message="Some results may be incomplete" variant="partial" />
+      <ErrorBanner message="The assistant hit its thinking limit. Some results may be incomplete." variant="partial" />
     );
     expect(container.firstChild).toHaveClass("text-ink");
   });
