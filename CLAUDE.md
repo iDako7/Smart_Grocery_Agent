@@ -83,6 +83,8 @@ Three worktrees develop in parallel, each with its own `CLAUDE.md` defining scop
 
 **Worktree policy:** Prefer `claude --worktree <issue-name>` for any task that will produce a PR. Work on `main` only for read-only exploration, trivial one-line fixes, or contract updates that all worktrees need immediately.
 
+**GitHub:** Prefer `gh` CLI over GitHub MCP for all GitHub operations.
+
 ## Key Design Decisions
 
 - **PCV gap analysis** (Protein/Carb/Veggie) is the reasoning backbone — deterministic lookup, not LLM judgment. Sauce tracked internally but not shown in analysis UI.
@@ -100,10 +102,6 @@ Three worktrees develop in parallel, each with its own `CLAUDE.md` defining scop
 - `docs/00-specs/architecture-spec-v2.md` — system architecture, API contract, deployment
 - `docs/00-specs/ai-layer-architecture-v2.md` — agent internals, ADRs (7 decisions documented)
 - `docs/01-plans/phase-2-implementation-plan.md` — phase plan, worktree protocol, sync points
-
-## GitHub Operations
-
-Prefer `mcp__github__*` tools over `gh` CLI for GitHub API calls — `gh` may hit deprecated GraphQL endpoints.
 
 ## Running Locally
 
