@@ -925,9 +925,10 @@ describe("useSession — sendMessage with explicit targetScreen", () => {
     const wrapper = makeWrapper(serviceSpy);
     const { result } = renderHook(() => useSession(), { wrapper });
 
-    // currentScreen stays "clarify" (not yet committed), but we pass "recipes"
+    // currentScreen is committed as "clarify" (separate act → ref is synced).
+    // Explicit targetScreen "recipes" must still win over the ref value.
     act(() => {
-      result.current.navigateToScreen("clarify"); // set base, then don't commit "recipes"
+      result.current.navigateToScreen("clarify");
     });
     act(() => {
       result.current.sendMessage("Looks good, show recipes.", "recipes");

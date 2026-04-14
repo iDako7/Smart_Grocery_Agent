@@ -465,9 +465,11 @@ describe("RecipesScreen — T8: partial completion banner", () => {
 describe("RecipesScreen — T9: Build list navigates to grocery", () => {
   let spy: ReturnType<typeof vi.spyOn>;
   const navigateToScreenSpy = vi.fn();
+  const sendMessageSpy = vi.fn();
 
   beforeEach(() => {
     navigateToScreenSpy.mockClear();
+    sendMessageSpy.mockClear();
     spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
       screenState: "complete",
       screenData: {
@@ -482,7 +484,7 @@ describe("RecipesScreen — T9: Build list navigates to grocery", () => {
       sessionId: null,
       conversationHistory: [],
       currentScreen: "recipes",
-      sendMessage: vi.fn(),
+      sendMessage: sendMessageSpy,
       navigateToScreen: navigateToScreenSpy,
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
@@ -514,6 +516,9 @@ describe("RecipesScreen — T9: Build list navigates to grocery", () => {
 
     // navigateToScreen called with "grocery"
     expect(navigateToScreenSpy).toHaveBeenCalledWith("grocery");
+
+    // sendMessage called with the correct message and explicit targetScreen
+    expect(sendMessageSpy).toHaveBeenCalledWith("Build my grocery list.", "grocery");
 
     // Navigated to /grocery route
     expect(screen.getByTestId("screen-grocery")).toBeInTheDocument();
