@@ -1,32 +1,90 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useLocation, useParams } from "react-router";
 import { ChecklistRow } from "@/components/checklist-row";
 import { StoreSection } from "@/components/store-section";
 import { Toast } from "@/components/toast";
-import { getSavedGroceryList } from "@/services/api-client";
+import { getSavedGroceryList, updateSavedGroceryList } from "@/services/api-client";
 import type { SavedGroceryList } from "@/types/api";
+import type { GroceryStore, GroceryDepartment, GroceryItem } from "@/types/sse";
 
-type ListItem = {
-  id: string;
-  name: string;
-  subtitle: string;
-  store: "costco" | "market";
-};
+type StoreKind = "costco" | "market";
 
-function mapStoreToItems(list: SavedGroceryList): ListItem[] {
-  return list.stores.flatMap((store) =>
-    store.departments.flatMap((dept) =>
-      dept.items.map((item) => ({
-        id: item.id,
-        name: item.name,
-        subtitle: item.amount,
-        store: store.store_name.toLowerCase().includes("costco")
-          ? ("costco" as const)
-          : ("market" as const),
-      }))
-    )
-  );
+function storeKind(storeName: string): StoreKind {
+  return storeName.toLowerCase().includes("costco") ? "costco" : "market";
+}
+
+function flattenItems(
+  list: SavedGroceryList,
+  kind: StoreKind,
+): Array<{ item: GroceryItem }> {
+  const out: Array<{ item: GroceryItem }> = [];
+  for (const store of list.stores) {
+    if (storeKind(store.store_name) !== kind) continue;
+    for (const dept of store.departments) {
+      for (const item of dept.items) {
+        out.push({ item });
+      }
+    }
+  }
+  return out;
+}
+
+function countItems(list: SavedGroceryList): number {
+  let n = 0;
+  for (const s of list.stores) for (const d of s.departments) n += d.items.length;
+  return n;
+}
+
+function addItemToStores(
+  stores: GroceryStore[],
+  kind: StoreKind,
+  newItem: GroceryItem,
+): GroceryStore[] {
+  const idx = stores.findIndex((s) => storeKind(s.store_name) === kind);
+  if (idx === -1) {
+    const newStore: GroceryStore = {
+      store_name: kind === "costco" ? "Costco" : "Market",
+      departments: [{ name: "Other", items: [newItem] }],
+    };
+    return [...stores, newStore];
+  }
+  const store = stores[idx]!;
+  let newDepartments: GroceryDepartment[];
+  if (store.departments.length === 0) {
+    newDepartments = [{ name: "Other", items: [newItem] }];
+  } else {
+    newDepartments = store.departments.map((d, i) =>
+      i === 0 ? { ...d, items: [...d.items, newItem] } : d,
+    );
+  }
+  const next = [...stores];
+  next[idx] = { ...store, departments: newDepartments };
+  return next;
+}
+
+function removeItemFromStores(stores: GroceryStore[], itemId: string): GroceryStore[] {
+  return stores.map((s) => ({
+    ...s,
+    departments: s.departments.map((d) => ({
+      ...d,
+      items: d.items.filter((it) => it.id !== itemId),
+    })),
+  }));
+}
+
+function updateItemInStores(
+  stores: GroceryStore[],
+  itemId: string,
+  patch: Partial<GroceryItem>,
+): GroceryStore[] {
+  return stores.map((s) => ({
+    ...s,
+    departments: s.departments.map((d) => ({
+      ...d,
+      items: d.items.map((it) => (it.id === itemId ? { ...it, ...patch } : it)),
+    })),
+  }));
 }
 
 export function SavedGroceryListScreen() {
@@ -34,14 +92,23 @@ export function SavedGroceryListScreen() {
   const location = useLocation();
   const { id } = useParams<{ id: string }>();
 
+  // `list` is the source of truth for rendering. Server round-trips mutate it.
   const [list, setList] = useState<SavedGroceryList | null>(null);
   const [loading, setLoading] = useState(true);
-  const [items, setItems] = useState<ListItem[]>([]);
+  // Checked state is local-only — not persisted to the backend.
   const [checked, setChecked] = useState<Set<string>>(new Set());
   const [addCostco, setAddCostco] = useState("");
   const [addMarket, setAddMarket] = useState("");
   const [copyCount, setCopyCount] = useState(0);
   const [copyFailed, setCopyFailed] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [errorNonce, setErrorNonce] = useState(0);
+  const [pending, setPending] = useState(false);
+
+  // Debounce: coalesce rapid mutations into one PUT.
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Snapshot of the most recent server-confirmed list; revert target on error.
+  const lastCommittedRef = useRef<SavedGroceryList | null>(null);
 
   useEffect(() => {
     if (!id) return;
@@ -49,45 +116,116 @@ export function SavedGroceryListScreen() {
     getSavedGroceryList(id)
       .then((data) => {
         setList(data);
-        setItems(mapStoreToItems(data));
+        lastCommittedRef.current = data;
       })
       .catch(() => setList(null))
       .finally(() => setLoading(false));
   }, [id]);
 
+  useEffect(() => {
+    return () => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+    };
+  }, []);
+
+  const schedulePersist = useCallback(
+    (nextList: SavedGroceryList) => {
+      if (!id) return;
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+      debounceTimer.current = setTimeout(() => {
+        debounceTimer.current = null;
+        setPending(true);
+        updateSavedGroceryList(id, { stores: nextList.stores })
+          .then((updated) => {
+            setList(updated);
+            lastCommittedRef.current = updated;
+          })
+          .catch((err: unknown) => {
+            // Revert to last server-confirmed snapshot.
+            if (lastCommittedRef.current) {
+              setList(lastCommittedRef.current);
+            }
+            const message = err instanceof Error ? err.message : "Update failed";
+            setErrorMsg(message);
+            setErrorNonce((n) => n + 1);
+          })
+          .finally(() => setPending(false));
+      }, 300);
+    },
+    [id],
+  );
+
+  function mutate(nextList: SavedGroceryList) {
+    setList(nextList);
+    schedulePersist(nextList);
+  }
+
   function handleToggle(itemId: string) {
+    // Toggle is local-only — intentionally no PUT.
     setChecked((prev) => {
       const next = new Set(prev);
-      if (next.has(itemId)) {
-        next.delete(itemId);
-      } else {
-        next.add(itemId);
-      }
+      if (next.has(itemId)) next.delete(itemId);
+      else next.add(itemId);
       return next;
     });
   }
 
   function handleRemove(itemId: string) {
-    setItems((prev) => prev.filter((i) => i.id !== itemId));
+    if (!list) return;
+    const nextList: SavedGroceryList = {
+      ...list,
+      stores: removeItemFromStores(list.stores, itemId),
+    };
     setChecked((prev) => {
+      if (!prev.has(itemId)) return prev;
       const next = new Set(prev);
       next.delete(itemId);
       return next;
     });
+    mutate(nextList);
+  }
+
+  function handleAdd(kind: StoreKind, value: string) {
+    if (!list) return;
+    const val = value.trim();
+    if (!val) return;
+    const newItem: GroceryItem = {
+      id: crypto.randomUUID(),
+      name: val,
+      amount: "",
+      recipe_context: "",
+      checked: false,
+    };
+    const nextList: SavedGroceryList = {
+      ...list,
+      stores: addItemToStores(list.stores, kind, newItem),
+    };
+    mutate(nextList);
   }
 
   function handleAddCostco() {
-    const val = addCostco.trim();
-    if (!val) return;
-    setItems((prev) => [
-      ...prev,
-      { id: `costco-${crypto.randomUUID()}`, name: val, subtitle: "", store: "costco" },
-    ]);
+    handleAdd("costco", addCostco);
     setAddCostco("");
   }
 
+  function handleAddMarket() {
+    handleAdd("market", addMarket);
+    setAddMarket("");
+  }
+
+  function handleEdit(itemId: string, newName: string) {
+    if (!list) return;
+    const nextList: SavedGroceryList = {
+      ...list,
+      stores: updateItemInStores(list.stores, itemId, { name: newName }),
+    };
+    mutate(nextList);
+  }
+
   async function handleCopyToNotes() {
-    const text = items.map((item) => `[ ] ${item.name}`).join("\n");
+    if (!list) return;
+    const allItems = [...flattenItems(list, "costco"), ...flattenItems(list, "market")];
+    const text = allItems.map(({ item }) => `[ ] ${item.name}`).join("\n");
     try {
       await navigator.clipboard.writeText(text);
       setCopyFailed(false);
@@ -98,18 +236,12 @@ export function SavedGroceryListScreen() {
     }
   }
 
-  function handleAddMarket() {
-    const val = addMarket.trim();
-    if (!val) return;
-    setItems((prev) => [
-      ...prev,
-      { id: `market-${crypto.randomUUID()}`, name: val, subtitle: "", store: "market" },
-    ]);
-    setAddMarket("");
-  }
-
-  const costcoItems = items.filter((i) => i.store === "costco");
-  const marketItems = items.filter((i) => i.store === "market");
+  const costcoItems = list ? flattenItems(list, "costco") : [];
+  const marketItems = list ? flattenItems(list, "market") : [];
+  const totalItems = list ? countItems(list) : 0;
+  const storeCount = list
+    ? new Set(list.stores.map((s) => storeKind(s.store_name))).size
+    : 0;
 
   return (
     <div data-testid="screen-saved-grocery-list" className="min-h-screen bg-cream flex flex-col">
@@ -127,6 +259,7 @@ export function SavedGroceryListScreen() {
       {/* Saved toast — only shown when arriving via the Save list button */}
       {(location.state as { justSaved?: boolean } | null)?.justSaved && <Toast message="Saved!" testId="saved-toast" />}
       {copyCount > 0 && <Toast key={copyCount} message={copyFailed ? "Copy failed" : "Copied!"} testId="copied-toast" />}
+      {errorMsg && <Toast key={`err-${errorNonce}`} message={errorMsg} testId="error-toast" />}
 
       {/* Loading state */}
       {loading && (
@@ -169,7 +302,12 @@ export function SavedGroceryListScreen() {
                 {list.name} <span className="text-persimmon">list</span>.
               </h1>
               <p className="mt-1.5 text-[13px] text-ink-2">
-                {items.length} items · {new Set(items.map((i) => i.store)).size} stores
+                {totalItems} items · {storeCount} stores
+                {pending && (
+                  <span data-testid="pending-indicator" className="ml-2 text-ink-3">
+                    · saving…
+                  </span>
+                )}
               </p>
             </div>
           </div>
@@ -187,15 +325,16 @@ export function SavedGroceryListScreen() {
 
           {/* Costco section */}
           <StoreSection storeName="COSTCO">
-            {costcoItems.map((item) => (
+            {costcoItems.map(({ item }) => (
               <ChecklistRow
                 key={item.id}
                 id={item.id}
                 name={item.name}
-                subtitle={item.subtitle || undefined}
+                subtitle={item.amount || undefined}
                 checked={checked.has(item.id)}
                 onToggle={handleToggle}
                 onRemove={handleRemove}
+                onEdit={handleEdit}
               />
             ))}
             {/* Add row inside Costco */}
@@ -220,15 +359,16 @@ export function SavedGroceryListScreen() {
 
           {/* Community Market section */}
           <StoreSection storeName="COMMUNITY MARKET">
-            {marketItems.map((item) => (
+            {marketItems.map(({ item }) => (
               <ChecklistRow
                 key={item.id}
                 id={item.id}
                 name={item.name}
-                subtitle={item.subtitle || undefined}
+                subtitle={item.amount || undefined}
                 checked={checked.has(item.id)}
                 onToggle={handleToggle}
                 onRemove={handleRemove}
+                onEdit={handleEdit}
               />
             ))}
             {/* Add row inside Market */}

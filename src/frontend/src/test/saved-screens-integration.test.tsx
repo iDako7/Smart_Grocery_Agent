@@ -21,6 +21,7 @@ vi.mock("@/services/api-client", () => ({
   getSavedMealPlan: vi.fn(),
   getSavedRecipe: vi.fn(),
   getSavedGroceryList: vi.fn(),
+  updateSavedGroceryList: vi.fn(),
 }));
 
 // Import the mocked functions for per-test configuration

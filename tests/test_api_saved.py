@@ -192,4 +192,72 @@ async def test_recipe_404(client):
 async def test_grocery_list_404(client):
     fake = uuid.uuid4()
     assert (await client.get(f"/saved/grocery-lists/{fake}")).status_code == 404
+    assert (await client.put(f"/saved/grocery-lists/{fake}", json={"name": "x"})).status_code == 404
     assert (await client.delete(f"/saved/grocery-lists/{fake}")).status_code == 404
+
+
+# ---- Grocery list PUT stores payload ----
+
+
+async def test_grocery_list_update_stores(client):
+    sid = await _create_session(client)
+    # Create
+    resp = await client.post("/saved/grocery-lists", json={"name": "Shopping trip", "session_id": sid})
+    assert resp.status_code == 201
+    gid = resp.json()["id"]
+
+    stores_payload = [
+        {
+            "store_name": "Costco",
+            "departments": [
+                {
+                    "name": "Produce",
+                    "items": [
+                        {"id": "i1", "name": "Spinach", "amount": "1 bag"},
+                        {"id": "i2", "name": "Carrots", "amount": "2 lb"},
+                    ],
+                },
+                {
+                    "name": "Meat",
+                    "items": [
+                        {"id": "i3", "name": "Pork belly", "amount": "1 lb"},
+                    ],
+                },
+            ],
+        },
+        {
+            "store_name": "T&T",
+            "departments": [
+                {
+                    "name": "Pantry",
+                    "items": [
+                        {"id": "i4", "name": "Soy sauce", "amount": "1 bottle"},
+                    ],
+                },
+            ],
+        },
+    ]
+
+    # PUT stores
+    resp = await client.put(f"/saved/grocery-lists/{gid}", json={"stores": stores_payload})
+    assert resp.status_code == 200
+    body = resp.json()
+    assert len(body["stores"]) == 2
+    assert body["stores"][0]["store_name"] == "Costco"
+    assert len(body["stores"][0]["departments"]) == 2
+    assert body["stores"][0]["departments"][0]["name"] == "Produce"
+    assert len(body["stores"][0]["departments"][0]["items"]) == 2
+    assert body["stores"][0]["departments"][0]["items"][0]["id"] == "i1"
+    assert body["stores"][0]["departments"][0]["items"][0]["name"] == "Spinach"
+    assert body["stores"][0]["departments"][0]["items"][0]["amount"] == "1 bag"
+    assert body["stores"][1]["store_name"] == "T&T"
+    assert body["stores"][1]["departments"][0]["items"][0]["name"] == "Soy sauce"
+
+    # GET persists
+    resp = await client.get(f"/saved/grocery-lists/{gid}")
+    assert resp.status_code == 200
+    persisted = resp.json()
+    assert len(persisted["stores"]) == 2
+    assert persisted["stores"][0]["store_name"] == "Costco"
+    assert persisted["stores"][0]["departments"][1]["items"][0]["id"] == "i3"
+    assert persisted["stores"][1]["departments"][0]["items"][0]["id"] == "i4"
