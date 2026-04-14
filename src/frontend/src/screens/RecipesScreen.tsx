@@ -24,7 +24,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { RecipeCard } from "@/components/recipe-card";
 import { SwapPanel } from "@/components/swap-panel";
-import { InfoSheet } from "@/components/info-sheet";
+import { RecipeInfoSheet } from "@/components/recipe-info-sheet";
 import { ErrorBanner } from "@/components/error-banner";
 import { ConfirmResetDialog } from "@/components/confirm-reset-dialog";
 import { useSessionOptional } from "@/context/session-context";
@@ -89,7 +89,7 @@ export function RecipesScreen() {
 
   const [lang, setLang] = useState<"en" | "zh">("en");
   const [resetOpen, setResetOpen] = useState(false);
-  const [infoRecipe, setInfoRecipe] = useState<RecipeSummary | null>(null);
+  const [infoRecipeId, setInfoRecipeId] = useState<string | null>(null);
   const [swapOpenFor, setSwapOpenFor] = useState<string | null>(null);
   const [overrides, setOverrides] = useState<Record<string, RecipeSummary>>({});
   const [removedIds, setRemovedIds] = useState<Set<string>>(new Set());
@@ -243,7 +243,7 @@ export function RecipesScreen() {
                   onSwap={() => setSwapOpenFor(r.id)}
                   isSwapping={swapOpenFor === r.id}
                   swapDisabled={r.alternatives.length === 0}
-                  onInfoClick={() => setInfoRecipe(shown)}
+                  onInfoClick={() => setInfoRecipeId(shown.id)}
                   onRemove={() => {
                     setRemovedIds((prev) => new Set(prev).add(r.id));
                     if (swapOpenFor === r.id) setSwapOpenFor(null);
@@ -258,7 +258,6 @@ export function RecipesScreen() {
                     lang={lang}
                     onSelect={(recipe) => {
                       if (recipe.id === r.id) {
-                        // User re-selected the original — clear override
                         setOverrides((prev) => {
                           const next = { ...prev };
                           delete next[r.id];
@@ -267,7 +266,6 @@ export function RecipesScreen() {
                       } else {
                         setOverrides((prev) => ({ ...prev, [r.id]: recipe }));
                       }
-                      // Panel closes via onClose, called by SwapPanel after onSelect
                     }}
                     onClose={() => setSwapOpenFor(null)}
                   />
@@ -309,23 +307,11 @@ export function RecipesScreen() {
       />
 
       {/* Info sheet */}
-      <InfoSheet
-        open={infoRecipe !== null}
-        onClose={() => setInfoRecipe(null)}
-        name={
-          infoRecipe
-            ? lang === "zh"
-              ? infoRecipe.name_zh
-              : infoRecipe.name
-            : ""
-        }
-        nameCjk={lang === "zh" ? undefined : infoRecipe?.name_zh}
-        flavorTags={infoRecipe?.flavor_tags ?? []}
-        description={
-          infoRecipe
-            ? `${infoRecipe.cuisine} · ${infoRecipe.cooking_method} · ${infoRecipe.effort_level} · serves ${infoRecipe.serves}`
-            : ""
-        }
+      <RecipeInfoSheet
+        open={infoRecipeId !== null}
+        recipeId={infoRecipeId}
+        lang={lang}
+        onClose={() => setInfoRecipeId(null)}
       />
     </div>
   );
