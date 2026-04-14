@@ -102,7 +102,7 @@ export function GroceryScreen() {
       const storeLines: string[] = [];
       for (const dept of store.departments) {
         for (const item of dept.items) {
-          if (!removedIds.has(item.id)) {
+          if (!removedIds.has(item.id) && !(buyPillActive && checkedIds.has(item.id))) {
             storeLines.push(`  - ${item.name} (${item.amount})`);
           }
         }
@@ -137,7 +137,19 @@ export function GroceryScreen() {
   // -------------------------------------------------------------------------
   if (screenState === "error") {
     return (
-      <div data-testid="screen-grocery" className="min-h-screen">
+      <div data-testid="screen-grocery" className="min-h-screen flex flex-col">
+        <div className="flex items-center justify-between px-3.5 pt-safe-top pb-3 border-b border-cream-deep">
+          <button
+            type="button"
+            aria-label="Go back"
+            onClick={() => navigate(-1)}
+            className="w-9 h-9 flex items-center justify-center rounded-full bg-cream-deep cursor-pointer"
+          >
+            <ArrowLeft size={16} />
+          </button>
+          <h1 className="text-[14px] font-semibold text-ink">Grocery List</h1>
+          <div className="w-9" />
+        </div>
         <div className="px-3.5 pt-4 pb-3">
           <ErrorBanner
             message={error ?? "Something went wrong. Please try again."}

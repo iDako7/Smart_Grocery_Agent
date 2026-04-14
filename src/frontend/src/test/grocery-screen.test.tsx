@@ -191,6 +191,7 @@ describe("GroceryScreen — T5: error shows banner and retry", () => {
     const user = userEvent.setup();
     render(<MemoryRouter initialEntries={["/grocery"]}><GroceryScreen /></MemoryRouter>);
     expect(screen.getByText("Something went wrong. Please try again.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /go back/i })).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: /try again/i }));
     expect(sendMessageSpy).toHaveBeenCalledWith("retry");
   });
@@ -336,5 +337,38 @@ describe("GroceryScreen — T10: checkbox toggles aria-checked", () => {
     expect(checkbox).toHaveAttribute("aria-checked", "false");
     await user.click(checkbox);
     expect(checkbox).toHaveAttribute("aria-checked", "true");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T11: buy-pill + copy excludes checked items from clipboard
+// ---------------------------------------------------------------------------
+
+describe("GroceryScreen — T11: copy respects buy-pill filter", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("test_grocery_screen_copy_excludes_checked_when_pill_active", async () => {
+    const user = userEvent.setup();
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal("navigator", { clipboard: { writeText } });
+
+    renderWithSession(
+      <GroceryWith drive={{ kind: "complete", stores: STORES }} />,
+      { chatService: createMockChatService().service, initialPath: "/grocery" }
+    );
+
+    // Check i1 (chicken breast)
+    await user.click(screen.getByRole("checkbox", { name: /toggle chicken breast/i }));
+    // Activate buy pill
+    await user.click(screen.getByRole("button", { name: /buy/i }));
+    // Copy — chicken breast should be absent, broccoli and olive oil present
+    await user.click(screen.getByRole("button", { name: /copy to notes/i }));
+    expect(writeText).toHaveBeenCalledTimes(1);
+    const written = writeText.mock.calls[0][0] as string;
+    expect(written).not.toContain("chicken breast");
+    expect(written).toContain("broccoli");
+    expect(written).toContain("olive oil");
   });
 });
