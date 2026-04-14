@@ -721,22 +721,224 @@ describe("RecipesScreen — T15: dialog cancel restores back-button focus", () =
   });
 });
 
-describe("RecipesScreen — T11: swap button disabled", () => {
-  it("test_recipes_screen_swap_disabled", () => {
+describe("RecipesScreen — T11: swap button enabled/disabled by alternatives", () => {
+  it("test_recipes_screen_swap_enabled_when_alternatives_present", () => {
     const mock = createMockChatService();
+    const altA = makeRecipeSummary({ id: "alt_a", name: "Alt A" });
+    const withAlts = makeRecipeSummary({
+      id: "r_with_alts",
+      name: "Has Alts",
+      alternatives: [altA],
+    });
+    const withoutAlts = makeRecipeSummary({
+      id: "r_no_alts",
+      name: "No Alts",
+      alternatives: [],
+    });
 
     renderWithSession(
       <RecipesWith
-        drive={{ kind: "complete", recipes: [recipe1, recipe2] }}
+        drive={{ kind: "complete", recipes: [withAlts, withoutAlts] }}
       />,
       { chatService: mock.service, initialPath: "/recipes" }
     );
 
-    // Swap button ("Try another") rendered and disabled on every card
     const swapButtons = screen.getAllByRole("button", { name: /try another/i });
     expect(swapButtons.length).toBe(2);
-    for (const btn of swapButtons) {
-      expect(btn).toBeDisabled();
+    expect(swapButtons[0]).not.toBeDisabled();
+    expect(swapButtons[1]).toBeDisabled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T-Swap: recipe swap interactions (Phase 6 of issue #56)
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — swap interactions", () => {
+  const alt1A = makeRecipeSummary({
+    id: "alt1a",
+    name: "Shrimp Lo Mein",
+    name_zh: "蝦撈麵",
+    cooking_method: "Boil",
+    flavor_tags: ["Savory"],
+  });
+  const alt2A = makeRecipeSummary({
+    id: "alt2a",
+    name: "Chicken Mole",
+    name_zh: "雞肉莫雷",
+    cooking_method: "Simmer",
+    flavor_tags: ["Rich"],
+  });
+  const alt2B = makeRecipeSummary({
+    id: "alt2b",
+    name: "Chicken Quesadilla",
+    name_zh: "雞肉乳酪餅",
+    cooking_method: "Pan-fry",
+    flavor_tags: ["Cheesy"],
+  });
+
+  const r1 = makeRecipeSummary({
+    id: "r_shrimp",
+    name: "Garlic Shrimp Stir-Fry",
+    name_zh: "蒜蓉蝦炒",
+    alternatives: [alt1A],
+  });
+  const r2 = makeRecipeSummary({
+    id: "r_tacos",
+    name: "Chicken Tinga Tacos",
+    name_zh: "雞肉墨西哥捲",
+    alternatives: [alt2A, alt2B],
+  });
+
+  it("test_recipes_screen_swap_opens_panel_for_clicked_card", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(
+      <RecipesWith drive={{ kind: "complete", recipes: [r1, r2] }} />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    const swapButtons = screen.getAllByRole("button", { name: /try another/i });
+    await user.click(swapButtons[1]);
+
+    const panels = screen.getAllByTestId("swap-panel");
+    expect(panels.length).toBe(1);
+
+    expect(screen.getByText("Chicken Mole")).toBeInTheDocument();
+    expect(screen.getByText("Chicken Quesadilla")).toBeInTheDocument();
+    expect(screen.queryByText("Shrimp Lo Mein")).toBeNull();
+  });
+
+  it("test_recipes_screen_swap_pick_replaces_card_and_closes", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(
+      <RecipesWith drive={{ kind: "complete", recipes: [r1, r2] }} />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    const swapButtons = screen.getAllByRole("button", { name: /try another/i });
+    await user.click(swapButtons[1]);
+
+    const pickBtn = screen.getByRole("button", { name: /pick chicken mole/i });
+    await user.click(pickBtn);
+
+    expect(screen.queryByText("Chicken Tinga Tacos")).toBeNull();
+    expect(screen.getByText("Chicken Mole")).toBeInTheDocument();
+    expect(screen.queryByTestId("swap-panel")).toBeNull();
+  });
+
+  it("test_recipes_screen_swap_lang_toggle_updates_card_and_panel", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(
+      <RecipesWith drive={{ kind: "complete", recipes: [r1, r2] }} />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    const swapButtons = screen.getAllByRole("button", { name: /try another/i });
+    await user.click(swapButtons[1]);
+
+    const zhButton = screen.getByRole("button", { name: /^中$/ });
+    await user.click(zhButton);
+
+    expect(screen.getByText("雞肉墨西哥捲")).toBeInTheDocument();
+    expect(screen.getByText("雞肉莫雷")).toBeInTheDocument();
+    expect(screen.getByText("雞肉乳酪餅")).toBeInTheDocument();
+  });
+
+  it("test_recipes_screen_fresh_recipes_clears_overrides", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    function Harness() {
+      const session = useSessionOptional();
+      const [phase, setPhase] = React.useState<1 | 2>(1);
+
+      useEffect(() => {
+        if (!session) return;
+        session.dispatch({ type: "start_loading" });
+        session.dispatch({ type: "start_streaming" });
+        session.dispatch({
+          type: "receive_event",
+          event: { event_type: "recipe_card", recipe: r1 },
+        });
+        session.dispatch({
+          type: "receive_event",
+          event: { event_type: "recipe_card", recipe: r2 },
+        });
+        session.dispatch({ type: "complete", status: "complete" });
+      }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+      useEffect(() => {
+        if (!session || phase !== 2) return;
+        session.dispatch({ type: "reset" });
+        session.dispatch({ type: "start_loading" });
+        session.dispatch({ type: "start_streaming" });
+        const fresh = makeRecipeSummary({
+          id: "r_fresh",
+          name: "Fresh Bowl",
+          alternatives: [],
+        });
+        session.dispatch({
+          type: "receive_event",
+          event: { event_type: "recipe_card", recipe: fresh },
+        });
+        session.dispatch({ type: "complete", status: "complete" });
+      }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+
+      return (
+        <>
+          <button
+            type="button"
+            data-testid="advance-phase"
+            onClick={() => setPhase(2)}
+          >
+            advance
+          </button>
+          <RecipesScreen />
+        </>
+      );
     }
+
+    renderWithSession(<Harness />, {
+      chatService: mock.service,
+      initialPath: "/recipes",
+    });
+
+    const swapButtons = screen.getAllByRole("button", { name: /try another/i });
+    await user.click(swapButtons[1]);
+    const pickBtn = screen.getByRole("button", { name: /pick chicken mole/i });
+    await user.click(pickBtn);
+    expect(screen.getByText("Chicken Mole")).toBeInTheDocument();
+
+    await user.click(screen.getByTestId("advance-phase"));
+
+    expect(screen.queryByText("Chicken Mole")).toBeNull();
+    expect(screen.queryByText("Chicken Tinga Tacos")).toBeNull();
+    expect(screen.getByText("Fresh Bowl")).toBeInTheDocument();
+    expect(screen.queryByTestId("swap-panel")).toBeNull();
+  });
+
+  it("test_recipes_screen_swap_esc_closes_panel", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    renderWithSession(
+      <RecipesWith drive={{ kind: "complete", recipes: [r1, r2] }} />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    const swapButtons = screen.getAllByRole("button", { name: /try another/i });
+    await user.click(swapButtons[1]);
+
+    expect(screen.getByTestId("swap-panel")).toBeInTheDocument();
+
+    await user.keyboard("{Escape}");
+
+    expect(screen.queryByTestId("swap-panel")).toBeNull();
   });
 });

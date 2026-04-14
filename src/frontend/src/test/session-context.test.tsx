@@ -566,6 +566,7 @@ describe("useSession — chatService onEvent triggers streaming", () => {
           pcsv_roles: { protein: ["chicken"] },
           ingredients_have: ["chicken"],
           ingredients_need: ["soy sauce"],
+          alternatives: [],
         },
       };
       mock.getOnEvent()(event);

@@ -25,6 +25,7 @@ const defaultRecipe: RecipeSummary = {
   },
   ingredients_have: ["shrimp", "garlic", "soy sauce"],
   ingredients_need: ["scallion", "bok choy"],
+  alternatives: [],
 };
 
 export function makeRecipeSummary(

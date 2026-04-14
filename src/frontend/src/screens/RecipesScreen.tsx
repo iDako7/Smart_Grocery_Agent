@@ -13,11 +13,12 @@
 // Partial completion banner appears above the body when
 //   isComplete && screenData.completionStatus === "partial".
 
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 
 import { RecipeCard } from "@/components/recipe-card";
+import { SwapPanel } from "@/components/swap-panel";
 import { InfoSheet } from "@/components/info-sheet";
 import { ErrorBanner } from "@/components/error-banner";
 import { ConfirmResetDialog } from "@/components/confirm-reset-dialog";
@@ -83,9 +84,18 @@ export function RecipesScreen() {
   const [lang, setLang] = useState<"en" | "zh">("en");
   const [resetOpen, setResetOpen] = useState(false);
   const [infoRecipe, setInfoRecipe] = useState<RecipeSummary | null>(null);
+  const [swapOpenFor, setSwapOpenFor] = useState<string | null>(null);
+  const [overrides, setOverrides] = useState<Record<string, RecipeSummary>>({});
 
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const prevResetOpen = useRef(false);
+  const prevRecipesRef = useRef(screenData?.recipes);
+
+  if (prevRecipesRef.current !== screenData?.recipes) {
+    prevRecipesRef.current = screenData?.recipes;
+    if (Object.keys(overrides).length > 0) setOverrides({});
+    if (swapOpenFor !== null) setSwapOpenFor(null);
+  }
 
   useEffect(() => {
     if (prevResetOpen.current && !resetOpen) {
@@ -204,22 +214,37 @@ export function RecipesScreen() {
       {/* Real cards — streaming or complete with data */}
       {!isLoading && !isError && !showEmptyState && recipes.length > 0 && (isStreaming || isComplete) && (
         <div className="mt-2">
-          {recipes.map((r, idx) => (
-            <RecipeCard
-              key={r.id}
-              index={idx}
-              name={r.name}
-              nameCjk={r.name_zh}
-              lang={lang}
-              flavorProfile={r.flavor_tags[0] ?? ""}
-              cookingMethod={r.cooking_method}
-              time={effortToTime(r.effort_level)}
-              ingredients={recipeToIngredientTags(r)}
-              onSwap={() => {}}
-              swapDisabled={true}
-              onInfoClick={() => setInfoRecipe(r)}
-            />
-          ))}
+          {recipes.map((r, idx) => {
+            const shown = overrides[r.id] ?? r;
+            return (
+              <React.Fragment key={r.id}>
+                <RecipeCard
+                  index={idx}
+                  name={shown.name}
+                  nameCjk={shown.name_zh}
+                  lang={lang}
+                  flavorProfile={shown.flavor_tags[0] ?? ""}
+                  cookingMethod={shown.cooking_method}
+                  time={effortToTime(shown.effort_level)}
+                  ingredients={recipeToIngredientTags(shown)}
+                  onSwap={() => setSwapOpenFor(r.id)}
+                  swapDisabled={shown.alternatives.length === 0}
+                  onInfoClick={() => setInfoRecipe(shown)}
+                />
+                {swapOpenFor === r.id && (
+                  <SwapPanel
+                    alternatives={shown.alternatives}
+                    lang={lang}
+                    onPick={(alt) => {
+                      setOverrides((prev) => ({ ...prev, [r.id]: alt }));
+                      setSwapOpenFor(null);
+                    }}
+                    onClose={() => setSwapOpenFor(null)}
+                  />
+                )}
+              </React.Fragment>
+            );
+          })}
         </div>
       )}
 
