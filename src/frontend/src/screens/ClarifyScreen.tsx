@@ -86,7 +86,7 @@ export function ClarifyScreen() {
         ? `Looks good, show recipes. ${clauses.join(" ")}`
         : "Looks good, show recipes.";
     navigateToScreen?.("recipes");
-    sendMessage(msg);
+    sendMessage(msg, "recipes");
     navigate("/recipes");
   }
 

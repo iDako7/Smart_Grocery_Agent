@@ -124,6 +124,7 @@ export function RecipesScreen() {
 
   function handleBuildList() {
     navigateToScreen?.("grocery");
+    sendMessage("Build my grocery list.", "grocery");
     navigate("/grocery");
   }
 
