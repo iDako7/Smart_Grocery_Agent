@@ -221,9 +221,11 @@ export async function getSavedRecipe(id: string): Promise<SavedRecipe> {
 // ---------------------------------------------------------------------------
 
 export class RecipeNotFoundError extends Error {
-  constructor(public recipeId: string) {
+  recipeId: string;
+  constructor(recipeId: string) {
     super(`Recipe not found: ${recipeId}`);
     this.name = "RecipeNotFoundError";
+    this.recipeId = recipeId;
   }
 }
 

@@ -2,7 +2,7 @@
 // Displays RecipeDetail fetched via getRecipeDetail() with loading / ready / error / not_found states.
 // In-memory cache at module scope: same recipeId → instant render, no refetch.
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   Sheet,

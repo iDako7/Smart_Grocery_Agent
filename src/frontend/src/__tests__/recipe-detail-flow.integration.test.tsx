@@ -13,7 +13,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 // ---------------------------------------------------------------------------
 // Reset the module-level recipe cache before every test so tests are
