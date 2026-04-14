@@ -42,6 +42,53 @@ async def test_emit_clarify_turn_handler_empty_questions():
     assert result.questions == []
 
 
+async def test_emit_clarify_turn_rejects_over_30_words():
+    """31-word explanation returns an error dict for the orchestrator to retry."""
+    text = " ".join(["word"] * 31)
+    payload = ClarifyTurnPayload(explanation=text, questions=[])
+    result = await emit_clarify_turn(payload)
+    assert isinstance(result, dict)
+    assert "error" in result
+
+
+async def test_emit_clarify_turn_accepts_exactly_30_words():
+    """Exactly 30 words passes the word-count check."""
+    text = " ".join(["word"] * 30)
+    payload = ClarifyTurnPayload(explanation=text, questions=[])
+    result = await emit_clarify_turn(payload)
+    assert result == payload
+
+
+async def test_emit_clarify_turn_rejects_newlines():
+    payload = ClarifyTurnPayload(
+        explanation="First line.\nSecond line continues here.",
+        questions=[],
+    )
+    result = await emit_clarify_turn(payload)
+    assert isinstance(result, dict)
+    assert "error" in result
+
+
+async def test_emit_clarify_turn_rejects_bullet_list_prefix():
+    payload = ClarifyTurnPayload(
+        explanation="- A bulleted direction for dinner tonight.",
+        questions=[],
+    )
+    result = await emit_clarify_turn(payload)
+    assert isinstance(result, dict)
+    assert "error" in result
+
+
+async def test_emit_clarify_turn_rejects_bold_markdown():
+    payload = ClarifyTurnPayload(
+        explanation="Proposing a **bold** weeknight stir-fry direction.",
+        questions=[],
+    )
+    result = await emit_clarify_turn(payload)
+    assert isinstance(result, dict)
+    assert "error" in result
+
+
 async def test_orchestrator_dispatches_emit_clarify_turn():
     """Dispatcher routes emit_clarify_turn to the handler and returns validated payload."""
     from src.ai.orchestrator import _dispatch_tool
