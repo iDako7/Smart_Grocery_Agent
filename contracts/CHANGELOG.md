@@ -9,6 +9,12 @@ YYYY-MM-DD | file | description
 
 ---
 
+## 2026-04-14
+
+2026-04-14: search_recipes — additive: include_alternatives flag + alternatives[] on RecipeSummary (#56). Non-breaking.
+
+---
+
 ## 2026-04-13
 
 ### Added

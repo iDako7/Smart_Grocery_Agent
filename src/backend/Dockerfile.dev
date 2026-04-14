@@ -5,14 +5,13 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /usr/local/bin/
 
 WORKDIR /app
 
-# Install dependencies
-COPY pyproject.toml uv.lock ./
+# Install dependencies (context is repo root; files live in src/backend/)
+COPY src/backend/pyproject.toml src/backend/uv.lock ./
 RUN uv sync --frozen
 
-# Set Python path so contracts and ai modules are importable
-# Mounted as /app/contracts and /app/ai in docker-compose.yml
+# /app is the repo root at runtime; src.backend.*, src.ai.*, contracts.* all resolve from here
 ENV PYTHONPATH="/app:${PYTHONPATH}"
 
 EXPOSE 8000
 
-CMD ["uv", "run", "uvicorn", "main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "src.backend.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]

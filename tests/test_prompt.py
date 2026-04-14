@@ -63,6 +63,13 @@ def test_prompt_with_screen_includes_screen_section():
     assert "recipes" in result
 
 
+def test_prompt_includes_recipe_alternatives_rule():
+    """Rule #10: search_recipes should be called with include_alternatives for meal-plan requests."""
+    prompt = build_system_prompt(UserProfile())
+    assert "include_alternatives: true" in prompt
+    assert "swap in place" in prompt
+
+
 def test_prompt_screen_section_includes_flow():
     """Screen section includes navigation flow."""
     profile = UserProfile()

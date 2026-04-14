@@ -96,6 +96,7 @@ export type RecipeSummary = {
   pcsv_roles: Partial<Record<PCSVRole, string[]>>;
   ingredients_have: string[];
   ingredients_need: string[];
+  alternatives: RecipeSummary[];
 };
 
 export type RecipeDetail = {

@@ -75,7 +75,9 @@ _RULES = """\
 
    - **`explanation` field**: ONE directional sentence, ≤30 words, plain text, no markdown. Propose a cooking direction (cuisine style, meal structure, or what to add) for the user to approve, correct, or add to. DO NOT use `#`/`##` headers, `-`/`*`/`1.` lists, `|` tables, `**` bold or `_` italic, or emoji column layouts.
 
-   - **`questions` field**: 0 to 3 chip-select clarifying questions. Empty (`[]`) is valid when the user's message is specific and the profile already answers everything material. Questions must materially affect recipe recommendations — skip filler. Skip any question whose answer is already in the user profile (e.g., don't ask about dietary restrictions if the profile lists them). New users with empty profiles should usually be asked about dietary/allergies if not stated in the initial message. Each question has a `selection_mode` ("single" or "multi") and a list of options; mark an option `is_exclusive: true` when selecting it should clear all others in that question (e.g., a "None" option in a multi-select dietary question).\
+   - **`questions` field**: 0 to 3 chip-select clarifying questions. Empty (`[]`) is valid when the user's message is specific and the profile already answers everything material. Questions must materially affect recipe recommendations — skip filler. Skip any question whose answer is already in the user profile (e.g., don't ask about dietary restrictions if the profile lists them). New users with empty profiles should usually be asked about dietary/allergies if not stated in the initial message. Each question has a `selection_mode` ("single" or "multi") and a list of options; mark an option `is_exclusive: true` when selecting it should clear all others in that question (e.g., a "None" option in a multi-select dietary question).
+
+10. **Recipe alternatives for swap-in-place.** When searching recipes for a meal-plan request, always call `search_recipes` with `include_alternatives: true` so users can swap in place. Omit this flag only for lookup-style queries (e.g., "show me the recipe for X").\
 """
 
 _TOOL_INSTRUCTIONS = """\
@@ -90,7 +92,7 @@ _TOOL_INSTRUCTIONS = """\
 You have 8 tools available. `emit_clarify_turn` is the terminal action on the Clarify screen (see above); the other 7 tools are your standard playbook:
 
 1. **`analyze_pcsv`** — Call FIRST with the user's ingredients to understand their PCV balance.
-2. **`search_recipes`** — Call AFTER pcsv analysis to find recipes that match.
+2. **`search_recipes`** — Call AFTER pcsv analysis to find recipes that match. Pass `include_alternatives: true` for meal-plan requests so users can swap in place; omit for lookup-style queries.
 3. **`lookup_store_product`** — Call to ground grocery suggestions in real store data.
 4. **`get_substitutions`** — Call when an ingredient is unavailable, restricted, or disliked.
 5. **`get_recipe_detail`** — Call when the user wants full cooking instructions.

@@ -47,6 +47,7 @@ class SearchRecipesInput(BaseModel):
     effort_level: EffortLevel | None = None
     flavor_tags: list[str] | None = None
     serves: int | None = None
+    include_alternatives: bool = False
 
 
 class LookupStoreProductInput(BaseModel):
@@ -134,6 +135,13 @@ class RecipeSummary(BaseModel):
         default_factory=list,
         description="Computed by tool handler, not stored in DB",
     )
+    alternatives: list["RecipeSummary"] = Field(
+        default_factory=list,
+        description="Alternative recipe suggestions ranked by similarity (issue #56). Populated only when search_recipes is called with include_alternatives=True; nested alternatives are not recursively populated.",
+    )
+
+
+RecipeSummary.model_rebuild()
 
 
 class RecipeDetail(BaseModel):
@@ -295,6 +303,10 @@ TOOLS: list[dict] = [
                     "serves": {
                         "type": "integer",
                         "description": "Number of servings needed. Optional, used for ranking.",
+                    },
+                    "include_alternatives": {
+                        "type": "boolean",
+                        "description": "When true, each returned recipe summary may include an `alternatives` array of similar recipes for swap UX. Defaults to false.",
                     },
                 },
                 "required": ["ingredients"],

@@ -13,7 +13,6 @@ import { ChatInput } from "@/components/chat-input";
 import { Sidebar } from "@/components/sidebar";
 import { InfoSheet } from "@/components/info-sheet";
 import { RecipeCard } from "@/components/recipe-card";
-import { SwapPanel } from "@/components/swap-panel";
 import { ChecklistRow } from "@/components/checklist-row";
 import { StoreSection } from "@/components/store-section";
 import { ExpandableRecipe } from "@/components/expandable-recipe";
@@ -496,74 +495,7 @@ describe("RecipeCard", () => {
   });
 });
 
-// ---------------------------------------------------------------------------
-// 8. SwapPanel
-// ---------------------------------------------------------------------------
-describe("SwapPanel", () => {
-  const defaultProps = {
-    alternatives: [
-      { name: "Tofu", nameCjk: "豆腐", description: "Plant-based protein" },
-      { name: "Tempeh", description: "Fermented soy" },
-    ],
-    onPick: vi.fn(),
-    onKeepOriginal: vi.fn(),
-  };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it("renders TRY INSTEAD label", () => {
-    render(<SwapPanel {...defaultProps} />);
-    expect(screen.getByText("TRY INSTEAD")).toBeInTheDocument();
-  });
-
-  it("renders all alternative names", () => {
-    render(<SwapPanel {...defaultProps} />);
-    expect(screen.getByText("Tofu")).toBeInTheDocument();
-    expect(screen.getByText("Tempeh")).toBeInTheDocument();
-  });
-
-  it("renders CJK name when provided", () => {
-    render(<SwapPanel {...defaultProps} />);
-    expect(screen.getByText("豆腐")).toBeInTheDocument();
-  });
-
-  it("renders descriptions", () => {
-    render(<SwapPanel {...defaultProps} />);
-    expect(screen.getByText("Plant-based protein")).toBeInTheDocument();
-    expect(screen.getByText("Fermented soy")).toBeInTheDocument();
-  });
-
-  it("calls onPick with correct index when pick button clicked", async () => {
-    const user = userEvent.setup();
-    const onPick = vi.fn();
-    render(<SwapPanel {...defaultProps} onPick={onPick} />);
-    await user.click(screen.getByLabelText("Pick Tofu"));
-    expect(onPick).toHaveBeenCalledWith(0);
-  });
-
-  it("calls onPick with index 1 for second alternative", async () => {
-    const user = userEvent.setup();
-    const onPick = vi.fn();
-    render(<SwapPanel {...defaultProps} onPick={onPick} />);
-    await user.click(screen.getByLabelText("Pick Tempeh"));
-    expect(onPick).toHaveBeenCalledWith(1);
-  });
-
-  it("calls onKeepOriginal when keep original clicked", async () => {
-    const user = userEvent.setup();
-    const onKeepOriginal = vi.fn();
-    render(<SwapPanel {...defaultProps} onKeepOriginal={onKeepOriginal} />);
-    await user.click(screen.getByText(/keep the original/));
-    expect(onKeepOriginal).toHaveBeenCalledOnce();
-  });
-
-  it("renders with empty alternatives without crashing", () => {
-    render(<SwapPanel alternatives={[]} onPick={() => {}} onKeepOriginal={() => {}} />);
-    expect(screen.getByText("TRY INSTEAD")).toBeInTheDocument();
-  });
-});
+// SwapPanel tests moved to src/components/swap-panel.test.tsx (issue #56 Phase 5).
 
 // ---------------------------------------------------------------------------
 // 9. ChecklistRow

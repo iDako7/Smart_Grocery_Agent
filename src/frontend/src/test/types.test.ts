@@ -161,6 +161,7 @@ describe("tools.ts — output model shapes", () => {
       pcsv_roles: { protein: ["chicken"] },
       ingredients_have: ["chicken"],
       ingredients_need: ["mirin"],
+      alternatives: [],
     };
     expect(recipe.id).toBe("r001");
     expect(recipe.effort_level).toBe("medium");
@@ -311,6 +312,7 @@ describe("sse.ts — event types", () => {
         pcsv_roles: {},
         ingredients_have: [],
         ingredients_need: [],
+        alternatives: [],
       },
     };
     expect(evt.event_type).toBe("recipe_card");

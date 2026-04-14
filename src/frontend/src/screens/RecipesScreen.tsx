@@ -12,16 +12,23 @@
 //
 // Partial completion banner appears above the body when
 //   isComplete && screenData.completionStatus === "partial".
+//
+// UAT fixes (issue #56):
+//   - SwapPanel is now a radio-group selector; stays open after pick.
+//   - Always passes r.alternatives (not shown.alternatives) to avoid stale data.
+//   - Remove button hides the card from the displayed list.
 
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 
 import { RecipeCard } from "@/components/recipe-card";
+import { SwapPanel } from "@/components/swap-panel";
 import { InfoSheet } from "@/components/info-sheet";
 import { ErrorBanner } from "@/components/error-banner";
 import { ConfirmResetDialog } from "@/components/confirm-reset-dialog";
 import { useSessionOptional } from "@/context/session-context";
+import { partialBannerMessage } from "@/lib/partial-message";
 import type { RecipeSummary, EffortLevel } from "@/types/tools";
 
 // ---------------------------------------------------------------------------
@@ -83,9 +90,21 @@ export function RecipesScreen() {
   const [lang, setLang] = useState<"en" | "zh">("en");
   const [resetOpen, setResetOpen] = useState(false);
   const [infoRecipe, setInfoRecipe] = useState<RecipeSummary | null>(null);
+  const [swapOpenFor, setSwapOpenFor] = useState<string | null>(null);
+  const [overrides, setOverrides] = useState<Record<string, RecipeSummary>>({});
+  const [removedIds, setRemovedIds] = useState<Set<string>>(new Set());
 
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const prevResetOpen = useRef(false);
+  const prevRecipesRef = useRef(screenData?.recipes);
+
+  // Reset local display state when the session produces a new recipe list.
+  if (prevRecipesRef.current !== screenData?.recipes) {
+    prevRecipesRef.current = screenData?.recipes;
+    if (Object.keys(overrides).length > 0) setOverrides({});
+    if (removedIds.size > 0) setRemovedIds(new Set());
+    if (swapOpenFor !== null) setSwapOpenFor(null);
+  }
 
   useEffect(() => {
     if (prevResetOpen.current && !resetOpen) {
@@ -113,12 +132,16 @@ export function RecipesScreen() {
   const isError = screenState === "error";
   const isPartial = isComplete && screenData?.completionStatus === "partial";
 
+  // Recipes filtered by user removals.
+  const displayedRecipes = recipes.filter((r) => !removedIds.has(r.id));
+
   // Empty state when idle, or when complete-but-no-recipes (T7 guard).
+  // Based on agent-returned count, not user-removed count.
   const showEmptyState =
     (screenState === "idle" && recipes.length === 0) ||
     (screenState === "complete" && recipes.length === 0);
 
-  const showCta = recipes.length > 0;
+  const showCta = displayedRecipes.length > 0;
   const ctaEnabled = screenState === "complete";
 
   return (
@@ -167,7 +190,7 @@ export function RecipesScreen() {
       {isPartial && (
         <div className="px-5 pt-3">
           <ErrorBanner
-            message="The assistant hit its thinking limit. Some results may be incomplete."
+            message={partialBannerMessage(screenData?.completionReason ?? null)}
             variant="partial"
           />
         </div>
@@ -202,28 +225,60 @@ export function RecipesScreen() {
       )}
 
       {/* Real cards — streaming or complete with data */}
-      {!isLoading && !isError && !showEmptyState && recipes.length > 0 && (isStreaming || isComplete) && (
+      {!isLoading && !isError && !showEmptyState && displayedRecipes.length > 0 && (isStreaming || isComplete) && (
         <div className="mt-2">
-          {recipes.map((r, idx) => (
-            <RecipeCard
-              key={r.id}
-              index={idx}
-              name={r.name}
-              nameCjk={r.name_zh}
-              lang={lang}
-              flavorProfile={r.flavor_tags[0] ?? ""}
-              cookingMethod={r.cooking_method}
-              time={effortToTime(r.effort_level)}
-              ingredients={recipeToIngredientTags(r)}
-              onSwap={() => {}}
-              swapDisabled={true}
-              onInfoClick={() => setInfoRecipe(r)}
-            />
-          ))}
+          {displayedRecipes.map((r, idx) => {
+            const shown = overrides[r.id] ?? r;
+            return (
+              <React.Fragment key={r.id}>
+                <RecipeCard
+                  index={idx}
+                  name={shown.name}
+                  nameCjk={shown.name_zh}
+                  lang={lang}
+                  flavorProfile={shown.flavor_tags[0] ?? ""}
+                  cookingMethod={shown.cooking_method}
+                  time={effortToTime(shown.effort_level)}
+                  ingredients={recipeToIngredientTags(shown)}
+                  onSwap={() => setSwapOpenFor(r.id)}
+                  isSwapping={swapOpenFor === r.id}
+                  swapDisabled={r.alternatives.length === 0}
+                  onInfoClick={() => setInfoRecipe(shown)}
+                  onRemove={() => {
+                    setRemovedIds((prev) => new Set(prev).add(r.id));
+                    if (swapOpenFor === r.id) setSwapOpenFor(null);
+                  }}
+                  canRemove={true}
+                />
+                {swapOpenFor === r.id && (
+                  <SwapPanel
+                    original={r}
+                    selected={shown}
+                    alternatives={r.alternatives}
+                    lang={lang}
+                    onSelect={(recipe) => {
+                      if (recipe.id === r.id) {
+                        // User re-selected the original — clear override
+                        setOverrides((prev) => {
+                          const next = { ...prev };
+                          delete next[r.id];
+                          return next;
+                        });
+                      } else {
+                        setOverrides((prev) => ({ ...prev, [r.id]: recipe }));
+                      }
+                      // Panel closes via onClose, called by SwapPanel after onSelect
+                    }}
+                    onClose={() => setSwapOpenFor(null)}
+                  />
+                )}
+              </React.Fragment>
+            );
+          })}
         </div>
       )}
 
-      {/* CTA — visible whenever we have recipes */}
+      {/* CTA — visible when there are displayed recipes */}
       {showCta && (
         <div className="px-5 py-3 flex justify-end">
           <button

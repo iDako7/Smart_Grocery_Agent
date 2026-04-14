@@ -11,6 +11,7 @@ import { ConfirmResetDialog } from "@/components/confirm-reset-dialog";
 import { ChipQuestion } from "@/components/chip-question";
 import { ChatInput } from "@/components/chat-input";
 import { useSessionOptional } from "@/context/session-context";
+import { partialBannerMessage } from "@/lib/partial-message";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -211,14 +212,15 @@ export function ClarifyScreen() {
                 </>
               )}
 
-              {/* Explanation — rendered with markdown; shown whenever text is available */}
-              {screenData?.explanation && (
+              {/* Explanation — prefer the validated clarify-turn explanation so enforced
+                  ≤30-word directional summary wins over any stale free-text blob. */}
+              {(screenData?.clarifyTurn?.explanation ?? screenData?.explanation) && (
                 <div className="mt-2 text-[13px] text-ink-2 leading-[1.5]">
                   <Markdown
                     allowedElements={["p", "strong", "em", "ul", "ol", "li", "a"]}
                     unwrapDisallowed
                   >
-                    {screenData.explanation}
+                    {screenData?.clarifyTurn?.explanation ?? screenData?.explanation ?? ""}
                   </Markdown>
                 </div>
               )}
@@ -240,7 +242,7 @@ export function ClarifyScreen() {
             {isComplete && screenData?.completionStatus === "partial" && (
               <div className="px-5 pt-3">
                 <ErrorBanner
-                  message="The assistant hit its thinking limit. Some results may be incomplete."
+                  message={partialBannerMessage(screenData?.completionReason ?? null)}
                   variant="partial"
                 />
               </div>
