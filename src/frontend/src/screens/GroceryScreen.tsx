@@ -193,7 +193,7 @@ export function GroceryScreen() {
                 : "bg-cream-deep text-ink-3"
             }`}
           >
-            Buy
+            Hide checked
           </button>
 
           {/* Copy to notes */}

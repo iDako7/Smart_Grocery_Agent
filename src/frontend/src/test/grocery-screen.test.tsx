@@ -285,9 +285,9 @@ describe("GroceryScreen — T8: buy-pill filters checked items", () => {
     );
     // Check i1 (chicken breast)
     await user.click(screen.getByRole("checkbox", { name: /toggle chicken breast/i }));
-    // Activate buy pill
-    await user.click(screen.getByRole("button", { name: /buy/i }));
-    expect(screen.getByRole("button", { name: /buy/i })).toHaveAttribute("aria-pressed", "true");
+    // Activate hide-checked pill
+    await user.click(screen.getByRole("button", { name: /hide checked/i }));
+    expect(screen.getByRole("button", { name: /hide checked/i })).toHaveAttribute("aria-pressed", "true");
     // i1 should be hidden (checked + pill active), i2 and i3 visible
     expect(screen.queryByText("chicken breast")).toBeNull();
     expect(screen.getByText("broccoli")).toBeInTheDocument();
@@ -361,8 +361,8 @@ describe("GroceryScreen — T11: copy respects buy-pill filter", () => {
 
     // Check i1 (chicken breast)
     await user.click(screen.getByRole("checkbox", { name: /toggle chicken breast/i }));
-    // Activate buy pill
-    await user.click(screen.getByRole("button", { name: /buy/i }));
+    // Activate hide-checked pill
+    await user.click(screen.getByRole("button", { name: /hide checked/i }));
     // Copy — chicken breast should be absent, broccoli and olive oil present
     await user.click(screen.getByRole("button", { name: /copy to notes/i }));
     expect(writeText).toHaveBeenCalledTimes(1);
