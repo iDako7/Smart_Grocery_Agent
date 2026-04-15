@@ -1,5 +1,6 @@
 """Tests for lookup_store_product tool against real SQLite KB."""
 
+import pytest
 import pytest_asyncio
 from src.ai.kb import get_kb
 from src.ai.tools.lookup_store_product import lookup_store_product, score_products
@@ -57,10 +58,11 @@ _SAMPLE_ROWS = [
 
 
 def test_score_products_returns_matches_above_threshold():
+    # Default threshold is 82; chicken vs Chicken Breast/Thighs scores 90 via WRatio
     results = score_products(_SAMPLE_ROWS, "chicken")
     assert len(results) > 0
     for score, _product in results:
-        assert score >= 60
+        assert score >= 82
 
 
 def test_score_products_no_match_returns_empty():
@@ -111,3 +113,51 @@ def test_score_products_fallback_store_when_none():
     results = score_products(rows_no_store, "salt", threshold=0)
     assert len(results) == 1
     assert results[0][1]["store"] == "costco"
+
+
+# ---------------------------------------------------------------------------
+# Empirical pin tests — pollution regression (issue #72 part B)
+# These encode the corrected WRatio + threshold=82 behaviour.
+# ---------------------------------------------------------------------------
+
+_POLLUTED_ROWS = [
+    # Rows that previously caused false matches with token_sort_ratio @ 60.
+    # Categories reflect actual KB values so unit tests mirror real query behaviour.
+    ("Yellow Sweet Corn", "900g", "Fresh Vegetables", "Sweet Corn", "costco"),
+    ("Pointed Peppers", "500g", "Fresh Vegetables", "Other Chili Peppers", "costco"),
+    ("Shallot", "300g", "Fresh Vegetables", "Shallots", "costco"),
+    # Rows that must still match correctly
+    ("Roma Tomatoes", "1 kg", "Fresh Vegetables", "Roma Tomatoes", "costco"),
+    ("Garlic Cloves", "400g", "Fresh Vegetables", "White Garlic", "costco"),
+    ("Large Eggs", "24 ct", "Dairy", "Whole Eggs", "costco"),
+]
+
+
+@pytest.mark.parametrize("query,product_name", [
+    ("cornstarch", "Yellow Sweet Corn"),
+    ("white pepper", "Pointed Peppers"),
+    ("scallions", "Shallot"),
+])
+def test_pollution_pairs_rejected(query, product_name):
+    """Polluted matches from issue #72 must NOT appear at default threshold."""
+    row = next(r for r in _POLLUTED_ROWS if r[0] == product_name)
+    results = score_products([row], query)
+    matched_names = [p["name"] for _, p in results]
+    assert product_name not in matched_names, (
+        f"{query!r} should not match {product_name!r} at default threshold"
+    )
+
+
+@pytest.mark.parametrize("query,product_name", [
+    ("tomatoes", "Roma Tomatoes"),
+    ("garlic", "Garlic Cloves"),
+    ("eggs", "Large Eggs"),
+])
+def test_correct_pairs_accepted(query, product_name):
+    """Common ingredient queries must still resolve to the correct product."""
+    row = next(r for r in _POLLUTED_ROWS if r[0] == product_name)
+    results = score_products([row], query)
+    matched_names = [p["name"] for _, p in results]
+    assert product_name in matched_names, (
+        f"{query!r} should match {product_name!r} at default threshold"
+    )

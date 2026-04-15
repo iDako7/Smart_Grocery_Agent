@@ -1,7 +1,7 @@
 """Integration test: save content from session, verify independence."""
 
 import uuid
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
@@ -9,10 +9,17 @@ from sqlalchemy import text
 from src.ai.types import AgentResult
 from src.backend.main import app
 
-from contracts.tool_schemas import RecipeSummary
+from contracts.tool_schemas import Ingredient, RecipeDetail, RecipeSummary
 from tests.conftest import _engine, _ensure_tables
 
 _DEV_USER = uuid.UUID("00000000-0000-0000-0000-000000000001")
+
+
+def _make_kb_ctx(kb_conn: AsyncMock) -> MagicMock:
+    ctx = MagicMock()
+    ctx.__aenter__ = AsyncMock(return_value=kb_conn)
+    ctx.__aexit__ = AsyncMock(return_value=False)
+    return ctx
 
 
 @pytest_asyncio.fixture(autouse=True)
@@ -51,39 +58,62 @@ async def client():
 
 
 async def test_save_meal_plan_from_session(client):
-    """Chat to populate session state, then save as meal plan."""
-    # Create session
+    """Chat to populate session state (with RecipeDetail upgrade), then save as meal plan.
+
+    REWRITTEN (issue #71): the snapshot upgrade now calls get_recipe_detail inside
+    an `async with get_kb()` block. Mock must be a proper async context manager.
+    The saved plan's recipes must carry RecipeDetail shape (instructions present).
+    """
     resp = await client.post("/session")
     sid = resp.json()["session_id"]
 
-    # Chat with recipes in result
-    recipe = RecipeSummary(id="r001", name="Korean Fried Chicken")
+    recipe_summary = RecipeSummary(id="r001", name="Korean Fried Chicken")
     mock_result = AgentResult(
         status="complete",
         response_text="Here you go!",
-        recipes=[recipe],
+        recipes=[recipe_summary],
         total_iterations=1,
     )
 
-    with patch("src.backend.api.sessions.run_agent", new_callable=AsyncMock, return_value=mock_result):
-        with patch("src.backend.api.sessions.get_kb") as mock_kb:
-            mock_kb_conn = AsyncMock()
-            mock_kb_conn.close = AsyncMock()
-            mock_kb.return_value = mock_kb_conn
-            await client.post(
-                f"/session/{sid}/chat",
-                json={"message": "Find me recipes", "screen": "home"},
-            )
+    detail = RecipeDetail(
+        id="r001",
+        name="Korean Fried Chicken",
+        ingredients=[Ingredient(name="chicken", amount="1 lb", pcsv=["protein"])],
+        instructions="Deep fry until golden.",
+    )
 
-    # Save meal plan from session
-    resp = await client.post("/saved/meal-plans", json={"name": "Test Plan", "session_id": sid})
+    kb_conn = AsyncMock()
+
+    with patch("src.backend.api.sessions.run_agent", new_callable=AsyncMock, return_value=mock_result):
+        with patch("src.backend.api.sessions.get_kb") as mock_get_kb:
+            mock_get_kb.return_value = _make_kb_ctx(kb_conn)
+            with patch(
+                "src.backend.api.sessions.get_recipe_detail",
+                new_callable=AsyncMock,
+                return_value=detail,
+            ):
+                await client.post(
+                    f"/session/{sid}/chat",
+                    json={"message": "Find me recipes", "screen": "home"},
+                )
+
+    # Save meal plan from session — snapshot already has RecipeDetail shape, no lazy upgrade needed
+    with patch("src.backend.api.saved.get_kb") as mock_saved_kb:
+        kb_conn2 = AsyncMock()
+        mock_saved_kb.return_value = _make_kb_ctx(kb_conn2)
+        resp = await client.post("/saved/meal-plans", json={"name": "Test Plan", "session_id": sid})
+
     assert resp.status_code == 201
 
-    # Verify saved plan is independent — delete session, plan should still exist
     plan_id = resp.json()["id"]
     resp = await client.get(f"/saved/meal-plans/{plan_id}")
     assert resp.status_code == 200
     assert resp.json()["name"] == "Test Plan"
+    # Snapshot should now carry instructions
+    recipes = resp.json()["recipes"]
+    assert recipes, "plan must have recipes"
+    assert "instructions" in recipes[0]
+    assert recipes[0]["instructions"] == "Deep fry until golden."
 
 
 async def test_saved_recipe_independent_of_kb():

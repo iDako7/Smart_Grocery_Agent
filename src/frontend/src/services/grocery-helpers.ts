@@ -30,7 +30,10 @@ export function collectBuyItems(
   recipes: RecipeForCollection[],
   excludedByCard: Map<number, Set<string>>
 ): GroceryListItem[] {
-  const items: GroceryListItem[] = [];
+  // Map keyed by normalised ingredient name → accumulated GroceryListItem.
+  // recipe_name is a comma-separated list of recipe names that need this ingredient,
+  // built order-preserving with duplicates suppressed.
+  const map = new Map<string, GroceryListItem & { _recipeNames: string[] }>();
 
   for (let cardIndex = 0; cardIndex < recipes.length; cardIndex++) {
     const recipe = recipes[cardIndex];
@@ -42,14 +45,27 @@ export function collectBuyItems(
 
       if (!isChecked) {
         // User does NOT have this ingredient → needs to buy
-        items.push({
-          ingredient_name: ing.name,
-          recipe_name: recipe.name,   // amount omitted: RecipeCardData doesn't carry amounts
-          recipe_id: recipe.id ?? "",
-        });
+        const key = ing.name.toLowerCase().trim();
+        const existing = map.get(key);
+
+        if (existing) {
+          // Merge: append recipe name only if not already present (order-preserving dedup)
+          if (!existing._recipeNames.includes(recipe.name)) {
+            existing._recipeNames.push(recipe.name);
+            existing.recipe_name = existing._recipeNames.join(", ");
+          }
+        } else {
+          map.set(key, {
+            ingredient_name: ing.name,
+            recipe_name: recipe.name,   // amount omitted: RecipeCardData doesn't carry amounts
+            recipe_id: recipe.id ?? "",
+            _recipeNames: [recipe.name],
+          });
+        }
       }
     }
   }
 
-  return items;
+  // Strip the internal _recipeNames tracking field before returning
+  return Array.from(map.values()).map(({ _recipeNames: _r, ...item }) => item);
 }

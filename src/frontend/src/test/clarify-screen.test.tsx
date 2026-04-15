@@ -680,6 +680,8 @@ describe("ClarifyScreen — Bug1-T3: error state suppresses ClarifyTurn chips ev
       navigateToScreen: vi.fn(),
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: vi.fn(),
     });
   });

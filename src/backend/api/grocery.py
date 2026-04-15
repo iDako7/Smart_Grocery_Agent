@@ -27,33 +27,62 @@ def group_items_by_store(
 
     Unmatched items go into store="Other", department="Uncategorized".
     "Other" is always placed last in the returned list.
-    """
-    store_map: dict[str, dict[str, list[GroceryItem]]] = {}
 
-    for i, item in enumerate(items):
+    Within each (store, department) bucket, entries that share the same
+    product.name (case-insensitive) are collapsed into a single GroceryItem.
+    recipe_context strings are merged: comma-joined, order-preserving, deduped.
+    """
+    # bucket_map: (store, dept) -> {normalized_product_name -> GroceryItem}
+    # We keep insertion order so the first-seen entry becomes canonical.
+    bucket_map: dict[tuple[str, str], dict[str, GroceryItem]] = {}
+    # Track all context strings seen per canonical key to dedupe them.
+    context_parts: dict[tuple[str, str, str], list[str]] = {}
+    id_counter = 0
+
+    for item in items:
         product = item.get("product")
+        recipe_context_val = f"for {item['recipe_name']}" if item["recipe_name"] else ""
+
         if product:
             store_name = product["store"]
             dept_name = product["department"] or "General"
-            grocery_item = GroceryItem(
-                id=f"gi-{i}",
-                name=product["name"],
-                amount=item["amount"],
-                recipe_context=f"for {item['recipe_name']}" if item["recipe_name"] else "",
-            )
+            product_key = product["name"].lower()
+            canonical_name = product["name"]
+            amount = item["amount"]
         else:
             store_name = "Other"
             dept_name = "Uncategorized"
-            grocery_item = GroceryItem(
-                id=f"gi-{i}",
-                name=item["ingredient_name"],
-                amount=item["amount"],
-                recipe_context=f"for {item['recipe_name']}" if item["recipe_name"] else "",
-            )
+            product_key = item["ingredient_name"].lower()
+            canonical_name = item["ingredient_name"]
+            amount = item["amount"]
 
-        store_map.setdefault(store_name, {}).setdefault(dept_name, []).append(grocery_item)
+        bucket_key = (store_name, dept_name)
+        ctx_key = (store_name, dept_name, product_key)
+
+        bucket = bucket_map.setdefault(bucket_key, {})
+        if product_key not in bucket:
+            grocery_item = GroceryItem(
+                id=f"gi-{id_counter}",
+                name=canonical_name,
+                amount=amount,
+                recipe_context=recipe_context_val,
+            )
+            id_counter += 1
+            bucket[product_key] = grocery_item
+            context_parts[ctx_key] = [recipe_context_val] if recipe_context_val else []
+        else:
+            # Duplicate product in same bucket — merge recipe_context (order-preserving dedup)
+            if recipe_context_val and recipe_context_val not in context_parts[ctx_key]:
+                context_parts[ctx_key].append(recipe_context_val)
+                bucket[product_key] = bucket[product_key].model_copy(
+                    update={"recipe_context": ", ".join(context_parts[ctx_key])}
+                )
 
     # Build GroceryStore objects, "Other" last
+    store_map: dict[str, dict[str, list[GroceryItem]]] = {}
+    for (store_name, dept_name), name_to_item in bucket_map.items():
+        store_map.setdefault(store_name, {}).setdefault(dept_name, []).extend(name_to_item.values())
+
     result: list[GroceryStore] = []
     other: GroceryStore | None = None
     for store_name, depts in store_map.items():

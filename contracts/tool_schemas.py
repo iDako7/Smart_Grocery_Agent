@@ -135,6 +135,14 @@ class RecipeSummary(BaseModel):
         default_factory=list,
         description="Computed by tool handler, not stored in DB",
     )
+    ingredients: list[Ingredient] = Field(
+        default_factory=list,
+        description="Canonical ingredient list hydrated from RecipeDetail at session-snapshot time (issue #71). Empty for AI-generated recipes with no KB row.",
+    )
+    instructions: str = Field(
+        default="",
+        description="Full cooking instructions hydrated from RecipeDetail at session-snapshot time (issue #71). Empty for AI-generated recipes with no KB row.",
+    )
     alternatives: list[RecipeSummary] = Field(
         default_factory=list,
         description="Alternative recipe suggestions ranked by similarity (issue #56). Populated only when search_recipes is called with include_alternatives=True; nested alternatives are not recursively populated.",
@@ -306,7 +314,7 @@ TOOLS: list[dict] = [
                     },
                     "include_alternatives": {
                         "type": "boolean",
-                        "description": "When true, each returned recipe summary may include an `alternatives` array of similar recipes for swap UX. Defaults to false.",
+                        "description": "When true, each returned recipe summary may include an `alternatives` array of similar recipes for swap UX. Defaults to false. Set to true for meal-plan requests (user asking for multiple dinners, a week's worth, alternatives, etc.); omit for specific single-recipe lookups.",
                     },
                 },
                 "required": ["ingredients"],

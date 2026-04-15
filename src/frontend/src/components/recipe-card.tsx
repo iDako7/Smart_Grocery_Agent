@@ -18,13 +18,13 @@ interface RecipeCardProps {
   time: string;
   ingredients: IngredientTag[];
   onSwap: () => void;
+  swapDisabled?: boolean;
   onInfoClick: () => void;
   isSwapping?: boolean;
   onToggleBuy?: (ingredientName: string) => void;
   excludedIngredients?: Set<string>;
   onRemove?: () => void;
   canRemove?: boolean;
-  swapDisabled?: boolean;
 }
 
 export function RecipeCard({
@@ -37,13 +37,13 @@ export function RecipeCard({
   time,
   ingredients,
   onSwap,
+  swapDisabled = false,
   onInfoClick,
   isSwapping = false,
   onToggleBuy,
   excludedIngredients,
   onRemove,
   canRemove = false,
-  swapDisabled = false,
 }: RecipeCardProps) {
   const ordinal = ORDINALS[index] ?? String(index + 1);
 
@@ -159,17 +159,16 @@ export function RecipeCard({
             type="button"
             onClick={onSwap}
             disabled={swapDisabled}
-            aria-disabled={swapDisabled || undefined}
-            title={swapDisabled ? "Coming soon" : undefined}
+            aria-disabled={swapDisabled}
             className={cn(
-              "inline-flex items-center gap-1.5 px-3 py-[6px] rounded-full bg-cream-deep text-ink-2 text-[10.5px] font-semibold border-none min-h-[30px]",
+              "inline-flex items-center gap-1.5 px-3 py-[6px] rounded-full bg-cream-deep text-[10.5px] font-semibold border-none min-h-[30px] transition-colors",
               swapDisabled
-                ? "opacity-50 cursor-not-allowed"
-                : "cursor-pointer hover:bg-cream transition-colors"
+                ? "text-ink-3 cursor-not-allowed opacity-60"
+                : "text-ink-2 cursor-pointer hover:bg-cream"
             )}
           >
             <RefreshCw size={12} />
-            Try another
+            {swapDisabled ? "No alternative" : "Try another"}
           </button>
         )}
       </div>

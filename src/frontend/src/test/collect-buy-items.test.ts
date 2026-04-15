@@ -198,4 +198,85 @@ describe("collectBuyItems", () => {
     expect(result).toHaveLength(1);
     expect(result[0].recipe_id).toBe("");
   });
+
+  // ---------------------------------------------------------------------------
+  // Dedupe: two-way collision — same ingredient in two recipes merges to one row
+  // ---------------------------------------------------------------------------
+
+  it("merges same ingredient from two recipes into one row with concatenated recipe names", () => {
+    const recipeA = {
+      name: "Fried Rice",
+      id: "r-100",
+      ingredients: [{ name: "garlic", have: false }],
+    };
+    const recipeB = {
+      name: "Congee",
+      id: "r-101",
+      ingredients: [{ name: "garlic", have: false }],
+    };
+
+    const result = collectBuyItems([recipeA, recipeB], new Map());
+
+    expect(result).toHaveLength(1);
+    expect(result[0].ingredient_name).toBe("garlic");
+    expect(result[0].recipe_name).toBe("Fried Rice, Congee");
+  });
+
+  // ---------------------------------------------------------------------------
+  // Dedupe: same recipe name does not appear twice in merged recipe_name
+  // ---------------------------------------------------------------------------
+
+  it("does not duplicate recipe name when same ingredient appears twice from the same recipe", () => {
+    // Pathological input: same recipe listed twice (e.g. two cards same recipe)
+    const recipe = {
+      name: "Fried Rice",
+      id: "r-100",
+      ingredients: [{ name: "garlic", have: false }],
+    };
+
+    const result = collectBuyItems([recipe, recipe], new Map());
+
+    expect(result).toHaveLength(1);
+    expect(result[0].ingredient_name).toBe("garlic");
+    // Recipe name must NOT appear twice
+    expect(result[0].recipe_name).toBe("Fried Rice");
+  });
+
+  // ---------------------------------------------------------------------------
+  // Dedupe: case-insensitive key — "Garlic" and "garlic" collapse to one row
+  // ---------------------------------------------------------------------------
+
+  it("merges case-insensitive duplicates into a single row", () => {
+    const recipeA = {
+      name: "Recipe A",
+      id: "r-200",
+      ingredients: [{ name: "Garlic", have: false }],
+    };
+    const recipeB = {
+      name: "Recipe B",
+      id: "r-201",
+      ingredients: [{ name: "garlic", have: false }],
+    };
+
+    const result = collectBuyItems([recipeA, recipeB], new Map());
+
+    expect(result).toHaveLength(1);
+    expect(result[0].recipe_name).toBe("Recipe A, Recipe B");
+  });
+
+  // ---------------------------------------------------------------------------
+  // Dedupe: three-way collision — three recipes share the same ingredient
+  // ---------------------------------------------------------------------------
+
+  it("merges three-way collision into one row with all three recipe names", () => {
+    const recipeA = { name: "Recipe A", id: "r-300", ingredients: [{ name: "onion", have: false }] };
+    const recipeB = { name: "Recipe B", id: "r-301", ingredients: [{ name: "onion", have: false }] };
+    const recipeC = { name: "Recipe C", id: "r-302", ingredients: [{ name: "onion", have: false }] };
+
+    const result = collectBuyItems([recipeA, recipeB, recipeC], new Map());
+
+    expect(result).toHaveLength(1);
+    expect(result[0].ingredient_name).toBe("onion");
+    expect(result[0].recipe_name).toBe("Recipe A, Recipe B, Recipe C");
+  });
 });

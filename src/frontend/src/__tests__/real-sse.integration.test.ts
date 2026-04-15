@@ -65,6 +65,10 @@ const RECIPE_CARD_BLOCK = sseBlock("recipe_card", {
     flavor_tags: ["savory"],
     serves: 2,
     pcsv_roles: {},
+    ingredients: [
+      { name: "chicken", amount: "400g", pcsv: ["protein"] },
+      { name: "soy sauce", amount: "2 tbsp", pcsv: ["sauce"] },
+    ],
     ingredients_have: ["chicken"],
     ingredients_need: ["soy sauce"],
   },

@@ -477,19 +477,19 @@ describe("RecipeCard", () => {
     expect(screen.getByLabelText("swapping indicator")).toBeInTheDocument();
   });
 
-  it("disables Try another when swapDisabled=true and does not fire onSwap on click", async () => {
+  it("Try another button is always enabled (never disabled regardless of alternatives)", async () => {
     const user = userEvent.setup();
     const onSwap = vi.fn();
-    render(<RecipeCard {...defaultProps} onSwap={onSwap} swapDisabled={true} />);
+    render(<RecipeCard {...defaultProps} onSwap={onSwap} />);
     const button = screen.getByRole("button", { name: /try another/i });
-    expect(button).toBeDisabled();
-    expect(button).toHaveAttribute("title", "Coming soon");
+    expect(button).not.toBeDisabled();
+    expect(button).not.toHaveAttribute("title", "Coming soon");
     await user.click(button);
-    expect(onSwap).not.toHaveBeenCalled();
+    expect(onSwap).toHaveBeenCalledOnce();
   });
 
-  it("swapping state wins over swapDisabled", () => {
-    render(<RecipeCard {...defaultProps} swapDisabled={true} isSwapping={true} />);
+  it("swapping state hides Try another button (isSwapping=true)", () => {
+    render(<RecipeCard {...defaultProps} isSwapping={true} />);
     expect(screen.getByLabelText("swapping indicator")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: /try another/i })).not.toBeInTheDocument();
   });

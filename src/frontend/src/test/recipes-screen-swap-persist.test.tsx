@@ -133,6 +133,8 @@ function renderWithRecipeComplete(sessionId = "sess-persist") {
     navigateToScreen: vi.fn(),
     resetSession: vi.fn(),
     addLocalTurn: vi.fn(),
+    excludedByCard: {},
+    toggleIngredientExclusion: vi.fn(),
     dispatch: vi.fn(),
   });
 
@@ -288,6 +290,8 @@ describe("RecipesScreen — T-Persist-2: swap reverts on patchSessionRecipe fail
       navigateToScreen: vi.fn(),
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: vi.fn(),
     });
 

@@ -23,6 +23,13 @@ const defaultRecipe: RecipeSummary = {
     veggie: ["scallion", "bok choy"],
     sauce: ["soy sauce", "garlic"],
   },
+  ingredients: [
+    { name: "shrimp", amount: "200g", pcsv: ["protein"] },
+    { name: "garlic", amount: "4 cloves", pcsv: ["sauce"] },
+    { name: "soy sauce", amount: "2 tbsp", pcsv: ["sauce"] },
+    { name: "scallion", amount: "2 stalks", pcsv: ["veggie"] },
+    { name: "bok choy", amount: "1 head", pcsv: ["veggie"] },
+  ],
   ingredients_have: ["shrimp", "garlic", "soy sauce"],
   ingredients_need: ["scallion", "bok choy"],
   alternatives: [],

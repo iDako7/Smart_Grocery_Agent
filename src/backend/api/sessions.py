@@ -12,6 +12,9 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 from src.ai.context import load_context, save_turn
 from src.ai.kb import get_kb
 from src.ai.orchestrator import run_agent
+from src.ai.tools.get_recipe_detail import get_recipe_detail
+
+from contracts.tool_schemas import GetRecipeDetailInput
 from src.ai.sse import emit_agent_result
 from src.ai.types import AgentResult
 from src.backend.auth import get_current_user_id
@@ -201,7 +204,17 @@ async def chat(
         if result.pcsv:
             snapshot["pcsv"] = result.pcsv.model_dump()
         if result.recipes:
-            snapshot["recipes"] = [r.model_dump() for r in result.recipes]
+            # Hydrate each RecipeSummary with canonical `ingredients` + `instructions`
+            # from the KB so both the SSE emit path and the saved meal plan path
+            # carry full detail (issue #71). AI-generated recipes have no KB row —
+            # leave ingredients/instructions at their defaults.
+            async with get_kb() as kb:
+                for r in result.recipes:
+                    detail = await get_recipe_detail(kb, GetRecipeDetailInput(recipe_id=r.id))
+                    if detail is not None:
+                        r.ingredients = detail.ingredients
+                        r.instructions = detail.instructions
+            snapshot["recipes"] = [s.model_dump() for s in result.recipes]
         if result.grocery_list:
             snapshot["grocery_list"] = [s.model_dump() for s in result.grocery_list]
 

@@ -68,11 +68,16 @@ type SessionContextValue = {
   conversationHistory: ConversationTurn[];
   currentScreen: Screen;
 
+  // Per-card ingredient exclusion state — lifted here so it survives navigation.
+  // Shape: Record<recipeId, ingredientName[]>
+  excludedByCard: Record<string, string[]>;
+
   // Actions
   sendMessage: (message: string, targetScreen?: Screen) => void;
   navigateToScreen: (screen: Screen) => void;
   resetSession: () => void;
   addLocalTurn: (turn: ConversationTurn) => void;
+  toggleIngredientExclusion: (recipeId: string, ingredientName: string) => void;
   dispatch: Dispatch<ScreenAction>;
 };
 
@@ -89,6 +94,8 @@ const SessionContext = createContext<SessionContextValue | null>(null);
 interface SessionProviderProps {
   children: ReactNode;
   chatService?: ChatServiceHandler;
+  /** For testing only: seed an initial session ID without a real SSE service. */
+  initialSessionId?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -98,20 +105,22 @@ interface SessionProviderProps {
 export function SessionProvider({
   children,
   chatService,
+  initialSessionId,
 }: SessionProviderProps) {
   const { state, data, dispatch, isLoading, isStreaming, isComplete, isError } =
     useScreenState();
 
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(initialSessionId ?? null);
   const [conversationHistory, setConversationHistory] = useState<
     ConversationTurn[]
   >([]);
   const [currentScreen, setCurrentScreen] = useState<Screen>("home");
+  const [excludedByCard, setExcludedByCard] = useState<Record<string, string[]>>({});
 
   // Real SSE service — created once when no test chatService is injected.
   // Uses useState lazy initializer so the service is created only on first render
   // without reading refs during render (which React 19 lint rules disallow).
-  const [sseService, setSseService] = useState<SSEService | null>(() =>
+  const [sseService] = useState<SSEService | null>(() =>
     chatService ? null : createRealSSEService({
       onSessionCreated: (id) => setSessionId(id),
     })
@@ -239,6 +248,23 @@ export function SessionProvider({
   }, []);
 
   // --------------------------------------------------------------------------
+  // toggleIngredientExclusion
+  // --------------------------------------------------------------------------
+
+  const toggleIngredientExclusion = useCallback(
+    (recipeId: string, ingredientName: string) => {
+      setExcludedByCard((prev) => {
+        const current = prev[recipeId] ?? [];
+        const next = current.includes(ingredientName)
+          ? current.filter((n) => n !== ingredientName)
+          : [...current, ingredientName];
+        return { ...prev, [recipeId]: next };
+      });
+    },
+    []
+  );
+
+  // --------------------------------------------------------------------------
   // navigateToScreen
   // --------------------------------------------------------------------------
 
@@ -261,12 +287,13 @@ export function SessionProvider({
     setSessionId(null);
     setConversationHistory([]);
     setCurrentScreen("home");
+    setExcludedByCard({});
 
-    // Invalidate the SSE service's cached session so a new one is created next time
-    setSseService((prev) => {
-      prev?.resetSession();
-      return null;
-    });
+    // Invalidate the SSE service's cached session so a new one is created next
+    // time. We keep the service instance itself — nulling it would leave
+    // activeChatService wired to the no-op fallback, silently dropping the
+    // next sendMessage call.
+    sseService?.resetSession();
 
     // Reset screen state machine to idle
     dispatch({ type: "reset" });
@@ -288,17 +315,19 @@ export function SessionProvider({
       sessionId,
       conversationHistory,
       currentScreen,
+      excludedByCard,
 
       sendMessage,
       navigateToScreen,
       resetSession,
       addLocalTurn,
+      toggleIngredientExclusion,
       dispatch,
     }),
     [
       state, data, isLoading, isStreaming, isComplete, isError,
-      sessionId, conversationHistory, currentScreen,
-      sendMessage, navigateToScreen, resetSession, addLocalTurn, dispatch,
+      sessionId, conversationHistory, currentScreen, excludedByCard,
+      sendMessage, navigateToScreen, resetSession, addLocalTurn, toggleIngredientExclusion, dispatch,
     ]
   );
 

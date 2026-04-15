@@ -5,6 +5,8 @@ import uuid
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncConnection
+from src.ai.kb import get_kb
+from src.ai.tools.get_recipe_detail import get_recipe_detail
 from src.backend.auth import get_current_user_id
 from src.backend.db.engine import get_db
 from src.backend.db.tables import (
@@ -13,6 +15,8 @@ from src.backend.db.tables import (
     saved_recipes,
     sessions,
 )
+
+from contracts.tool_schemas import GetRecipeDetailInput
 
 from contracts.api_types import (
     SavedGroceryList,
@@ -48,6 +52,17 @@ async def create_meal_plan(
         await conn.execute(sessions.select().where(sessions.c.id == body.session_id, sessions.c.user_id == user_id))
     ).first()
     recipes_data = (sess_row.state_snapshot or {}).get("recipes", []) if sess_row else []
+
+    # Lazy upgrade: pre-existing sessions may have un-hydrated RecipeSummary
+    # entries (no `instructions` / empty `ingredients`). Re-fetch detail from
+    # the KB and hydrate in place before persisting (issue #71).
+    async with get_kb() as kb:
+        for entry in recipes_data:
+            if not entry.get("instructions") and not entry.get("ingredients"):
+                detail = await get_recipe_detail(kb, GetRecipeDetailInput(recipe_id=entry["id"]))
+                if detail is not None:
+                    entry["ingredients"] = [i.model_dump() for i in detail.ingredients]
+                    entry["instructions"] = detail.instructions
 
     pid = uuid.uuid4()
     result = await conn.execute(

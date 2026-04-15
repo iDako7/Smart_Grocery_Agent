@@ -67,6 +67,7 @@ export function renderWithSession(
     initialPath?: string;
     initialState?: Record<string, unknown>;
     routes?: React.ReactElement;
+    initialSessionId?: string;
   }
 ) {
   const initialEntry = options?.initialState
@@ -74,7 +75,10 @@ export function renderWithSession(
     : (options?.initialPath ?? "/");
 
   const Wrapper = ({ children }: { children: ReactNode }) => (
-    <SessionProvider chatService={options?.chatService}>
+    <SessionProvider
+      chatService={options?.chatService}
+      initialSessionId={options?.initialSessionId}
+    >
       <MemoryRouter initialEntries={[initialEntry]}>
         {children}
       </MemoryRouter>

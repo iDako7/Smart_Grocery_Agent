@@ -77,7 +77,7 @@ _RULES = """\
 
    - **`questions` field**: 0 to 3 chip-select clarifying questions. Empty (`[]`) is valid when the user's message is specific and the profile already answers everything material. Questions must materially affect recipe recommendations — skip filler. Skip any question whose answer is already in the user profile (e.g., don't ask about dietary restrictions if the profile lists them). New users with empty profiles should usually be asked about dietary/allergies if not stated in the initial message. Each question has a `selection_mode` ("single" or "multi") and a list of options; mark an option `is_exclusive: true` when selecting it should clear all others in that question (e.g., a "None" option in a multi-select dietary question).
 
-10. **Recipe alternatives for swap-in-place.** When searching recipes for a meal-plan request, always call `search_recipes` with `include_alternatives: true` so users can swap in place. Omit this flag only for lookup-style queries (e.g., "show me the recipe for X").\
+10. **Recipe alternatives for swap-in-place.** When searching recipes for a meal-plan request, always call `search_recipes` with `include_alternatives: true` so users can swap in place. Omit this flag only for lookup-style queries (e.g., "show me the recipe for X"). Example: user says "plan me 3 dinners for this week" → call `search_recipes(ingredients=[...], include_alternatives=true)`. User says "show me the recipe for mapo tofu" → call `search_recipes(ingredients=[...])` without the flag.\
 """
 
 _TOOL_INSTRUCTIONS = """\

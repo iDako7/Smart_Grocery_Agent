@@ -49,9 +49,12 @@ function effortToTime(level: EffortLevel): string {
 }
 
 function recipeToIngredientTags(r: RecipeSummary): { name: string; have: boolean }[] {
-  const have = r.ingredients_have.map((name) => ({ name, have: true }));
-  const need = r.ingredients_need.map((name) => ({ name, have: false }));
-  return [...have, ...need];
+  const haveHints = r.ingredients_have.map((s) => s.toLowerCase());
+  return r.ingredients.map((ing) => {
+    const nameLower = ing.name.toLowerCase();
+    const have = haveHints.some((hint) => hint.includes(nameLower) || nameLower.includes(hint));
+    return { name: ing.name, have };
+  });
 }
 
 function SkeletonCard() {
@@ -72,9 +75,6 @@ function SkeletonCard() {
   );
 }
 
-// Module-level empty set — stable reference avoids unnecessary re-renders.
-const EMPTY_SET: Set<string> = new Set();
-
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -91,6 +91,8 @@ export function RecipesScreen() {
   const screenData = session?.screenData;
   const screenState = session?.screenState ?? "idle";
   const isComplete = session?.isComplete ?? false;
+  const excludedByCard = session?.excludedByCard ?? {};
+  const toggleIngredientExclusion = session?.toggleIngredientExclusion ?? (() => {});
 
   const recipes = screenData?.recipes ?? [];
 
@@ -100,7 +102,6 @@ export function RecipesScreen() {
   const [swapOpenFor, setSwapOpenFor] = useState<string | null>(null);
   const [overrides, setOverrides] = useState<Record<string, RecipeSummary>>({});
   const [removedIds, setRemovedIds] = useState<Set<string>>(new Set());
-  const [excludedByCard, setExcludedByCard] = useState<Map<string, Set<string>>>(new Map());
   const [isBuilding, setIsBuilding] = useState(false);
   const [buildError, setBuildError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -115,7 +116,6 @@ export function RecipesScreen() {
     if (Object.keys(overrides).length > 0) setOverrides({});
     if (removedIds.size > 0) setRemovedIds(new Set());
     if (swapOpenFor !== null) setSwapOpenFor(null);
-    if (excludedByCard.size > 0) setExcludedByCard(new Map());
   }
 
   useEffect(() => {
@@ -126,17 +126,7 @@ export function RecipesScreen() {
   }, [resetOpen]);
 
   function handleToggleBuy(cardId: string, ingredientName: string) {
-    setExcludedByCard((prev) => {
-      const next = new Map(prev);
-      const cardSet = new Set(next.get(cardId) ?? []);
-      if (cardSet.has(ingredientName)) {
-        cardSet.delete(ingredientName);
-      } else {
-        cardSet.add(ingredientName);
-      }
-      next.set(cardId, cardSet);
-      return next;
-    });
+    toggleIngredientExclusion(cardId, ingredientName);
   }
 
   function handleStartOver() {
@@ -169,8 +159,8 @@ export function RecipesScreen() {
     try {
       const excludedByIndex = new Map<number, Set<string>>();
       displayedRecipes.forEach((r, idx) => {
-        const excluded = excludedByCard.get(r.id);
-        if (excluded && excluded.size > 0) excludedByIndex.set(idx, excluded);
+        const excluded = excludedByCard[r.id];
+        if (excluded && excluded.length > 0) excludedByIndex.set(idx, new Set(excluded));
       });
       const items = collectBuyItems(
         displayedRecipes.map((r) => {
@@ -303,11 +293,11 @@ export function RecipesScreen() {
                   cookingMethod={shown.cooking_method}
                   time={effortToTime(shown.effort_level)}
                   ingredients={recipeToIngredientTags(shown)}
-                  onSwap={() => setSwapOpenFor(r.id)}
-                  isSwapping={swapOpenFor === r.id}
+                  onSwap={() => { if (r.alternatives.length > 0) setSwapOpenFor(r.id); }}
                   swapDisabled={r.alternatives.length === 0}
+                  isSwapping={swapOpenFor === r.id}
                   onInfoClick={() => setInfoRecipeId(shown.id)}
-                  excludedIngredients={excludedByCard.get(r.id) ?? EMPTY_SET}
+                  excludedIngredients={new Set(excludedByCard[r.id] ?? [])}
                   onToggleBuy={(name) => handleToggleBuy(r.id, name)}
                   onRemove={() => {
                     setRemovedIds((prev) => new Set(prev).add(r.id));
@@ -315,7 +305,7 @@ export function RecipesScreen() {
                   }}
                   canRemove={true}
                 />
-                {swapOpenFor === r.id && (
+                {swapOpenFor === r.id && r.alternatives.length > 0 && (
                   <SwapPanel
                     original={r}
                     selected={shown}
@@ -333,6 +323,11 @@ export function RecipesScreen() {
                         });
                       } else {
                         setOverrides((prev) => ({ ...prev, [r.id]: recipe }));
+                        // Clear pill exclusions when swapping to a different recipe —
+                        // exclusions from the old recipe don't translate to the new one.
+                        for (const name of excludedByCard[r.id] ?? []) {
+                          toggleIngredientExclusion(r.id, name);
+                        }
                       }
 
                       // Persist to backend when a session is active and it's a real swap
