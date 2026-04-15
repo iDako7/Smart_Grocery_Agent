@@ -11,6 +11,7 @@ from contracts.api_types import (
     ConversationTurn,
     CreateSessionRequest,
     CreateSessionResponse,
+    PatchSessionRecipeRequest,
     SessionStateResponse,
 )
 from contracts.sse_events import AgentErrorCategory
@@ -85,6 +86,56 @@ async def get_session(
         recipes=snapshot.get("recipes", []),
         grocery_list=snapshot.get("grocery_list"),
         conversation=conversation,
+    )
+
+
+@router.patch("/session/{session_id}/recipes")
+async def patch_session_recipes(
+    session_id: uuid.UUID,
+    body: PatchSessionRecipeRequest,
+    user_id: uuid.UUID = Depends(get_current_user_id),
+    conn: AsyncConnection = Depends(get_db),
+) -> SessionStateResponse:
+    """Replace the recipe at body.index in session state_snapshot["recipes"].
+
+    The list length stays the same — slot body.index becomes body.recipe.
+    Returns the updated SessionStateResponse so the caller can confirm the write.
+    """
+    row = (
+        await conn.execute(
+            sessions.select().where(
+                sessions.c.id == session_id,
+                sessions.c.user_id == user_id,
+            )
+        )
+    ).first()
+    if row is None:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    snapshot: dict = dict(row.state_snapshot or {})
+    recipes: list = list(snapshot.get("recipes", []))
+
+    if body.index >= len(recipes):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Index {body.index} out of range for recipe list of length {len(recipes)}",
+        )
+
+    recipes[body.index] = body.recipe.model_dump()
+    snapshot["recipes"] = recipes
+
+    await conn.execute(
+        sessions.update().where(sessions.c.id == session_id).values(state_snapshot=snapshot)
+    )
+    await conn.commit()
+
+    return SessionStateResponse(
+        session_id=str(session_id),
+        screen=row.screen,
+        pcsv=snapshot.get("pcsv"),
+        recipes=snapshot.get("recipes", []),
+        grocery_list=snapshot.get("grocery_list"),
+        conversation=[],
     )
 
 

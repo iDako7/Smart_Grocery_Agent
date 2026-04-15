@@ -211,6 +211,14 @@ class UpdateSavedRecipeRequest(BaseModel):
     notes: str | None = Field(default=None, max_length=5000)
 
 
+# Session recipe patch
+
+
+class PatchSessionRecipeRequest(BaseModel):
+    index: int = Field(ge=0, description="Zero-based index of the recipe to replace")
+    recipe: RecipeSummary
+
+
 # Grocery lists
 
 
