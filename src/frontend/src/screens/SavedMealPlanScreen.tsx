@@ -14,13 +14,22 @@ export function SavedMealPlanScreen() {
   const [plan, setPlan] = useState<SavedMealPlan | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Reset to loading when id changes (React-approved prop-derived state pattern)
+  const [prevId, setPrevId] = useState(id);
+  if (prevId !== id) {
+    setPrevId(id);
+    setPlan(null);
+    setLoading(true);
+  }
+
   useEffect(() => {
     if (!id) return;
-    setLoading(true);
+    let cancelled = false;
     getSavedMealPlan(id)
-      .then(setPlan)
-      .catch(() => setPlan(null))
-      .finally(() => setLoading(false));
+      .then((data) => { if (!cancelled) setPlan(data); })
+      .catch(() => { if (!cancelled) setPlan(null); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, [id]);
 
   const mappedRecipes = useMemo(

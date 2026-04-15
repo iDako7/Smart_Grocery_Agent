@@ -71,11 +71,27 @@ export function RecipeInfoSheet({
 }: RecipeInfoSheetProps) {
   const [state, setState] = useState<SheetState>({ status: "idle" });
 
+  // Track previous open+recipeId to derive state transitions during render
+  // (React-approved pattern for adjusting state when props change).
+  const [prevKey, setPrevKey] = useState<string | null>(null);
+  const currentKey = open && recipeId ? recipeId : null;
+
+  if (currentKey !== prevKey) {
+    setPrevKey(currentKey);
+    if (!currentKey) {
+      setState({ status: "idle" });
+    } else if (recipeCache.has(currentKey)) {
+      setState({ status: "ready", detail: recipeCache.get(currentKey)! });
+    } else {
+      setState({ status: "loading" });
+    }
+  }
+
   // Track current recipeId to avoid stale fetch updates
   const currentIdRef = useRef<string | null>(null);
 
+  // fetchDetail — used by the retry button (event handler, not effect)
   const fetchDetail = useCallback((id: string) => {
-    // Cache hit — instant ready, no network call
     if (recipeCache.has(id)) {
       setState({ status: "ready", detail: recipeCache.get(id)! });
       return;
@@ -86,37 +102,43 @@ export function RecipeInfoSheet({
 
     getRecipeDetail(id).then(
       (detail) => {
-        if (currentIdRef.current !== id) return; // stale
+        if (currentIdRef.current !== id) return;
         recipeCache.set(id, detail);
         setState({ status: "ready", detail });
       },
       (err: unknown) => {
-        if (currentIdRef.current !== id) return; // stale
-        // Check by name so mocked RecipeNotFoundError (different class identity) also matches.
+        if (currentIdRef.current !== id) return;
         const isNotFound =
           err instanceof RecipeNotFoundError ||
           (err instanceof Error && err.name === "RecipeNotFoundError");
-        if (isNotFound) {
-          setState({ status: "not_found" });
-        } else {
-          setState({ status: "error" });
-        }
+        setState(isNotFound ? { status: "not_found" } : { status: "error" });
       }
     );
   }, []);
 
+  // Effect: fetch non-cached recipes (no sync setState — loading state set during render above)
   useEffect(() => {
-    if (!open || recipeId === null) return;
-    fetchDetail(recipeId);
-  }, [open, recipeId, fetchDetail]);
+    if (!open || recipeId === null || recipeCache.has(recipeId)) return;
+    currentIdRef.current = recipeId;
+    let cancelled = false;
 
-  // Reset to idle when closed
-  useEffect(() => {
-    if (!open) {
-      setState({ status: "idle" });
-      currentIdRef.current = null;
-    }
-  }, [open]);
+    getRecipeDetail(recipeId).then(
+      (detail) => {
+        if (cancelled) return;
+        recipeCache.set(recipeId, detail);
+        setState({ status: "ready", detail });
+      },
+      (err: unknown) => {
+        if (cancelled) return;
+        const isNotFound =
+          err instanceof RecipeNotFoundError ||
+          (err instanceof Error && err.name === "RecipeNotFoundError");
+        setState(isNotFound ? { status: "not_found" } : { status: "error" });
+      }
+    );
+
+    return () => { cancelled = true; };
+  }, [open, recipeId]);
 
   // ---------------------------------------------------------------------------
   // Derive display values

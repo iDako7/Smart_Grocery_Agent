@@ -110,16 +110,26 @@ export function SavedGroceryListScreen() {
   // Snapshot of the most recent server-confirmed list; revert target on error.
   const lastCommittedRef = useRef<SavedGroceryList | null>(null);
 
+  // Reset to loading when id changes (React-approved prop-derived state pattern)
+  const [prevId, setPrevId] = useState(id);
+  if (prevId !== id) {
+    setPrevId(id);
+    setList(null);
+    setLoading(true);
+  }
+
   useEffect(() => {
     if (!id) return;
-    setLoading(true);
+    let cancelled = false;
     getSavedGroceryList(id)
       .then((data) => {
+        if (cancelled) return;
         setList(data);
         lastCommittedRef.current = data;
       })
-      .catch(() => setList(null))
-      .finally(() => setLoading(false));
+      .catch(() => { if (!cancelled) setList(null); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, [id]);
 
   useEffect(() => {

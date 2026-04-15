@@ -14,18 +14,28 @@ export function SavedRecipeScreen() {
   const [editText, setEditText] = useState("");
   const [savedText, setSavedText] = useState("");
 
+  // Reset to loading when id changes (React-approved prop-derived state pattern)
+  const [prevId, setPrevId] = useState(id);
+  if (prevId !== id) {
+    setPrevId(id);
+    setRecipe(null);
+    setLoading(true);
+  }
+
   useEffect(() => {
     if (!id) return;
-    setLoading(true);
+    let cancelled = false;
     getSavedRecipe(id)
       .then((data) => {
+        if (cancelled) return;
         setRecipe(data);
         const instructions = data.recipe_snapshot.instructions;
         setEditText(instructions);
         setSavedText(instructions);
       })
-      .catch(() => setRecipe(null))
-      .finally(() => setLoading(false));
+      .catch(() => { if (!cancelled) setRecipe(null); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, [id]);
 
   function handleEdit() {
