@@ -5,7 +5,7 @@ import { StoreSection } from "@/components/store-section";
 import { ChecklistRow } from "@/components/checklist-row";
 import { ErrorBanner } from "@/components/error-banner";
 import { useSessionOptional } from "@/context/session-context";
-import { saveGroceryList } from "@/services/api-client";
+import { saveGroceryList, saveMealPlan } from "@/services/api-client";
 import type { GroceryStore } from "@/types/sse";
 
 // ---------------------------------------------------------------------------
@@ -52,6 +52,7 @@ export function GroceryScreen() {
   const [buyPillActive, setBuyPillActive] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [mealPlanSavedId, setMealPlanSavedId] = useState<string | null>(null);
 
   // Derived state from session
   const screenState = session?.screenState ?? "idle";
@@ -80,16 +81,26 @@ export function GroceryScreen() {
     setRemovedIds((prev) => new Set([...prev, id]));
   }
 
-  // Save grocery list to backend and navigate to saved screen
+  // Save grocery list (and meal plan on first attempt) to backend, then navigate
   async function handleSave() {
     if (isSaving || !session?.sessionId) return;
     setSaveError(null);
     setIsSaving(true);
+    let planIdThisCall = mealPlanSavedId;
     try {
-      const result = await saveGroceryList("My Grocery List", session.sessionId);
-      navigate(`/saved/list/${result.id}`, { state: { justSaved: true } });
+      if (!planIdThisCall) {
+        const planResult = await saveMealPlan("My Meal Plan", session.sessionId);
+        planIdThisCall = planResult.id;
+        setMealPlanSavedId(planResult.id);
+      }
+      const listResult = await saveGroceryList("My Grocery List", session.sessionId);
+      navigate(`/saved/list/${listResult.id}`, { state: { justSaved: true } });
     } catch {
-      setSaveError("Failed to save. Please try again.");
+      if (!planIdThisCall) {
+        setSaveError("Failed to save meal plan.");
+      } else {
+        setSaveError("Grocery list save failed; meal plan saved. Retry grocery save.");
+      }
     } finally {
       setIsSaving(false);
     }
@@ -193,7 +204,7 @@ export function GroceryScreen() {
                 : "bg-cream-deep text-ink-3"
             }`}
           >
-            Buy
+            Hide checked
           </button>
 
           {/* Copy to notes */}

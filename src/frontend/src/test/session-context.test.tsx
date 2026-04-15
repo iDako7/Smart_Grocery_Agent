@@ -875,6 +875,86 @@ describe("useSession — edge cases", () => {
 });
 
 // ---------------------------------------------------------------------------
+// 17. sendMessage with explicit targetScreen bypasses stale screen ref
+//
+// Regression test for issue #65:
+// navigateToScreen("clarify") + sendMessage(text) in the same event handler
+// causes a React 18 state-batching race — currentScreenRef.current still
+// returns "home" when sendMessage reads it one line later.  The fix adds an
+// optional targetScreen param so call sites can bypass the stale ref.
+// ---------------------------------------------------------------------------
+
+describe("useSession — sendMessage with explicit targetScreen", () => {
+  it("calls chatService with explicit targetScreen even when currentScreen is still 'home'", () => {
+    const mock = createMockChatService();
+    const serviceSpy = vi.fn(mock.service);
+    const wrapper = makeWrapper(serviceSpy);
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    // currentScreen is "home" (initial). Simulate the race: navigateToScreen
+    // was called synchronously before sendMessage, but React hasn't committed
+    // the update yet.  sendMessage must use the explicit targetScreen.
+    act(() => {
+      result.current.sendMessage("I have beef, tomatoes, and eggs", "clarify");
+    });
+
+    expect(serviceSpy).toHaveBeenCalledTimes(1);
+    expect(serviceSpy.mock.calls[0][1]).toBe("clarify");
+  });
+
+  it("falls back to currentScreenRef when targetScreen is omitted", () => {
+    const mock = createMockChatService();
+    const serviceSpy = vi.fn(mock.service);
+    const wrapper = makeWrapper(serviceSpy);
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    // Navigate first (committed in its own act), then send without targetScreen.
+    act(() => {
+      result.current.navigateToScreen("recipes");
+    });
+    act(() => {
+      result.current.sendMessage("show more");
+    });
+
+    expect(serviceSpy.mock.calls[0][1]).toBe("recipes");
+  });
+
+  it("accepts 'recipes' as targetScreen when clarify→recipes transition fires", () => {
+    const mock = createMockChatService();
+    const serviceSpy = vi.fn(mock.service);
+    const wrapper = makeWrapper(serviceSpy);
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    // currentScreen is committed as "clarify" (separate act → ref is synced).
+    // Explicit targetScreen "recipes" must still win over the ref value.
+    act(() => {
+      result.current.navigateToScreen("clarify");
+    });
+    act(() => {
+      result.current.sendMessage("Looks good, show recipes.", "recipes");
+    });
+
+    expect(serviceSpy.mock.calls[0][1]).toBe("recipes");
+  });
+
+  it("accepts 'grocery' as targetScreen for recipes→grocery transition", () => {
+    const mock = createMockChatService();
+    const serviceSpy = vi.fn(mock.service);
+    const wrapper = makeWrapper(serviceSpy);
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    act(() => {
+      result.current.navigateToScreen("recipes"); // base screen
+    });
+    act(() => {
+      result.current.sendMessage("Build my grocery list.", "grocery");
+    });
+
+    expect(serviceSpy.mock.calls[0][1]).toBe("grocery");
+  });
+});
+
+// ---------------------------------------------------------------------------
 // 16. addLocalTurn
 // ---------------------------------------------------------------------------
 

@@ -52,13 +52,13 @@ export function HomeScreen() {
     const trimmed = text.trim();
     if (!trimmed) return;
     navigateToScreen?.("clarify");
-    sendMessage(trimmed);
+    sendMessage(trimmed, "clarify");
     navigate("/clarify");
   }
 
   function handleQuickStart(label: string) {
     navigateToScreen?.("clarify");
-    sendMessage(label);
+    sendMessage(label, "clarify");
     navigate("/clarify");
   }
 

@@ -6,7 +6,7 @@ Covers:
 - SearchRecipesInput backward-compat (include_alternatives defaults to False)
 """
 
-from contracts.tool_schemas import RecipeSummary, SearchRecipesInput, TOOLS
+from contracts.tool_schemas import TOOLS, RecipeSummary, SearchRecipesInput
 
 
 def test_recipe_summary_alternatives_roundtrip():

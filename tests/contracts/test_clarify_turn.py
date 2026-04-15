@@ -11,7 +11,6 @@ from contracts.tool_schemas import (
     ClarifyTurnPayload,
 )
 
-
 # ---------------------------------------------------------------------------
 # Test 1: Roundtrip
 # ---------------------------------------------------------------------------
@@ -224,6 +223,7 @@ def test_clarify_turn_event_deserializes_without_questions_key():
     still parse, defaulting to an empty list. Guards against serializer
     fragility where an empty array might be omitted."""
     from pydantic import TypeAdapter
+
     from contracts.sse_events import ClarifyTurnEvent, SSEEvent
 
     # Minimal payload — no questions key at all

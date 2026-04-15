@@ -4,7 +4,6 @@ import json
 import sys
 
 from dotenv import load_dotenv
-
 from prototype.orchestrator import run_agent
 from prototype.schema import UserProfile
 

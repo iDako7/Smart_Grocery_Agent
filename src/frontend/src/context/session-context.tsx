@@ -69,7 +69,7 @@ type SessionContextValue = {
   currentScreen: Screen;
 
   // Actions
-  sendMessage: (message: string) => void;
+  sendMessage: (message: string, targetScreen?: Screen) => void;
   navigateToScreen: (screen: Screen) => void;
   resetSession: () => void;
   addLocalTurn: (turn: ConversationTurn) => void;
@@ -153,7 +153,7 @@ export function SessionProvider({
   // --------------------------------------------------------------------------
 
   const sendMessage = useCallback(
-    (text: string) => {
+    (text: string, targetScreen?: Screen) => {
       // Guard: ignore empty messages
       if (!text.trim()) return;
 
@@ -176,11 +176,16 @@ export function SessionProvider({
       // 3. Track whether streaming has been started for this request
       let streamingStarted = false;
 
-      // 4. Call chatService (via ref so this callback stays stable)
+      // 4. Resolve screen: explicit targetScreen bypasses the stale-ref window
+      //    that occurs when navigateToScreen + sendMessage are called in the
+      //    same synchronous event handler (React 18 batching — issue #65).
+      const screen = targetScreen ?? currentScreenRef.current;
+
+      // 5. Call chatService (via ref so this callback stays stable)
       const { cancel } = chatServiceRef.current(
         text,
-        currentScreenRef.current,
-        // onEvent
+        screen,
+        // 6. onEvent
         (event: SSEEvent) => {
           if (!streamingStarted) {
             streamingStarted = true;

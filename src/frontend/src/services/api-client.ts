@@ -13,7 +13,7 @@ import type {
   SavedGroceryListSummary,
 } from "@/types/api";
 import type { GroceryStore } from "@/types/sse";
-import type { RecipeDetail } from "@/types/tools";
+import type { RecipeDetail, RecipeSummary } from "@/types/tools";
 
 // ---------------------------------------------------------------------------
 // Base URL
@@ -255,6 +255,40 @@ export async function getSavedGroceryList(id: string): Promise<SavedGroceryList>
     throw new Error(`Failed to get saved grocery list: ${response.status}`);
   }
   return response.json() as Promise<SavedGroceryList>;
+}
+
+// ---------------------------------------------------------------------------
+// Session recipe swap — PATCH /session/{id}/recipes
+// ---------------------------------------------------------------------------
+
+export interface SessionStateResponse {
+  session_id: string;
+  screen: string;
+  recipes: RecipeSummary[];
+  pcsv: unknown | null;
+  grocery_list: unknown | null;
+  conversation: unknown[];
+}
+
+export async function patchSessionRecipe(
+  sessionId: string,
+  index: number,
+  recipe: RecipeSummary
+): Promise<SessionStateResponse> {
+  const token = await getAuthToken();
+  const url = `${getApiBase()}/session/${sessionId}/recipes`;
+  const response = await fetch(url, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ index, recipe }),
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to patch session recipe: ${response.status}`);
+  }
+  return response.json() as Promise<SessionStateResponse>;
 }
 
 export async function updateSavedGroceryList(

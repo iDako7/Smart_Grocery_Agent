@@ -1,6 +1,7 @@
 """Bilingual EN↔ZH glossary lookup from SQLite KB."""
 
 import aiosqlite
+
 from contracts.tool_schemas import TranslateTermInput, TranslateTermResult
 
 

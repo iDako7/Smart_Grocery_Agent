@@ -7,9 +7,9 @@ Output: data/cookwell_raw/normalized_recipes.json
 Does NOT modify recipes.json — that happens in the merge step.
 """
 
+import glob
 import json
 import re
-import glob
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent

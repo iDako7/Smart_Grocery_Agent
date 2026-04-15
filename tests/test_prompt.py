@@ -1,7 +1,8 @@
 """Tests for prompt assembly."""
 
-from contracts.tool_schemas import UserProfile
 from src.ai.prompt import build_system_prompt
+
+from contracts.tool_schemas import UserProfile
 
 
 def test_default_profile_prompt():

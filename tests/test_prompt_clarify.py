@@ -17,11 +17,9 @@ them verbatim so the tests pass after the fix.
     - "Do NOT respond with free-text"   (explicit prohibition of markdown fallback)
 """
 
-import pytest
-
-from contracts.tool_schemas import UserProfile
 from src.ai.prompt import _TOOL_INSTRUCTIONS, build_system_prompt
 
+from contracts.tool_schemas import UserProfile
 
 # ---------------------------------------------------------------------------
 # 1. _TOOL_INSTRUCTIONS lists emit_clarify_turn

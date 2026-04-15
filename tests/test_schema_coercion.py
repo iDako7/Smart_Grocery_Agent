@@ -1,7 +1,8 @@
 """Tests for schema coercion pipeline."""
 
-from contracts.tool_schemas import AnalyzePcsvInput, UpdateUserProfileInput
 from src.ai.schema_coercion import coerce_tool_args
+
+from contracts.tool_schemas import AnalyzePcsvInput, UpdateUserProfileInput
 
 
 def test_valid_json_coercion():

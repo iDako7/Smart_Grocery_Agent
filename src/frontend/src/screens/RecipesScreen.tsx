@@ -29,6 +29,8 @@ import { ErrorBanner } from "@/components/error-banner";
 import { ConfirmResetDialog } from "@/components/confirm-reset-dialog";
 import { useSessionOptional } from "@/context/session-context";
 import { partialBannerMessage } from "@/lib/partial-message";
+import { postGroceryList, patchSessionRecipe, saveMealPlan } from "@/services/api-client";
+import { collectBuyItems } from "@/services/grocery-helpers";
 import type { RecipeSummary, EffortLevel } from "@/types/tools";
 
 // ---------------------------------------------------------------------------
@@ -70,6 +72,9 @@ function SkeletonCard() {
   );
 }
 
+// Module-level empty set — stable reference avoids unnecessary re-renders.
+const EMPTY_SET: Set<string> = new Set();
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -79,8 +84,10 @@ export function RecipesScreen() {
   const session = useSessionOptional();
 
   const navigateToScreen = session?.navigateToScreen;
-  const sendMessage = session?.sendMessage ?? (() => {});
   const resetSession = session?.resetSession;
+  const sendMessage = session?.sendMessage ?? (() => {});
+  const dispatch = session?.dispatch;
+  const sessionId = session?.sessionId ?? null;
   const screenData = session?.screenData;
   const screenState = session?.screenState ?? "idle";
   const isComplete = session?.isComplete ?? false;
@@ -93,6 +100,10 @@ export function RecipesScreen() {
   const [swapOpenFor, setSwapOpenFor] = useState<string | null>(null);
   const [overrides, setOverrides] = useState<Record<string, RecipeSummary>>({});
   const [removedIds, setRemovedIds] = useState<Set<string>>(new Set());
+  const [excludedByCard, setExcludedByCard] = useState<Map<string, Set<string>>>(new Map());
+  const [isBuilding, setIsBuilding] = useState(false);
+  const [buildError, setBuildError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   const backButtonRef = useRef<HTMLButtonElement>(null);
   const prevResetOpen = useRef(false);
@@ -104,6 +115,7 @@ export function RecipesScreen() {
     if (Object.keys(overrides).length > 0) setOverrides({});
     if (removedIds.size > 0) setRemovedIds(new Set());
     if (swapOpenFor !== null) setSwapOpenFor(null);
+    if (excludedByCard.size > 0) setExcludedByCard(new Map());
   }
 
   useEffect(() => {
@@ -112,6 +124,20 @@ export function RecipesScreen() {
     }
     prevResetOpen.current = resetOpen;
   }, [resetOpen]);
+
+  function handleToggleBuy(cardId: string, ingredientName: string) {
+    setExcludedByCard((prev) => {
+      const next = new Map(prev);
+      const cardSet = new Set(next.get(cardId) ?? []);
+      if (cardSet.has(ingredientName)) {
+        cardSet.delete(ingredientName);
+      } else {
+        cardSet.add(ingredientName);
+      }
+      next.set(cardId, cardSet);
+      return next;
+    });
+  }
 
   function handleStartOver() {
     resetSession?.();
@@ -122,9 +148,46 @@ export function RecipesScreen() {
     sendMessage("retry");
   }
 
-  function handleBuildList() {
-    navigateToScreen?.("grocery");
-    navigate("/grocery");
+  async function handleSaveMealPlan() {
+    if (!sessionId) return;
+    setIsSaving(true);
+    setBuildError(null);
+    try {
+      const saved = await saveMealPlan("My Meal Plan", sessionId);
+      navigate(`/saved/plan/${saved.id}`, { state: { justSaved: true } });
+    } catch {
+      setBuildError("Couldn't save your meal plan. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  }
+
+  async function handleBuildList() {
+    if (!sessionId || !dispatch) return;
+    setIsBuilding(true);
+    setBuildError(null);
+    try {
+      const excludedByIndex = new Map<number, Set<string>>();
+      displayedRecipes.forEach((r, idx) => {
+        const excluded = excludedByCard.get(r.id);
+        if (excluded && excluded.size > 0) excludedByIndex.set(idx, excluded);
+      });
+      const items = collectBuyItems(
+        displayedRecipes.map((r) => {
+          const shown = overrides[r.id] ?? r;
+          return { name: shown.name, id: shown.id, ingredients: recipeToIngredientTags(shown) };
+        }),
+        excludedByIndex
+      );
+      const stores = await postGroceryList(sessionId, items);
+      navigateToScreen?.("grocery");
+      dispatch({ type: "set_grocery_list", stores });
+      navigate("/grocery");
+    } catch {
+      setBuildError("Couldn't build your grocery list. Please try again.");
+    } finally {
+      setIsBuilding(false);
+    }
   }
 
   const isLoading = screenState === "loading";
@@ -244,6 +307,8 @@ export function RecipesScreen() {
                   isSwapping={swapOpenFor === r.id}
                   swapDisabled={r.alternatives.length === 0}
                   onInfoClick={() => setInfoRecipeId(shown.id)}
+                  excludedIngredients={excludedByCard.get(r.id) ?? EMPTY_SET}
+                  onToggleBuy={(name) => handleToggleBuy(r.id, name)}
                   onRemove={() => {
                     setRemovedIds((prev) => new Set(prev).add(r.id));
                     if (swapOpenFor === r.id) setSwapOpenFor(null);
@@ -256,8 +321,11 @@ export function RecipesScreen() {
                     selected={shown}
                     alternatives={r.alternatives}
                     lang={lang}
-                    onSelect={(recipe) => {
-                      if (recipe.id === r.id) {
+                    onSelect={async (recipe) => {
+                      const isRestore = recipe.id === r.id;
+
+                      // Optimistic update
+                      if (isRestore) {
                         setOverrides((prev) => {
                           const next = { ...prev };
                           delete next[r.id];
@@ -265,6 +333,22 @@ export function RecipesScreen() {
                         });
                       } else {
                         setOverrides((prev) => ({ ...prev, [r.id]: recipe }));
+                      }
+
+                      // Persist to backend when a session is active and it's a real swap
+                      if (sessionId && !isRestore) {
+                        try {
+                          await patchSessionRecipe(sessionId, idx, recipe);
+                        } catch {
+                          // Revert optimistic update on failure and close the panel
+                          setOverrides((prev) => {
+                            const next = { ...prev };
+                            delete next[r.id];
+                            return next;
+                          });
+                          setSwapOpenFor(null);
+                          setBuildError("Couldn't save your recipe swap. Please try again.");
+                        }
                       }
                     }}
                     onClose={() => setSwapOpenFor(null)}
@@ -276,20 +360,39 @@ export function RecipesScreen() {
         </div>
       )}
 
+      {/* Build list error banner */}
+      {buildError && (
+        <div className="px-5 pt-3">
+          <ErrorBanner message={buildError} />
+        </div>
+      )}
+
       {/* CTA — visible when there are displayed recipes */}
       {showCta && (
-        <div className="px-5 py-3 flex justify-end">
+        <div className="px-5 py-3 flex justify-end gap-2">
+          <button
+            type="button"
+            onClick={handleSaveMealPlan}
+            disabled={!ctaEnabled || isSaving}
+            className={`px-6 py-[11px] border-none rounded-full font-sans text-[13px] font-semibold ${
+              ctaEnabled && !isSaving
+                ? "bg-cream-deep text-ink cursor-pointer"
+                : "bg-cream-deep text-ink-3 cursor-not-allowed opacity-60"
+            }`}
+          >
+            {isSaving ? "Saving…" : "Save meal plan"}
+          </button>
           <button
             type="button"
             onClick={handleBuildList}
-            disabled={!ctaEnabled}
+            disabled={!ctaEnabled || isBuilding}
             className={`px-6 py-[11px] border-none rounded-full font-sans text-[13px] font-semibold ${
-              ctaEnabled
+              ctaEnabled && !isBuilding
                 ? "bg-shoyu text-cream cursor-pointer"
                 : "bg-cream-deep text-ink-3 cursor-not-allowed opacity-60"
             }`}
           >
-            Build list →
+            {isBuilding ? "Building…" : "Build list →"}
           </button>
         </div>
       )}

@@ -3,11 +3,12 @@
 // empty RecipesScreen shell.
 
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { screen, render } from "@testing-library/react";
+import { screen, render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 // Mock api-client so RecipeInfoSheet (child of RecipesScreen) doesn't hit network.
 // Phase 3 owns RecipeInfoSheet's full coverage — here we only assert call-through.
+// postGroceryList is controlled per-test to test the build-list flow.
 vi.mock("@/services/api-client", async () => {
   const actual =
     await vi.importActual<typeof import("@/services/api-client")>(
@@ -16,6 +17,8 @@ vi.mock("@/services/api-client", async () => {
   return {
     ...actual,
     getRecipeDetail: vi.fn(() => new Promise(() => {})), // pending forever
+    postGroceryList: vi.fn(), // controlled per-test
+    saveMealPlan: vi.fn(), // controlled per-test
   };
 });
 
@@ -84,14 +87,17 @@ import React, { useEffect } from "react";
 import { Routes, Route, MemoryRouter } from "react-router";
 
 import { RecipesScreen } from "@/screens/RecipesScreen";
-import { getRecipeDetail } from "@/services/api-client";
+import { GroceryScreen } from "@/screens/GroceryScreen";
+import { getRecipeDetail, postGroceryList, saveMealPlan } from "@/services/api-client";
 import { resetRecipeCacheForTests } from "@/components/recipe-cache";
 import { renderWithSession, createMockChatService } from "@/test/test-utils";
 import { useSessionOptional } from "@/context/session-context";
 import * as sessionContextModule from "@/context/session-context";
 import { initialScreenData } from "@/hooks/use-screen-state";
+import type { ScreenAction } from "@/hooks/use-screen-state";
 import { makeRecipeSummary } from "@/test/fixtures/recipes";
 import type { RecipeSummary } from "@/types/tools";
+import type { GroceryStore } from "@/types/sse";
 
 // ---------------------------------------------------------------------------
 // Fixtures: three distinct recipes for assertions
@@ -132,6 +138,23 @@ const recipe3: RecipeSummary = makeRecipeSummary({
   ingredients_have: ["zucchini", "tomato"],
   ingredients_need: ["eggplant", "thyme"],
 });
+
+// Stores returned by the mocked postGroceryList endpoint (T9, T16).
+const STORES: GroceryStore[] = [
+  {
+    store_name: "Save-On-Foods",
+    departments: [
+      {
+        name: "Produce",
+        items: [
+          { id: "i1", name: "scallion", amount: "1 bunch", recipe_context: "Garlic Shrimp Stir-Fry", checked: false },
+          { id: "i2", name: "bok choy", amount: "1 head", recipe_context: "Garlic Shrimp Stir-Fry", checked: false },
+          { id: "i3", name: "chipotle", amount: "2 cans", recipe_context: "Chicken Tinga Tacos", checked: false },
+        ],
+      },
+    ],
+  },
+];
 
 // ---------------------------------------------------------------------------
 // Helper driver component — uses session dispatch to force a given state.
@@ -459,15 +482,21 @@ describe("RecipesScreen — T8: partial completion banner", () => {
 });
 
 // ---------------------------------------------------------------------------
-// T9: click "Build list" → navigates to /grocery and calls navigateToScreen
+// T9: click "Build list" → calls postGroceryList (not sendMessage), dispatches
+//     set_grocery_list, navigates to /grocery
 // ---------------------------------------------------------------------------
 
-describe("RecipesScreen — T9: Build list navigates to grocery", () => {
+describe("RecipesScreen — T9: Build list calls postGroceryList and dispatches set_grocery_list", () => {
   let spy: ReturnType<typeof vi.spyOn>;
   const navigateToScreenSpy = vi.fn();
+  const sendMessageSpy = vi.fn();
+  const dispatchSpy = vi.fn();
 
   beforeEach(() => {
     navigateToScreenSpy.mockClear();
+    sendMessageSpy.mockClear();
+    dispatchSpy.mockClear();
+    vi.mocked(postGroceryList).mockResolvedValue(STORES);
     spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
       screenState: "complete",
       screenData: {
@@ -479,22 +508,23 @@ describe("RecipesScreen — T9: Build list navigates to grocery", () => {
       isStreaming: false,
       isComplete: true,
       isError: false,
-      sessionId: null,
+      sessionId: "sess-1",
       conversationHistory: [],
       currentScreen: "recipes",
-      sendMessage: vi.fn(),
+      sendMessage: sendMessageSpy,
       navigateToScreen: navigateToScreenSpy,
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
-      dispatch: vi.fn(),
+      dispatch: dispatchSpy,
     });
   });
 
   afterEach(() => {
     spy.mockRestore();
+    vi.mocked(postGroceryList).mockReset();
   });
 
-  it("test_recipes_screen_build_list_navigates_to_grocery", async () => {
+  it("test_recipes_screen_build_list_calls_post_grocery_list", async () => {
     const user = userEvent.setup();
 
     render(
@@ -512,11 +542,29 @@ describe("RecipesScreen — T9: Build list navigates to grocery", () => {
     const cta = screen.getByRole("button", { name: /build list/i });
     await user.click(cta);
 
-    // navigateToScreen called with "grocery"
+    // postGroceryList must be called with the session id and a list of items
+    await waitFor(() => {
+      expect(vi.mocked(postGroceryList)).toHaveBeenCalledWith("sess-1", expect.any(Array));
+    });
+
+    // sendMessage must NOT be called — it was the root cause of the bug
+    expect(sendMessageSpy).not.toHaveBeenCalled();
+
+    // navigateToScreen dispatched to context (so GroceryScreen receives correct screen)
     expect(navigateToScreenSpy).toHaveBeenCalledWith("grocery");
 
-    // Navigated to /grocery route
-    expect(screen.getByTestId("screen-grocery")).toBeInTheDocument();
+    // Reducer must receive set_grocery_list with the stores returned by the endpoint
+    await waitFor(() => {
+      expect(dispatchSpy).toHaveBeenCalledWith({
+        type: "set_grocery_list",
+        stores: STORES,
+      } satisfies ScreenAction);
+    });
+
+    // Router navigated to /grocery
+    await waitFor(() => {
+      expect(screen.getByTestId("screen-grocery")).toBeInTheDocument();
+    });
   });
 });
 
@@ -1084,5 +1132,615 @@ describe("RecipesScreen — T-Remove: remove recipe", () => {
     expect(screen.getByText("Fresh Bowl")).toBeInTheDocument();
     expect(screen.queryByText("Garlic Shrimp Stir-Fry")).toBeNull();
     expect(screen.queryByText("Chicken Tinga Tacos")).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T16: cross-screen integration — "Build list →" → GroceryScreen shows items
+//
+// This test covers the full connection that was missing and allowed issue #68
+// to go undetected. It renders RecipesScreen (complete + recipes) alongside
+// GroceryScreen in the same route tree, clicks "Build list →", and asserts
+// that GroceryScreen renders grocery items — NOT the empty state.
+//
+// Would have caught the bug: clicking "Build list →" navigated to GroceryScreen
+// but groceryList was always empty because sendMessage() was called instead of
+// postGroceryList(), and sendMessage() resets all screenData via start_loading.
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen → GroceryScreen — T16: Build list populates grocery items", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.mocked(postGroceryList).mockResolvedValue(STORES);
+  });
+
+  afterEach(() => {
+    spy?.mockRestore();
+    vi.mocked(postGroceryList).mockReset();
+  });
+
+  it("test_build_list_populates_grocery_screen_not_empty_state", async () => {
+    const user = userEvent.setup();
+
+    // Shared mutable stores populated when handleBuildList calls dispatch.
+    // mockImplementation reads from this closure so GroceryScreen sees the
+    // data on its first render (after navigation, which happens post-dispatch).
+    let currentGroceryList: GroceryStore[] = [];
+    const dispatchFn = vi.fn((action: ScreenAction) => {
+      if (action.type === "set_grocery_list") {
+        currentGroceryList = action.stores;
+      }
+    });
+
+    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockImplementation(() => ({
+      screenState: "complete",
+      screenData: {
+        ...initialScreenData,
+        recipes: [recipe1, recipe2],
+        completionStatus: "complete",
+        groceryList: currentGroceryList,
+      },
+      isLoading: false,
+      isStreaming: false,
+      isComplete: true,
+      isError: false,
+      sessionId: "sess-t16",
+      conversationHistory: [],
+      currentScreen: "recipes",
+      sendMessage: vi.fn(),
+      navigateToScreen: vi.fn(),
+      resetSession: vi.fn(),
+      addLocalTurn: vi.fn(),
+      dispatch: dispatchFn,
+    }));
+
+    render(
+      <MemoryRouter initialEntries={["/recipes"]}>
+        <Routes>
+          <Route path="/recipes" element={<RecipesScreen />} />
+          <Route path="/grocery" element={<GroceryScreen />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // Verify initial RecipesScreen state
+    expect(screen.getByRole("button", { name: /build list/i })).not.toBeDisabled();
+
+    // Click "Build list →"
+    await user.click(screen.getByRole("button", { name: /build list/i }));
+
+    // After postGroceryList resolves:
+    //   1. dispatch({ type: "set_grocery_list", stores }) is called → currentGroceryList updated
+    //   2. navigate("/grocery") is called → GroceryScreen mounts
+    //   3. GroceryScreen reads useSessionOptional() → groceryList: currentGroceryList (populated)
+    //   4. GroceryScreen renders items, NOT "No grocery list yet."
+    await waitFor(() => {
+      expect(screen.getByText("scallion")).toBeInTheDocument();
+    });
+
+    // The empty-state message must NOT be visible
+    expect(screen.queryByText(/no grocery list yet/i)).toBeNull();
+
+    // Regression guard: sendMessage was NOT called (it would have reset screenData)
+    expect(vi.mocked(postGroceryList)).toHaveBeenCalledWith("sess-t16", expect.any(Array));
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T-Toggle-1: clicking an ingredient pill marks it as excluded (visual)
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T-Toggle-1: clicking ingredient pill visually marks it excluded", () => {
+  it("test_ingredient_pill_click_toggles_excluded_visual", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    // recipe1: ingredients_have: ["shrimp", "garlic"], ingredients_need: ["scallion", "bok choy"]
+    // "shrimp" starts as have=true → pill is aria-pressed=true (checked/green)
+    // after clicking it, it should be aria-pressed=false (unchecked/red)
+    renderWithSession(
+      <RecipesWith drive={{ kind: "complete", recipes: [recipe1] }} />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    // Ingredient pills have aria-pressed. Use getAllByRole + filter to avoid
+    // matching the info button ("Info about Garlic Shrimp Stir-Fry").
+    const shrimpPill = screen
+      .getAllByRole("button", { pressed: true })
+      .find((btn) => btn.textContent?.includes("shrimp"));
+    expect(shrimpPill).toBeDefined();
+    expect(shrimpPill).toHaveAttribute("aria-pressed", "true");
+
+    await user.click(shrimpPill!);
+
+    expect(shrimpPill).toHaveAttribute("aria-pressed", "false");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T-Toggle-2: excluded ingredient is omitted from Build list payload
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T-Toggle-2: excluded ingredient absent from postGroceryList call", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+  const dispatchSpy = vi.fn();
+  const navigateToScreenSpy = vi.fn();
+
+  beforeEach(() => {
+    dispatchSpy.mockClear();
+    navigateToScreenSpy.mockClear();
+    vi.mocked(postGroceryList).mockResolvedValue(STORES);
+    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
+      screenState: "complete",
+      screenData: {
+        ...initialScreenData,
+        recipes: [recipe1],
+        completionStatus: "complete",
+      },
+      isLoading: false,
+      isStreaming: false,
+      isComplete: true,
+      isError: false,
+      sessionId: "sess-toggle",
+      conversationHistory: [],
+      currentScreen: "recipes",
+      sendMessage: vi.fn(),
+      navigateToScreen: navigateToScreenSpy,
+      resetSession: vi.fn(),
+      addLocalTurn: vi.fn(),
+      dispatch: dispatchSpy,
+    });
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+    vi.mocked(postGroceryList).mockReset();
+  });
+
+  it("test_excluded_ingredient_not_in_grocery_list", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter initialEntries={["/recipes"]}>
+        <Routes>
+          <Route path="/recipes" element={<RecipesScreen />} />
+          <Route path="/grocery" element={<div data-testid="screen-grocery" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // recipe1 ingredients_need: ["scallion", "bok choy"] — both need to be bought by default.
+    // Toggle "scallion" off (user says "I have it" → flip have=false → now treated as have=true → skip)
+    const scallionPill = screen.getByRole("button", { name: /scallion/i });
+    await user.click(scallionPill);
+
+    // Build the list
+    const cta = screen.getByRole("button", { name: /build list/i });
+    await user.click(cta);
+
+    await waitFor(() => {
+      expect(vi.mocked(postGroceryList)).toHaveBeenCalledTimes(1);
+    });
+
+    const [, items] = vi.mocked(postGroceryList).mock.calls[0];
+    const names = items.map((i: { ingredient_name: string }) => i.ingredient_name);
+
+    // "scallion" was toggled off → user claims to have it → should NOT be in the buy list
+    expect(names).not.toContain("scallion");
+    // "bok choy" was not toggled → still need to buy
+    expect(names).toContain("bok choy");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T-Toggle-3: toggle off then back on — ingredient reappears in Build list
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T-Toggle-3: toggle off then on restores ingredient in grocery list", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+  const dispatchSpy = vi.fn();
+  const navigateToScreenSpy = vi.fn();
+
+  beforeEach(() => {
+    dispatchSpy.mockClear();
+    navigateToScreenSpy.mockClear();
+    vi.mocked(postGroceryList).mockResolvedValue(STORES);
+    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
+      screenState: "complete",
+      screenData: {
+        ...initialScreenData,
+        recipes: [recipe1],
+        completionStatus: "complete",
+      },
+      isLoading: false,
+      isStreaming: false,
+      isComplete: true,
+      isError: false,
+      sessionId: "sess-toggle3",
+      conversationHistory: [],
+      currentScreen: "recipes",
+      sendMessage: vi.fn(),
+      navigateToScreen: navigateToScreenSpy,
+      resetSession: vi.fn(),
+      addLocalTurn: vi.fn(),
+      dispatch: dispatchSpy,
+    });
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+    vi.mocked(postGroceryList).mockReset();
+  });
+
+  it("test_toggle_off_then_on_restores_ingredient_in_list", async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MemoryRouter initialEntries={["/recipes"]}>
+        <Routes>
+          <Route path="/recipes" element={<RecipesScreen />} />
+          <Route path="/grocery" element={<div data-testid="screen-grocery" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    // Toggle "bok choy" off then back on
+    const bokChoyPill = screen.getByRole("button", { name: /bok choy/i });
+    await user.click(bokChoyPill); // off
+    await user.click(bokChoyPill); // back on
+
+    const cta = screen.getByRole("button", { name: /build list/i });
+    await user.click(cta);
+
+    await waitFor(() => {
+      expect(vi.mocked(postGroceryList)).toHaveBeenCalledTimes(1);
+    });
+
+    const [, items] = vi.mocked(postGroceryList).mock.calls[0];
+    const names = items.map((i: { ingredient_name: string }) => i.ingredient_name);
+
+    // "bok choy" toggled back on — have=false again → still needs buying
+    expect(names).toContain("bok choy");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T-Toggle-4: fresh recipe list clears exclusions for removed/replaced cards
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T-Toggle-4: fresh recipe list clears per-card exclusions", () => {
+  it("test_fresh_recipes_clears_exclusions", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+
+    function HarnessToggle() {
+      const session = useSessionOptional();
+      const [phase, setPhase] = React.useState<1 | 2>(1);
+
+      useEffect(() => {
+        if (!session) return;
+        session.dispatch({ type: "start_loading" });
+        session.dispatch({ type: "start_streaming" });
+        session.dispatch({
+          type: "receive_event",
+          event: { event_type: "recipe_card", recipe: recipe1 },
+        });
+        session.dispatch({ type: "complete", status: "complete" });
+      }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+      useEffect(() => {
+        if (!session || phase !== 2) return;
+        session.dispatch({ type: "reset" });
+        session.dispatch({ type: "start_loading" });
+        session.dispatch({ type: "start_streaming" });
+        const freshRecipe = makeRecipeSummary({
+          id: "r_fresh2",
+          name: "Fresh Noodles",
+          ingredients_need: ["scallion"],
+          ingredients_have: [],
+          alternatives: [],
+        });
+        session.dispatch({
+          type: "receive_event",
+          event: { event_type: "recipe_card", recipe: freshRecipe },
+        });
+        session.dispatch({ type: "complete", status: "complete" });
+      }, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
+
+      return (
+        <>
+          <button
+            type="button"
+            data-testid="advance-toggle-phase"
+            onClick={() => setPhase(2)}
+          >
+            advance
+          </button>
+          <RecipesScreen />
+        </>
+      );
+    }
+
+    renderWithSession(<HarnessToggle />, {
+      chatService: mock.service,
+      initialPath: "/recipes",
+    });
+
+    // Toggle "scallion" off in the first session (recipe1 ingredients_need)
+    const scallionPill = screen.getByRole("button", { name: /scallion/i });
+    await user.click(scallionPill);
+    expect(scallionPill).toHaveAttribute("aria-pressed", "true"); // scallion have=false XOR flipped=true → isChecked=true
+
+    // Advance to a fresh recipe list
+    await user.click(screen.getByTestId("advance-toggle-phase"));
+
+    // Fresh Noodles card appears with scallion in ingredients_need (have=false)
+    // Since exclusions were reset, scallion should be back to unchecked (aria-pressed=false)
+    await waitFor(() => {
+      expect(screen.getByText("Fresh Noodles")).toBeInTheDocument();
+    });
+
+    const freshScallionPill = screen.getByRole("button", { name: /scallion/i });
+    expect(freshScallionPill).toHaveAttribute("aria-pressed", "false");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T17: "Save meal plan" button renders when recipes are present
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T17: Save meal plan button renders when recipes present", () => {
+  it("test_recipes_screen_save_meal_plan_button_renders_with_recipes", () => {
+    const mock = createMockChatService();
+
+    renderWithSession(
+      <RecipesWith drive={{ kind: "complete", recipes: [recipe1, recipe2] }} />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    expect(
+      screen.getByRole("button", { name: /save meal plan/i })
+    ).toBeInTheDocument();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T18: click "Save meal plan" → calls saveMealPlan("My Meal Plan", sessionId)
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T18: Save meal plan calls saveMealPlan with correct args", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.mocked(saveMealPlan).mockResolvedValue({
+      id: "plan-42",
+      name: "My Meal Plan",
+      recipes: [],
+      created_at: "2026-04-14T00:00:00Z",
+      updated_at: "2026-04-14T00:00:00Z",
+    });
+    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
+      screenState: "complete",
+      screenData: { ...initialScreenData, recipes: [recipe1], completionStatus: "complete" },
+      isLoading: false,
+      isStreaming: false,
+      isComplete: true,
+      isError: false,
+      sessionId: "sess-plan-1",
+      conversationHistory: [],
+      currentScreen: "recipes",
+      sendMessage: vi.fn(),
+      navigateToScreen: vi.fn(),
+      resetSession: vi.fn(),
+      addLocalTurn: vi.fn(),
+      dispatch: vi.fn(),
+    });
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+    vi.mocked(saveMealPlan).mockReset();
+  });
+
+  it("test_recipes_screen_save_meal_plan_calls_api_with_name_and_session", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/recipes"]}>
+        <Routes>
+          <Route path="/recipes" element={<RecipesScreen />} />
+          <Route path="/saved/plan/:id" element={<div data-testid="saved-plan-screen" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await user.click(screen.getByRole("button", { name: /save meal plan/i }));
+
+    await waitFor(() => {
+      expect(vi.mocked(saveMealPlan)).toHaveBeenCalledWith("My Meal Plan", "sess-plan-1");
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T19: success → navigates to /saved/plan/:id
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T19: Save meal plan success navigates to /saved/plan/:id", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.mocked(saveMealPlan).mockResolvedValue({
+      id: "plan-42",
+      name: "My Meal Plan",
+      recipes: [],
+      created_at: "2026-04-14T00:00:00Z",
+      updated_at: "2026-04-14T00:00:00Z",
+    });
+    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
+      screenState: "complete",
+      screenData: { ...initialScreenData, recipes: [recipe1], completionStatus: "complete" },
+      isLoading: false,
+      isStreaming: false,
+      isComplete: true,
+      isError: false,
+      sessionId: "sess-plan-1",
+      conversationHistory: [],
+      currentScreen: "recipes",
+      sendMessage: vi.fn(),
+      navigateToScreen: vi.fn(),
+      resetSession: vi.fn(),
+      addLocalTurn: vi.fn(),
+      dispatch: vi.fn(),
+    });
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+    vi.mocked(saveMealPlan).mockReset();
+  });
+
+  it("test_recipes_screen_save_meal_plan_navigates_to_saved_plan", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/recipes"]}>
+        <Routes>
+          <Route path="/recipes" element={<RecipesScreen />} />
+          <Route path="/saved/plan/:id" element={<div data-testid="saved-plan-screen" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await user.click(screen.getByRole("button", { name: /save meal plan/i }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId("saved-plan-screen")).toBeInTheDocument();
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T20: failure → error banner shown, does NOT navigate
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T20: Save meal plan failure shows error banner", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.mocked(saveMealPlan).mockRejectedValue(new Error("Server error"));
+    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
+      screenState: "complete",
+      screenData: { ...initialScreenData, recipes: [recipe1], completionStatus: "complete" },
+      isLoading: false,
+      isStreaming: false,
+      isComplete: true,
+      isError: false,
+      sessionId: "sess-plan-1",
+      conversationHistory: [],
+      currentScreen: "recipes",
+      sendMessage: vi.fn(),
+      navigateToScreen: vi.fn(),
+      resetSession: vi.fn(),
+      addLocalTurn: vi.fn(),
+      dispatch: vi.fn(),
+    });
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+    vi.mocked(saveMealPlan).mockReset();
+  });
+
+  it("test_recipes_screen_save_meal_plan_failure_shows_banner_no_navigate", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/recipes"]}>
+        <Routes>
+          <Route path="/recipes" element={<RecipesScreen />} />
+          <Route path="/saved/plan/:id" element={<div data-testid="saved-plan-screen" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await user.click(screen.getByRole("button", { name: /save meal plan/i }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/couldn't save your meal plan/i)
+      ).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId("saved-plan-screen")).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T21: button disabled while save in flight and while streaming
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T21: Save meal plan button disabled while in-flight or streaming", () => {
+  it("test_recipes_screen_save_meal_plan_disabled_while_streaming", () => {
+    const mock = createMockChatService();
+
+    renderWithSession(
+      <RecipesWith drive={{ kind: "streaming", recipes: [recipe1] }} />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    expect(
+      screen.getByRole("button", { name: /save meal plan/i })
+    ).toBeDisabled();
+  });
+
+  it("test_recipes_screen_save_meal_plan_disabled_while_saving", async () => {
+    let resolvePromise!: (v: import("@/types/api").SavedMealPlan) => void;
+    vi.mocked(saveMealPlan).mockReturnValue(
+      new Promise((res) => { resolvePromise = res; })
+    );
+
+    const spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
+      screenState: "complete",
+      screenData: { ...initialScreenData, recipes: [recipe1], completionStatus: "complete" },
+      isLoading: false,
+      isStreaming: false,
+      isComplete: true,
+      isError: false,
+      sessionId: "sess-plan-1",
+      conversationHistory: [],
+      currentScreen: "recipes",
+      sendMessage: vi.fn(),
+      navigateToScreen: vi.fn(),
+      resetSession: vi.fn(),
+      addLocalTurn: vi.fn(),
+      dispatch: vi.fn(),
+    });
+
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/recipes"]}>
+        <RecipesScreen />
+      </MemoryRouter>
+    );
+
+    const btn = screen.getByRole("button", { name: /save meal plan/i });
+    expect(btn).not.toBeDisabled();
+    await user.click(btn);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: /saving/i })
+      ).toBeDisabled();
+    });
+
+    resolvePromise({
+      id: "plan-42",
+      name: "My Meal Plan",
+      recipes: [],
+      created_at: "2026-04-14T00:00:00Z",
+      updated_at: "2026-04-14T00:00:00Z",
+    });
+
+    spy.mockRestore();
+    vi.mocked(saveMealPlan).mockReset();
   });
 });

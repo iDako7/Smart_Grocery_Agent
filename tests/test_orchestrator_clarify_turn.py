@@ -3,11 +3,9 @@
 import json
 from unittest.mock import AsyncMock, MagicMock, patch
 
-import pytest
 import pytest_asyncio
 from src.ai.kb import get_kb
 from src.ai.orchestrator import run_agent
-from contracts.tool_schemas import ClarifyTurnPayload
 
 
 @pytest_asyncio.fixture()

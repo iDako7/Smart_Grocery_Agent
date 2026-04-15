@@ -11,6 +11,8 @@ YYYY-MM-DD | file | description
 
 ## 2026-04-14
 
+2026-04-14: api_types.py — additive: `PatchSessionRecipeRequest` added for `PATCH /session/{id}/recipes`. Non-breaking.
+
 2026-04-14: search_recipes — additive: include_alternatives flag + alternatives[] on RecipeSummary (#56). Non-breaking.
 
 ---

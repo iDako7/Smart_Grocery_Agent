@@ -1,6 +1,7 @@
 """Substitution lookup from SQLite KB."""
 
 import aiosqlite
+
 from contracts.tool_schemas import GetSubstitutionsInput, Substitution
 
 
