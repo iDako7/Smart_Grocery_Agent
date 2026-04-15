@@ -204,15 +204,17 @@ async def chat(
         if result.pcsv:
             snapshot["pcsv"] = result.pcsv.model_dump()
         if result.recipes:
-            # Upgrade RecipeSummary → RecipeDetail so saved content carries
-            # full instructions and canonical ingredient objects (issue #71).
-            # AI-generated recipes (~20%) have no KB row — fall back to summary.
+            # Hydrate each RecipeSummary with canonical `ingredients` + `instructions`
+            # from the KB so both the SSE emit path and the saved meal plan path
+            # carry full detail (issue #71). AI-generated recipes have no KB row —
+            # leave ingredients/instructions at their defaults.
             async with get_kb() as kb:
-                upgraded = []
                 for r in result.recipes:
                     detail = await get_recipe_detail(kb, GetRecipeDetailInput(recipe_id=r.id))
-                    upgraded.append(detail if detail is not None else r)
-            snapshot["recipes"] = [d.model_dump() for d in upgraded]
+                    if detail is not None:
+                        r.ingredients = detail.ingredients
+                        r.instructions = detail.instructions
+            snapshot["recipes"] = [s.model_dump() for s in result.recipes]
         if result.grocery_list:
             snapshot["grocery_list"] = [s.model_dump() for s in result.grocery_list]
 

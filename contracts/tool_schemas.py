@@ -135,6 +135,14 @@ class RecipeSummary(BaseModel):
         default_factory=list,
         description="Computed by tool handler, not stored in DB",
     )
+    ingredients: list[Ingredient] = Field(
+        default_factory=list,
+        description="Canonical ingredient list hydrated from RecipeDetail at session-snapshot time (issue #71). Empty for AI-generated recipes with no KB row.",
+    )
+    instructions: str = Field(
+        default="",
+        description="Full cooking instructions hydrated from RecipeDetail at session-snapshot time (issue #71). Empty for AI-generated recipes with no KB row.",
+    )
     alternatives: list[RecipeSummary] = Field(
         default_factory=list,
         description="Alternative recipe suggestions ranked by similarity (issue #56). Populated only when search_recipes is called with include_alternatives=True; nested alternatives are not recursively populated.",

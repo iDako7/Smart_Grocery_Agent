@@ -53,17 +53,16 @@ async def create_meal_plan(
     ).first()
     recipes_data = (sess_row.state_snapshot or {}).get("recipes", []) if sess_row else []
 
-    # Lazy upgrade: pre-existing sessions may have RecipeSummary-shape entries
-    # (no `instructions` key). Re-fetch detail from KB before persisting (issue #71).
-    upgraded_recipes = []
+    # Lazy upgrade: pre-existing sessions may have un-hydrated RecipeSummary
+    # entries (no `instructions` / empty `ingredients`). Re-fetch detail from
+    # the KB and hydrate in place before persisting (issue #71).
     async with get_kb() as kb:
         for entry in recipes_data:
-            if "instructions" not in entry:
+            if not entry.get("instructions") and not entry.get("ingredients"):
                 detail = await get_recipe_detail(kb, GetRecipeDetailInput(recipe_id=entry["id"]))
-                upgraded_recipes.append(detail.model_dump() if detail is not None else entry)
-            else:
-                upgraded_recipes.append(entry)
-    recipes_data = upgraded_recipes
+                if detail is not None:
+                    entry["ingredients"] = [i.model_dump() for i in detail.ingredients]
+                    entry["instructions"] = detail.instructions
 
     pid = uuid.uuid4()
     result = await conn.execute(

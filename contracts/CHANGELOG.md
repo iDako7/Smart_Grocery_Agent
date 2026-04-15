@@ -11,7 +11,7 @@ YYYY-MM-DD | file | description
 
 ## 2026-04-14
 
-2026-04-14: api_types.py — `SessionStateResponse.recipes` widened from `list[RecipeSummary]` to `list[RecipeDetail]` so saved meal plans carry canonical ingredients + instructions (#71). Non-breaking for frontend (`SavedMealPlanScreen` already consumed `RecipeDetail`).
+2026-04-14: tool_schemas.py — additive: `RecipeSummary.ingredients: list[Ingredient]` and `RecipeSummary.instructions: str` (#71). Hydrated from the KB at chat-turn time so the SSE emit path AND the session snapshot carry canonical ingredients + instructions without losing `ingredients_have` / `ingredients_need` / `alternatives`. Non-breaking (additive fields default to empty). `SessionStateResponse.recipes` remains `list[RecipeSummary]`.
 
 2026-04-14: api_types.py — additive: `PatchSessionRecipeRequest` added for `PATCH /session/{id}/recipes`. Non-breaking.
 

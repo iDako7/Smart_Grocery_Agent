@@ -83,7 +83,7 @@ class SessionStateResponse(BaseModel):
     session_id: str
     screen: Screen
     pcsv: PCSVResult | None = None
-    recipes: list[RecipeDetail] = Field(default_factory=list)
+    recipes: list[RecipeSummary] = Field(default_factory=list)
     grocery_list: list[GroceryStore] | None = None
     conversation: list[ConversationTurn] = Field(default_factory=list)
 
