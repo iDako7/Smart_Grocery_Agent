@@ -214,6 +214,57 @@ describe("SwapPanel", () => {
   });
 
   // ---------------------------------------------------------------------------
+  // Empty-state (no alternatives)
+  // ---------------------------------------------------------------------------
+
+  it("renders empty-state message when alternatives is empty", () => {
+    render(
+      <SwapPanel
+        original={original}
+        selected={original}
+        alternatives={[]}
+        lang="en"
+        onSelect={() => {}}
+        onClose={() => {}}
+      />
+    );
+    expect(
+      screen.getByText("No similar recipes found for this dish.")
+    ).toBeInTheDocument();
+  });
+
+  it("still renders original recipe row when alternatives is empty", () => {
+    render(
+      <SwapPanel
+        original={original}
+        selected={original}
+        alternatives={[]}
+        lang="en"
+        onSelect={() => {}}
+        onClose={() => {}}
+      />
+    );
+    expect(screen.getByText("Original Recipe")).toBeInTheDocument();
+  });
+
+  it("close button is present and functional when alternatives is empty", async () => {
+    const user = userEvent.setup();
+    const onClose = vi.fn();
+    render(
+      <SwapPanel
+        original={original}
+        selected={original}
+        alternatives={[]}
+        lang="en"
+        onSelect={() => {}}
+        onClose={onClose}
+      />
+    );
+    await user.click(screen.getByRole("button", { name: /^close$/i }));
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  // ---------------------------------------------------------------------------
   // Focus management
   // ---------------------------------------------------------------------------
 

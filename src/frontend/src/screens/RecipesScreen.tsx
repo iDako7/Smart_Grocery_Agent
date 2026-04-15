@@ -49,9 +49,12 @@ function effortToTime(level: EffortLevel): string {
 }
 
 function recipeToIngredientTags(r: RecipeSummary): { name: string; have: boolean }[] {
-  const have = r.ingredients_have.map((name) => ({ name, have: true }));
-  const need = r.ingredients_need.map((name) => ({ name, have: false }));
-  return [...have, ...need];
+  const haveHints = r.ingredients_have.map((s) => s.toLowerCase());
+  return r.ingredients.map((ing) => {
+    const nameLower = ing.name.toLowerCase();
+    const have = haveHints.some((hint) => hint.includes(nameLower) || nameLower.includes(hint));
+    return { name: ing.name, have };
+  });
 }
 
 function SkeletonCard() {
@@ -305,7 +308,6 @@ export function RecipesScreen() {
                   ingredients={recipeToIngredientTags(shown)}
                   onSwap={() => setSwapOpenFor(r.id)}
                   isSwapping={swapOpenFor === r.id}
-                  swapDisabled={r.alternatives.length === 0}
                   onInfoClick={() => setInfoRecipeId(shown.id)}
                   excludedIngredients={excludedByCard.get(r.id) ?? EMPTY_SET}
                   onToggleBuy={(name) => handleToggleBuy(r.id, name)}
@@ -333,6 +335,13 @@ export function RecipesScreen() {
                         });
                       } else {
                         setOverrides((prev) => ({ ...prev, [r.id]: recipe }));
+                        // Clear pill exclusions when swapping to a different recipe —
+                        // exclusions from the old recipe don't translate to the new one.
+                        setExcludedByCard((prev) => {
+                          const next = new Map(prev);
+                          next.delete(r.id);
+                          return next;
+                        });
                       }
 
                       // Persist to backend when a session is active and it's a real swap

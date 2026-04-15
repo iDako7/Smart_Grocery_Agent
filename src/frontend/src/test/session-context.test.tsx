@@ -564,6 +564,10 @@ describe("useSession — chatService onEvent triggers streaming", () => {
           flavor_tags: ["savory"],
           serves: 2,
           pcsv_roles: { protein: ["chicken"] },
+          ingredients: [
+            { name: "chicken", amount: "400g", pcsv: ["protein"] as const },
+            { name: "soy sauce", amount: "2 tbsp", pcsv: ["sauce"] as const },
+          ],
           ingredients_have: ["chicken"],
           ingredients_need: ["soy sauce"],
           alternatives: [],

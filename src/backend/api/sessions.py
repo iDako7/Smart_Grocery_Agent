@@ -12,6 +12,9 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 from src.ai.context import load_context, save_turn
 from src.ai.kb import get_kb
 from src.ai.orchestrator import run_agent
+from src.ai.tools.get_recipe_detail import get_recipe_detail
+
+from contracts.tool_schemas import GetRecipeDetailInput
 from src.ai.sse import emit_agent_result
 from src.ai.types import AgentResult
 from src.backend.auth import get_current_user_id
@@ -201,7 +204,15 @@ async def chat(
         if result.pcsv:
             snapshot["pcsv"] = result.pcsv.model_dump()
         if result.recipes:
-            snapshot["recipes"] = [r.model_dump() for r in result.recipes]
+            # Upgrade RecipeSummary → RecipeDetail so saved content carries
+            # full instructions and canonical ingredient objects (issue #71).
+            # AI-generated recipes (~20%) have no KB row — fall back to summary.
+            async with get_kb() as kb:
+                upgraded = []
+                for r in result.recipes:
+                    detail = await get_recipe_detail(kb, GetRecipeDetailInput(recipe_id=r.id))
+                    upgraded.append(detail if detail is not None else r)
+            snapshot["recipes"] = [d.model_dump() for d in upgraded]
         if result.grocery_list:
             snapshot["grocery_list"] = [s.model_dump() for s in result.grocery_list]
 

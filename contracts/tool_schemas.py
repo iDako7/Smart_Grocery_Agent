@@ -306,7 +306,7 @@ TOOLS: list[dict] = [
                     },
                     "include_alternatives": {
                         "type": "boolean",
-                        "description": "When true, each returned recipe summary may include an `alternatives` array of similar recipes for swap UX. Defaults to false.",
+                        "description": "When true, each returned recipe summary may include an `alternatives` array of similar recipes for swap UX. Defaults to false. Set to true for meal-plan requests (user asking for multiple dinners, a week's worth, alternatives, etc.); omit for specific single-recipe lookups.",
                     },
                 },
                 "required": ["ingredients"],

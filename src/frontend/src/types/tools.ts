@@ -94,6 +94,7 @@ export type RecipeSummary = {
   flavor_tags: string[];
   serves: number;
   pcsv_roles: Partial<Record<PCSVRole, string[]>>;
+  ingredients: Ingredient[];
   ingredients_have: string[];
   ingredients_need: string[];
   alternatives: RecipeSummary[];

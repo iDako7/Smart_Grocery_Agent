@@ -2,7 +2,7 @@
 
 import json
 import uuid
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
@@ -98,16 +98,34 @@ async def test_full_e2e_flow(client):
         recipes=[recipe],
     )
 
+    # get_kb must be a proper async context manager (used twice: agent loop + snapshot upgrade).
+    kb_conn = AsyncMock()
+    kb_ctx = MagicMock()
+    kb_ctx.__aenter__ = AsyncMock(return_value=kb_conn)
+    kb_ctx.__aexit__ = AsyncMock(return_value=False)
+
+    from contracts.tool_schemas import RecipeDetail, Ingredient
+
+    detail = RecipeDetail(
+        id="r001",
+        name="Korean Fried Chicken",
+        cuisine="Korean",
+        ingredients=[Ingredient(name="chicken", amount="1 lb", pcsv=["protein"])],
+        instructions="Deep fry until golden.",
+    )
+
     with patch("src.backend.api.sessions.run_agent", new_callable=AsyncMock, return_value=mock_result):
         with patch("src.backend.api.sessions.get_kb") as mock_kb:
-            mock_kb_conn = AsyncMock()
-            mock_kb_conn.close = AsyncMock()
-            mock_kb.return_value = mock_kb_conn
-
-            resp = await client.post(
-                f"/session/{sid}/chat",
-                json={"message": "I have chicken and rice", "screen": "home"},
-            )
+            mock_kb.return_value = kb_ctx
+            with patch(
+                "src.backend.api.sessions.get_recipe_detail",
+                new_callable=AsyncMock,
+                return_value=detail,
+            ):
+                resp = await client.post(
+                    f"/session/{sid}/chat",
+                    json={"message": "I have chicken and rice", "screen": "home"},
+                )
 
     # 3. Verify SSE response
     assert resp.status_code == 200

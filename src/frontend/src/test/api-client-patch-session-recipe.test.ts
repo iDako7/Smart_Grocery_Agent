@@ -25,6 +25,10 @@ const RECIPE_D: RecipeSummary = {
   flavor_tags: ["Savory"],
   serves: 2,
   pcsv_roles: {},
+  ingredients: [
+    { name: "tofu", amount: "200g", pcsv: ["protein"] },
+    { name: "ginger", amount: "1 tsp", pcsv: ["sauce"] },
+  ],
   ingredients_have: ["tofu"],
   ingredients_need: ["ginger"],
   alternatives: [],

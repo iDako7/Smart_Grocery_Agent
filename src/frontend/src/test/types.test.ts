@@ -159,6 +159,10 @@ describe("tools.ts — output model shapes", () => {
       flavor_tags: ["savory", "umami"],
       serves: 4,
       pcsv_roles: { protein: ["chicken"] },
+      ingredients: [
+        { name: "chicken", amount: "400g", pcsv: ["protein"] },
+        { name: "mirin", amount: "2 tbsp", pcsv: ["sauce"] },
+      ],
       ingredients_have: ["chicken"],
       ingredients_need: ["mirin"],
       alternatives: [],
@@ -310,6 +314,7 @@ describe("sse.ts — event types", () => {
         flavor_tags: [],
         serves: 2,
         pcsv_roles: {},
+        ingredients: [],
         ingredients_have: [],
         ingredients_need: [],
         alternatives: [],

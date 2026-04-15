@@ -9,7 +9,7 @@ from contracts.tool_schemas import LookupStoreProductInput, StoreProduct
 def score_products(
     rows: list[tuple],
     query: str,
-    threshold: int = 60,
+    threshold: int = 82,
 ) -> list[tuple[int, dict]]:
     """Score pre-fetched product rows against query.
 
@@ -19,8 +19,8 @@ def score_products(
     query_lower = query.lower().strip()
     scored: list[tuple[int, dict]] = []
     for row in rows:
-        name_score = fuzz.token_sort_ratio(query_lower, row[0].lower())
-        cat_score = fuzz.token_sort_ratio(query_lower, (row[3] or "").lower())
+        name_score = fuzz.WRatio(query_lower, row[0].lower())
+        cat_score = fuzz.WRatio(query_lower, (row[3] or "").lower())
         best_score = max(name_score, cat_score)
         if best_score >= threshold:
             scored.append(
@@ -42,7 +42,7 @@ async def fuzzy_match_products(
     db: aiosqlite.Connection,
     query: str,
     store: str | None = None,
-    threshold: int = 60,
+    threshold: int = 82,
 ) -> list[tuple[int, dict]]:
     """Return products matching query, scored and sorted descending.
 
