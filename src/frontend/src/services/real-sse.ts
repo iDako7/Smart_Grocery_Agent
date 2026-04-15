@@ -190,6 +190,13 @@ export function createRealSSEService(options?: SSEServiceOptions): SSEService {
           signal: abort.signal,
         });
 
+        if (response.status === 404) {
+          // Session not found in DB (e.g. DB was reset in dev, or token mismatch).
+          // Clear the cached session so the next call creates a fresh one.
+          sessionIdPromise = null;
+          onError("Session expired. Please refresh and try again.");
+          return;
+        }
         if (!response.ok) {
           console.error(`[real-sse] chat request failed: ${response.status}`);
           onError("Something went wrong. Please try again.");

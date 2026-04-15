@@ -827,4 +827,96 @@ describe("F12 — SessionProvider stores explanation in assistant turn", () => {
     expect(assistantTurn).toBeDefined();
     expect(assistantTurn!.content).toBe(EXPLANATION_TEXT);
   });
+
+});
+
+// ---------------------------------------------------------------------------
+// Test 12: chat 404 → "Session expired" error + sessionIdPromise reset
+// ---------------------------------------------------------------------------
+
+describe("createRealSSEService — chat 404 handling", () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  afterEach(async () => {
+    vi.unstubAllGlobals();
+    const { resetAuthToken } = await import("@/services/api-client");
+    resetAuthToken();
+  });
+
+  it("calls onError with session-expired message when chat returns 404", async () => {
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (url.includes("/auth/verify")) {
+        return Promise.resolve({ ok: true, body: null, json: async () => AUTH_RESPONSE });
+      }
+      if (url.includes("/session") && !url.includes("/chat")) {
+        return Promise.resolve({ ok: true, body: null, json: async () => SESSION_RESPONSE });
+      }
+      // Chat endpoint returns 404 (session not found in DB)
+      return Promise.resolve({ ok: false, status: 404, body: null });
+    });
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { createRealSSEService } = await import("@/services/real-sse");
+    const { handler: service } = createRealSSEService();
+
+    const onError = vi.fn();
+
+    await new Promise<void>((resolve) => {
+      service("hello", "home", vi.fn(), vi.fn(), (msg) => {
+        onError(msg);
+        resolve();
+      });
+    });
+
+    expect(onError).toHaveBeenCalledWith(
+      "Session expired. Please refresh and try again."
+    );
+  });
+
+  it("resets sessionIdPromise after 404 so next call creates a fresh session", async () => {
+    let sessionCreationCount = 0;
+    let chatCallCount = 0;
+
+    const fetchMock = vi.fn().mockImplementation((url: string) => {
+      if (url.includes("/auth/verify")) {
+        return Promise.resolve({ ok: true, body: null, json: async () => AUTH_RESPONSE });
+      }
+      if (url.includes("/session") && !url.includes("/chat")) {
+        sessionCreationCount++;
+        return Promise.resolve({ ok: true, body: null, json: async () => SESSION_RESPONSE });
+      }
+      // First chat call → 404; subsequent calls → success
+      chatCallCount++;
+      if (chatCallCount === 1) {
+        return Promise.resolve({ ok: false, status: 404, body: null });
+      }
+      return Promise.resolve({
+        ok: true,
+        body: makeSseBody([DONE_BLOCK]),
+        json: async () => ({}),
+      });
+    });
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const { createRealSSEService } = await import("@/services/real-sse");
+    const { handler: service } = createRealSSEService();
+
+    // First call → 404
+    await new Promise<void>((resolve) => {
+      service("first", "home", vi.fn(), vi.fn(), () => resolve());
+    });
+
+    expect(sessionCreationCount).toBe(1);
+
+    // Second call → must create a NEW session (sessionIdPromise was reset on 404)
+    await new Promise<void>((resolve) => {
+      service("second", "home", vi.fn(), () => resolve(), vi.fn());
+    });
+
+    expect(sessionCreationCount).toBe(2);
+  });
 });
