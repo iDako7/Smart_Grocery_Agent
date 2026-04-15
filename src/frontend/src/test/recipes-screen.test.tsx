@@ -438,6 +438,8 @@ describe("RecipesScreen — T7: complete with empty recipes shows empty state", 
       navigateToScreen: vi.fn(),
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: vi.fn(),
     });
   });
@@ -534,6 +536,8 @@ describe("RecipesScreen — T9: Build list calls postGroceryList and dispatches 
       navigateToScreen: navigateToScreenSpy,
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: dispatchSpy,
     });
   });
@@ -653,6 +657,8 @@ describe("RecipesScreen — T12: confirm reset calls resetSession and navigates 
       navigateToScreen: vi.fn(),
       resetSession: resetSessionSpy,
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: vi.fn(),
     });
   });
@@ -716,6 +722,8 @@ describe("RecipesScreen — T13: error retry calls sendMessage('retry')", () => 
       navigateToScreen: vi.fn(),
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: vi.fn(),
     });
   });
@@ -801,8 +809,12 @@ describe("RecipesScreen — T15: dialog cancel restores back-button focus", () =
   });
 });
 
-describe("RecipesScreen — T11: swap button always enabled", () => {
-  it("Try another button is enabled for all cards regardless of alternatives count", () => {
+// ---------------------------------------------------------------------------
+// T11: swap button — "No alternative" label + disabled when no alternatives
+// ---------------------------------------------------------------------------
+
+describe("RecipesScreen — T11: swap button disabled with 'No alternative' label when no alternatives", () => {
+  it("card with alternatives renders enabled 'Try another' button", () => {
     const mock = createMockChatService();
     const altA = makeRecipeSummary({ id: "alt_a", name: "Alt A" });
     const withAlts = makeRecipeSummary({
@@ -810,6 +822,22 @@ describe("RecipesScreen — T11: swap button always enabled", () => {
       name: "Has Alts",
       alternatives: [altA],
     });
+
+    renderWithSession(
+      <RecipesWith
+        drive={{ kind: "complete", recipes: [withAlts] }}
+      />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    const tryAnotherBtn = screen.getByRole("button", { name: /try another/i });
+    expect(tryAnotherBtn).toBeInTheDocument();
+    expect(tryAnotherBtn).not.toBeDisabled();
+    expect(screen.queryByRole("button", { name: /no alternative/i })).toBeNull();
+  });
+
+  it("card with no alternatives renders disabled 'No alternative' button and no 'Try another'", () => {
+    const mock = createMockChatService();
     const withoutAlts = makeRecipeSummary({
       id: "r_no_alts",
       name: "No Alts",
@@ -818,16 +846,37 @@ describe("RecipesScreen — T11: swap button always enabled", () => {
 
     renderWithSession(
       <RecipesWith
-        drive={{ kind: "complete", recipes: [withAlts, withoutAlts] }}
+        drive={{ kind: "complete", recipes: [withoutAlts] }}
       />,
       { chatService: mock.service, initialPath: "/recipes" }
     );
 
-    const swapButtons = screen.getAllByRole("button", { name: /try another/i });
-    expect(swapButtons.length).toBe(2);
-    expect(swapButtons[0]).not.toBeDisabled();
-    // Card with no alternatives: button must also be enabled (opens panel with empty-state message)
-    expect(swapButtons[1]).not.toBeDisabled();
+    const noAltBtn = screen.getByRole("button", { name: /no alternative/i });
+    expect(noAltBtn).toBeInTheDocument();
+    expect(noAltBtn).toBeDisabled();
+    expect(screen.queryByRole("button", { name: /try another/i })).toBeNull();
+  });
+
+  it("clicking disabled 'No alternative' button does NOT open SwapPanel", async () => {
+    const user = userEvent.setup();
+    const mock = createMockChatService();
+    const withoutAlts = makeRecipeSummary({
+      id: "r_no_alts",
+      name: "No Alts",
+      alternatives: [],
+    });
+
+    renderWithSession(
+      <RecipesWith
+        drive={{ kind: "complete", recipes: [withoutAlts] }}
+      />,
+      { chatService: mock.service, initialPath: "/recipes" }
+    );
+
+    const noAltBtn = screen.getByRole("button", { name: /no alternative/i });
+    await user.click(noAltBtn);
+
+    expect(screen.queryByTestId("swap-panel")).toBeNull();
   });
 });
 
@@ -1212,6 +1261,8 @@ describe("RecipesScreen → GroceryScreen — T16: Build list populates grocery 
       navigateToScreen: vi.fn(),
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: dispatchFn,
     }));
 
@@ -1284,52 +1335,35 @@ describe("RecipesScreen — T-Toggle-1: clicking ingredient pill visually marks 
 // ---------------------------------------------------------------------------
 
 describe("RecipesScreen — T-Toggle-2: excluded ingredient absent from postGroceryList call", () => {
-  let spy: ReturnType<typeof vi.spyOn>;
-  const dispatchSpy = vi.fn();
-  const navigateToScreenSpy = vi.fn();
-
   beforeEach(() => {
-    dispatchSpy.mockClear();
-    navigateToScreenSpy.mockClear();
     vi.mocked(postGroceryList).mockResolvedValue(STORES);
-    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
-      screenState: "complete",
-      screenData: {
-        ...initialScreenData,
-        recipes: [recipe1],
-        completionStatus: "complete",
-      },
-      isLoading: false,
-      isStreaming: false,
-      isComplete: true,
-      isError: false,
-      sessionId: "sess-toggle",
-      conversationHistory: [],
-      currentScreen: "recipes",
-      sendMessage: vi.fn(),
-      navigateToScreen: navigateToScreenSpy,
-      resetSession: vi.fn(),
-      addLocalTurn: vi.fn(),
-      dispatch: dispatchSpy,
-    });
   });
 
   afterEach(() => {
-    spy.mockRestore();
     vi.mocked(postGroceryList).mockReset();
   });
 
   it("test_excluded_ingredient_not_in_grocery_list", async () => {
     const user = userEvent.setup();
 
-    render(
-      <MemoryRouter initialEntries={["/recipes"]}>
+    renderWithSession(<></>, {
+      initialPath: "/recipes",
+      initialSessionId: "sess-toggle",
+      routes: (
         <Routes>
-          <Route path="/recipes" element={<RecipesScreen />} />
+          <Route
+            path="/recipes"
+            element={<RecipesWith drive={{ kind: "complete", recipes: [recipe1] }} />}
+          />
           <Route path="/grocery" element={<div data-testid="screen-grocery" />} />
         </Routes>
-      </MemoryRouter>
-    );
+      ),
+    });
+
+    // Wait for recipe cards to appear
+    await waitFor(() => {
+      expect(screen.getByText("Garlic Shrimp Stir-Fry")).toBeInTheDocument();
+    });
 
     // recipe1 canonical ingredients: scallion and bok choy are NOT in ingredients_have → have=false.
     // Toggle "scallion" off (user says "I have it" → flip have=false → treated as have=true → skip)
@@ -1338,6 +1372,7 @@ describe("RecipesScreen — T-Toggle-2: excluded ingredient absent from postGroc
 
     // Build the list
     const cta = screen.getByRole("button", { name: /build list/i });
+    expect(cta).not.toBeDisabled();
     await user.click(cta);
 
     await waitFor(() => {
@@ -1359,52 +1394,35 @@ describe("RecipesScreen — T-Toggle-2: excluded ingredient absent from postGroc
 // ---------------------------------------------------------------------------
 
 describe("RecipesScreen — T-Toggle-3: toggle off then on restores ingredient in grocery list", () => {
-  let spy: ReturnType<typeof vi.spyOn>;
-  const dispatchSpy = vi.fn();
-  const navigateToScreenSpy = vi.fn();
-
   beforeEach(() => {
-    dispatchSpy.mockClear();
-    navigateToScreenSpy.mockClear();
     vi.mocked(postGroceryList).mockResolvedValue(STORES);
-    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
-      screenState: "complete",
-      screenData: {
-        ...initialScreenData,
-        recipes: [recipe1],
-        completionStatus: "complete",
-      },
-      isLoading: false,
-      isStreaming: false,
-      isComplete: true,
-      isError: false,
-      sessionId: "sess-toggle3",
-      conversationHistory: [],
-      currentScreen: "recipes",
-      sendMessage: vi.fn(),
-      navigateToScreen: navigateToScreenSpy,
-      resetSession: vi.fn(),
-      addLocalTurn: vi.fn(),
-      dispatch: dispatchSpy,
-    });
   });
 
   afterEach(() => {
-    spy.mockRestore();
     vi.mocked(postGroceryList).mockReset();
   });
 
   it("test_toggle_off_then_on_restores_ingredient_in_list", async () => {
     const user = userEvent.setup();
 
-    render(
-      <MemoryRouter initialEntries={["/recipes"]}>
+    renderWithSession(<></>, {
+      initialPath: "/recipes",
+      initialSessionId: "sess-toggle3",
+      routes: (
         <Routes>
-          <Route path="/recipes" element={<RecipesScreen />} />
+          <Route
+            path="/recipes"
+            element={<RecipesWith drive={{ kind: "complete", recipes: [recipe1] }} />}
+          />
           <Route path="/grocery" element={<div data-testid="screen-grocery" />} />
         </Routes>
-      </MemoryRouter>
-    );
+      ),
+    });
+
+    // Wait for recipe cards to appear
+    await waitFor(() => {
+      expect(screen.getByText("Garlic Shrimp Stir-Fry")).toBeInTheDocument();
+    });
 
     // Toggle "bok choy" off then back on
     const bokChoyPill = screen.getByRole("button", { name: /bok choy/i });
@@ -1412,6 +1430,7 @@ describe("RecipesScreen — T-Toggle-3: toggle off then on restores ingredient i
     await user.click(bokChoyPill); // back on
 
     const cta = screen.getByRole("button", { name: /build list/i });
+    expect(cta).not.toBeDisabled();
     await user.click(cta);
 
     await waitFor(() => {
@@ -1558,6 +1577,8 @@ describe("RecipesScreen — T-Pill-Source: pills use canonical ingredients[*].na
       navigateToScreen: vi.fn(),
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: vi.fn(),
     });
   });
@@ -1653,6 +1674,8 @@ describe("RecipesScreen — T18: Save meal plan calls saveMealPlan with correct 
       navigateToScreen: vi.fn(),
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: vi.fn(),
     });
   });
@@ -1710,6 +1733,8 @@ describe("RecipesScreen — T19: Save meal plan success navigates to /saved/plan
       navigateToScreen: vi.fn(),
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: vi.fn(),
     });
   });
@@ -1761,6 +1786,8 @@ describe("RecipesScreen — T20: Save meal plan failure shows error banner", () 
       navigateToScreen: vi.fn(),
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: vi.fn(),
     });
   });
@@ -1925,6 +1952,8 @@ describe("RecipesScreen — T21: Save meal plan button disabled while in-flight 
       navigateToScreen: vi.fn(),
       resetSession: vi.fn(),
       addLocalTurn: vi.fn(),
+      excludedByCard: {},
+      toggleIngredientExclusion: vi.fn(),
       dispatch: vi.fn(),
     });
 
@@ -1955,5 +1984,80 @@ describe("RecipesScreen — T21: Save meal plan button disabled while in-flight 
 
     spy.mockRestore();
     vi.mocked(saveMealPlan).mockReset();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T17: pill exclusion state persists across navigation to GroceryScreen and back
+// ---------------------------------------------------------------------------
+//
+// This is the UAT regression test for issue #69.
+// RecipesScreen previously held `excludedByCard` in component-local useState,
+// which was lost when React-Router unmounted the component on navigation.
+// After the fix, `excludedByCard` lives in SessionContext and survives navigation.
+
+describe("RecipesScreen — T17: pill exclusion persists through navigation round-trip", () => {
+  it("excluded ingredient pill stays excluded after navigating to /grocery and back", async () => {
+    const user = userEvent.setup();
+
+    vi.mocked(postGroceryList).mockResolvedValueOnce(STORES);
+
+    // Render the full route tree: /recipes + /grocery
+    renderWithSession(<></>, {
+      initialPath: "/recipes",
+      initialSessionId: "sess-t17",
+      routes: (
+        <Routes>
+          <Route
+            path="/recipes"
+            element={
+              <RecipesWith
+                drive={{ kind: "complete", recipes: [recipe1, recipe2] }}
+              />
+            }
+          />
+          <Route path="/grocery" element={<GroceryScreen />} />
+        </Routes>
+      ),
+    });
+
+    // Wait for recipe cards to appear (useEffect in RecipesWith fires async)
+    await waitFor(() => {
+      expect(screen.getByText("Garlic Shrimp Stir-Fry")).toBeInTheDocument();
+    });
+
+    // "scallion" is a "need" ingredient (not in ingredients_have), so initially
+    // have=false, isFlipped=false → isChecked=false → aria-pressed="false".
+    const scallionButton = await screen.findByRole("button", { name: /scallion/i });
+    expect(scallionButton).toHaveAttribute("aria-pressed", "false");
+
+    // Toggle the pill to exclude "scallion"
+    await user.click(scallionButton);
+    expect(scallionButton).toHaveAttribute("aria-pressed", "true");
+
+    // Wait for "Build list →" to be enabled (complete state)
+    const buildBtn = await screen.findByRole("button", { name: /build list/i });
+    expect(buildBtn).not.toBeDisabled();
+
+    // Click "Build list →" — this calls postGroceryList then navigates to /grocery
+    await user.click(buildBtn);
+
+    // Wait for GroceryScreen to appear (RecipesScreen unmounts)
+    await waitFor(() => {
+      expect(screen.getByTestId("screen-grocery")).toBeInTheDocument();
+    });
+
+    // Navigate back to /recipes via the GroceryScreen back button (navigate(-1))
+    const backBtn = screen.getByRole("button", { name: /go back/i });
+    await user.click(backBtn);
+
+    // Wait for RecipesScreen to remount and cards to render
+    await waitFor(() => {
+      expect(screen.getByText("Garlic Shrimp Stir-Fry")).toBeInTheDocument();
+    });
+
+    // The excluded pill must still show excluded state — context survived navigation
+    const scallionButtonAfterReturn = screen.getByRole("button", { name: /scallion/i });
+    expect(scallionButtonAfterReturn).toHaveAttribute("aria-pressed", "true");
   });
 });

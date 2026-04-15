@@ -959,6 +959,107 @@ describe("useSession — sendMessage with explicit targetScreen", () => {
 });
 
 // ---------------------------------------------------------------------------
+// 18. excludedByCard — toggle_ingredient_exclusion action
+// ---------------------------------------------------------------------------
+
+describe("useSession — excludedByCard toggle_ingredient_exclusion", () => {
+  it("excludedByCard is empty initially", () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    expect(result.current.excludedByCard).toEqual({});
+  });
+
+  it("toggle action adds an entry for (recipeId, ingredientName)", () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    act(() => {
+      result.current.toggleIngredientExclusion("r001", "garlic");
+    });
+
+    expect(result.current.excludedByCard).toEqual({ r001: ["garlic"] });
+  });
+
+  it("toggling the same (recipeId, ingredientName) twice removes the entry", () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    act(() => {
+      result.current.toggleIngredientExclusion("r001", "garlic");
+    });
+    act(() => {
+      result.current.toggleIngredientExclusion("r001", "garlic");
+    });
+
+    expect(result.current.excludedByCard["r001"]).toEqual([]);
+  });
+
+  it("multiple ingredients can be excluded for the same recipe", () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    act(() => {
+      result.current.toggleIngredientExclusion("r001", "garlic");
+    });
+    act(() => {
+      result.current.toggleIngredientExclusion("r001", "scallion");
+    });
+
+    expect(result.current.excludedByCard["r001"]).toContain("garlic");
+    expect(result.current.excludedByCard["r001"]).toContain("scallion");
+  });
+
+  it("exclusions for different recipeIds are stored independently", () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    act(() => {
+      result.current.toggleIngredientExclusion("r001", "garlic");
+    });
+    act(() => {
+      result.current.toggleIngredientExclusion("r002", "lime");
+    });
+
+    expect(result.current.excludedByCard["r001"]).toEqual(["garlic"]);
+    expect(result.current.excludedByCard["r002"]).toEqual(["lime"]);
+  });
+
+  it("state survives across unrelated dispatches", () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    act(() => {
+      result.current.toggleIngredientExclusion("r001", "garlic");
+    });
+
+    // Unrelated dispatch that does not clear excludedByCard
+    act(() => {
+      result.current.navigateToScreen("grocery");
+    });
+
+    expect(result.current.excludedByCard["r001"]).toEqual(["garlic"]);
+  });
+
+  it("resetSession clears excludedByCard", () => {
+    const wrapper = makeWrapper();
+    const { result } = renderHook(() => useSession(), { wrapper });
+
+    act(() => {
+      result.current.toggleIngredientExclusion("r001", "garlic");
+    });
+
+    expect(result.current.excludedByCard["r001"]).toEqual(["garlic"]);
+
+    act(() => {
+      result.current.resetSession();
+    });
+
+    expect(result.current.excludedByCard).toEqual({});
+  });
+});
+
+// ---------------------------------------------------------------------------
 // 16. addLocalTurn
 // ---------------------------------------------------------------------------
 

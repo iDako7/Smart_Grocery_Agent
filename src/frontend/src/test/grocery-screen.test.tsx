@@ -182,7 +182,7 @@ describe("GroceryScreen — T5: error shows banner and retry", () => {
       isLoading: false, isStreaming: false, isComplete: false, isError: true,
       sessionId: null, conversationHistory: [], currentScreen: "grocery",
       sendMessage: sendMessageSpy,
-      navigateToScreen: vi.fn(), resetSession: vi.fn(), addLocalTurn: vi.fn(), dispatch: vi.fn(),
+      navigateToScreen: vi.fn(), resetSession: vi.fn(), addLocalTurn: vi.fn(), excludedByCard: {}, toggleIngredientExclusion: vi.fn(), dispatch: vi.fn(),
     });
   });
 
@@ -212,7 +212,7 @@ describe("GroceryScreen — T6: complete with empty groceryList shows empty stat
       isLoading: false, isStreaming: false, isComplete: true, isError: false,
       sessionId: null, conversationHistory: [], currentScreen: "grocery",
       sendMessage: vi.fn(), navigateToScreen: vi.fn(), resetSession: vi.fn(),
-      addLocalTurn: vi.fn(), dispatch: vi.fn(),
+      addLocalTurn: vi.fn(), excludedByCard: {}, toggleIngredientExclusion: vi.fn(), dispatch: vi.fn(),
     });
   });
 
@@ -256,7 +256,7 @@ describe("GroceryScreen — T7: save list navigates to /saved/list/:id", () => {
       sessionId: "session-abc",
       conversationHistory: [], currentScreen: "grocery",
       sendMessage: vi.fn(), navigateToScreen: vi.fn(), resetSession: vi.fn(),
-      addLocalTurn: vi.fn(), dispatch: vi.fn(),
+      addLocalTurn: vi.fn(), excludedByCard: {}, toggleIngredientExclusion: vi.fn(), dispatch: vi.fn(),
     });
   });
 
@@ -402,7 +402,7 @@ function makeCompleteSpy() {
     sessionId: "session-abc",
     conversationHistory: [], currentScreen: "grocery",
     sendMessage: vi.fn(), navigateToScreen: vi.fn(), resetSession: vi.fn(),
-    addLocalTurn: vi.fn(), dispatch: vi.fn(),
+    addLocalTurn: vi.fn(), excludedByCard: {}, toggleIngredientExclusion: vi.fn(), dispatch: vi.fn(),
   });
 }
 
