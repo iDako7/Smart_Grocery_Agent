@@ -21,6 +21,19 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 
 logger = logging.getLogger(__name__)
 
+from src.ai.prompt import build_system_prompt
+from src.ai.schema_coercion import coerce_tool_args
+from src.ai.tools.analyze_pcsv import analyze_pcsv
+from src.ai.tools.emit_clarify_turn import emit_clarify_turn
+from src.ai.tools.get_recipe_detail import get_recipe_detail
+from src.ai.tools.get_substitutions import get_substitutions
+from src.ai.tools.lookup_store_product import lookup_store_product
+from src.ai.tools.search_recipes import search_recipes
+from src.ai.tools.translate_term import translate_term
+from src.ai.tools.update_user_profile import update_user_profile
+from src.ai.types import AgentResult, ToolCall
+from src.backend.db.crud import get_user_profile
+
 from contracts.api_types import Screen
 from contracts.tool_schemas import (
     TOOLS,
@@ -35,18 +48,6 @@ from contracts.tool_schemas import (
     TranslateTermInput,
     UpdateUserProfileInput,
 )
-from src.ai.prompt import build_system_prompt
-from src.ai.schema_coercion import coerce_tool_args
-from src.ai.tools.analyze_pcsv import analyze_pcsv
-from src.ai.tools.get_recipe_detail import get_recipe_detail
-from src.ai.tools.get_substitutions import get_substitutions
-from src.ai.tools.lookup_store_product import lookup_store_product
-from src.ai.tools.search_recipes import search_recipes
-from src.ai.tools.translate_term import translate_term
-from src.ai.tools.emit_clarify_turn import emit_clarify_turn
-from src.ai.tools.update_user_profile import update_user_profile
-from src.ai.types import AgentResult, ToolCall
-from src.backend.db.crud import get_user_profile
 
 MAX_ITERATIONS = 10
 MODEL = os.environ.get("SGA_MODEL", "anthropic/claude-sonnet-4.6")

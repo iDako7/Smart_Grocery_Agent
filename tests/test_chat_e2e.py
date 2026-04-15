@@ -5,12 +5,12 @@ import uuid
 from unittest.mock import AsyncMock, patch
 
 import pytest_asyncio
-from contracts.tool_schemas import PCSVCategory, PCSVResult, RecipeSummary
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
 from src.ai.types import AgentResult, ToolCall
 from src.backend.main import app
 
+from contracts.tool_schemas import PCSVCategory, PCSVResult, RecipeSummary
 from tests.conftest import _engine, _ensure_tables
 
 _DEV_USER = uuid.UUID("00000000-0000-0000-0000-000000000001")

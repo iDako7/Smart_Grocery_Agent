@@ -2,8 +2,6 @@
 
 import uuid
 
-from contracts.api_types import GroceryListRequest
-from contracts.sse_events import GroceryDepartment, GroceryItem, GroceryStore
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncConnection
 from src.ai.kb import get_kb
@@ -11,6 +9,9 @@ from src.ai.tools.lookup_store_product import score_products
 from src.backend.auth import get_current_user_id
 from src.backend.db.engine import get_db
 from src.backend.db.tables import sessions
+
+from contracts.api_types import GroceryListRequest
+from contracts.sse_events import GroceryDepartment, GroceryItem, GroceryStore
 
 router = APIRouter()
 

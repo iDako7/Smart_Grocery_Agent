@@ -14,6 +14,7 @@ ignore = [
 [lint.per-file-ignores]
 "contracts/validate.py" = ["E501"]  # inline test data, long lines are fine
 "contracts/tool_schemas.py" = ["E501"]  # tool description strings
+"contracts/sse_events.py" = ["E501"]  # event field description strings
 "src/ai/**" = ["E501"]  # prompt templates and orchestrator, long strings by design
 "src/backend/api/saved.py" = ["E501"]  # long SQL query expressions
 "tests/**" = ["E501", "SIM115"]  # test data + NamedTemporaryFile pattern

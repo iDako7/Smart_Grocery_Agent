@@ -135,7 +135,7 @@ class RecipeSummary(BaseModel):
         default_factory=list,
         description="Computed by tool handler, not stored in DB",
     )
-    alternatives: list["RecipeSummary"] = Field(
+    alternatives: list[RecipeSummary] = Field(
         default_factory=list,
         description="Alternative recipe suggestions ranked by similarity (issue #56). Populated only when search_recipes is called with include_alternatives=True; nested alternatives are not recursively populated.",
     )
@@ -230,7 +230,7 @@ class ClarifyTurnPayload(BaseModel):
     )
 
     @model_validator(mode="after")
-    def _check_question_count(self) -> "ClarifyTurnPayload":
+    def _check_question_count(self) -> ClarifyTurnPayload:
         if len(self.questions) > 3:
             raise ValueError(
                 f"emit_clarify_turn accepts at most 3 questions, got {len(self.questions)}"

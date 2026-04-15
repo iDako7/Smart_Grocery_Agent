@@ -1,9 +1,10 @@
 """Tests for analyze_pcsv tool against real SQLite KB."""
 
 import pytest_asyncio
-from contracts.tool_schemas import AnalyzePcsvInput
 from src.ai.kb import get_kb
 from src.ai.tools.analyze_pcsv import analyze_pcsv
+
+from contracts.tool_schemas import AnalyzePcsvInput
 
 
 @pytest_asyncio.fixture()

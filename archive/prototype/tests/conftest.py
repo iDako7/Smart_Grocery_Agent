@@ -1,9 +1,8 @@
 """Shared pytest fixtures for SGA V2 prototype tests."""
 
-import pytest
-
-from prototype.schema import UserProfile
 import prototype.tools.lookup_store_product as _lookup_module
+import pytest
+from prototype.schema import UserProfile
 
 
 @pytest.fixture

@@ -7,6 +7,8 @@ typed events in rapid sequence.
 import json
 from collections.abc import AsyncIterator
 
+from src.ai.types import AgentResult
+
 from contracts.sse_events import (
     AgentErrorCategory,
     ClarifyTurnEvent,
@@ -18,7 +20,6 @@ from contracts.sse_events import (
     RecipeCardEvent,
     ThinkingEvent,
 )
-from src.ai.types import AgentResult
 
 
 def _sse_line(event_type: str, data: dict) -> str:

@@ -2,6 +2,18 @@
 
 import uuid
 
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select, text
+from sqlalchemy.ext.asyncio import AsyncConnection
+from src.backend.auth import get_current_user_id
+from src.backend.db.engine import get_db
+from src.backend.db.tables import (
+    saved_grocery_lists,
+    saved_meal_plans,
+    saved_recipes,
+    sessions,
+)
+
 from contracts.api_types import (
     SavedGroceryList,
     SavedGroceryListSummary,
@@ -15,17 +27,6 @@ from contracts.api_types import (
     UpdateGroceryListRequest,
     UpdateMealPlanRequest,
     UpdateSavedRecipeRequest,
-)
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select, text
-from sqlalchemy.ext.asyncio import AsyncConnection
-from src.backend.auth import get_current_user_id
-from src.backend.db.engine import get_db
-from src.backend.db.tables import (
-    saved_grocery_lists,
-    saved_meal_plans,
-    saved_recipes,
-    sessions,
 )
 
 router = APIRouter(prefix="/saved")

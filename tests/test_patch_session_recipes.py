@@ -8,7 +8,6 @@ Covers:
 5. Auth is enforced (separate user cannot mutate the session).
 """
 
-import json
 import uuid
 
 import pytest_asyncio
@@ -143,8 +142,6 @@ async def _seed_session_with_recipes(client: AsyncClient, recipes: list[dict]) -
     needing raw JSONB SQL (asyncpg does not support the :name::jsonb cast syntax).
     Instead we use SQLAlchemy's type_coerce or cast to pass JSONB correctly.
     """
-    from sqlalchemy.dialects.postgresql import JSONB
-    from sqlalchemy import cast as sa_cast
 
     resp = await client.post("/session")
     assert resp.status_code == 201

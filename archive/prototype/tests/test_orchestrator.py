@@ -14,7 +14,6 @@ from unittest.mock import MagicMock, patch
 from prototype.orchestrator import MAX_ITERATIONS, _dispatch_tool, run_agent
 from prototype.schema import UserProfile
 
-
 # ---------------------------------------------------------------------------
 # Mock response helpers
 # ---------------------------------------------------------------------------

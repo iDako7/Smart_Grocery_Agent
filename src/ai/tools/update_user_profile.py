@@ -2,9 +2,10 @@
 
 import uuid
 
-from contracts.tool_schemas import UpdateUserProfileInput, UpdateUserProfileResult
 from sqlalchemy.ext.asyncio import AsyncConnection
 from src.backend.db.crud import update_user_profile_field
+
+from contracts.tool_schemas import UpdateUserProfileInput, UpdateUserProfileResult
 
 
 async def update_user_profile(

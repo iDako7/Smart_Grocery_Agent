@@ -13,7 +13,7 @@ import type {
   SavedGroceryListSummary,
 } from "@/types/api";
 import type { GroceryStore } from "@/types/sse";
-import type { RecipeDetail } from "@/types/tools";
+import type { RecipeDetail, RecipeSummary } from "@/types/tools";
 
 // ---------------------------------------------------------------------------
 // Base URL

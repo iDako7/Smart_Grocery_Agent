@@ -15,7 +15,6 @@ from collections.abc import AsyncIterator
 from unittest.mock import patch
 
 import aiosqlite
-import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
