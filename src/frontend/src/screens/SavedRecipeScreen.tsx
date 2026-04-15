@@ -117,7 +117,7 @@ export function SavedRecipeScreen() {
 
           {/* View mode */}
           {!isEditing && (
-            <pre className="font-mono text-[11.5px] leading-[1.7] text-ink-2 whitespace-pre bg-tofu px-5 py-4 border-t border-t-[0.5px] border-t-cream-deep overflow-x-auto border-b border-b-[0.5px] border-b-cream-deep">
+            <pre className="font-mono text-[11.5px] leading-[1.7] text-ink-2 whitespace-pre-wrap bg-tofu px-5 py-4 border-t border-t-[0.5px] border-t-cream-deep border-b border-b-[0.5px] border-b-cream-deep">
               {savedText}
             </pre>
           )}
