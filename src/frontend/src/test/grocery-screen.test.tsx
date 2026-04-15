@@ -13,7 +13,7 @@ import { renderWithSession, createMockChatService } from "@/test/test-utils";
 import { useSessionOptional } from "@/context/session-context";
 import * as sessionContextModule from "@/context/session-context";
 import { initialScreenData } from "@/hooks/use-screen-state";
-import { saveGroceryList } from "@/services/api-client";
+import { saveGroceryList, saveMealPlan } from "@/services/api-client";
 import type { GroceryStore } from "@/types/sse";
 
 // ---------------------------------------------------------------------------
@@ -22,6 +22,7 @@ import type { GroceryStore } from "@/types/sse";
 
 vi.mock("@/services/api-client", () => ({
   saveGroceryList: vi.fn(),
+  saveMealPlan: vi.fn(),
 }));
 
 // ---------------------------------------------------------------------------
@@ -234,6 +235,13 @@ describe("GroceryScreen — T7: save list navigates to /saved/list/:id", () => {
   let spy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
+    vi.mocked(saveMealPlan).mockResolvedValue({
+      id: "plan-1",
+      name: "My Meal Plan",
+      recipes: [],
+      created_at: "2026-04-13T00:00:00Z",
+      updated_at: "2026-04-13T00:00:00Z",
+    });
     vi.mocked(saveGroceryList).mockResolvedValue({
       id: "list-99",
       name: "My Grocery List",
@@ -252,7 +260,11 @@ describe("GroceryScreen — T7: save list navigates to /saved/list/:id", () => {
     });
   });
 
-  afterEach(() => { spy.mockRestore(); vi.mocked(saveGroceryList).mockReset(); });
+  afterEach(() => {
+    spy.mockRestore();
+    vi.mocked(saveGroceryList).mockReset();
+    vi.mocked(saveMealPlan).mockReset();
+  });
 
   it("test_grocery_screen_save_list_navigates", async () => {
     const user = userEvent.setup();
@@ -268,7 +280,12 @@ describe("GroceryScreen — T7: save list navigates to /saved/list/:id", () => {
     await waitFor(() => {
       expect(screen.getByTestId("saved-list-screen")).toBeInTheDocument();
     });
+    expect(vi.mocked(saveMealPlan)).toHaveBeenCalledWith("My Meal Plan", "session-abc");
     expect(vi.mocked(saveGroceryList)).toHaveBeenCalledWith("My Grocery List", "session-abc");
+    // meal plan must be called before grocery list
+    const mpOrder = vi.mocked(saveMealPlan).mock.invocationCallOrder[0];
+    const glOrder = vi.mocked(saveGroceryList).mock.invocationCallOrder[0];
+    expect(mpOrder).toBeLessThan(glOrder);
   });
 });
 
@@ -370,5 +387,284 @@ describe("GroceryScreen — T11: copy respects buy-pill filter", () => {
     expect(written).not.toContain("chicken breast");
     expect(written).toContain("broccoli");
     expect(written).toContain("olive oil");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Shared spy setup for T12–T16
+// ---------------------------------------------------------------------------
+
+function makeCompleteSpy() {
+  return vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
+    screenState: "complete",
+    screenData: { ...initialScreenData, groceryList: STORES, completionStatus: "complete" },
+    isLoading: false, isStreaming: false, isComplete: true, isError: false,
+    sessionId: "session-abc",
+    conversationHistory: [], currentScreen: "grocery",
+    sendMessage: vi.fn(), navigateToScreen: vi.fn(), resetSession: vi.fn(),
+    addLocalTurn: vi.fn(), dispatch: vi.fn(),
+  });
+}
+
+// ---------------------------------------------------------------------------
+// T12: meal plan fails → saveGroceryList NOT called, error banner shown
+// ---------------------------------------------------------------------------
+
+describe("GroceryScreen — T12: meal plan fails → no grocery save, error shown", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.mocked(saveMealPlan).mockRejectedValue(new Error("network error"));
+    vi.mocked(saveGroceryList).mockResolvedValue({
+      id: "list-99",
+      name: "My Grocery List",
+      stores: STORES,
+      created_at: "2026-04-13T00:00:00Z",
+      updated_at: "2026-04-13T00:00:00Z",
+    });
+    spy = makeCompleteSpy();
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+    vi.mocked(saveMealPlan).mockReset();
+    vi.mocked(saveGroceryList).mockReset();
+  });
+
+  it("test_grocery_screen_meal_plan_fail_no_grocery_save", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/grocery"]}>
+        <Routes>
+          <Route path="/grocery" element={<GroceryScreen />} />
+          <Route path="/saved/list/:id" element={<div data-testid="saved-list-screen" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    await user.click(screen.getByRole("button", { name: /save list/i }));
+    await waitFor(() => {
+      expect(screen.getByText(/failed to save meal plan/i)).toBeInTheDocument();
+    });
+    expect(vi.mocked(saveGroceryList)).not.toHaveBeenCalled();
+    expect(screen.queryByTestId("saved-list-screen")).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T13: meal plan succeeds but grocery list fails → correct error, no nav
+// ---------------------------------------------------------------------------
+
+describe("GroceryScreen — T13: meal plan ok but grocery list fails → partial error", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.mocked(saveMealPlan).mockResolvedValue({
+      id: "plan-1",
+      name: "My Meal Plan",
+      recipes: [],
+      created_at: "2026-04-13T00:00:00Z",
+      updated_at: "2026-04-13T00:00:00Z",
+    });
+    vi.mocked(saveGroceryList).mockRejectedValue(new Error("grocery save failed"));
+    spy = makeCompleteSpy();
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+    vi.mocked(saveMealPlan).mockReset();
+    vi.mocked(saveGroceryList).mockReset();
+  });
+
+  it("test_grocery_screen_grocery_fail_partial_error_banner", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/grocery"]}>
+        <Routes>
+          <Route path="/grocery" element={<GroceryScreen />} />
+          <Route path="/saved/list/:id" element={<div data-testid="saved-list-screen" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    await user.click(screen.getByRole("button", { name: /save list/i }));
+    await waitFor(() => {
+      expect(screen.getByText(/grocery list save failed.*meal plan saved/i)).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId("saved-list-screen")).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T14: retry after partial failure skips saveMealPlan
+// ---------------------------------------------------------------------------
+
+describe("GroceryScreen — T14: retry after partial failure does not re-save meal plan", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.mocked(saveMealPlan).mockResolvedValue({
+      id: "plan-1",
+      name: "My Meal Plan",
+      recipes: [],
+      created_at: "2026-04-13T00:00:00Z",
+      updated_at: "2026-04-13T00:00:00Z",
+    });
+    vi.mocked(saveGroceryList)
+      .mockRejectedValueOnce(new Error("grocery save failed"))
+      .mockResolvedValue({
+        id: "list-99",
+        name: "My Grocery List",
+        stores: STORES,
+        created_at: "2026-04-13T00:00:00Z",
+        updated_at: "2026-04-13T00:00:00Z",
+      });
+    spy = makeCompleteSpy();
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+    vi.mocked(saveMealPlan).mockReset();
+    vi.mocked(saveGroceryList).mockReset();
+  });
+
+  it("test_grocery_screen_retry_skips_meal_plan", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/grocery"]}>
+        <Routes>
+          <Route path="/grocery" element={<GroceryScreen />} />
+          <Route path="/saved/list/:id" element={<div data-testid="saved-list-screen" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    // First click — grocery list fails
+    await user.click(screen.getByRole("button", { name: /save list/i }));
+    await waitFor(() => {
+      expect(screen.getByText(/grocery list save failed.*meal plan saved/i)).toBeInTheDocument();
+    });
+    // Retry — only saveGroceryList should be called again
+    await user.click(screen.getByRole("button", { name: /save list/i }));
+    await waitFor(() => {
+      expect(screen.getByTestId("saved-list-screen")).toBeInTheDocument();
+    });
+    expect(vi.mocked(saveMealPlan)).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(saveGroceryList)).toHaveBeenCalledTimes(2);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T15: successful retry navigates to /saved/list/:id
+// ---------------------------------------------------------------------------
+
+describe("GroceryScreen — T15: successful retry navigates to /saved/list/:id", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.mocked(saveMealPlan).mockResolvedValue({
+      id: "plan-1",
+      name: "My Meal Plan",
+      recipes: [],
+      created_at: "2026-04-13T00:00:00Z",
+      updated_at: "2026-04-13T00:00:00Z",
+    });
+    vi.mocked(saveGroceryList)
+      .mockRejectedValueOnce(new Error("first attempt fails"))
+      .mockResolvedValue({
+        id: "list-99",
+        name: "My Grocery List",
+        stores: STORES,
+        created_at: "2026-04-13T00:00:00Z",
+        updated_at: "2026-04-13T00:00:00Z",
+      });
+    spy = makeCompleteSpy();
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+    vi.mocked(saveMealPlan).mockReset();
+    vi.mocked(saveGroceryList).mockReset();
+  });
+
+  it("test_grocery_screen_retry_success_navigates", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/grocery"]}>
+        <Routes>
+          <Route path="/grocery" element={<GroceryScreen />} />
+          <Route path="/saved/list/:id" element={<div data-testid="saved-list-screen" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    await user.click(screen.getByRole("button", { name: /save list/i }));
+    await waitFor(() => {
+      expect(screen.getByText(/grocery list save failed.*meal plan saved/i)).toBeInTheDocument();
+    });
+    await user.click(screen.getByRole("button", { name: /save list/i }));
+    await waitFor(() => {
+      expect(screen.getByTestId("saved-list-screen")).toBeInTheDocument();
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// T16: save button disabled while request is in flight
+// ---------------------------------------------------------------------------
+
+type MealPlanResult = { id: string; name: string; recipes: unknown[]; created_at: string; updated_at: string };
+let t16ResolvePlan: ((v: MealPlanResult) => void) | null = null;
+
+describe("GroceryScreen — T16: save button disabled while saving", () => {
+  let spy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    const planPromise = new Promise<MealPlanResult>((res) => { t16ResolvePlan = res; });
+    vi.mocked(saveMealPlan).mockReturnValue(planPromise as ReturnType<typeof saveMealPlan>);
+    vi.mocked(saveGroceryList).mockResolvedValue({
+      id: "list-99",
+      name: "My Grocery List",
+      stores: STORES,
+      created_at: "2026-04-13T00:00:00Z",
+      updated_at: "2026-04-13T00:00:00Z",
+    });
+    spy = makeCompleteSpy();
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+    vi.mocked(saveMealPlan).mockReset();
+    vi.mocked(saveGroceryList).mockReset();
+    t16ResolvePlan = null;
+  });
+
+  it("test_grocery_screen_button_disabled_while_saving", async () => {
+    const user = userEvent.setup();
+    render(
+      <MemoryRouter initialEntries={["/grocery"]}>
+        <Routes>
+          <Route path="/grocery" element={<GroceryScreen />} />
+          <Route path="/saved/list/:id" element={<div data-testid="saved-list-screen" />} />
+        </Routes>
+      </MemoryRouter>
+    );
+    const btn = screen.getByRole("button", { name: /save list/i });
+    expect(btn).not.toBeDisabled();
+
+    // Click but do NOT await — saveMealPlan is blocked so handleSave is in-flight
+    const clickPromise = user.click(btn);
+
+    // isSaving=true → button is disabled
+    await waitFor(() => {
+      const savingBtn = screen.getByRole("button", { name: /save list|saving/i });
+      expect(savingBtn).toBeDisabled();
+    });
+
+    // Unblock the in-flight promise so React can clean up
+    t16ResolvePlan!({
+      id: "plan-1",
+      name: "My Meal Plan",
+      recipes: [],
+      created_at: "2026-04-13T00:00:00Z",
+      updated_at: "2026-04-13T00:00:00Z",
+    });
+    await clickPromise;
   });
 });
