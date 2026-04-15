@@ -111,7 +111,7 @@ export function SessionProvider({
   // Real SSE service — created once when no test chatService is injected.
   // Uses useState lazy initializer so the service is created only on first render
   // without reading refs during render (which React 19 lint rules disallow).
-  const [sseService, setSseService] = useState<SSEService | null>(() =>
+  const [sseService] = useState<SSEService | null>(() =>
     chatService ? null : createRealSSEService({
       onSessionCreated: (id) => setSessionId(id),
     })
@@ -262,11 +262,11 @@ export function SessionProvider({
     setConversationHistory([]);
     setCurrentScreen("home");
 
-    // Invalidate the SSE service's cached session so a new one is created next time
-    setSseService((prev) => {
-      prev?.resetSession();
-      return null;
-    });
+    // Invalidate the SSE service's cached session so a new one is created next
+    // time. We keep the service instance itself — nulling it would leave
+    // activeChatService wired to the no-op fallback, silently dropping the
+    // next sendMessage call.
+    sseService?.resetSession();
 
     // Reset screen state machine to idle
     dispatch({ type: "reset" });
