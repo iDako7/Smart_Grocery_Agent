@@ -18,6 +18,7 @@ interface RecipeCardProps {
   time: string;
   ingredients: IngredientTag[];
   onSwap: () => void;
+  swapDisabled?: boolean;
   onInfoClick: () => void;
   isSwapping?: boolean;
   onToggleBuy?: (ingredientName: string) => void;
@@ -36,6 +37,7 @@ export function RecipeCard({
   time,
   ingredients,
   onSwap,
+  swapDisabled = false,
   onInfoClick,
   isSwapping = false,
   onToggleBuy,
@@ -156,10 +158,17 @@ export function RecipeCard({
           <button
             type="button"
             onClick={onSwap}
-            className="inline-flex items-center gap-1.5 px-3 py-[6px] rounded-full bg-cream-deep text-ink-2 text-[10.5px] font-semibold border-none min-h-[30px] cursor-pointer hover:bg-cream transition-colors"
+            disabled={swapDisabled}
+            aria-disabled={swapDisabled}
+            className={cn(
+              "inline-flex items-center gap-1.5 px-3 py-[6px] rounded-full bg-cream-deep text-[10.5px] font-semibold border-none min-h-[30px] transition-colors",
+              swapDisabled
+                ? "text-ink-3 cursor-not-allowed opacity-60"
+                : "text-ink-2 cursor-pointer hover:bg-cream"
+            )}
           >
             <RefreshCw size={12} />
-            Try another
+            {swapDisabled ? "No alternative" : "Try another"}
           </button>
         )}
       </div>

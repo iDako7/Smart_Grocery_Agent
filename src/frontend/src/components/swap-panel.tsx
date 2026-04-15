@@ -60,13 +60,6 @@ export function SwapPanel({
         </span>
       </div>
 
-      {/* Empty-state — shown when no alternatives exist */}
-      {alternatives.length === 0 && (
-        <p className="text-[12px] text-ink-3 font-medium py-2 px-1">
-          No similar recipes found for this dish.
-        </p>
-      )}
-
       {/* Option rows — original first, then alternatives */}
       {allOptions.map((option) => {
         const isOriginal = option.id === original.id;
