@@ -97,6 +97,7 @@ Round 2 (address review findings):
 ### Background
 
 WT3 Stage 3 UAT found 3 critical interaction bugs despite ~4500 test assertions across 13 test files:
+
 1. Clarify page "All of the above" / "None" toggle has no mutual exclusion logic — clicking "All" just adds the string, doesn't select individual options.
 2. Recipe swap cycling broken — `onPick` closes the panel but never replaces the recipe in the array or rotates alternatives.
 3. Non-functional buttons — "Save plan", "EN/中", "Save list" render but have no onClick handlers.
@@ -106,11 +107,13 @@ Diagnosed why the same `/tdd` agent produced high-quality integration tests for 
 ### Root cause: test quality is determined by the orchestration plan, not the agent
 
 The backend orchestration plan (`wt2-orchestration-plan.md`) specified:
+
 - Exact integration test file names (`test_session_lifecycle.py`, `test_chat_e2e.py`, `test_saved_content_integration.py`)
 - Exact behaviors to verify ("multi-turn context includes previous turns", "save from session, verify independence")
 - Real infrastructure in tests (PostgreSQL via tx-rollback, SQLite KB, ASGI transport)
 
 The frontend plan (`wt3-frontend-plan.md`) specified:
+
 - Human review criteria ("full click-through: Home → Clarify → Recipes → Grocery")
 - No test file list, no behavior specs, no multi-step flow requirements
 
@@ -141,6 +144,7 @@ Preparing for Phase 2.2 integration, ran a gap analysis comparing the product sp
 Diagnosed the root cause: the product spec itself. Written as dense prose, it was hard for both agents and humans to extract discrete features, behavioral expectations, and test criteria. The agents had to interpret paragraphs and translate them into feature definitions — a lossy process that produced gaps.
 
 Rewrote `product-spec-v2.md` as a structured, agent-friendly format (Approved v3):
+
 - **Feature catalog** — 26 features with IDs (H1-H2, C1-C4, R1-R6, G1-G3, S1-S8, A1-A3), grouped by screen
 - **User journeys** — 5 end-to-end flows in compact notation with "must be true" assertions
 - **Acceptance criteria** — per-journey FE/BE behavioral requirements, each tagged with feature IDs for traceability
@@ -174,3 +178,38 @@ The design gap was **not planning the lifecycle of mocks** — where they live, 
 ### Takeaway
 
 Mock data is not neutral scaffolding; it is **an alternate implementation** that can satisfy agents and shallow tests without proving the system works. Treat mocks like temporary infrastructure with an explicit exit criteria, not as permanent UI content.
+
+## Day 12 (Apr 14) — Main branch LOC analysis baseline
+
+### What was measured
+
+Computed lines landed on `main` per day from project start by traversing `origin/main` first-parent history (merge/push path only), then summing `--numstat` additions/deletions per commit grouped by commit date.
+
+### Daily LOC landed on main
+
+| Date       | Commits |   Added | Deleted |      Net |
+| ---------- | ------: | ------: | ------: | -------: |
+| 2026-04-05 |       1 |   1,167 |       0 |   +1,167 |
+| 2026-04-06 |       7 |  13,558 |      30 |  +13,528 |
+| 2026-04-07 |       5 |  15,745 |     171 |  +15,574 |
+| 2026-04-08 |       3 |   4,079 |      27 |   +4,052 |
+| 2026-04-09 |       5 | 116,374 |     590 | +115,784 |
+| 2026-04-10 |       9 |   2,527 |     245 |   +2,282 |
+| 2026-04-11 |       7 |   3,218 |     315 |   +2,903 |
+| 2026-04-12 |      16 |   9,341 |   9,802 |     -461 |
+| 2026-04-13 |       5 |   4,327 |     603 |   +3,724 |
+
+### Totals and notes
+
+- **Range:** 2026-04-05 to 2026-04-13 (9 active days)
+- **Commits landed on main:** 58
+- **Total added:** 170,336
+- **Total deleted:** 11,783
+- **Net growth:** +158,553
+- **Largest landing day:** 2026-04-09 (+115,784 net)
+- **Only negative net day:** 2026-04-12 (-461), likely cleanup/refactor-heavy
+
+## the lesson
+
+build fast but failed profoundly
+There are several lessons here: 1. Setting the right standards or bar is critical; otherwise, mistakes will compound. For example, in this project, I verified the prototype using mock data, but I didn’t remove the mock data when building the real system. As a result, the agent began “cheating” by using the mock data and claiming features were complete without a real backend or frontend—I only caught this during integration testing. 2. Manual confirmation and testing are still the gold standard. For each PR, human verification is still necessary.
