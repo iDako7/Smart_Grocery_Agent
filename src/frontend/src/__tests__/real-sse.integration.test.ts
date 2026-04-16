@@ -574,10 +574,8 @@ describe("createRealSSEService — resetSession", () => {
 // Test 11 (F12): explanation text in assistant turn (SessionProvider integration)
 // ---------------------------------------------------------------------------
 
-// NOTE: This test relies on the B1 global MSW handlers (src/test/msw/handlers.ts)
-// to serve the /session and /session/:sessionId/chat routes with a happy-path
-// SSE sequence that includes an explanation event. If this test starts failing,
-// check the global handler defaults first.
+// NOTE: Self-contained — injects a local stubService as the chatService prop.
+// Does not use createRealSSEService or MSW.
 describe("F12 — SessionProvider stores explanation in assistant turn", () => {
   it("assistant turn content equals the explanation event text", async () => {
     const { SessionProvider, useSession } = await import("@/context/session-context");
