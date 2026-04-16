@@ -237,7 +237,7 @@ async def run_agent(
                 if clarify_payload is not None:
                     return AgentResult(
                         status="complete",
-                        response_text="",
+                        response_text=clarify_payload.to_context_text(),
                         tool_calls=all_tool_calls,
                         total_iterations=iteration + 1,
                         pcsv=pcsv_result,
@@ -246,7 +246,7 @@ async def run_agent(
                     )
                 return AgentResult(
                     status="partial",
-                    response_text="",
+                    response_text="[Clarify turn failed — no questions generated]",
                     tool_calls=all_tool_calls,
                     total_iterations=iteration + 1,
                     pcsv=pcsv_result,
@@ -297,7 +297,7 @@ async def run_agent(
         if clarify_turn_payload is not None:
             return AgentResult(
                 status="complete",
-                response_text="",
+                response_text=clarify_turn_payload.to_context_text(),
                 tool_calls=all_tool_calls,
                 total_iterations=iteration + 1,
                 pcsv=pcsv_result,
