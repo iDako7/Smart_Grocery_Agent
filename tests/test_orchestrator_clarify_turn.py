@@ -89,6 +89,10 @@ async def test_orchestrator_terminates_on_emit_clarify_turn(kb, seeded_user, db)
     assert result.clarify_turn is not None
     assert result.clarify_turn.explanation == _CLARIFY_ARGS["explanation"]
     assert len(result.clarify_turn.questions) == 1
+    # response_text must contain the clarify content for conversation history (issue #99)
+    assert result.response_text != ""
+    assert "Clarify turn" in result.response_text
+    assert _CLARIFY_ARGS["explanation"] in result.response_text
     # LLM called EXACTLY once — terminal, no follow-up iteration
     assert mock_client.chat.completions.create.call_count == 1
 
@@ -183,6 +187,9 @@ async def test_clarify_screen_freetext_response_forces_retry_with_tool_choice(kb
     assert result.clarify_turn is not None
     assert result.clarify_turn.explanation == _CLARIFY_ARGS["explanation"]
     assert len(result.clarify_turn.questions) == 1
+    # response_text must contain clarify content (issue #99) — forced-retry path
+    assert result.response_text != ""
+    assert _CLARIFY_ARGS["explanation"] in result.response_text
 
 
 async def test_clarify_screen_freetext_retry_also_fails_returns_error(kb, seeded_user, db):
@@ -275,3 +282,6 @@ async def test_clarify_screen_tool_calls_then_emit_clarify_turn_no_retry(kb, see
     assert result.status == "complete"
     assert result.clarify_turn is not None
     assert result.clarify_turn.explanation == _CLARIFY_ARGS["explanation"]
+    # response_text must contain clarify content (issue #99) — main-loop path
+    assert result.response_text != ""
+    assert _CLARIFY_ARGS["explanation"] in result.response_text

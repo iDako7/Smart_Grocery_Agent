@@ -243,6 +243,18 @@ class ClarifyTurnPayload(BaseModel):
             raise ValueError(f"emit_clarify_turn accepts at most 3 questions, got {len(self.questions)}")
         return self
 
+    def to_context_text(self) -> str:
+        """Serialize into a compact string for conversation history.
+
+        The LLM sees this on subsequent turns so it knows what analysis was
+        presented and which questions were asked.
+        """
+        parts = [f"[Clarify turn] {self.explanation}"]
+        for q in self.questions:
+            opts = ", ".join(o.label for o in q.options)
+            parts.append(f"- {q.text} ({opts})")
+        return "\n".join(parts)
+
 
 # ---------------------------------------------------------------------------
 # OpenAI function-calling tool definitions (used by OpenRouter)
