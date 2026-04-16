@@ -17,6 +17,7 @@
 
 import { http, HttpResponse } from "msw";
 import { makeSseStream } from "./sse";
+import { STORES_API_RESPONSE } from "../fixtures/grocery";
 
 const BASE = "http://localhost:8000";
 
@@ -130,7 +131,7 @@ export const handlers = [
 
   // Grocery list generation
   http.post(`${BASE}/session/:sessionId/grocery-list`, () => {
-    return HttpResponse.json([]);
+    return HttpResponse.json(STORES_API_RESPONSE);
   }),
 
   // Session recipe swap

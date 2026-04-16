@@ -6,6 +6,10 @@
 // Moved from session-context.test.tsx as part of interpretation A + split:
 //   session-context.test.tsx: screen-level DOM tests (MSW behavioral)
 //   This file: hook contract tests (renderHook, act, createMockChatService)
+//
+// Section numbering preserved from original file for traceability.
+// Sections 8–11 (chatService callbacks, onEvent/onDone/onError) are now
+// covered by screen-level tests in session-context.test.tsx via MSW.
 
 import type { ReactNode } from "react";
 import { describe, it, expect, vi } from "vitest";

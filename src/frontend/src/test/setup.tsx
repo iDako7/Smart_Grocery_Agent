@@ -5,7 +5,7 @@ import { server } from "./msw/server";
 // ---------------------------------------------------------------------------
 // MSW lifecycle — intercepts unhandled requests with 'bypass' so existing
 // vi.stubGlobal("fetch", ...) tests continue to work unchanged.
-// B2/B3 sub-issues will tighten this to 'error' on migrated test files.
+// TODO(#91): tighten to 'error' once B2 (#90) and B3 (#91) migrations are complete
 // ---------------------------------------------------------------------------
 beforeAll(() => server.listen({ onUnhandledRequest: "bypass" }));
 afterEach(() => server.resetHandlers());

@@ -5,7 +5,7 @@
 // these arrays and emit them as server-sent events on the `/chat` endpoint.
 //
 // Naming convention: SEQUENCE_<FLOW_DESCRIPTION>
-//   e.g. SEQUENCE_THINKING_RECIPE_DONE = thinking → recipe_card → done
+//   e.g. SEQUENCE_THINKING_PCSV_RECIPE_DONE = thinking → pcsv → recipe_card → done
 
 import type {
   SSEEvent,
@@ -184,13 +184,14 @@ export const SEQUENCE_THINKING_EXPLANATION_DONE: SSEEvent[] = [
 ];
 
 /**
- * Clarify flow: thinking → clarify_turn question set.
- * The agent stops after clarify_turn (no done event) — the user answers
- * questions and sends another message to continue.
+ * Clarify flow: thinking → clarify_turn question set → done.
+ * The real SSE client requires a `done` event to close cleanly —
+ * without it, `consumeSseStream` fires `onError("Connection closed unexpectedly")`.
  */
 export const SEQUENCE_THINKING_CLARIFY: SSEEvent[] = [
   EVENT_THINKING_ANALYZING,
   EVENT_CLARIFY_TURN,
+  EVENT_DONE_COMPLETE,
 ];
 
 /**

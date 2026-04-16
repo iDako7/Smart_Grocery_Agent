@@ -48,3 +48,41 @@ export function makeSseStream(events: SseEventSpec[]): ReadableStream<Uint8Array
     },
   });
 }
+
+/**
+ * Returns a deferred SSE stream with manual push/close control.
+ * Use for tests that need to assert intermediate states (loading, streaming)
+ * before the stream terminates.
+ *
+ * Usage:
+ *   const { stream, push, close } = makeDeferredSseStream();
+ *   server.use(http.post(..., () => new HttpResponse(stream, { headers: SSE_HEADERS })));
+ *   // ... trigger fetch ...
+ *   push({ event: "thinking", data: { event_type: "thinking", message: "..." } });
+ *   // ... assert intermediate state ...
+ *   push({ event: "done", data: { ... } });
+ *   close();
+ */
+export function makeDeferredSseStream(): {
+  stream: ReadableStream<Uint8Array>;
+  push: (spec: SseEventSpec) => void;
+  close: () => void;
+} {
+  let controller!: ReadableStreamDefaultController<Uint8Array>;
+
+  const stream = new ReadableStream<Uint8Array>({
+    start(c) {
+      controller = c;
+    },
+  });
+
+  return {
+    stream,
+    push(spec: SseEventSpec) {
+      controller.enqueue(encodeSseBlock(spec));
+    },
+    close() {
+      controller.close();
+    },
+  };
+}

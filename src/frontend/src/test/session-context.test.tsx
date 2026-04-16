@@ -17,7 +17,7 @@ import { SessionProvider } from "@/context/session-context";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ClarifyScreen } from "@/screens/ClarifyScreen";
 import { server } from "@/test/msw/server";
-import { makeSseStream } from "@/test/msw/sse";
+import { makeSseStream, makeDeferredSseStream } from "@/test/msw/sse";
 import {
   EVENT_THINKING_ANALYZING,
   EVENT_CLARIFY_TURN,
@@ -52,41 +52,6 @@ function toSseSpecs(
   events: { event_type: string; [key: string]: unknown }[]
 ): SseEventSpec[] {
   return events.map((e) => ({ event: e.event_type, data: e }));
-}
-
-// ---------------------------------------------------------------------------
-// Helper: builds a deferred SSE stream — the controller is returned so the
-// caller can push events and close the stream at any point from the test.
-// Used for tests that need to assert on intermediate states (loading, streaming)
-// before the stream terminates.
-// ---------------------------------------------------------------------------
-
-function makeDeferredSseStream(): {
-  stream: ReadableStream<Uint8Array>;
-  push: (spec: SseEventSpec) => void;
-  close: () => void;
-} {
-  let controller!: ReadableStreamDefaultController<Uint8Array>;
-  const encoder = new TextEncoder();
-
-  const stream = new ReadableStream<Uint8Array>({
-    start(c) {
-      controller = c;
-    },
-  });
-
-  function push(spec: SseEventSpec) {
-    const json =
-      typeof spec.data === "string" ? spec.data : JSON.stringify(spec.data);
-    const block = `event: ${spec.event}\ndata: ${json}\n\n`;
-    controller.enqueue(encoder.encode(block));
-  }
-
-  function close() {
-    controller.close();
-  }
-
-  return { stream, push, close };
 }
 
 // SSE response headers used in all chat handler overrides
