@@ -437,7 +437,7 @@ describe("GroceryScreen — T12: meal plan fails → no grocery save, error show
     await waitFor(() => {
       expect(screen.getByText(/failed to save meal plan/i)).toBeInTheDocument();
     });
-    expect(groceryCalled).toBe(false);
+    await waitFor(() => { expect(groceryCalled).toBe(false); });
     expect(screen.queryByTestId("saved-list-screen")).toBeNull();
   });
 });

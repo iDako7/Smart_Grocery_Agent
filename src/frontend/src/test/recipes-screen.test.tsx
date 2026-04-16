@@ -610,6 +610,10 @@ describe("RecipesScreen — T12: confirm reset calls resetSession and navigates 
     await user.click(confirmBtn);
 
     expect(screen.getByTestId("screen-home")).toBeInTheDocument();
+    // NOTE: This asserts navigation to "/" but does not verify resetSession()
+    // was called (which clears conversation history + screen state). A full
+    // behavioral check would require sending a new message and asserting the
+    // session ID changes — deferred to a future hook-level or E2E test.
   });
 });
 
@@ -1751,7 +1755,9 @@ describe("RecipesScreen — T21: Save meal plan button disabled while in-flight 
 
     const btn = screen.getByRole("button", { name: /save meal plan/i });
     expect(btn).not.toBeDisabled();
-    await user.click(btn);
+
+    // Click but do NOT await — saveMealPlan is blocked so handleSave is in-flight
+    const clickPromise = user.click(btn);
 
     await waitFor(() => {
       expect(
@@ -1759,8 +1765,9 @@ describe("RecipesScreen — T21: Save meal plan button disabled while in-flight 
       ).toBeDisabled();
     });
 
-    // Resolve the deferred save to clean up
-    if (resolveSave) (resolveSave as () => void)();
+    // Unblock the in-flight promise so React can clean up
+    resolveSave!();
+    await clickPromise;
   });
 });
 
