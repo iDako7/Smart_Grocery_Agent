@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# Phase 2 eval suite — the "judge" for all AI service changes.
+# Targets the running backend via HTTP (POST /session/{id}/chat).
+# Prerequisite: docker compose up
+#
+# Run: cd evals/phase2 && npx promptfoo eval -c promptfooconfig.yaml
+
+description: >-
+  SGA V2 Phase 2 agent eval — dish count, ingredient noise, diverse inputs.
+  Hits the full backend stack (HTTP → orchestrator → tools → SSE).
+
+prompts:
+  - "{{input}}"
+
+providers:
+  - id: python:provider.py
+
+tests: file://test_cases.yaml

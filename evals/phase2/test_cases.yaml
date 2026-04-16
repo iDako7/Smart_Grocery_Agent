@@ -1,0 +1,210 @@
+# Phase 2 eval test cases for SGA V2
+# 9 cases across 3 categories:
+#   A (dish_count)        — is the number of dishes reasonable for party size?
+#   B (ingredient_noise)  — are recipes overloaded with unlisted ingredients?
+#   C (diverse_inputs)    — dietary constraints, bilingual, vague prompts
+
+# ---------------------------------------------------------------------------
+# Category A — Dish count (4 cases)
+# ---------------------------------------------------------------------------
+
+- description: "A1: chicken+broccoli dinner for 2"
+  vars:
+    input: "I have chicken and broccoli. Please help me prepare dinner for two people."
+    screen: "home"
+    category: "dish_count"
+    expected_dish_min: 2
+    expected_dish_max: 4
+    party_size: 2
+  assert:
+    - type: javascript
+      value: file://assertions/structural.js
+      metric: agent_completes
+    - type: javascript
+      value: file://assertions/dish_count.js
+      metric: dish_count
+    - type: javascript
+      value: file://assertions/ingredient_noise.js
+      metric: ingredient_noise
+    - type: llm-rubric
+      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      metric: overall_quality
+
+- description: "A2: beef+egg+rice dinner for 4"
+  vars:
+    input: "I have beef, egg, and rice. Please help me to prepare dinner for four people."
+    screen: "home"
+    category: "dish_count"
+    expected_dish_min: 3
+    expected_dish_max: 5
+    party_size: 4
+  assert:
+    - type: javascript
+      value: file://assertions/structural.js
+      metric: agent_completes
+    - type: javascript
+      value: file://assertions/dish_count.js
+      metric: dish_count
+    - type: javascript
+      value: file://assertions/ingredient_noise.js
+      metric: ingredient_noise
+    - type: llm-rubric
+      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      metric: overall_quality
+
+- description: "A3: salmon+asparagus dinner for 1"
+  vars:
+    input: "I have salmon and asparagus. Please help me prepare dinner for one person."
+    screen: "home"
+    category: "dish_count"
+    expected_dish_min: 1
+    expected_dish_max: 2
+    party_size: 1
+  assert:
+    - type: javascript
+      value: file://assertions/structural.js
+      metric: agent_completes
+    - type: javascript
+      value: file://assertions/dish_count.js
+      metric: dish_count
+    - type: javascript
+      value: file://assertions/ingredient_noise.js
+      metric: ingredient_noise
+    - type: llm-rubric
+      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      metric: overall_quality
+
+- description: "A4: chicken+rice+veggies BBQ dinner for 8"
+  vars:
+    input: "I have chicken, rice, and mixed vegetables. Please help me prepare a BBQ dinner for eight people."
+    screen: "home"
+    category: "dish_count"
+    expected_dish_min: 4
+    expected_dish_max: 8
+    party_size: 8
+  assert:
+    - type: javascript
+      value: file://assertions/structural.js
+      metric: agent_completes
+    - type: javascript
+      value: file://assertions/dish_count.js
+      metric: dish_count
+    - type: javascript
+      value: file://assertions/ingredient_noise.js
+      metric: ingredient_noise
+    - type: llm-rubric
+      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      metric: overall_quality
+
+# ---------------------------------------------------------------------------
+# Category B — Ingredient noise (2 cases, reuse A1 and A2 inputs)
+# ---------------------------------------------------------------------------
+
+- description: "B1: ingredient noise focus — chicken+broccoli dinner for 2"
+  vars:
+    input: "I have chicken and broccoli. Please help me prepare dinner for two people."
+    screen: "home"
+    category: "ingredient_noise"
+    expected_dish_min: 2
+    expected_dish_max: 4
+    party_size: 2
+  assert:
+    - type: javascript
+      value: file://assertions/structural.js
+      metric: agent_completes
+    - type: javascript
+      value: file://assertions/dish_count.js
+      metric: dish_count
+    - type: javascript
+      value: file://assertions/ingredient_noise.js
+      metric: ingredient_noise
+    - type: llm-rubric
+      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      metric: overall_quality
+
+- description: "B2: ingredient noise focus — beef+egg+rice dinner for 4"
+  vars:
+    input: "I have beef, egg, and rice. Please help me to prepare dinner for four people."
+    screen: "home"
+    category: "ingredient_noise"
+    expected_dish_min: 3
+    expected_dish_max: 5
+    party_size: 4
+  assert:
+    - type: javascript
+      value: file://assertions/structural.js
+      metric: agent_completes
+    - type: javascript
+      value: file://assertions/dish_count.js
+      metric: dish_count
+    - type: javascript
+      value: file://assertions/ingredient_noise.js
+      metric: ingredient_noise
+    - type: llm-rubric
+      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      metric: overall_quality
+
+# ---------------------------------------------------------------------------
+# Category C — Diverse inputs (3 cases)
+# ---------------------------------------------------------------------------
+
+- description: "C1: vegetarian no-dairy — tofu+mushrooms dinner for 2"
+  vars:
+    input: "I'm vegetarian with no dairy. I have tofu and mushrooms. Please help me prepare dinner for two people."
+    screen: "home"
+    category: "diverse_inputs"
+    expected_dish_min: 2
+    expected_dish_max: 4
+    party_size: 2
+  assert:
+    - type: javascript
+      value: file://assertions/structural.js
+      metric: agent_completes
+    - type: javascript
+      value: file://assertions/dish_count.js
+      metric: dish_count
+    - type: javascript
+      value: file://assertions/ingredient_noise.js
+      metric: ingredient_noise
+    - type: llm-rubric
+      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      metric: overall_quality
+    - type: llm-rubric
+      value: "Does this response strictly comply with the stated dietary restrictions (vegetarian, no dairy)? Score 1-5 where 1=clear violation, 3=mostly compliant with minor concerns, 5=fully compliant with no violations."
+      metric: dietary_compliance
+
+- description: "C2: Chinese input — chicken+broccoli dinner for 2 (bilingual test)"
+  vars:
+    input: "我有鸡肉和西兰花，帮我准备两个人的晚餐"
+    screen: "home"
+    category: "diverse_inputs"
+    expected_dish_min: 2
+    expected_dish_max: 4
+    party_size: 2
+  assert:
+    - type: javascript
+      value: file://assertions/structural.js
+      metric: agent_completes
+    - type: javascript
+      value: file://assertions/dish_count.js
+      metric: dish_count
+    - type: javascript
+      value: file://assertions/ingredient_noise.js
+      metric: ingredient_noise
+    - type: llm-rubric
+      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      metric: overall_quality
+
+- description: "C3: vague input — no ingredients, no party size"
+  vars:
+    input: "I want to cook something"
+    screen: "home"
+    category: "diverse_inputs"
+    party_size: 0
+  assert:
+    - type: javascript
+      value: file://assertions/structural.js
+      metric: agent_completes
+    - type: llm-rubric
+      value: "The user gave a vague input ('I want to cook something'). Does the agent handle this well — either by asking clarifying questions or by making reasonable assumptions and proceeding? Score 1-5."
+      metric: vague_input_handling

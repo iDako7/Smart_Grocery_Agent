@@ -1,0 +1,924 @@
+{
+  "database": "/Users/dako/LocalDocument/200-Project/SGA_V2/.claude/worktrees/issue-87/data/kb.sqlite",
+  "total_recipes": 120,
+  "ingredient_counts": {
+    "average": 13.4,
+    "max": 29,
+    "max_recipe": {
+      "id": "r068",
+      "name": "Jollof Rice"
+    },
+    "distribution": {
+      "1-5": 4,
+      "6-10": 35,
+      "11-15": 44,
+      "16-20": 27,
+      "21+": 10
+    }
+  },
+  "overlapping_ingredients": {
+    "count": 54,
+    "percentage": 45.0,
+    "top_pairs": [
+      {
+        "pair": [
+          "neutral oil",
+          "sesame oil"
+        ],
+        "count": 6
+      },
+      {
+        "pair": [
+          "sesame oil",
+          "vegetable oil"
+        ],
+        "count": 4
+      },
+      {
+        "pair": [
+          "fish sauce",
+          "soy sauce"
+        ],
+        "count": 3
+      },
+      {
+        "pair": [
+          "oyster sauce",
+          "soy sauce"
+        ],
+        "count": 3
+      },
+      {
+        "pair": [
+          "onion",
+          "pickled onion"
+        ],
+        "count": 3
+      },
+      {
+        "pair": [
+          "dark soy sauce",
+          "fish sauce"
+        ],
+        "count": 3
+      },
+      {
+        "pair": [
+          "dark soy sauce",
+          "light soy sauce"
+        ],
+        "count": 3
+      },
+      {
+        "pair": [
+          "garlic powder",
+          "onion powder"
+        ],
+        "count": 3
+      },
+      {
+        "pair": [
+          "rice",
+          "rice vinegar"
+        ],
+        "count": 2
+      },
+      {
+        "pair": [
+          "onion",
+          "red onion"
+        ],
+        "count": 2
+      }
+    ],
+    "affected_recipes": [
+      {
+        "id": "r005",
+        "name": "Thai-Style Beef with Basil and Chilies",
+        "overlaps": [
+          [
+            "fish sauce",
+            "soy sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r009",
+        "name": "Chicken and Bok Choy Stir-Fry",
+        "overlaps": [
+          [
+            "soy sauce",
+            "oyster sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r010",
+        "name": "Chicken and Ginger Stir Fry",
+        "overlaps": [
+          [
+            "rice vinegar",
+            "rice"
+          ]
+        ]
+      },
+      {
+        "id": "r011",
+        "name": "Restaurant-Style Chicken Fried Rice",
+        "overlaps": [
+          [
+            "sesame oil",
+            "vegetable oil"
+          ]
+        ]
+      },
+      {
+        "id": "r016",
+        "name": "Mapo Tofu (Vegetarian)",
+        "overlaps": [
+          [
+            "sesame oil",
+            "vegetable oil"
+          ]
+        ]
+      },
+      {
+        "id": "r017",
+        "name": "Tofu and Bok Choy Stir-Fry",
+        "overlaps": [
+          [
+            "rice vinegar",
+            "rice"
+          ],
+          [
+            "sesame oil",
+            "vegetable oil"
+          ]
+        ]
+      },
+      {
+        "id": "r019",
+        "name": "Vegetable Fried Rice",
+        "overlaps": [
+          [
+            "sesame oil",
+            "vegetable oil"
+          ]
+        ]
+      },
+      {
+        "id": "r021",
+        "name": "Higher Protein Chicken Enchiladas Verdes",
+        "overlaps": [
+          [
+            "poblano peppers",
+            "anaheim peppers"
+          ],
+          [
+            "red onions",
+            "onions"
+          ]
+        ]
+      },
+      {
+        "id": "r022",
+        "name": "Bulgogi Beef Tacos",
+        "overlaps": [
+          [
+            "sesame oil",
+            "neutral oil"
+          ]
+        ]
+      },
+      {
+        "id": "r023",
+        "name": "Carne Guisada",
+        "overlaps": [
+          [
+            "green bell peppers",
+            "poblano peppers"
+          ]
+        ]
+      },
+      {
+        "id": "r027",
+        "name": "Green Pozole",
+        "overlaps": [
+          [
+            "onions, quartered",
+            "onions"
+          ]
+        ]
+      },
+      {
+        "id": "r029",
+        "name": "Enchiladas Rojas",
+        "overlaps": [
+          [
+            "onions",
+            "pickled onions"
+          ],
+          [
+            "bay leaves",
+            "epazote leaves"
+          ]
+        ]
+      },
+      {
+        "id": "r030",
+        "name": "Panko Fish Tacos",
+        "overlaps": [
+          [
+            "lime zest",
+            "limes"
+          ]
+        ]
+      },
+      {
+        "id": "r031",
+        "name": "Huevos Rancheros",
+        "overlaps": [
+          [
+            "pickled onions",
+            "white onions"
+          ]
+        ]
+      },
+      {
+        "id": "r035",
+        "name": "Restaurant-Style Butter Chicken",
+        "overlaps": [
+          [
+            "chili powder",
+            "turmeric powder"
+          ],
+          [
+            "cooking oil",
+            "cooking oil or butter"
+          ],
+          [
+            "cooking oil or butter",
+            "butter"
+          ]
+        ]
+      },
+      {
+        "id": "r036",
+        "name": "Keema Matar",
+        "overlaps": [
+          [
+            "turmeric powder",
+            "chili powder"
+          ]
+        ]
+      },
+      {
+        "id": "r037",
+        "name": "Pakistani Chicken Karahi",
+        "overlaps": [
+          [
+            "cumin, freshly ground",
+            "turmeric powder, ground"
+          ],
+          [
+            "cumin, freshly ground",
+            "black pepper, freshly ground"
+          ],
+          [
+            "turmeric powder, ground",
+            "black pepper, freshly ground"
+          ],
+          [
+            "green chilies, rough chopped",
+            "cilantro, roughly chopped"
+          ]
+        ]
+      },
+      {
+        "id": "r039",
+        "name": "Chicken Kati Rolls",
+        "overlaps": [
+          [
+            "kashmiri chili powder",
+            "turmeric powder"
+          ]
+        ]
+      },
+      {
+        "id": "r041",
+        "name": "Lemongrass Banh Mi",
+        "overlaps": [
+          [
+            "soy sauce",
+            "fish sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r042",
+        "name": "Spicy Thai Meatballs",
+        "overlaps": [
+          [
+            "fish sauce",
+            "dark soy sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r044",
+        "name": "Street Pad Thai",
+        "overlaps": [
+          [
+            "chicken or shrimp",
+            "dried shrimp"
+          ],
+          [
+            "fish sauce",
+            "dark soy sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r047",
+        "name": "Lu Rou Fan",
+        "overlaps": [
+          [
+            "light soy sauce",
+            "dark soy sauce"
+          ],
+          [
+            "bok choy, blanched",
+            "chinese broccoli, blanched"
+          ]
+        ]
+      },
+      {
+        "id": "r048",
+        "name": "Higher Protein Chicken Lo Mein",
+        "overlaps": [
+          [
+            "neutral oil",
+            "sesame oil"
+          ],
+          [
+            "light soy sauce",
+            "oyster sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r049",
+        "name": "Cantonese Black Pepper Beef",
+        "overlaps": [
+          [
+            "lee kum kee black pepper sauce",
+            "soy sauce"
+          ],
+          [
+            "lee kum kee black pepper sauce",
+            "black pepper"
+          ],
+          [
+            "black pepper",
+            "red bell peppers"
+          ],
+          [
+            "onion powder",
+            "garlic powder"
+          ],
+          [
+            "onion powder",
+            "onions"
+          ],
+          [
+            "garlic powder",
+            "garlic"
+          ]
+        ]
+      },
+      {
+        "id": "r050",
+        "name": "Home Friendly General Tso's (Air Fried or Deep Fried)",
+        "overlaps": [
+          [
+            "cooking oil",
+            "sesame oil"
+          ],
+          [
+            "garlic",
+            "chili garlic paste"
+          ]
+        ]
+      },
+      {
+        "id": "r051",
+        "name": "Karaage: Japanese Fried Chicken",
+        "overlaps": [
+          [
+            "neutral oil",
+            "sesame oil"
+          ]
+        ]
+      },
+      {
+        "id": "r052",
+        "name": "Tonkatsu",
+        "overlaps": [
+          [
+            "soy sauce",
+            "tonkatsu sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r053",
+        "name": "Chicken Shoyu Ramen",
+        "overlaps": [
+          [
+            "scallions, whites",
+            "scallions"
+          ]
+        ]
+      },
+      {
+        "id": "r057",
+        "name": "Fiery Carbonara",
+        "overlaps": [
+          [
+            "water",
+            "pasta water, reserved"
+          ],
+          [
+            "aleppo pepper",
+            "cayenne pepper"
+          ]
+        ]
+      },
+      {
+        "id": "r058",
+        "name": "Chicken Parmesan",
+        "overlaps": [
+          [
+            "neutral oil",
+            "olive oil"
+          ]
+        ]
+      },
+      {
+        "id": "r065",
+        "name": "20-Min Chicken Shawarma Wrap",
+        "overlaps": [
+          [
+            "garlic powder",
+            "turmeric powder"
+          ],
+          [
+            "garlic powder",
+            "harissa powder"
+          ],
+          [
+            "turmeric powder",
+            "harissa powder"
+          ]
+        ]
+      },
+      {
+        "id": "r067",
+        "name": "Lamb Kofta",
+        "overlaps": [
+          [
+            "onions",
+            "pickled onions"
+          ]
+        ]
+      },
+      {
+        "id": "r068",
+        "name": "Jollof Rice",
+        "overlaps": [
+          [
+            "dried thyme",
+            "thyme"
+          ],
+          [
+            "onion powder",
+            "garlic powder"
+          ],
+          [
+            "onion powder",
+            "crayfish powder"
+          ],
+          [
+            "onion powder",
+            "curry powder"
+          ],
+          [
+            "garlic powder",
+            "crayfish powder"
+          ],
+          [
+            "garlic powder",
+            "curry powder"
+          ],
+          [
+            "garlic powder",
+            "garlic"
+          ],
+          [
+            "cubeb tail pepper",
+            "red bell peppers"
+          ],
+          [
+            "cubeb tail pepper",
+            "habanero peppers"
+          ],
+          [
+            "cubeb tail pepper",
+            "cayenne pepper"
+          ],
+          [
+            "crayfish powder",
+            "curry powder"
+          ],
+          [
+            "white onions",
+            "red onions"
+          ],
+          [
+            "red bell peppers",
+            "habanero peppers"
+          ],
+          [
+            "red bell peppers",
+            "cayenne pepper"
+          ],
+          [
+            "habanero peppers",
+            "cayenne pepper"
+          ]
+        ]
+      },
+      {
+        "id": "r069",
+        "name": "Jamaican Beef Patty",
+        "overlaps": [
+          [
+            "water, cold",
+            "beef tallow, cold"
+          ],
+          [
+            "turmeric powder",
+            "curry powder"
+          ]
+        ]
+      },
+      {
+        "id": "r070",
+        "name": "Doner Kebab",
+        "overlaps": [
+          [
+            "cooking oil",
+            "olive oil"
+          ],
+          [
+            "onion powder",
+            "garlic powder"
+          ]
+        ]
+      },
+      {
+        "id": "r071",
+        "name": "Classic Shrimp Lo Mein",
+        "overlaps": [
+          [
+            "neutral oil",
+            "sesame oil"
+          ],
+          [
+            "oyster sauce",
+            "light soy sauce"
+          ],
+          [
+            "oyster sauce",
+            "dark soy sauce"
+          ],
+          [
+            "light soy sauce",
+            "dark soy sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r072",
+        "name": "Crispy Chilli Beef",
+        "overlaps": [
+          [
+            "steak of choice",
+            "chile pepper of choice"
+          ],
+          [
+            "sesame oil",
+            "neutral oil"
+          ],
+          [
+            "light soy sauce",
+            "dark soy sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r073",
+        "name": "Thai Basil Beef Stir Fry",
+        "overlaps": [
+          [
+            "thai black soy sauce",
+            "fish sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r074",
+        "name": "Thai Chile Pork & Cabbage Stir Fry",
+        "overlaps": [
+          [
+            "cooking oil",
+            "sesame oil"
+          ]
+        ]
+      },
+      {
+        "id": "r077",
+        "name": "Chicken Pad See Ew",
+        "overlaps": [
+          [
+            "dark soy sauce",
+            "soy sauce"
+          ],
+          [
+            "dark soy sauce",
+            "oyster sauce"
+          ],
+          [
+            "dark soy sauce",
+            "fish sauce"
+          ],
+          [
+            "soy sauce",
+            "oyster sauce"
+          ],
+          [
+            "soy sauce",
+            "fish sauce"
+          ],
+          [
+            "oyster sauce",
+            "fish sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r079",
+        "name": "Congee with Crispy Chili Pork",
+        "overlaps": [
+          [
+            "neutral oil",
+            "sesame oil"
+          ],
+          [
+            "neutral oil",
+            "chili crisp oil"
+          ],
+          [
+            "sesame oil",
+            "chili crisp oil"
+          ]
+        ]
+      },
+      {
+        "id": "r082",
+        "name": "Biang Biang Noodles",
+        "overlaps": [
+          [
+            "soy sauce",
+            "oyster sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r084",
+        "name": "22 Minute Katsu Sandwich",
+        "overlaps": [
+          [
+            "worcestershire sauce",
+            "soy sauce"
+          ]
+        ]
+      },
+      {
+        "id": "r085",
+        "name": "Salmon Temaki Bento Box",
+        "overlaps": [
+          [
+            "rice vinegar",
+            "white vinegar"
+          ]
+        ]
+      },
+      {
+        "id": "r088",
+        "name": "Spinach Carbonara",
+        "overlaps": [
+          [
+            "water",
+            "pasta water"
+          ]
+        ]
+      },
+      {
+        "id": "r093",
+        "name": "One-Pot Chicken, Mozzarella, & Roasted Pepper Pasta",
+        "overlaps": [
+          [
+            "black pepper",
+            "roasted peppers"
+          ]
+        ]
+      },
+      {
+        "id": "r096",
+        "name": "Enfrijoladas",
+        "overlaps": [
+          [
+            "onions",
+            "red onions"
+          ]
+        ]
+      },
+      {
+        "id": "r098",
+        "name": "Chicken Tinga Quesadilla",
+        "overlaps": [
+          [
+            "whole peeled tomatoes",
+            "tomatoes"
+          ],
+          [
+            "onions",
+            "pickled onions"
+          ]
+        ]
+      },
+      {
+        "id": "r101",
+        "name": "Baladi Salad & Beef Kebab Rice Plate",
+        "overlaps": [
+          [
+            "yellow rice: cooking oil",
+            "baladi salad: olive oil"
+          ],
+          [
+            "yellow rice: turmeric powder",
+            "yellow rice: chicken bouillon powder"
+          ],
+          [
+            "baladi salad: tomatoes, roughly diced",
+            "baladi salad: cucumbers, roughly diced"
+          ],
+          [
+            "baladi salad: onions",
+            "beef kofta kebabs: onions"
+          ],
+          [
+            "baladi salad: lemon juice",
+            "beef kofta kebabs: lemon juice"
+          ],
+          [
+            "baladi salad: aleppo pepper",
+            "white sauce: black pepper"
+          ],
+          [
+            "baladi salad: salt",
+            "beef kofta kebabs: salt"
+          ]
+        ]
+      },
+      {
+        "id": "r102",
+        "name": "Za'atar Chicken & Rice Bowl with Pomegranate Seeds",
+        "overlaps": [
+          [
+            "za'atar spiced chicken: salt",
+            "yellow rice: salt"
+          ],
+          [
+            "za'atar spiced chicken: cooking oil",
+            "yellow rice: cooking oil"
+          ],
+          [
+            "yellow rice: onions",
+            "toppings: red onions"
+          ]
+        ]
+      },
+      {
+        "id": "r106",
+        "name": "Cheesesteak",
+        "overlaps": [
+          [
+            "shaved beef: salt",
+            "sweated onions: salt"
+          ],
+          [
+            "bread of choice: sesame roll",
+            "bread of choice: hoagie rolls"
+          ],
+          [
+            "bread of choice: sesame roll",
+            "bread of choice: bakery sub roll"
+          ],
+          [
+            "bread of choice: hoagie rolls",
+            "bread of choice: bakery sub roll"
+          ]
+        ]
+      },
+      {
+        "id": "r108",
+        "name": "Sunday Roasted Chicken",
+        "overlaps": [
+          [
+            "chicken components: neutral oil",
+            "peruvian style green sauce: olive oil"
+          ]
+        ]
+      },
+      {
+        "id": "r112",
+        "name": "Steak, Mushroom, and Asparagus Bowl",
+        "overlaps": [
+          [
+            "chili garlic paste",
+            "garlic"
+          ]
+        ]
+      },
+      {
+        "id": "r113",
+        "name": "NOLA BBQ Shrimp",
+        "overlaps": [
+          [
+            "worcestershire sauce",
+            "hot sauce"
+          ]
+        ]
+      }
+    ]
+  },
+  "pantry_staples": {
+    "recipes_with_3_plus": 64,
+    "recipes_with_3_plus_percentage": 53.3,
+    "average_per_recipe": 2.6,
+    "most_common": [
+      {
+        "name": "salt",
+        "count": 84
+      },
+      {
+        "name": "water",
+        "count": 37
+      },
+      {
+        "name": "soy sauce",
+        "count": 35
+      },
+      {
+        "name": "cooking oil",
+        "count": 29
+      },
+      {
+        "name": "sesame oil",
+        "count": 21
+      },
+      {
+        "name": "sugar",
+        "count": 20
+      },
+      {
+        "name": "neutral oil",
+        "count": 20
+      },
+      {
+        "name": "black pepper",
+        "count": 19
+      },
+      {
+        "name": "butter",
+        "count": 16
+      },
+      {
+        "name": "olive oil",
+        "count": 11
+      }
+    ]
+  }
+}
