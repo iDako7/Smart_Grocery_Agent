@@ -439,6 +439,8 @@ describe("createRealSSEService — onSessionCreated callback", () => {
     expect(onSessionCreated).toHaveBeenCalledWith("session-for-callback-test");
   });
 
+  // NOTE: POST /session is not overridden here — this test relies on the B1 global
+  // handler (src/test/msw/handlers.ts) to create the session and supply its ID.
   it("calls onSessionCreated only once across two messages (session reuse)", async () => {
     let chatCallCount = 0;
 
