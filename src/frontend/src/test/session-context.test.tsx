@@ -17,14 +17,13 @@ import { SessionProvider } from "@/context/session-context";
 import { HomeScreen } from "@/screens/HomeScreen";
 import { ClarifyScreen } from "@/screens/ClarifyScreen";
 import { server } from "@/test/msw/server";
-import { makeSseStream, makeDeferredSseStream } from "@/test/msw/sse";
+import { makeSseStream, makeDeferredSseStream, toSseSpecs } from "@/test/msw/sse";
 import {
   EVENT_THINKING_ANALYZING,
   EVENT_CLARIFY_TURN,
   EVENT_ERROR_GENERIC,
   EVENT_DONE_COMPLETE,
 } from "@/test/fixtures/sse-sequences";
-import type { SseEventSpec } from "@/test/msw/sse";
 
 // ---------------------------------------------------------------------------
 // Render helper — wraps HomeScreen + ClarifyScreen in MemoryRouter + SessionProvider.
@@ -42,16 +41,6 @@ function renderApp(initialRoute = "/") {
       </SessionProvider>
     </MemoryRouter>
   );
-}
-
-// ---------------------------------------------------------------------------
-// Helper: converts typed SSEEvent array to SseEventSpec[] for makeSseStream
-// ---------------------------------------------------------------------------
-
-function toSseSpecs(
-  events: { event_type: string; [key: string]: unknown }[]
-): SseEventSpec[] {
-  return events.map((e) => ({ event: e.event_type, data: e }));
 }
 
 // SSE response headers used in all chat handler overrides

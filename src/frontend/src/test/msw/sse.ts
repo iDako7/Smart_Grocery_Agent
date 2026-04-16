@@ -38,7 +38,9 @@ function encodeSseBlock(spec: SseEventSpec): Uint8Array {
  *   ]);
  *   return new HttpResponse(stream, { headers: { "Content-Type": "text/event-stream" } });
  */
-export function makeSseStream(events: SseEventSpec[]): ReadableStream<Uint8Array> {
+export function makeSseStream(
+  events: SseEventSpec[]
+): ReadableStream<Uint8Array> {
   return new ReadableStream<Uint8Array>({
     start(controller) {
       for (const spec of events) {
@@ -63,11 +65,25 @@ export function makeSseStream(events: SseEventSpec[]): ReadableStream<Uint8Array
  *   push({ event: "done", data: { ... } });
  *   close();
  */
+/**
+ * Converts an array of typed SSEEvent objects (from fixtures/sse-sequences.ts)
+ * into SseEventSpec[] suitable for makeSseStream.
+ *
+ * Maps event_type → SSE event name, and the full object → SSE data payload.
+ */
+export function toSseSpecs(
+  events: { event_type: string; [key: string]: unknown }[]
+): SseEventSpec[] {
+  return events.map((e) => ({ event: e.event_type, data: e }));
+}
+
 export function makeDeferredSseStream(): {
   stream: ReadableStream<Uint8Array>;
   push: (spec: SseEventSpec) => void;
   close: () => void;
 } {
+  // start() is called synchronously by the ReadableStream constructor (per spec),
+  // so controller is guaranteed to be assigned before any push/close call.
   let controller!: ReadableStreamDefaultController<Uint8Array>;
 
   const stream = new ReadableStream<Uint8Array>({

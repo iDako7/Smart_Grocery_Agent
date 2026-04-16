@@ -16,13 +16,20 @@
 // tests and to serve as extension points for B2/B3 sub-issues.
 
 import { http, HttpResponse } from "msw";
-import { makeSseStream } from "./sse";
+import { makeSseStream, toSseSpecs } from "./sse";
 import { STORES_API_RESPONSE } from "../fixtures/grocery";
+import {
+  EVENT_THINKING_ANALYZING,
+  EVENT_DONE_COMPLETE,
+} from "../fixtures/sse-sequences";
 
 const BASE = "http://localhost:8000";
 
 // ---------------------------------------------------------------------------
-// Minimal fixture shapes (keep in sync with contracts/api_types.py)
+// Minimal fixture shapes
+// Cross-ref: contracts/api_types.py (SavedMealPlan, SavedGroceryList,
+// SavedRecipeSummary, SavedRecipeDetail, SessionState).
+// If contract schemas change, update these stubs to match.
 // ---------------------------------------------------------------------------
 
 const STUB_TIMESTAMP = "2026-04-15T00:00:00Z";
@@ -84,19 +91,13 @@ const STUB_SESSION_STATE = {
 };
 
 // ---------------------------------------------------------------------------
-// Default SSE events for the chat stub
+// Default SSE events for the chat stub — derived from typed fixtures
 // ---------------------------------------------------------------------------
 
-const DEFAULT_CHAT_SSE_EVENTS = [
-  {
-    event: "thinking",
-    data: { event_type: "thinking", message: "Analyzing your request..." },
-  },
-  {
-    event: "done",
-    data: { event_type: "done", status: "complete", reason: null, error_category: null },
-  },
-];
+const DEFAULT_CHAT_SSE_EVENTS = toSseSpecs([
+  EVENT_THINKING_ANALYZING,
+  EVENT_DONE_COMPLETE,
+]);
 
 // ---------------------------------------------------------------------------
 // Handlers

@@ -57,22 +57,37 @@ export const ITEM_CHIPOTLE: GroceryItem = {
   checked: false,
 };
 
+// ---------------------------------------------------------------------------
+// GroceryItem factory — use instead of duplicating base items with different ids
+// ---------------------------------------------------------------------------
+
+const defaultGroceryItem: GroceryItem = {
+  id: "item-1",
+  name: "grocery item",
+  amount: "1",
+  recipe_context: "",
+  checked: false,
+};
+
+export function makeGroceryItem(
+  overrides?: Partial<GroceryItem>
+): GroceryItem {
+  return { ...defaultGroceryItem, ...overrides };
+}
+
 // For grocery-api.integration.test.ts canonical shape
-export const ITEM_CHICKEN_BREAST_CANONICAL: GroceryItem = {
+export const ITEM_CHICKEN_BREAST_CANONICAL: GroceryItem = makeGroceryItem({
   id: "item-1",
   name: "chicken breast",
   amount: "500g",
   recipe_context: "Stir Fry",
-  checked: false,
-};
+});
 
-export const ITEM_BROCCOLI_CANONICAL: GroceryItem = {
+export const ITEM_BROCCOLI_CANONICAL: GroceryItem = makeGroceryItem({
   id: "item-2",
   name: "broccoli",
   amount: "1 head",
-  recipe_context: "",
-  checked: false,
-};
+});
 
 // ---------------------------------------------------------------------------
 // GroceryStore arrays — reusable multi-store fixtures
