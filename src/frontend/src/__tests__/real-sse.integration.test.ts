@@ -12,7 +12,7 @@ import React from "react";
 import { http, HttpResponse, delay } from "msw";
 
 import { server } from "@/test/msw/server";
-import { makeSseStream, toSseSpecs } from "@/test/msw/sse";
+import { makeSseStream, makeDeferredSseStream, toSseSpecs } from "@/test/msw/sse";
 import { createRealSSEService } from "@/services/real-sse";
 import { resetAuthToken } from "@/services/api-client";
 
@@ -318,12 +318,15 @@ describe("createRealSSEService — session reuse", () => {
 
 describe("createRealSSEService — cancel / abort", () => {
   it("cancel() aborts the in-flight chat request", async () => {
-    // Capture the request signal so we can verify abort was delivered
+    // Synchronize: resolve when the chat handler is entered
     let capturedSignal: AbortSignal | undefined;
+    let handlerReached: () => void;
+    const handlerReachedPromise = new Promise<void>((r) => { handlerReached = r; });
 
     server.use(
       http.post(`${BASE}/session/:sessionId/chat`, async ({ request }) => {
         capturedSignal = request.signal;
+        handlerReached();
         await delay("infinite");
         return new HttpResponse(null, { status: 200 });
       })
@@ -334,13 +337,13 @@ describe("createRealSSEService — cancel / abort", () => {
 
     const { cancel } = service("hello", "home", vi.fn(), onDone, vi.fn());
 
-    // Give the IIFE time to call session creation + start chat fetch
-    await new Promise((r) => setTimeout(r, 50));
+    // Wait until the chat handler is actually entered — no arbitrary timeout
+    await handlerReachedPromise;
 
     cancel();
 
-    // Wait for abort to propagate
-    await new Promise((r) => setTimeout(r, 10));
+    // One microtask tick for abort to propagate
+    await new Promise((r) => setTimeout(r, 0));
 
     expect(capturedSignal).toBeDefined();
     expect(capturedSignal!.aborted).toBe(true);
@@ -376,11 +379,19 @@ describe("createRealSSEService — stream closes without done event", () => {
   });
 
   it("does NOT call onError or onDone when stream closes after cancel()", async () => {
-    // Chat endpoint returns a stream that never closes on its own
+    // Use a deferred stream so we can close it AFTER cancel — exercises the
+    // post-cancel stream-close path that the old test covered.
+    const deferred = makeDeferredSseStream();
+    let handlerReached: () => void;
+    const handlerReachedPromise = new Promise<void>((r) => { handlerReached = r; });
+
     server.use(
-      http.post(`${BASE}/session/:sessionId/chat`, async () => {
-        await delay("infinite");
-        return new HttpResponse(null, { status: 200 });
+      http.post(`${BASE}/session/:sessionId/chat`, () => {
+        handlerReached();
+        return new HttpResponse(deferred.stream, {
+          status: 200,
+          headers: SSE_HEADERS,
+        });
       })
     );
 
@@ -391,14 +402,17 @@ describe("createRealSSEService — stream closes without done event", () => {
 
     const { cancel } = service("what should I cook?", "home", onEvent, onDone, onError);
 
-    // Give the IIFE time to reach the chat fetch
-    await new Promise((r) => setTimeout(r, 30));
+    // Wait until the handler has returned the stream
+    await handlerReachedPromise;
+    // One tick for the service to start reading the stream
+    await new Promise((r) => setTimeout(r, 0));
 
-    // Cancel first
+    // Cancel first, then close the stream to unblock the reader
     cancel();
+    deferred.close();
 
-    // Wait for the async IIFE to settle
-    await new Promise((r) => setTimeout(r, 30));
+    // Let the async IIFE settle
+    await new Promise((r) => setTimeout(r, 10));
 
     expect(onError).not.toHaveBeenCalled();
     expect(onDone).not.toHaveBeenCalled();
@@ -509,24 +523,37 @@ describe("createRealSSEService — resetSession", () => {
 
   it("does not fire onSessionCreated for a stale session when resetSession interrupts in-flight creation", async () => {
     let resolveSession: ((value: Response) => void) | null = null;
+    let sessionHandlerReached: () => void;
+    const sessionHandlerPromise = new Promise<void>((r) => { sessionHandlerReached = r; });
+    const chatReached = vi.fn();
 
     server.use(
       http.post(`${BASE}/session`, () => {
+        sessionHandlerReached();
         // Return a promise that hangs until we manually resolve it
         return new Promise<Response>((resolve) => {
           resolveSession = (val) => resolve(val);
         });
+      }),
+      // If the stale session leaks through, this handler would fire — proves
+      // the first service() call is truly abandoned after resetSession().
+      http.post(`${BASE}/session/:sessionId/chat`, () => {
+        chatReached();
+        return new HttpResponse(
+          makeSseStream(toSseSpecs([DONE_EVENT as { event_type: string }])),
+          { status: 200, headers: SSE_HEADERS }
+        );
       })
     );
 
     const onSessionCreated = vi.fn();
     const { handler: service, resetSession } = createRealSSEService({ onSessionCreated });
 
-    // Start first message — session creation is pending
+    // Start first message — session creation is pending (intentionally untracked)
     service("first", "home", vi.fn(), vi.fn(), vi.fn());
 
-    // Wait a tick for the fetch to be called
-    await new Promise((r) => setTimeout(r, 10));
+    // Wait until the session handler is actually entered — no arbitrary timeout
+    await sessionHandlerPromise;
     expect(resolveSession).not.toBeNull();
 
     // Reset BEFORE the session creation resolves
@@ -540,7 +567,7 @@ describe("createRealSSEService — resetSession", () => {
       })
     );
 
-    // Wait for promise chain to settle
+    // Let the promise chain settle
     await new Promise((r) => setTimeout(r, 10));
 
     // onSessionCreated must NOT have been called — the generation was invalidated

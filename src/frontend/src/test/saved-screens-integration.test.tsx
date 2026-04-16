@@ -159,9 +159,12 @@ describe("SavedMealPlanScreen — loading state", () => {
 });
 
 describe("SavedMealPlanScreen — success", () => {
-  it("fetches and displays the plan name and recipe", async () => {
+  it("fetches the correct ID from URL params and displays the plan", async () => {
+    let capturedId: string | undefined;
+
     server.use(
-      http.get(`${BASE}/saved/meal-plans/:id`, () => {
+      http.get(`${BASE}/saved/meal-plans/:id`, ({ params }) => {
+        capturedId = params.id as string;
         return HttpResponse.json(mockMealPlan);
       })
     );
@@ -176,6 +179,7 @@ describe("SavedMealPlanScreen — success", () => {
       expect(screen.getByText(/BBQ Plan/)).toBeInTheDocument();
       expect(screen.getByText("Grilled Chicken")).toBeInTheDocument();
     });
+    expect(capturedId).toBe("plan-1");
   });
 
   it("shows recipe count as deck text", async () => {
@@ -242,9 +246,12 @@ describe("SavedRecipeScreen — loading state", () => {
 });
 
 describe("SavedRecipeScreen — success", () => {
-  it("fetches and displays the recipe name and instructions", async () => {
+  it("fetches the correct ID from URL params and displays the recipe", async () => {
+    let capturedId: string | undefined;
+
     server.use(
-      http.get(`${BASE}/saved/recipes/:id`, () => {
+      http.get(`${BASE}/saved/recipes/:id`, ({ params }) => {
+        capturedId = params.id as string;
         return HttpResponse.json(mockSavedRecipe);
       })
     );
@@ -261,6 +268,7 @@ describe("SavedRecipeScreen — success", () => {
     expect(
       screen.getByText("Coat wings with baking powder and salt.")
     ).toBeInTheDocument();
+    expect(capturedId).toBe("recipe-1");
   });
 
   it("displays the CJK name", async () => {
@@ -329,9 +337,12 @@ describe("SavedGroceryListScreen — loading state", () => {
 });
 
 describe("SavedGroceryListScreen — success", () => {
-  it("fetches and displays the list name and items", async () => {
+  it("fetches the correct ID from URL params and displays the list", async () => {
+    let capturedId: string | undefined;
+
     server.use(
-      http.get(`${BASE}/saved/grocery-lists/:id`, () => {
+      http.get(`${BASE}/saved/grocery-lists/:id`, ({ params }) => {
+        capturedId = params.id as string;
         return HttpResponse.json(mockGroceryList);
       })
     );
@@ -347,6 +358,7 @@ describe("SavedGroceryListScreen — success", () => {
     );
     expect(screen.getByText("Corn on the cob")).toBeInTheDocument();
     expect(screen.getByText("Cucumber")).toBeInTheDocument();
+    expect(capturedId).toBe("list-1");
   });
 
   it("page refresh works — fetches by ID without relying on router state", async () => {
