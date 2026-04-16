@@ -74,6 +74,18 @@ async def search_recipes(db: aiosqlite.Connection, input: SearchRecipesInput) ->
     limit = input.max_results or 10
     primaries = [r[1] for r in results[:limit]]
 
+    # Issue #87: filter relaxation fallback. If restrictive filters
+    # (cuisine / cooking_method / effort_level) produced an empty result,
+    # retry once without them. The model sometimes guesses these fields
+    # from user context (e.g., "dinner for two" → effort_level="quick");
+    # returning nothing lets the agent narrate "can't find" instead of
+    # surfacing KB recipes the user actually has ingredients for.
+    if not primaries and (input.cuisine or input.cooking_method or input.effort_level):
+        relaxed = input.model_copy(
+            update={"cuisine": "", "cooking_method": "", "effort_level": None}
+        )
+        return await search_recipes(db, relaxed)
+
     if input.include_alternatives and primaries:
         primary_ids = {p.id for p in primaries}
         used: set[str] = set()

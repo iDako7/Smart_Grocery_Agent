@@ -40,7 +40,11 @@ async def test_max_10_results(kb):
 
 
 async def test_cuisine_filter(kb):
-    result = await search_recipes(kb, SearchRecipesInput(ingredients=["chicken"], cuisine="Korean"))
+    # Use ingredients+cuisine combo that yields non-empty. Filter relaxation
+    # (issue #87) falls back to unfiltered when the combo yields zero — covered
+    # by test_filter_relaxation_when_cuisine_yields_empty.
+    result = await search_recipes(kb, SearchRecipesInput(ingredients=["rice"], cuisine="Korean"))
+    assert len(result) > 0
     for r in result:
         assert r.cuisine.lower() == "korean"
 
@@ -51,7 +55,11 @@ async def test_no_match_returns_empty(kb):
 
 
 async def test_effort_level_filter(kb):
-    result = await search_recipes(kb, SearchRecipesInput(ingredients=["chicken"], effort_level="quick"))
+    # Use ingredients+effort combo that yields non-empty. Filter relaxation
+    # (issue #87) falls back to unfiltered when the combo yields zero — covered
+    # by test_filter_relaxation_when_effort_level_yields_empty.
+    result = await search_recipes(kb, SearchRecipesInput(ingredients=["rice"], effort_level="quick"))
+    assert len(result) > 0
     for r in result:
         assert r.effort_level == "quick"
 
@@ -149,3 +157,84 @@ async def test_search_recipes_honors_max_results(kb, max_results):
     """search_recipes must cap results to at most max_results."""
     result = await search_recipes(kb, SearchRecipesInput(ingredients=["salt", "oil", "garlic"], max_results=max_results))
     assert len(result) <= max_results
+
+
+# ---------------------------------------------------------------------------
+# Issue #87: filter relaxation fallback
+# ---------------------------------------------------------------------------
+
+
+async def test_filter_relaxation_when_effort_level_yields_empty(kb):
+    """If the effort_level filter eliminates all matches, fall back to
+    unfiltered ingredient search rather than returning empty.
+
+    Regression scenario: model passes effort_level='quick' for chicken+broccoli
+    (all KB matches are 'medium'), previously returning 0 → user sees empty panel.
+    """
+    result = await search_recipes(
+        kb,
+        SearchRecipesInput(
+            ingredients=["chicken", "broccoli"],
+            effort_level="quick",
+            max_results=3,
+        ),
+    )
+    assert len(result) > 0, (
+        "filter relaxation should fall back to unfiltered search when "
+        "effort_level filter returns nothing"
+    )
+
+
+async def test_filter_relaxation_when_cuisine_yields_empty(kb):
+    """cuisine filter that matches no KB rows for the given ingredients
+    triggers fallback to unfiltered search.
+    """
+    result = await search_recipes(
+        kb,
+        SearchRecipesInput(
+            ingredients=["chicken", "rice", "mixed vegetables"],
+            cuisine="BBQ",
+            max_results=3,
+        ),
+    )
+    assert len(result) > 0, (
+        "filter relaxation should fall back when cuisine filter returns nothing"
+    )
+
+
+async def test_filter_relaxation_when_combined_filters_yield_empty(kb):
+    """All three filters set, none matching → fallback to unfiltered."""
+    result = await search_recipes(
+        kb,
+        SearchRecipesInput(
+            ingredients=["chicken", "rice"],
+            cuisine="BBQ",
+            cooking_method="grill",
+            effort_level="quick",
+            max_results=3,
+        ),
+    )
+    assert len(result) > 0
+
+
+async def test_no_fallback_when_ingredients_unmatched(kb):
+    """Relaxation only fires for filter-emptied results. Ingredients that
+    don't exist in the KB at all still return empty — don't invent recipes.
+    """
+    result = await search_recipes(
+        kb,
+        SearchRecipesInput(
+            ingredients=["xyznonexistent_ingredient_qwerty"],
+            effort_level="quick",
+        ),
+    )
+    assert result == []
+
+
+async def test_no_fallback_when_filters_absent(kb):
+    """When no restrictive filters are passed and ingredients don't match,
+    result is empty (not a fallback case)."""
+    result = await search_recipes(
+        kb, SearchRecipesInput(ingredients=["xyznonexistent_qwerty"])
+    )
+    assert result == []

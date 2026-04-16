@@ -79,9 +79,12 @@ def test_prompt_screen_section_includes_flow():
 
 
 def test_prompt_contains_dish_count_rule():
-    """The rules section must include the party-size → dish-count ladder."""
+    """Rule 11 must include the presentation contract + party-size → max_results ladder."""
     prompt = build_system_prompt(UserProfile())
-    assert "Dish count" in prompt
+    # Presentation contract (issue #87 fix)
+    assert "Presentation contract" in prompt
+    assert "MUST present" in prompt
+    # Count contract + ladder
     assert "max_results" in prompt
-    assert "1-2 dishes" in prompt
-    assert "4-5 dishes" in prompt
+    assert "1 person → 1-2" in prompt
+    assert "7+ people → 4-5" in prompt

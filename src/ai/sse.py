@@ -47,7 +47,9 @@ async def emit_agent_result(
         event = PcsvUpdateEvent(pcsv=result.pcsv)
         yield _sse_line("pcsv_update", event.model_dump())
 
-    # Recipe cards
+    # Recipe cards. Issue #87 invariant: result.recipes is populated upstream
+    # in orchestrator.run_agent() whenever search_recipes returned non-empty
+    # during the loop — don't add belt-and-suspenders logic here.
     for recipe in result.recipes:
         event = RecipeCardEvent(recipe=recipe)
         yield _sse_line("recipe_card", event.model_dump())
