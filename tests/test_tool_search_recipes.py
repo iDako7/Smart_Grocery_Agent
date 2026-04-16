@@ -155,7 +155,9 @@ def test_score_similarity_protein_match_dominates():
 @pytest.mark.parametrize("max_results", [3, 5, 10])
 async def test_search_recipes_honors_max_results(kb, max_results):
     """search_recipes must cap results to at most max_results."""
-    result = await search_recipes(kb, SearchRecipesInput(ingredients=["salt", "oil", "garlic"], max_results=max_results))
+    result = await search_recipes(
+        kb, SearchRecipesInput(ingredients=["salt", "oil", "garlic"], max_results=max_results)
+    )
     assert len(result) <= max_results
 
 
@@ -180,8 +182,7 @@ async def test_filter_relaxation_when_effort_level_yields_empty(kb):
         ),
     )
     assert len(result) > 0, (
-        "filter relaxation should fall back to unfiltered search when "
-        "effort_level filter returns nothing"
+        "filter relaxation should fall back to unfiltered search when effort_level filter returns nothing"
     )
 
 
@@ -197,9 +198,7 @@ async def test_filter_relaxation_when_cuisine_yields_empty(kb):
             max_results=3,
         ),
     )
-    assert len(result) > 0, (
-        "filter relaxation should fall back when cuisine filter returns nothing"
-    )
+    assert len(result) > 0, "filter relaxation should fall back when cuisine filter returns nothing"
 
 
 async def test_filter_relaxation_when_combined_filters_yield_empty(kb):
@@ -234,7 +233,5 @@ async def test_no_fallback_when_ingredients_unmatched(kb):
 async def test_no_fallback_when_filters_absent(kb):
     """When no restrictive filters are passed and ingredients don't match,
     result is empty (not a fallback case)."""
-    result = await search_recipes(
-        kb, SearchRecipesInput(ingredients=["xyznonexistent_qwerty"])
-    )
+    result = await search_recipes(kb, SearchRecipesInput(ingredients=["xyznonexistent_qwerty"]))
     assert result == []

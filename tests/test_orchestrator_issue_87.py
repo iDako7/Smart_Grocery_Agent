@@ -141,20 +141,13 @@ async def test_recipes_surface_even_when_terminal_narrative_omits_them(kb, seede
         "search_recipes",
         {"ingredients": ["chicken", "broccoli"], "max_results": 3},
     )
-    response_with_search = _make_response(
-        tool_calls=[search_call], finish_reason="tool_calls"
-    )
+    response_with_search = _make_response(tool_calls=[search_call], finish_reason="tool_calls")
     terminal_narrative = _make_response(
-        content=(
-            "A good direction is a quick chicken and broccoli dinner with "
-            "a carb and simple sauce added."
-        )
+        content=("A good direction is a quick chicken and broccoli dinner with a carb and simple sauce added.")
     )
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_with_search, terminal_narrative]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_with_search, terminal_narrative])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent(
@@ -182,9 +175,7 @@ async def test_recipes_preserved_when_second_search_returns_empty(kb, seeded_use
         {"ingredients": ["chicken"], "max_results": 3},
         call_id="call_search_1",
     )
-    response_search1 = _make_response(
-        tool_calls=[search1], finish_reason="tool_calls"
-    )
+    response_search1 = _make_response(tool_calls=[search1], finish_reason="tool_calls")
 
     search2 = _make_tool_call(
         "search_recipes",
@@ -194,26 +185,19 @@ async def test_recipes_preserved_when_second_search_returns_empty(kb, seeded_use
         },
         call_id="call_search_2",
     )
-    response_search2 = _make_response(
-        tool_calls=[search2], finish_reason="tool_calls"
-    )
+    response_search2 = _make_response(tool_calls=[search2], finish_reason="tool_calls")
 
     terminal = _make_response(content="Here are some chicken recipes.")
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_search1, response_search2, terminal]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_search1, response_search2, terminal])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
-        result = await run_agent(
-            "I have chicken", kb, db, seeded_user, screen="home"
-        )
+        result = await run_agent("I have chicken", kb, db, seeded_user, screen="home")
 
     assert result.status == "complete"
     assert len(result.recipes) >= 1, (
-        "first search returned recipes; second search's empty result must "
-        "NOT wipe them (orchestrator.py:281 landmine)."
+        "first search returned recipes; second search's empty result must NOT wipe them (orchestrator.py:281 landmine)."
     )
 
 
@@ -245,13 +229,9 @@ async def test_recipes_replaced_when_second_search_returns_non_empty(kb, seeded_
     )
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
-        result = await run_agent(
-            "I have chicken", kb, db, seeded_user, screen="home"
-        )
+        result = await run_agent("I have chicken", kb, db, seeded_user, screen="home")
 
     assert result.status == "complete"
     # Check no duplicate recipe IDs in result (replace semantics, not union)
     ids = [r.id for r in result.recipes]
-    assert len(ids) == len(set(ids)), (
-        f"duplicate recipe IDs in result: {ids} — accumulator should replace, not union"
-    )
+    assert len(ids) == len(set(ids)), f"duplicate recipe IDs in result: {ids} — accumulator should replace, not union"

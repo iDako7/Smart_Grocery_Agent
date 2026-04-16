@@ -78,10 +78,7 @@ def accumulate_recipe_results(
     """
     if not new_raw:
         return existing
-    return [
-        RecipeSummary.model_validate(r) if isinstance(r, dict) else r
-        for r in new_raw
-    ]
+    return [RecipeSummary.model_validate(r) if isinstance(r, dict) else r for r in new_raw]
 
 
 def _get_client() -> AsyncOpenAI:
@@ -106,9 +103,7 @@ _TOOL_REGISTRY: dict[str, tuple[type, str]] = {
 }
 
 
-async def _llm_call_with_retry(
-    client, *, model, messages, tools, max_tokens, tool_choice=None, temperature=0.3
-):
+async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens, tool_choice=None, temperature=0.3):
     """Call LLM with one retry + exponential backoff on transient errors."""
     last_error = None
     for attempt in range(LLM_MAX_RETRIES + 1):

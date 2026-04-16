@@ -81,9 +81,7 @@ async def search_recipes(db: aiosqlite.Connection, input: SearchRecipesInput) ->
     # returning nothing lets the agent narrate "can't find" instead of
     # surfacing KB recipes the user actually has ingredients for.
     if not primaries and (input.cuisine or input.cooking_method or input.effort_level):
-        relaxed = input.model_copy(
-            update={"cuisine": "", "cooking_method": "", "effort_level": None}
-        )
+        relaxed = input.model_copy(update={"cuisine": "", "cooking_method": "", "effort_level": None})
         return await search_recipes(db, relaxed)
 
     if input.include_alternatives and primaries:
