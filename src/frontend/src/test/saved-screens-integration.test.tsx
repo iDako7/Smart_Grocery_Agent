@@ -17,9 +17,8 @@ import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
 import { SavedRecipeScreen } from "@/screens/SavedRecipeScreen";
 import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
 import { server } from "@/test/msw/server";
+import { BASE } from "@/test/msw/constants";
 import type { SavedMealPlan, SavedRecipe, SavedGroceryList } from "@/types/api";
-
-const BASE = "http://localhost:8000";
 
 // ---------------------------------------------------------------------------
 // Mock data — same shapes as before, returned by MSW handlers

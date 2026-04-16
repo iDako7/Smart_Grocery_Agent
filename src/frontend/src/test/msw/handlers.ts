@@ -16,6 +16,7 @@
 // tests and to serve as extension points for B2/B3 sub-issues.
 
 import { http, HttpResponse } from "msw";
+import { BASE } from "./constants";
 import { makeSseStream, toSseSpecs } from "./sse";
 import { STORES_API_RESPONSE } from "../fixtures/grocery";
 import {
@@ -23,7 +24,6 @@ import {
   EVENT_DONE_COMPLETE,
 } from "../fixtures/sse-sequences";
 
-const BASE = "http://localhost:8000";
 
 // ---------------------------------------------------------------------------
 // Minimal fixture shapes

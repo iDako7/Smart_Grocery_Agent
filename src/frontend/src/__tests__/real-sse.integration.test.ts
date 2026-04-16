@@ -13,16 +13,9 @@ import { http, HttpResponse, delay } from "msw";
 
 import { server } from "@/test/msw/server";
 import { makeSseStream, makeDeferredSseStream, toSseSpecs } from "@/test/msw/sse";
+import { BASE, SSE_HEADERS } from "@/test/msw/constants";
 import { createRealSSEService } from "@/services/real-sse";
 import { resetAuthToken } from "@/services/api-client";
-
-const BASE = "http://localhost:8000";
-
-const SSE_HEADERS = {
-  "Content-Type": "text/event-stream",
-  "Cache-Control": "no-cache",
-  Connection: "keep-alive",
-};
 
 // ---------------------------------------------------------------------------
 // Typed SSE events — used to build MSW chat handler responses
@@ -579,6 +572,10 @@ describe("createRealSSEService — resetSession", () => {
 // Test 11 (F12): explanation text in assistant turn (SessionProvider integration)
 // ---------------------------------------------------------------------------
 
+// NOTE: This test relies on the B1 global MSW handlers (src/test/msw/handlers.ts)
+// to serve the /session and /session/:sessionId/chat routes with a happy-path
+// SSE sequence that includes an explanation event. If this test starts failing,
+// check the global handler defaults first.
 describe("F12 — SessionProvider stores explanation in assistant turn", () => {
   it("assistant turn content equals the explanation event text", async () => {
     const { SessionProvider, useSession } = await import("@/context/session-context");
