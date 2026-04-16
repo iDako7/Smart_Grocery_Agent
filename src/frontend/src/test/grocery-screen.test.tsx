@@ -1,29 +1,38 @@
-// GroceryScreen integration tests — TDD RED → GREEN (issue #40).
-// Written FIRST before implementation. All 10 tests should RED on an
-// empty GroceryScreen shell.
+// GroceryScreen integration tests — MSW behavioral testing (issue #91, B3).
+//
+// Migrated from vi.mock("@/services/api-client") to MSW handlers.
+// All assertions use visible DOM (getByRole, findByText) and MSW request
+// capture — no component props, internal state, or vi.mock().toHaveBeenCalledWith().
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { screen, render, waitFor } from "@testing-library/react";
+import { describe, it, expect, vi, afterEach } from "vitest";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useEffect } from "react";
-import { Routes, Route, MemoryRouter } from "react-router";
+import { Routes, Route } from "react-router";
+import { http, HttpResponse } from "msw";
 
 import { GroceryScreen } from "@/screens/GroceryScreen";
-import { renderWithSession, createMockChatService } from "@/test/test-utils";
+import { renderWithSession } from "@/test/test-utils";
 import { useSessionOptional } from "@/context/session-context";
-import * as sessionContextModule from "@/context/session-context";
-import { initialScreenData } from "@/hooks/use-screen-state";
-import { saveGroceryList, saveMealPlan } from "@/services/api-client";
+import { server } from "@/test/msw/server";
+import { makeSseStream, toSseSpecs } from "@/test/msw/sse";
+import {
+  EVENT_THINKING_ANALYZING,
+  EVENT_DONE_COMPLETE,
+} from "@/test/fixtures/sse-sequences";
 import type { GroceryStore } from "@/types/sse";
 
 // ---------------------------------------------------------------------------
-// Module-level mock for api-client
+// Constants
 // ---------------------------------------------------------------------------
 
-vi.mock("@/services/api-client", () => ({
-  saveGroceryList: vi.fn(),
-  saveMealPlan: vi.fn(),
-}));
+const BASE = "http://localhost:8000";
+const SSE_HEADERS = {
+  "Content-Type": "text/event-stream",
+  "Cache-Control": "no-cache",
+  Connection: "keep-alive",
+};
+const STUB_TIMESTAMP = "2026-04-13T00:00:00Z";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -56,7 +65,7 @@ const STORES: GroceryStore[] = [
 ];
 
 // ---------------------------------------------------------------------------
-// Drive helper — mirrors RecipesWith from recipes-screen.test.tsx
+// Drive helper — dispatches session events to put GroceryScreen in a target state
 // ---------------------------------------------------------------------------
 
 type DriveKind =
@@ -89,7 +98,6 @@ function GroceryWith({ drive }: { drive: DriveKind }) {
       return;
     }
     if (drive.kind === "error") {
-      // start_loading + start_streaming already dispatched above
       session.dispatch({
         type: "receive_event",
         event: {
@@ -105,13 +113,38 @@ function GroceryWith({ drive }: { drive: DriveKind }) {
 }
 
 // ---------------------------------------------------------------------------
+// Render helper for tests that need routing (save → navigate)
+// ---------------------------------------------------------------------------
+
+function renderGroceryWithRoutes(
+  drive: DriveKind,
+  options?: { initialSessionId?: string },
+) {
+  return renderWithSession(<></>, {
+    initialPath: "/grocery",
+    initialSessionId: options?.initialSessionId,
+    routes: (
+      <Routes>
+        <Route
+          path="/grocery"
+          element={<GroceryWith drive={drive} />}
+        />
+        <Route
+          path="/saved/list/:id"
+          element={<div data-testid="saved-list-screen" />}
+        />
+      </Routes>
+    ),
+  });
+}
+
+// ---------------------------------------------------------------------------
 // T1: idle → empty state
 // ---------------------------------------------------------------------------
 
 describe("GroceryScreen — T1: idle shows empty state", () => {
   it("test_grocery_screen_idle_empty_state", () => {
     renderWithSession(<GroceryWith drive={{ kind: "idle" }} />, {
-      chatService: createMockChatService().service,
       initialPath: "/grocery",
     });
     expect(screen.getByText(/no grocery list yet/i)).toBeInTheDocument();
@@ -125,7 +158,6 @@ describe("GroceryScreen — T1: idle shows empty state", () => {
 describe("GroceryScreen — T2: loading shows skeletons", () => {
   it("test_grocery_screen_loading_skeletons", () => {
     renderWithSession(<GroceryWith drive={{ kind: "loading" }} />, {
-      chatService: createMockChatService().service,
       initialPath: "/grocery",
     });
     expect(screen.getAllByTestId("grocery-skeleton-row").length).toBeGreaterThan(0);
@@ -141,7 +173,7 @@ describe("GroceryScreen — T3: streaming shows items, Save disabled", () => {
   it("test_grocery_screen_streaming_items_cta_disabled", () => {
     renderWithSession(
       <GroceryWith drive={{ kind: "streaming", stores: STORES }} />,
-      { chatService: createMockChatService().service, initialPath: "/grocery" }
+      { initialPath: "/grocery" },
     );
     expect(screen.getByText("chicken breast")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /save list/i })).toBeDisabled();
@@ -156,7 +188,7 @@ describe("GroceryScreen — T4: complete shows grouped list, Save enabled", () =
   it("test_grocery_screen_complete_grouped_items_cta_enabled", () => {
     renderWithSession(
       <GroceryWith drive={{ kind: "complete", stores: STORES }} />,
-      { chatService: createMockChatService().service, initialPath: "/grocery" }
+      { initialPath: "/grocery" },
     );
     expect(screen.getByText("Save-On-Foods")).toBeInTheDocument();
     expect(screen.getByText("Costco")).toBeInTheDocument();
@@ -167,34 +199,36 @@ describe("GroceryScreen — T4: complete shows grouped list, Save enabled", () =
 });
 
 // ---------------------------------------------------------------------------
-// T5: error → ErrorBanner + retry calls sendMessage
+// T5: error → ErrorBanner + retry sends "retry" to chat endpoint
 // ---------------------------------------------------------------------------
 
 describe("GroceryScreen — T5: error shows banner and retry", () => {
-  let spy: ReturnType<typeof vi.spyOn>;
-  const sendMessageSpy = vi.fn();
-
-  beforeEach(() => {
-    sendMessageSpy.mockClear();
-    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
-      screenState: "error",
-      screenData: { ...initialScreenData, error: "Something went wrong. Please try again." },
-      isLoading: false, isStreaming: false, isComplete: false, isError: true,
-      sessionId: null, conversationHistory: [], currentScreen: "grocery",
-      sendMessage: sendMessageSpy,
-      navigateToScreen: vi.fn(), resetSession: vi.fn(), addLocalTurn: vi.fn(), excludedByCard: {}, toggleIngredientExclusion: vi.fn(), dispatch: vi.fn(),
-    });
-  });
-
-  afterEach(() => { spy.mockRestore(); });
-
   it("test_grocery_screen_error_banner_retry", async () => {
+    let capturedBody: Record<string, unknown> | null = null;
+    server.use(
+      http.post(`${BASE}/session/:sessionId/chat`, async ({ request }) => {
+        capturedBody = (await request.json()) as Record<string, unknown>;
+        return new HttpResponse(
+          makeSseStream(toSseSpecs([EVENT_THINKING_ANALYZING, EVENT_DONE_COMPLETE])),
+          { status: 200, headers: SSE_HEADERS },
+        );
+      }),
+    );
+
     const user = userEvent.setup();
-    render(<MemoryRouter initialEntries={["/grocery"]}><GroceryScreen /></MemoryRouter>);
+    renderWithSession(<GroceryWith drive={{ kind: "error" }} />, {
+      initialPath: "/grocery",
+    });
+
     expect(screen.getByText("Something went wrong. Please try again.")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /go back/i })).toBeInTheDocument();
+
     await user.click(screen.getByRole("button", { name: /try again/i }));
-    expect(sendMessageSpy).toHaveBeenCalledWith("retry");
+
+    await waitFor(() => {
+      expect(capturedBody).not.toBeNull();
+    });
+    expect(capturedBody!.message).toBe("retry");
   });
 });
 
@@ -203,23 +237,11 @@ describe("GroceryScreen — T5: error shows banner and retry", () => {
 // ---------------------------------------------------------------------------
 
 describe("GroceryScreen — T6: complete with empty groceryList shows empty state", () => {
-  let spy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
-      screenState: "complete",
-      screenData: { ...initialScreenData, groceryList: [], completionStatus: "complete" },
-      isLoading: false, isStreaming: false, isComplete: true, isError: false,
-      sessionId: null, conversationHistory: [], currentScreen: "grocery",
-      sendMessage: vi.fn(), navigateToScreen: vi.fn(), resetSession: vi.fn(),
-      addLocalTurn: vi.fn(), excludedByCard: {}, toggleIngredientExclusion: vi.fn(), dispatch: vi.fn(),
-    });
-  });
-
-  afterEach(() => { spy.mockRestore(); });
-
   it("test_grocery_screen_complete_empty_shows_empty_state", () => {
-    render(<MemoryRouter initialEntries={["/grocery"]}><GroceryScreen /></MemoryRouter>);
+    renderWithSession(
+      <GroceryWith drive={{ kind: "complete", stores: [] }} />,
+      { initialPath: "/grocery" },
+    );
     expect(screen.getByText(/no grocery list yet/i)).toBeInTheDocument();
     expect(screen.queryByText("chicken breast")).toBeNull();
     expect(screen.queryByText("olive oil")).toBeNull();
@@ -228,64 +250,56 @@ describe("GroceryScreen — T6: complete with empty groceryList shows empty stat
 });
 
 // ---------------------------------------------------------------------------
-// T7: save list → calls saveGroceryList and navigates to /saved/list/:id
+// T7: save list → calls saveMealPlan then saveGroceryList, navigates
 // ---------------------------------------------------------------------------
 
 describe("GroceryScreen — T7: save list navigates to /saved/list/:id", () => {
-  let spy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    vi.mocked(saveMealPlan).mockResolvedValue({
-      id: "plan-1",
-      name: "My Meal Plan",
-      recipes: [],
-      created_at: "2026-04-13T00:00:00Z",
-      updated_at: "2026-04-13T00:00:00Z",
-    });
-    vi.mocked(saveGroceryList).mockResolvedValue({
-      id: "list-99",
-      name: "My Grocery List",
-      stores: STORES,
-      created_at: "2026-04-13T00:00:00Z",
-      updated_at: "2026-04-13T00:00:00Z",
-    });
-    spy = vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
-      screenState: "complete",
-      screenData: { ...initialScreenData, groceryList: STORES, completionStatus: "complete" },
-      isLoading: false, isStreaming: false, isComplete: true, isError: false,
-      sessionId: "session-abc",
-      conversationHistory: [], currentScreen: "grocery",
-      sendMessage: vi.fn(), navigateToScreen: vi.fn(), resetSession: vi.fn(),
-      addLocalTurn: vi.fn(), excludedByCard: {}, toggleIngredientExclusion: vi.fn(), dispatch: vi.fn(),
-    });
-  });
-
-  afterEach(() => {
-    spy.mockRestore();
-    vi.mocked(saveGroceryList).mockReset();
-    vi.mocked(saveMealPlan).mockReset();
-  });
-
   it("test_grocery_screen_save_list_navigates", async () => {
-    const user = userEvent.setup();
-    render(
-      <MemoryRouter initialEntries={["/grocery"]}>
-        <Routes>
-          <Route path="/grocery" element={<GroceryScreen />} />
-          <Route path="/saved/list/:id" element={<div data-testid="saved-list-screen" />} />
-        </Routes>
-      </MemoryRouter>
+    const requestOrder: string[] = [];
+    let capturedMealPlanBody: Record<string, unknown> | null = null;
+    let capturedGroceryBody: Record<string, unknown> | null = null;
+
+    server.use(
+      http.post(`${BASE}/saved/meal-plans`, async ({ request }) => {
+        capturedMealPlanBody = (await request.json()) as Record<string, unknown>;
+        requestOrder.push("meal-plan");
+        return HttpResponse.json({
+          id: "plan-1",
+          name: "My Meal Plan",
+          recipes: [],
+          created_at: STUB_TIMESTAMP,
+          updated_at: STUB_TIMESTAMP,
+        });
+      }),
+      http.post(`${BASE}/saved/grocery-lists`, async ({ request }) => {
+        capturedGroceryBody = (await request.json()) as Record<string, unknown>;
+        requestOrder.push("grocery-list");
+        return HttpResponse.json({
+          id: "list-99",
+          name: "My Grocery List",
+          stores: STORES,
+          created_at: STUB_TIMESTAMP,
+          updated_at: STUB_TIMESTAMP,
+        });
+      }),
     );
+
+    const user = userEvent.setup();
+    renderGroceryWithRoutes(
+      { kind: "complete", stores: STORES },
+      { initialSessionId: "session-abc" },
+    );
+
     await user.click(screen.getByRole("button", { name: /save list/i }));
     await waitFor(() => {
       expect(screen.getByTestId("saved-list-screen")).toBeInTheDocument();
     });
-    expect(vi.mocked(saveMealPlan)).toHaveBeenCalledWith("My Meal Plan", "session-abc");
-    expect(vi.mocked(saveGroceryList)).toHaveBeenCalledWith("My Grocery List", "session-abc");
-    // meal plan must be called before grocery list
-    const mpOrder = vi.mocked(saveMealPlan).mock.invocationCallOrder[0];
-    const glOrder = vi.mocked(saveGroceryList).mock.invocationCallOrder[0];
-    expect(mpOrder).toBeLessThan(glOrder);
+
+    // Verify request bodies
+    expect(capturedMealPlanBody).toEqual({ name: "My Meal Plan", session_id: "session-abc" });
+    expect(capturedGroceryBody).toEqual({ name: "My Grocery List", session_id: "session-abc" });
+    // Meal plan must be called before grocery list
+    expect(requestOrder).toEqual(["meal-plan", "grocery-list"]);
   });
 });
 
@@ -298,7 +312,7 @@ describe("GroceryScreen — T8: buy-pill filters checked items", () => {
     const user = userEvent.setup();
     renderWithSession(
       <GroceryWith drive={{ kind: "complete", stores: STORES }} />,
-      { chatService: createMockChatService().service, initialPath: "/grocery" }
+      { initialPath: "/grocery" },
     );
     // Check i1 (chicken breast)
     await user.click(screen.getByRole("checkbox", { name: /toggle chicken breast/i }));
@@ -328,7 +342,7 @@ describe("GroceryScreen — T9: copy to notes writes to clipboard", () => {
 
     renderWithSession(
       <GroceryWith drive={{ kind: "complete", stores: STORES }} />,
-      { chatService: createMockChatService().service, initialPath: "/grocery" }
+      { initialPath: "/grocery" },
     );
 
     await user.click(screen.getByRole("button", { name: /copy to notes/i }));
@@ -348,7 +362,7 @@ describe("GroceryScreen — T10: checkbox toggles aria-checked", () => {
     const user = userEvent.setup();
     renderWithSession(
       <GroceryWith drive={{ kind: "complete", stores: STORES }} />,
-      { chatService: createMockChatService().service, initialPath: "/grocery" }
+      { initialPath: "/grocery" },
     );
     const checkbox = screen.getByRole("checkbox", { name: /toggle chicken breast/i });
     expect(checkbox).toHaveAttribute("aria-checked", "false");
@@ -373,7 +387,7 @@ describe("GroceryScreen — T11: copy respects buy-pill filter", () => {
 
     renderWithSession(
       <GroceryWith drive={{ kind: "complete", stores: STORES }} />,
-      { chatService: createMockChatService().service, initialPath: "/grocery" }
+      { initialPath: "/grocery" },
     );
 
     // Check i1 (chicken breast)
@@ -391,61 +405,39 @@ describe("GroceryScreen — T11: copy respects buy-pill filter", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Shared spy setup for T12–T16
-// ---------------------------------------------------------------------------
-
-function makeCompleteSpy() {
-  return vi.spyOn(sessionContextModule, "useSessionOptional").mockReturnValue({
-    screenState: "complete",
-    screenData: { ...initialScreenData, groceryList: STORES, completionStatus: "complete" },
-    isLoading: false, isStreaming: false, isComplete: true, isError: false,
-    sessionId: "session-abc",
-    conversationHistory: [], currentScreen: "grocery",
-    sendMessage: vi.fn(), navigateToScreen: vi.fn(), resetSession: vi.fn(),
-    addLocalTurn: vi.fn(), excludedByCard: {}, toggleIngredientExclusion: vi.fn(), dispatch: vi.fn(),
-  });
-}
-
-// ---------------------------------------------------------------------------
 // T12: meal plan fails → saveGroceryList NOT called, error banner shown
 // ---------------------------------------------------------------------------
 
 describe("GroceryScreen — T12: meal plan fails → no grocery save, error shown", () => {
-  let spy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    vi.mocked(saveMealPlan).mockRejectedValue(new Error("network error"));
-    vi.mocked(saveGroceryList).mockResolvedValue({
-      id: "list-99",
-      name: "My Grocery List",
-      stores: STORES,
-      created_at: "2026-04-13T00:00:00Z",
-      updated_at: "2026-04-13T00:00:00Z",
-    });
-    spy = makeCompleteSpy();
-  });
-
-  afterEach(() => {
-    spy.mockRestore();
-    vi.mocked(saveMealPlan).mockReset();
-    vi.mocked(saveGroceryList).mockReset();
-  });
-
   it("test_grocery_screen_meal_plan_fail_no_grocery_save", async () => {
-    const user = userEvent.setup();
-    render(
-      <MemoryRouter initialEntries={["/grocery"]}>
-        <Routes>
-          <Route path="/grocery" element={<GroceryScreen />} />
-          <Route path="/saved/list/:id" element={<div data-testid="saved-list-screen" />} />
-        </Routes>
-      </MemoryRouter>
+    let groceryCalled = false;
+    server.use(
+      http.post(`${BASE}/saved/meal-plans`, () => {
+        return new HttpResponse(null, { status: 500 });
+      }),
+      http.post(`${BASE}/saved/grocery-lists`, () => {
+        groceryCalled = true;
+        return HttpResponse.json({
+          id: "list-99",
+          name: "My Grocery List",
+          stores: STORES,
+          created_at: STUB_TIMESTAMP,
+          updated_at: STUB_TIMESTAMP,
+        });
+      }),
     );
+
+    const user = userEvent.setup();
+    renderGroceryWithRoutes(
+      { kind: "complete", stores: STORES },
+      { initialSessionId: "session-abc" },
+    );
+
     await user.click(screen.getByRole("button", { name: /save list/i }));
     await waitFor(() => {
       expect(screen.getByText(/failed to save meal plan/i)).toBeInTheDocument();
     });
-    expect(vi.mocked(saveGroceryList)).not.toHaveBeenCalled();
+    expect(groceryCalled).toBe(false);
     expect(screen.queryByTestId("saved-list-screen")).toBeNull();
   });
 });
@@ -455,36 +447,28 @@ describe("GroceryScreen — T12: meal plan fails → no grocery save, error show
 // ---------------------------------------------------------------------------
 
 describe("GroceryScreen — T13: meal plan ok but grocery list fails → partial error", () => {
-  let spy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    vi.mocked(saveMealPlan).mockResolvedValue({
-      id: "plan-1",
-      name: "My Meal Plan",
-      recipes: [],
-      created_at: "2026-04-13T00:00:00Z",
-      updated_at: "2026-04-13T00:00:00Z",
-    });
-    vi.mocked(saveGroceryList).mockRejectedValue(new Error("grocery save failed"));
-    spy = makeCompleteSpy();
-  });
-
-  afterEach(() => {
-    spy.mockRestore();
-    vi.mocked(saveMealPlan).mockReset();
-    vi.mocked(saveGroceryList).mockReset();
-  });
-
   it("test_grocery_screen_grocery_fail_partial_error_banner", async () => {
-    const user = userEvent.setup();
-    render(
-      <MemoryRouter initialEntries={["/grocery"]}>
-        <Routes>
-          <Route path="/grocery" element={<GroceryScreen />} />
-          <Route path="/saved/list/:id" element={<div data-testid="saved-list-screen" />} />
-        </Routes>
-      </MemoryRouter>
+    server.use(
+      http.post(`${BASE}/saved/meal-plans`, () => {
+        return HttpResponse.json({
+          id: "plan-1",
+          name: "My Meal Plan",
+          recipes: [],
+          created_at: STUB_TIMESTAMP,
+          updated_at: STUB_TIMESTAMP,
+        });
+      }),
+      http.post(`${BASE}/saved/grocery-lists`, () => {
+        return new HttpResponse(null, { status: 500 });
+      }),
     );
+
+    const user = userEvent.setup();
+    renderGroceryWithRoutes(
+      { kind: "complete", stores: STORES },
+      { initialSessionId: "session-abc" },
+    );
+
     await user.click(screen.getByRole("button", { name: /save list/i }));
     await waitFor(() => {
       expect(screen.getByText(/grocery list save failed.*meal plan saved/i)).toBeInTheDocument();
@@ -498,44 +482,42 @@ describe("GroceryScreen — T13: meal plan ok but grocery list fails → partial
 // ---------------------------------------------------------------------------
 
 describe("GroceryScreen — T14: retry after partial failure does not re-save meal plan", () => {
-  let spy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    vi.mocked(saveMealPlan).mockResolvedValue({
-      id: "plan-1",
-      name: "My Meal Plan",
-      recipes: [],
-      created_at: "2026-04-13T00:00:00Z",
-      updated_at: "2026-04-13T00:00:00Z",
-    });
-    vi.mocked(saveGroceryList)
-      .mockRejectedValueOnce(new Error("grocery save failed"))
-      .mockResolvedValue({
-        id: "list-99",
-        name: "My Grocery List",
-        stores: STORES,
-        created_at: "2026-04-13T00:00:00Z",
-        updated_at: "2026-04-13T00:00:00Z",
-      });
-    spy = makeCompleteSpy();
-  });
-
-  afterEach(() => {
-    spy.mockRestore();
-    vi.mocked(saveMealPlan).mockReset();
-    vi.mocked(saveGroceryList).mockReset();
-  });
-
   it("test_grocery_screen_retry_skips_meal_plan", async () => {
-    const user = userEvent.setup();
-    render(
-      <MemoryRouter initialEntries={["/grocery"]}>
-        <Routes>
-          <Route path="/grocery" element={<GroceryScreen />} />
-          <Route path="/saved/list/:id" element={<div data-testid="saved-list-screen" />} />
-        </Routes>
-      </MemoryRouter>
+    let mealPlanCalls = 0;
+    let groceryCalls = 0;
+
+    server.use(
+      http.post(`${BASE}/saved/meal-plans`, () => {
+        mealPlanCalls++;
+        return HttpResponse.json({
+          id: "plan-1",
+          name: "My Meal Plan",
+          recipes: [],
+          created_at: STUB_TIMESTAMP,
+          updated_at: STUB_TIMESTAMP,
+        });
+      }),
+      http.post(`${BASE}/saved/grocery-lists`, () => {
+        groceryCalls++;
+        if (groceryCalls === 1) {
+          return new HttpResponse(null, { status: 500 });
+        }
+        return HttpResponse.json({
+          id: "list-99",
+          name: "My Grocery List",
+          stores: STORES,
+          created_at: STUB_TIMESTAMP,
+          updated_at: STUB_TIMESTAMP,
+        });
+      }),
     );
+
+    const user = userEvent.setup();
+    renderGroceryWithRoutes(
+      { kind: "complete", stores: STORES },
+      { initialSessionId: "session-abc" },
+    );
+
     // First click — grocery list fails
     await user.click(screen.getByRole("button", { name: /save list/i }));
     await waitFor(() => {
@@ -546,8 +528,8 @@ describe("GroceryScreen — T14: retry after partial failure does not re-save me
     await waitFor(() => {
       expect(screen.getByTestId("saved-list-screen")).toBeInTheDocument();
     });
-    expect(vi.mocked(saveMealPlan)).toHaveBeenCalledTimes(1);
-    expect(vi.mocked(saveGroceryList)).toHaveBeenCalledTimes(2);
+    expect(mealPlanCalls).toBe(1);
+    expect(groceryCalls).toBe(2);
   });
 });
 
@@ -556,44 +538,40 @@ describe("GroceryScreen — T14: retry after partial failure does not re-save me
 // ---------------------------------------------------------------------------
 
 describe("GroceryScreen — T15: successful retry navigates to /saved/list/:id", () => {
-  let spy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    vi.mocked(saveMealPlan).mockResolvedValue({
-      id: "plan-1",
-      name: "My Meal Plan",
-      recipes: [],
-      created_at: "2026-04-13T00:00:00Z",
-      updated_at: "2026-04-13T00:00:00Z",
-    });
-    vi.mocked(saveGroceryList)
-      .mockRejectedValueOnce(new Error("first attempt fails"))
-      .mockResolvedValue({
-        id: "list-99",
-        name: "My Grocery List",
-        stores: STORES,
-        created_at: "2026-04-13T00:00:00Z",
-        updated_at: "2026-04-13T00:00:00Z",
-      });
-    spy = makeCompleteSpy();
-  });
-
-  afterEach(() => {
-    spy.mockRestore();
-    vi.mocked(saveMealPlan).mockReset();
-    vi.mocked(saveGroceryList).mockReset();
-  });
-
   it("test_grocery_screen_retry_success_navigates", async () => {
-    const user = userEvent.setup();
-    render(
-      <MemoryRouter initialEntries={["/grocery"]}>
-        <Routes>
-          <Route path="/grocery" element={<GroceryScreen />} />
-          <Route path="/saved/list/:id" element={<div data-testid="saved-list-screen" />} />
-        </Routes>
-      </MemoryRouter>
+    let groceryCalls = 0;
+
+    server.use(
+      http.post(`${BASE}/saved/meal-plans`, () => {
+        return HttpResponse.json({
+          id: "plan-1",
+          name: "My Meal Plan",
+          recipes: [],
+          created_at: STUB_TIMESTAMP,
+          updated_at: STUB_TIMESTAMP,
+        });
+      }),
+      http.post(`${BASE}/saved/grocery-lists`, () => {
+        groceryCalls++;
+        if (groceryCalls === 1) {
+          return new HttpResponse(null, { status: 500 });
+        }
+        return HttpResponse.json({
+          id: "list-99",
+          name: "My Grocery List",
+          stores: STORES,
+          created_at: STUB_TIMESTAMP,
+          updated_at: STUB_TIMESTAMP,
+        });
+      }),
     );
+
+    const user = userEvent.setup();
+    renderGroceryWithRoutes(
+      { kind: "complete", stores: STORES },
+      { initialSessionId: "session-abc" },
+    );
+
     await user.click(screen.getByRole("button", { name: /save list/i }));
     await waitFor(() => {
       expect(screen.getByText(/grocery list save failed.*meal plan saved/i)).toBeInTheDocument();
@@ -609,42 +587,40 @@ describe("GroceryScreen — T15: successful retry navigates to /saved/list/:id",
 // T16: save button disabled while request is in flight
 // ---------------------------------------------------------------------------
 
-type MealPlanResult = { id: string; name: string; recipes: unknown[]; created_at: string; updated_at: string };
-let t16ResolvePlan: ((v: MealPlanResult) => void) | null = null;
-
 describe("GroceryScreen — T16: save button disabled while saving", () => {
-  let spy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    const planPromise = new Promise<MealPlanResult>((res) => { t16ResolvePlan = res; });
-    vi.mocked(saveMealPlan).mockReturnValue(planPromise as ReturnType<typeof saveMealPlan>);
-    vi.mocked(saveGroceryList).mockResolvedValue({
-      id: "list-99",
-      name: "My Grocery List",
-      stores: STORES,
-      created_at: "2026-04-13T00:00:00Z",
-      updated_at: "2026-04-13T00:00:00Z",
-    });
-    spy = makeCompleteSpy();
-  });
-
-  afterEach(() => {
-    spy.mockRestore();
-    vi.mocked(saveMealPlan).mockReset();
-    vi.mocked(saveGroceryList).mockReset();
-    t16ResolvePlan = null;
-  });
-
   it("test_grocery_screen_button_disabled_while_saving", async () => {
-    const user = userEvent.setup();
-    render(
-      <MemoryRouter initialEntries={["/grocery"]}>
-        <Routes>
-          <Route path="/grocery" element={<GroceryScreen />} />
-          <Route path="/saved/list/:id" element={<div data-testid="saved-list-screen" />} />
-        </Routes>
-      </MemoryRouter>
+    let resolveMealPlan: (() => void) | null = null;
+
+    server.use(
+      http.post(`${BASE}/saved/meal-plans`, async () => {
+        await new Promise<void>((r) => {
+          resolveMealPlan = r;
+        });
+        return HttpResponse.json({
+          id: "plan-1",
+          name: "My Meal Plan",
+          recipes: [],
+          created_at: STUB_TIMESTAMP,
+          updated_at: STUB_TIMESTAMP,
+        });
+      }),
+      http.post(`${BASE}/saved/grocery-lists`, () => {
+        return HttpResponse.json({
+          id: "list-99",
+          name: "My Grocery List",
+          stores: STORES,
+          created_at: STUB_TIMESTAMP,
+          updated_at: STUB_TIMESTAMP,
+        });
+      }),
     );
+
+    const user = userEvent.setup();
+    renderGroceryWithRoutes(
+      { kind: "complete", stores: STORES },
+      { initialSessionId: "session-abc" },
+    );
+
     const btn = screen.getByRole("button", { name: /save list/i });
     expect(btn).not.toBeDisabled();
 
@@ -658,13 +634,7 @@ describe("GroceryScreen — T16: save button disabled while saving", () => {
     });
 
     // Unblock the in-flight promise so React can clean up
-    t16ResolvePlan!({
-      id: "plan-1",
-      name: "My Meal Plan",
-      recipes: [],
-      created_at: "2026-04-13T00:00:00Z",
-      updated_at: "2026-04-13T00:00:00Z",
-    });
+    resolveMealPlan!();
     await clickPromise;
   });
 });
