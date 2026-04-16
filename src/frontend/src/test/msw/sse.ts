@@ -52,6 +52,18 @@ export function makeSseStream(
 }
 
 /**
+ * Converts an array of typed SSEEvent objects (from fixtures/sse-sequences.ts)
+ * into SseEventSpec[] suitable for makeSseStream.
+ *
+ * Maps event_type → SSE event name, and the full object → SSE data payload.
+ */
+export function toSseSpecs(
+  events: { event_type: string; [key: string]: unknown }[]
+): SseEventSpec[] {
+  return events.map((e) => ({ event: e.event_type, data: e }));
+}
+
+/**
  * Returns a deferred SSE stream with manual push/close control.
  * Use for tests that need to assert intermediate states (loading, streaming)
  * before the stream terminates.
@@ -65,18 +77,6 @@ export function makeSseStream(
  *   push({ event: "done", data: { ... } });
  *   close();
  */
-/**
- * Converts an array of typed SSEEvent objects (from fixtures/sse-sequences.ts)
- * into SseEventSpec[] suitable for makeSseStream.
- *
- * Maps event_type → SSE event name, and the full object → SSE data payload.
- */
-export function toSseSpecs(
-  events: { event_type: string; [key: string]: unknown }[]
-): SseEventSpec[] {
-  return events.map((e) => ({ event: e.event_type, data: e }));
-}
-
 export function makeDeferredSseStream(): {
   stream: ReadableStream<Uint8Array>;
   push: (spec: SseEventSpec) => void;
