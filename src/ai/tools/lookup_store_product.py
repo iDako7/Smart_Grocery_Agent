@@ -15,27 +15,37 @@ def score_products(
 
     Returns (score, product_dict) pairs >= threshold, sorted descending.
     Each row must be (name, size, department, category, store).
+
+    Ranking is name-dominant: a product whose *name* fuzzy-matches the query
+    always outranks a product whose only link is its *category* matching the
+    query. Category remains a signal — it can still qualify a row through
+    the threshold and break ties between products with identical name scores —
+    but it can no longer promote a mismatched product (e.g. query "vinegar"
+    must not surface "Mazola - Corn Oil" just because its category is
+    "Oils & Vinegars").
     """
     query_lower = query.lower().strip()
-    scored: list[tuple[int, dict]] = []
+    ranked: list[tuple[int, int, dict]] = []  # (name_score, cat_score, product)
     for row in rows:
         name_score = fuzz.WRatio(query_lower, row[0].lower())
         cat_score = fuzz.WRatio(query_lower, (row[3] or "").lower())
-        best_score = max(name_score, cat_score)
-        if best_score >= threshold:
-            scored.append(
-                (
-                    best_score,
-                    {
-                        "name": row[0],
-                        "size": row[1] or "",
-                        "department": row[2] or "",
-                        "store": row[4] or "costco",
-                    },
-                )
+        if max(name_score, cat_score) < threshold:
+            continue
+        ranked.append(
+            (
+                name_score,
+                cat_score,
+                {
+                    "name": row[0],
+                    "size": row[1] or "",
+                    "department": row[2] or "",
+                    "store": row[4] or "costco",
+                },
             )
-    scored.sort(key=lambda x: (x[0], -len(x[1]["name"])), reverse=True)
-    return scored
+        )
+    # Primary: name_score desc. Secondary: cat_score desc. Tertiary: shorter name.
+    ranked.sort(key=lambda x: (-x[0], -x[1], len(x[2]["name"])))
+    return [(max(n, c), p) for n, c, p in ranked]
 
 
 async def fuzzy_match_products(

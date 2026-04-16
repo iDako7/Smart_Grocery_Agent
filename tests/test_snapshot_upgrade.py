@@ -209,6 +209,78 @@ async def test_create_meal_plan_lazy_upgrades_old_shape_snapshot(client):
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# Test 4 — alternatives hydration (UAT bug on PR #112)
+# ---------------------------------------------------------------------------
+
+
+async def test_chat_turn_hydrates_alternatives(client):
+    """Recipes nested under `primary.alternatives` must also be hydrated with
+    `ingredients` and `instructions` so the frontend swap-in-place flow renders
+    ingredient pills when the user picks an alternative.
+
+    Reproducer: PR #112 UAT — swapping a dish to its alternative showed the
+    dish name but zero ingredient tags because alternatives shipped with
+    ingredients=[] from the SSE snapshot.
+    """
+    resp = await client.post("/session")
+    sid = resp.json()["session_id"]
+
+    alt_summary = RecipeSummary(id="r_alt_01", name="Ginger Chicken")
+    primary = RecipeSummary(id="r001", name="Korean Fried Chicken", alternatives=[alt_summary])
+    mock_result = AgentResult(
+        status="complete",
+        response_text="Here you go!",
+        recipes=[primary],
+        total_iterations=1,
+    )
+
+    primary_detail = _make_recipe_detail("r001", "Korean Fried Chicken")
+    alt_detail = RecipeDetail(
+        id="r_alt_01",
+        name="Ginger Chicken",
+        ingredients=[Ingredient(name="ginger", amount="2 tbsp", pcsv=["sauce"])],
+        instructions="Step 1: Mince ginger.",
+        is_ai_generated=False,
+    )
+
+    async def _detail_side_effect(_kb, input):
+        mapping = {"r001": primary_detail, "r_alt_01": alt_detail}
+        return mapping.get(input.recipe_id)
+
+    kb_conn = AsyncMock()
+
+    with patch(
+        "src.backend.api.sessions.run_agent",
+        new_callable=AsyncMock,
+        return_value=mock_result,
+    ):
+        with patch("src.backend.api.sessions.get_kb") as mock_get_kb:
+            mock_get_kb.return_value = _make_kb_ctx(kb_conn)
+            with patch(
+                "src.backend.api.sessions.get_recipe_detail",
+                new_callable=AsyncMock,
+                side_effect=_detail_side_effect,
+            ):
+                resp = await client.post(
+                    f"/session/{sid}/chat",
+                    json={"message": "Find me recipes", "screen": "recipes"},
+                )
+
+    assert resp.status_code == 200
+
+    resp = await client.get(f"/session/{sid}")
+    data = resp.json()
+    assert data["recipes"], "snapshot must contain primary recipe"
+    rec = data["recipes"][0]
+    assert rec["alternatives"], "primary must carry alternatives"
+    alt = rec["alternatives"][0]
+    # The bug: alternatives arrived with ingredients=[] and instructions=""
+    assert alt["ingredients"], "alternative must be hydrated with ingredients"
+    assert alt["ingredients"][0]["name"] == "ginger"
+    assert alt["instructions"] == "Step 1: Mince ginger."
+
+
 async def test_chat_turn_ai_generated_recipe_persisted_as_summary_fallback(client):
     """When get_recipe_detail returns None (AI-generated recipe with no KB row),
     the original RecipeSummary dict must be persisted in the snapshot without crashing.

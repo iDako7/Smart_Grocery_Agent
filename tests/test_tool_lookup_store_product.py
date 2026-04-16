@@ -163,3 +163,49 @@ def test_correct_pairs_accepted(query, product_name):
     results = score_products([row], query)
     matched_names = [p["name"] for _, p in results]
     assert product_name in matched_names, f"{query!r} should match {product_name!r} at default threshold"
+
+
+# ---------------------------------------------------------------------------
+# Name-over-category regression tests (issue #112 — vinegar → Mazola Corn Oil)
+# ---------------------------------------------------------------------------
+
+
+def test_name_match_outranks_category_only_match():
+    """Regression for UAT bug #112: 'vinegar' must not return 'Mazola - Corn Oil'.
+
+    Both products share the category 'Oils & Vinegars' (fuzz WRatio 90 against
+    'vinegar'), but only the second has 'vinegar' in its name. The name match
+    must dominate the ranking regardless of shorter-name tiebreak.
+    """
+    rows = [
+        ("Mazola - Corn Oil", "1 L", "pantry", "Oils & Vinegars", "community_market"),
+        ("Allen's - Pure White Vinegar", "1 L", "pantry", "Oils & Vinegars", "community_market"),
+        ("Marukan - Rice Vinegar", "500 ml", "pantry", "Oils & Vinegars", "community_market"),
+    ]
+    results = score_products(rows, "vinegar")
+    assert results, "expected at least one match"
+    top_name = results[0][1]["name"].lower()
+    assert "vinegar" in top_name, f"top match should have 'vinegar' in name, got {top_name!r}"
+
+
+def test_corn_prefers_name_over_popcorn_category():
+    """Similar shape: 'corn' must not resolve to a Popcorn-category product
+    when a product with 'corn' in its name is available."""
+    rows = [
+        ("Kirkland Microwave Butter Popcorn", "300 g", "snacks", "Popcorn", "costco"),
+        ("Yellow Sweet Corn", "1 kg", "produce", "Corn", "saveonfoods"),
+    ]
+    results = score_products(rows, "corn")
+    assert results, "expected at least one match"
+    assert "sweet corn" in results[0][1]["name"].lower()
+
+
+def test_category_only_match_still_returned_when_no_name_match():
+    """Category rescue is preserved when no name-match product is available —
+    it's just never allowed to outrank one."""
+    rows = [
+        ("Mazola - Corn Oil", "1 L", "pantry", "Oils & Vinegars", "community_market"),
+    ]
+    results = score_products(rows, "vinegar")
+    assert len(results) == 1
+    assert results[0][1]["name"] == "Mazola - Corn Oil"

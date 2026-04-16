@@ -60,6 +60,27 @@ _RETRYABLE_ERRORS = (APIConnectionError, APITimeoutError, RateLimitError, Intern
 _openai_client: AsyncOpenAI | None = None
 
 
+def accumulate_recipe_results(
+    existing: list[RecipeSummary],
+    new_raw: list,
+) -> list[RecipeSummary]:
+    """Merge a fresh search_recipes tool result into the accumulator.
+
+    Issue #87 invariant: if any search_recipes call during the loop returns
+    non-empty, recipe_results must carry those recipes to the terminal
+    AgentResult. A later zero-result call (e.g., model retries with tighter
+    filters) must NOT wipe prior valid results.
+
+    Policy:
+    - new_raw empty → preserve existing (the landmine fix).
+    - new_raw non-empty → replace with new_raw (newest narrowing reflects
+      model intent; union-with-dedup would risk duplicate cards).
+    """
+    if not new_raw:
+        return existing
+    return [RecipeSummary.model_validate(r) if isinstance(r, dict) else r for r in new_raw]
+
+
 def _get_client() -> AsyncOpenAI:
     """Lazy singleton — reuses connection pool across requests."""
     global _openai_client
@@ -82,7 +103,7 @@ _TOOL_REGISTRY: dict[str, tuple[type, str]] = {
 }
 
 
-async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens, tool_choice=None):
+async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens, tool_choice=None, temperature=0.3):
     """Call LLM with one retry + exponential backoff on transient errors."""
     last_error = None
     for attempt in range(LLM_MAX_RETRIES + 1):
@@ -92,6 +113,7 @@ async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens, to
                 messages=messages,
                 tools=tools,
                 max_tokens=max_tokens,
+                temperature=temperature,
             )
             if tool_choice is not None:
                 kwargs["tool_choice"] = tool_choice
@@ -275,7 +297,7 @@ async def run_agent(
             if tc.function.name == "analyze_pcsv" and isinstance(result_dict, dict) and "error" not in result_dict:
                 pcsv_result = PCSVResult.model_validate(result_dict)
             elif tc.function.name == "search_recipes" and isinstance(result_dict, list):
-                recipe_results = [RecipeSummary.model_validate(r) if isinstance(r, dict) else r for r in result_dict]
+                recipe_results = accumulate_recipe_results(recipe_results, result_dict)
             elif (
                 tc.function.name == "emit_clarify_turn" and isinstance(result_dict, dict) and "error" not in result_dict
             ):

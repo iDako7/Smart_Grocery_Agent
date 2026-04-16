@@ -77,7 +77,12 @@ _RULES = """\
 
    - **`questions` field**: 0 to 3 chip-select clarifying questions. Empty (`[]`) is valid when the user's message is specific and the profile already answers everything material. Questions must materially affect recipe recommendations — skip filler. Skip any question whose answer is already in the user profile (e.g., don't ask about dietary restrictions if the profile lists them). New users with empty profiles should usually be asked about dietary/allergies if not stated in the initial message. Each question has a `selection_mode` ("single" or "multi") and a list of options; mark an option `is_exclusive: true` when selecting it should clear all others in that question (e.g., a "None" option in a multi-select dietary question).
 
-10. **Recipe alternatives for swap-in-place.** When searching recipes for a meal-plan request, always call `search_recipes` with `include_alternatives: true` so users can swap in place. Omit this flag only for lookup-style queries (e.g., "show me the recipe for X"). Example: user says "plan me 3 dinners for this week" → call `search_recipes(ingredients=[...], include_alternatives=true)`. User says "show me the recipe for mapo tofu" → call `search_recipes(ingredients=[...])` without the flag.\
+10. **Recipe alternatives for swap-in-place.** When searching recipes for a meal-plan request, always call `search_recipes` with `include_alternatives: true` so users can swap in place. Omit this flag only for lookup-style queries (e.g., "show me the recipe for X"). Example: user says "plan me 3 dinners for this week" → call `search_recipes(ingredients=[...], include_alternatives=true)`. User says "show me the recipe for mapo tofu" → call `search_recipes(ingredients=[...])` without the flag.
+11. **Present retrieved recipes; scale count to party size.** Two hard contracts:
+
+    **(a) Presentation contract.** When you are on the **Home** screen and `search_recipes` returns non-empty results, you MUST present those recipes as the primary response. If `analyze_pcsv` reports gaps (e.g., carb or sauce), ALSO explain the gap — but do NOT replace recipe presentation with gap-narration. The user sees an empty recipe panel if you describe the gap without presenting KB options; that is a failure. Retrieved recipes always surface; gap commentary is supplementary context alongside them.
+
+    **(b) Count contract.** You MUST pass `max_results` on every `search_recipes` call, scaled to party size via this ladder: 1 person → 1-2, 2-3 people → 2-3, 4-6 people → 3-4, 7+ people → 4-5. Default to household size from the User Profile if the user doesn't specify a party size. Omitting `max_results` or passing a value outside the ladder is a rule violation.\
 """
 
 _TOOL_INSTRUCTIONS = """\
@@ -92,7 +97,7 @@ _TOOL_INSTRUCTIONS = """\
 You have 8 tools available. `emit_clarify_turn` is the terminal action on the Clarify screen (see above); the other 7 tools are your standard playbook:
 
 1. **`analyze_pcsv`** — Call FIRST with the user's ingredients to understand their PCV balance.
-2. **`search_recipes`** — Call AFTER pcsv analysis to find recipes that match. Pass `include_alternatives: true` for meal-plan requests so users can swap in place; omit for lookup-style queries.
+2. **`search_recipes`** — Call AFTER pcsv analysis to find recipes that match. Pass `include_alternatives: true` for meal-plan requests so users can swap in place; omit for lookup-style queries. Pass `max_results` (integer 1-20) to scope the recipe count to party size per Rule 11 — e.g., `max_results: 3` for a 2-3 person household. **DO NOT pass `cuisine`, `cooking_method`, or `effort_level` filters unless the user EXPLICITLY requested that attribute** (e.g., "Italian", "grilled", "quick weeknight meal"). These fields filter the KB strictly; guessing them from context (e.g., inferring `effort_level="quick"` from "dinner for two") frequently returns zero matches and hides valid recipes from the user. When in doubt, omit filters and let ingredient matching do the work.
 3. **`lookup_store_product`** — Call to ground grocery suggestions in real store data.
 4. **`get_substitutions`** — Call when an ingredient is unavailable, restricted, or disliked.
 5. **`get_recipe_detail`** — Call when the user wants full cooking instructions.

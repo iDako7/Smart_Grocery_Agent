@@ -245,3 +245,19 @@ async def test_llm_retry_exhausted_propagates(kb, seeded_user, db):
 
     assert mock_client.chat.completions.create.call_count == 2
     mock_sleep.assert_called_once_with(1.0)
+
+
+async def test_llm_call_uses_temperature_0_3(kb, seeded_user, db):
+    """run_agent must pass temperature=0.3 to the LLM; seed and top_p must be absent."""
+    mock_response = _make_response(content="Looks good!")
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        result = await run_agent("What should I cook?", kb, db, seeded_user)
+
+    assert result.status == "complete"
+    call_kwargs = mock_client.chat.completions.create.call_args.kwargs
+    assert call_kwargs["temperature"] == 0.3
+    assert "seed" not in call_kwargs
+    assert "top_p" not in call_kwargs
