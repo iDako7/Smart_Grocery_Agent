@@ -1,5 +1,15 @@
 import "@testing-library/jest-dom";
-import { vi } from "vitest";
+import { vi, beforeAll, afterEach, afterAll } from "vitest";
+import { server } from "./msw/server";
+
+// ---------------------------------------------------------------------------
+// MSW lifecycle — intercepts unhandled requests with 'bypass' so existing
+// vi.stubGlobal("fetch", ...) tests continue to work unchanged.
+// B2/B3 sub-issues will tighten this to 'error' on migrated test files.
+// ---------------------------------------------------------------------------
+beforeAll(() => server.listen({ onUnhandledRequest: "bypass" }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 // ---------------------------------------------------------------------------
 // Shared mock: @base-ui/react/menu — renders inline (no portal)
