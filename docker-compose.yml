@@ -31,6 +31,12 @@ services:
     environment:
       # Override localhost URL from .env — inside the container, Postgres is reachable via the service name
       DATABASE_URL: postgresql+asyncpg://sga:sga_dev@db:5432/sga
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
+      start_period: 5s
     depends_on:
       db:
         condition: service_healthy

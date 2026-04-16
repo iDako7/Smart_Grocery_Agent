@@ -1,0 +1,7 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "docker compose up -d --wait && cd src/frontend && bun install --frozen-lockfile && bun dev",
+    "dev:stop": "docker compose down"
+  }
+}
