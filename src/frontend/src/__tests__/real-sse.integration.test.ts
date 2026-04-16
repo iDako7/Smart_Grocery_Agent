@@ -1,48 +1,29 @@
-// TDD RED phase — tests written before implementation.
+// Integration tests for createRealSSEService — migrated from vi.stubGlobal("fetch")
+// to MSW handlers (issue #90).
+//
 // Tests for:
-//   - src/services/api-client.ts  (getApiBase, createSession)
 //   - src/services/real-sse.ts    (createRealSSEService)
 //   - session-context.tsx         (F12 — explanationRef integration)
 
-import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import type { ReactNode } from "react";
 import React from "react";
+import { http, HttpResponse, delay } from "msw";
+
+import { server } from "@/test/msw/server";
+import { makeSseStream, makeDeferredSseStream, toSseSpecs } from "@/test/msw/sse";
+import { BASE, SSE_HEADERS } from "@/test/msw/constants";
+import { createRealSSEService } from "@/services/real-sse";
+import { resetAuthToken } from "@/services/api-client";
 
 // ---------------------------------------------------------------------------
-// Helper: build SSE response body from pre-formatted blocks
-// Each block must already end with \n\n
+// Typed SSE events — used to build MSW chat handler responses
 // ---------------------------------------------------------------------------
 
-function makeSseBody(blocks: string[]): ReadableStream<Uint8Array> {
-  const text = blocks.join("");
-  const encoder = new TextEncoder();
-  return new ReadableStream({
-    start(controller) {
-      controller.enqueue(encoder.encode(text));
-      controller.close();
-    },
-  });
-}
+const THINKING_EVENT = { event_type: "thinking", message: "Running analyze_pcsv..." };
 
-// ---------------------------------------------------------------------------
-// Helper: build a well-formed SSE block
-// ---------------------------------------------------------------------------
-
-function sseBlock(eventType: string, data: object): string {
-  return `event: ${eventType}\ndata: ${JSON.stringify(data)}\n\n`;
-}
-
-// ---------------------------------------------------------------------------
-// Sample event payloads
-// ---------------------------------------------------------------------------
-
-const THINKING_BLOCK = sseBlock("thinking", {
-  event_type: "thinking",
-  message: "Running analyze_pcsv...",
-});
-
-const PCSV_BLOCK = sseBlock("pcsv_update", {
+const PCSV_EVENT = {
   event_type: "pcsv_update",
   pcsv: {
     protein: ["chicken"],
@@ -51,9 +32,9 @@ const PCSV_BLOCK = sseBlock("pcsv_update", {
     sauce: [],
     gaps: ["carb", "veggie"],
   },
-});
+};
 
-const RECIPE_CARD_BLOCK = sseBlock("recipe_card", {
+const RECIPE_CARD_EVENT = {
   event_type: "recipe_card",
   recipe: {
     id: "r001",
@@ -72,101 +53,64 @@ const RECIPE_CARD_BLOCK = sseBlock("recipe_card", {
     ingredients_have: ["chicken"],
     ingredients_need: ["soy sauce"],
   },
-});
+};
 
 const EXPLANATION_TEXT = "Here are your recipes";
-const EXPLANATION_BLOCK = sseBlock("explanation", {
-  event_type: "explanation",
-  text: EXPLANATION_TEXT,
-});
+const EXPLANATION_EVENT = { event_type: "explanation", text: EXPLANATION_TEXT };
 
-const DONE_BLOCK = sseBlock("done", {
-  event_type: "done",
-  status: "complete",
-  reason: null,
-});
+const DONE_EVENT = { event_type: "done", status: "complete", reason: null };
 
-const ERROR_NON_RECOVERABLE_BLOCK = sseBlock("error", {
+const ERROR_NON_RECOVERABLE_EVENT = {
   event_type: "error",
   message: "some error message",
   code: "TOOL_ERROR",
   recoverable: false,
-});
+};
 
-const ERROR_RECOVERABLE_BLOCK = sseBlock("error", {
+const ERROR_RECOVERABLE_EVENT = {
   event_type: "error",
   message: "recoverable warning",
   code: "WARN",
   recoverable: true,
-});
-
-// ---------------------------------------------------------------------------
-// Mock fetch helpers
-// ---------------------------------------------------------------------------
-
-const AUTH_RESPONSE = { token: "test-jwt", user_id: "u1" };
-
-const SESSION_RESPONSE = {
-  session_id: "test-session-123",
-  created_at: "2026-04-11T00:00:00.000Z",
 };
 
-/**
- * Builds a fetch mock that handles all three calls in order:
- *   1. POST /auth/verify  → AUTH_RESPONSE
- *   2. POST /session      → SESSION_RESPONSE
- *   3. POST /session/.../chat → sseBody
- *
- * URL-based matching used so that session-reuse tests (which skip call 2 on
- * the second message) still resolve correctly.
- */
-function mockFetchWithSessionAndChat(sseBody: ReadableStream<Uint8Array>) {
-  return vi.fn().mockImplementation((url: string) => {
-    if (typeof url === "string" && url.includes("/auth/verify")) {
-      return Promise.resolve({
-        ok: true,
-        body: null,
-        json: async () => AUTH_RESPONSE,
+// ---------------------------------------------------------------------------
+// Helper: override the chat endpoint with a specific SSE sequence
+// ---------------------------------------------------------------------------
+
+function overrideChatWithEvents(events: Record<string, unknown>[]) {
+  const specs = toSseSpecs(events as { event_type: string }[]);
+  server.use(
+    http.post(`${BASE}/session/:sessionId/chat`, () => {
+      return new HttpResponse(makeSseStream(specs), {
+        status: 200,
+        headers: SSE_HEADERS,
       });
-    }
-    if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
-      return Promise.resolve({
-        ok: true,
-        body: null,
-        json: async () => SESSION_RESPONSE,
-      });
-    }
-    return Promise.resolve({
-      ok: true,
-      body: sseBody,
-      json: async () => ({}),
-    });
-  });
+    })
+  );
 }
+
+// ---------------------------------------------------------------------------
+// Cleanup — reset auth token cache between tests
+// ---------------------------------------------------------------------------
+
+beforeEach(() => {
+  resetAuthToken();
+});
 
 // ---------------------------------------------------------------------------
 // Test 1: Happy path — all event types dispatched in order
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — happy path", () => {
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
-
   it("dispatches thinking, pcsv_update, recipe_card, explanation in order and calls onDone", async () => {
-    const sseBody = makeSseBody([
-      THINKING_BLOCK,
-      PCSV_BLOCK,
-      RECIPE_CARD_BLOCK,
-      EXPLANATION_BLOCK,
-      DONE_BLOCK,
+    overrideChatWithEvents([
+      THINKING_EVENT,
+      PCSV_EVENT,
+      RECIPE_CARD_EVENT,
+      EXPLANATION_EVENT,
+      DONE_EVENT,
     ]);
-
-    vi.stubGlobal("fetch", mockFetchWithSessionAndChat(sseBody));
-
-    const { createRealSSEService } = await import("@/services/real-sse");
 
     const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
@@ -197,41 +141,12 @@ describe("createRealSSEService — happy path", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — network failure", () => {
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
-
   it("calls onError and never calls onDone when fetch rejects", async () => {
-    // Auth succeeds, session creation succeeds, chat fetch fails
-    let callCount = 0;
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockImplementation((url: string) => {
-        callCount++;
-        if (typeof url === "string" && url.includes("/auth/verify")) {
-          return Promise.resolve({
-            ok: true,
-            body: null,
-            json: async () => AUTH_RESPONSE,
-          });
-        }
-        if (callCount === 2) {
-          // Second call: session creation
-          return Promise.resolve({
-            ok: true,
-            body: null,
-            json: async () => SESSION_RESPONSE,
-          });
-        }
-        // Third call: chat — network error
-        return Promise.reject(new Error("Network error"));
+    server.use(
+      http.post(`${BASE}/session/:sessionId/chat`, () => {
+        return HttpResponse.error();
       })
     );
-
-    // Re-import to get a fresh closure (session state is fresh per module load)
-    const { createRealSSEService } = await import("@/services/real-sse");
 
     const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
@@ -256,17 +171,8 @@ describe("createRealSSEService — network failure", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — non-recoverable error event", () => {
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
-
   it("routes non-recoverable error to onError and never calls onEvent", async () => {
-    const sseBody = makeSseBody([ERROR_NON_RECOVERABLE_BLOCK]);
-    vi.stubGlobal("fetch", mockFetchWithSessionAndChat(sseBody));
-
-    const { createRealSSEService } = await import("@/services/real-sse");
+    overrideChatWithEvents([ERROR_NON_RECOVERABLE_EVENT]);
 
     const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
@@ -291,17 +197,8 @@ describe("createRealSSEService — non-recoverable error event", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — recoverable error event", () => {
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
-
   it("routes recoverable error to onEvent and then calls onDone", async () => {
-    const sseBody = makeSseBody([ERROR_RECOVERABLE_BLOCK, DONE_BLOCK]);
-    vi.stubGlobal("fetch", mockFetchWithSessionAndChat(sseBody));
-
-    const { createRealSSEService } = await import("@/services/real-sse");
+    overrideChatWithEvents([ERROR_RECOVERABLE_EVENT, DONE_EVENT]);
 
     const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
@@ -329,45 +226,39 @@ describe("createRealSSEService — recoverable error event", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — session creation", () => {
-  beforeEach(() => {
-    vi.resetModules();
-  });
-
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
-
   it("calls POST /session before POST /session/.../chat on first call", async () => {
-    const sseBody = makeSseBody([DONE_BLOCK]);
-    const fetchMock = mockFetchWithSessionAndChat(sseBody);
-    vi.stubGlobal("fetch", fetchMock);
+    let sessionCreated = false;
+    let chatCalled = false;
+    let sessionBeforeChat = false;
 
-    const { createRealSSEService } = await import("@/services/real-sse");
+    server.use(
+      http.post(`${BASE}/session`, () => {
+        sessionCreated = true;
+        return HttpResponse.json({
+          session_id: "test-session-123",
+          created_at: "2026-04-11T00:00:00.000Z",
+        });
+      }),
+      http.post(`${BASE}/session/:sessionId/chat`, () => {
+        chatCalled = true;
+        sessionBeforeChat = sessionCreated;
+        return new HttpResponse(
+          makeSseStream(toSseSpecs([DONE_EVENT as { event_type: string }])),
+          { status: 200, headers: SSE_HEADERS }
+        );
+      })
+    );
 
     const { handler: service } = createRealSSEService();
     const onDone = vi.fn();
 
     await new Promise<void>((resolve) => {
-      service("hello", "home", vi.fn(), (_s: "complete" | "partial", _r: string | null) => { onDone(_s, _r); resolve(); }, vi.fn());
+      service("hello", "home", vi.fn(), (_s, _r) => { onDone(_s, _r); resolve(); }, vi.fn());
     });
 
-    const calls = fetchMock.mock.calls as [string, RequestInit][];
-    expect(calls.length).toBeGreaterThanOrEqual(2);
-
-    // Find session creation call (not /auth/verify, not /chat)
-    const sessionCall = calls.find(
-      ([url]) => typeof url === "string" && /\/session$/.test(url)
-    );
-    expect(sessionCall).toBeDefined();
-    expect(sessionCall![1]?.method).toBe("POST");
-
-    // Find chat call
-    const chatCall = calls.find(
-      ([url]) => typeof url === "string" && url.includes("/chat")
-    );
-    expect(chatCall).toBeDefined();
+    expect(sessionCreated).toBe(true);
+    expect(chatCalled).toBe(true);
+    expect(sessionBeforeChat).toBe(true);
   });
 });
 
@@ -376,46 +267,27 @@ describe("createRealSSEService — session creation", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — session reuse", () => {
-  beforeEach(() => {
-    vi.resetModules();
-  });
-
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
-
   it("calls POST /session exactly once across two sendMessage calls", async () => {
-    const makeDoneBody = () => makeSseBody([DONE_BLOCK]);
-
+    let sessionCreateCount = 0;
     let chatCallCount = 0;
-    const fetchMock = vi.fn().mockImplementation((url: string) => {
-      if (typeof url === "string" && url.includes("/auth/verify")) {
-        return Promise.resolve({
-          ok: true,
-          body: null,
-          json: async () => AUTH_RESPONSE,
-        });
-      }
-      if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
-        return Promise.resolve({
-          ok: true,
-          body: null,
-          json: async () => SESSION_RESPONSE,
-        });
-      }
-      chatCallCount++;
-      return Promise.resolve({
-        ok: true,
-        body: makeDoneBody(),
-        json: async () => ({}),
-      });
-    });
 
-    vi.stubGlobal("fetch", fetchMock);
+    server.use(
+      http.post(`${BASE}/session`, () => {
+        sessionCreateCount++;
+        return HttpResponse.json({
+          session_id: "test-session-123",
+          created_at: "2026-04-11T00:00:00.000Z",
+        });
+      }),
+      http.post(`${BASE}/session/:sessionId/chat`, () => {
+        chatCallCount++;
+        return new HttpResponse(
+          makeSseStream(toSseSpecs([DONE_EVENT as { event_type: string }])),
+          { status: 200, headers: SSE_HEADERS }
+        );
+      })
+    );
 
-    const { createRealSSEService } = await import("@/services/real-sse");
     const { handler: service } = createRealSSEService();
 
     // First call
@@ -428,11 +300,7 @@ describe("createRealSSEService — session reuse", () => {
       service("second", "home", vi.fn(), () => { resolve(); }, vi.fn());
     });
 
-    // Count how many times /session (not /chat) was called
-    const sessionCreationCalls = (fetchMock.mock.calls as [string, RequestInit][]).filter(
-      ([url]) => typeof url === "string" && /\/session$/.test(url)
-    );
-    expect(sessionCreationCalls).toHaveLength(1);
+    expect(sessionCreateCount).toBe(1);
     expect(chatCallCount).toBe(2);
   });
 });
@@ -442,63 +310,37 @@ describe("createRealSSEService — session reuse", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — cancel / abort", () => {
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
+  it("cancel() aborts the in-flight chat request", async () => {
+    // Synchronize: resolve when the chat handler is entered
+    let capturedSignal: AbortSignal | undefined;
+    let handlerReached: () => void;
+    const handlerReachedPromise = new Promise<void>((r) => { handlerReached = r; });
 
-  it("passing cancel() causes fetch to be called with an AbortSignal that was aborted", async () => {
-    // fetch never resolves — we cancel immediately
-    let capturedSignal: AbortSignal | null = null;
-    const fetchMock = vi.fn().mockImplementation((url: string, init?: RequestInit) => {
-      if (typeof url === "string" && url.includes("/auth/verify")) {
-        return Promise.resolve({
-          ok: true,
-          body: null,
-          json: async () => AUTH_RESPONSE,
-        });
-      }
-      if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
-        return Promise.resolve({
-          ok: true,
-          body: null,
-          json: async () => SESSION_RESPONSE,
-        });
-      }
-      // Chat fetch — capture the signal, never resolves
-      if (init?.signal) {
-        capturedSignal = init.signal as AbortSignal;
-      }
-      return Promise.resolve({
-        ok: true,
-        body: new ReadableStream<Uint8Array>({ start() {} }), // never closes
-        json: async () => SESSION_RESPONSE,
-      });
-    });
+    server.use(
+      http.post(`${BASE}/session/:sessionId/chat`, async ({ request }) => {
+        capturedSignal = request.signal;
+        handlerReached();
+        await delay("infinite");
+        return new HttpResponse(null, { status: 200 });
+      })
+    );
 
-    vi.stubGlobal("fetch", fetchMock);
-
-    const { createRealSSEService } = await import("@/services/real-sse");
     const { handler: service } = createRealSSEService();
+    const onDone = vi.fn();
 
-    const { cancel } = service("hello", "home", vi.fn(), vi.fn(), vi.fn());
+    const { cancel } = service("hello", "home", vi.fn(), onDone, vi.fn());
 
-    // Give the IIFE a tick to call session creation fetch + chat fetch
-    await new Promise((r) => setTimeout(r, 50));
+    // Wait until the chat handler is actually entered — no arbitrary timeout
+    await handlerReachedPromise;
 
     cancel();
 
-    // Wait a tick for abort to propagate
-    await new Promise((r) => setTimeout(r, 10));
+    // One microtask tick for abort to propagate
+    await new Promise((r) => setTimeout(r, 0));
 
-    // At least one fetch call should have received a signal
-    const chatFetchCalls = (fetchMock.mock.calls as [string, RequestInit][]).filter(
-      ([url]) => typeof url === "string" && url.includes("/chat")
-    );
-    expect(chatFetchCalls.length).toBeGreaterThanOrEqual(1);
-    expect(capturedSignal).not.toBeNull();
+    expect(capturedSignal).toBeDefined();
     expect(capturedSignal!.aborted).toBe(true);
+    expect(onDone).not.toHaveBeenCalled();
   });
 });
 
@@ -507,25 +349,9 @@ describe("createRealSSEService — cancel / abort", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — stream closes without done event", () => {
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
-
   it("calls onError with 'Connection closed unexpectedly' when stream closes without a done event", async () => {
-    // Stream emits a thinking event then closes — no done event
-    const encoder = new TextEncoder();
-    const sseBody = new ReadableStream<Uint8Array>({
-      start(controller) {
-        controller.enqueue(encoder.encode(THINKING_BLOCK));
-        controller.close(); // closes without emitting done
-      },
-    });
-
-    vi.stubGlobal("fetch", mockFetchWithSessionAndChat(sseBody));
-
-    const { createRealSSEService } = await import("@/services/real-sse");
+    // Stream emits thinking then closes — no done event
+    overrideChatWithEvents([THINKING_EVENT]);
 
     const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
@@ -546,20 +372,21 @@ describe("createRealSSEService — stream closes without done event", () => {
   });
 
   it("does NOT call onError or onDone when stream closes after cancel()", async () => {
-    // Stream that never closes on its own — we cancel before it ends
-    let streamController: ReadableStreamDefaultController<Uint8Array> | null = null;
-    const encoder = new TextEncoder();
-    const sseBody = new ReadableStream<Uint8Array>({
-      start(controller) {
-        streamController = controller;
-        controller.enqueue(encoder.encode(THINKING_BLOCK));
-        // Does NOT call controller.close() — the test closes it after cancel
-      },
-    });
+    // Use a deferred stream so we can close it AFTER cancel — exercises the
+    // post-cancel stream-close path that the old test covered.
+    const deferred = makeDeferredSseStream();
+    let handlerReached: () => void;
+    const handlerReachedPromise = new Promise<void>((r) => { handlerReached = r; });
 
-    vi.stubGlobal("fetch", mockFetchWithSessionAndChat(sseBody));
-
-    const { createRealSSEService } = await import("@/services/real-sse");
+    server.use(
+      http.post(`${BASE}/session/:sessionId/chat`, () => {
+        handlerReached();
+        return new HttpResponse(deferred.stream, {
+          status: 200,
+          headers: SSE_HEADERS,
+        });
+      })
+    );
 
     const { handler: service } = createRealSSEService();
     const onEvent = vi.fn();
@@ -568,15 +395,17 @@ describe("createRealSSEService — stream closes without done event", () => {
 
     const { cancel } = service("what should I cook?", "home", onEvent, onDone, onError);
 
-    // Give the IIFE time to reach consumeSseStream and block on reader.read()
-    await new Promise((r) => setTimeout(r, 30));
+    // Wait until the handler has returned the stream
+    await handlerReachedPromise;
+    // One tick for the service to start reading the stream
+    await new Promise((r) => setTimeout(r, 0));
 
     // Cancel first, then close the stream to unblock the reader
     cancel();
-    streamController!.close();
+    deferred.close();
 
-    // Wait for the async IIFE to settle
-    await new Promise((r) => setTimeout(r, 30));
+    // Let the async IIFE settle
+    await new Promise((r) => setTimeout(r, 10));
 
     expect(onError).not.toHaveBeenCalled();
     expect(onDone).not.toHaveBeenCalled();
@@ -588,21 +417,16 @@ describe("createRealSSEService — stream closes without done event", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — onSessionCreated callback", () => {
-  beforeEach(() => {
-    vi.resetModules();
-  });
-
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
-
   it("calls onSessionCreated with the session ID after first message", async () => {
-    const sseBody = makeSseBody([DONE_BLOCK]);
-    vi.stubGlobal("fetch", mockFetchWithSessionAndChat(sseBody));
-
-    const { createRealSSEService } = await import("@/services/real-sse");
+    server.use(
+      http.post(`${BASE}/session`, () => {
+        return HttpResponse.json({
+          session_id: "session-for-callback-test",
+          created_at: "2026-04-11T00:00:00.000Z",
+        });
+      })
+    );
+    overrideChatWithEvents([DONE_EVENT]);
 
     const onSessionCreated = vi.fn();
     const { handler: service } = createRealSSEService({ onSessionCreated });
@@ -612,37 +436,23 @@ describe("createRealSSEService — onSessionCreated callback", () => {
     });
 
     expect(onSessionCreated).toHaveBeenCalledOnce();
-    expect(onSessionCreated).toHaveBeenCalledWith("test-session-123");
+    expect(onSessionCreated).toHaveBeenCalledWith("session-for-callback-test");
   });
 
+  // NOTE: POST /session is not overridden here — this test relies on the B1 global
+  // handler (src/test/msw/handlers.ts) to create the session and supply its ID.
   it("calls onSessionCreated only once across two messages (session reuse)", async () => {
-    const makeDoneBody = () => makeSseBody([DONE_BLOCK]);
+    let chatCallCount = 0;
 
-    const fetchMock = vi.fn().mockImplementation((url: string) => {
-      if (typeof url === "string" && url.includes("/auth/verify")) {
-        return Promise.resolve({
-          ok: true,
-          body: null,
-          json: async () => AUTH_RESPONSE,
-        });
-      }
-      if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
-        return Promise.resolve({
-          ok: true,
-          body: null,
-          json: async () => SESSION_RESPONSE,
-        });
-      }
-      return Promise.resolve({
-        ok: true,
-        body: makeDoneBody(),
-        json: async () => ({}),
-      });
-    });
-
-    vi.stubGlobal("fetch", fetchMock);
-
-    const { createRealSSEService } = await import("@/services/real-sse");
+    server.use(
+      http.post(`${BASE}/session/:sessionId/chat`, () => {
+        chatCallCount++;
+        return new HttpResponse(
+          makeSseStream(toSseSpecs([DONE_EVENT as { event_type: string }])),
+          { status: 200, headers: SSE_HEADERS }
+        );
+      })
+    );
 
     const onSessionCreated = vi.fn();
     const { handler: service } = createRealSSEService({ onSessionCreated });
@@ -655,6 +465,7 @@ describe("createRealSSEService — onSessionCreated callback", () => {
     });
 
     expect(onSessionCreated).toHaveBeenCalledOnce();
+    expect(chatCallCount).toBe(2);
   });
 });
 
@@ -663,44 +474,24 @@ describe("createRealSSEService — onSessionCreated callback", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — resetSession", () => {
-  beforeEach(() => {
-    vi.resetModules();
-  });
-
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
-
   it("creates a new session after resetSession is called", async () => {
-    const makeDoneBody = () => makeSseBody([DONE_BLOCK]);
+    let sessionCreationCount = 0;
 
-    const fetchMock = vi.fn().mockImplementation((url: string) => {
-      if (typeof url === "string" && url.includes("/auth/verify")) {
-        return Promise.resolve({
-          ok: true,
-          body: null,
-          json: async () => AUTH_RESPONSE,
+    server.use(
+      http.post(`${BASE}/session`, () => {
+        sessionCreationCount++;
+        return HttpResponse.json({
+          session_id: "test-session-123",
+          created_at: "2026-04-11T00:00:00.000Z",
         });
-      }
-      if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
-        return Promise.resolve({
-          ok: true,
-          body: null,
-          json: async () => SESSION_RESPONSE,
-        });
-      }
-      return Promise.resolve({
-        ok: true,
-        body: makeDoneBody(),
-        json: async () => ({}),
-      });
-    });
-
-    vi.stubGlobal("fetch", fetchMock);
-
-    const { createRealSSEService } = await import("@/services/real-sse");
+      }),
+      http.post(`${BASE}/session/:sessionId/chat`, () => {
+        return new HttpResponse(
+          makeSseStream(toSseSpecs([DONE_EVENT as { event_type: string }])),
+          { status: 200, headers: SSE_HEADERS }
+        );
+      })
+    );
 
     const onSessionCreated = vi.fn();
     const { handler: service, resetSession } = createRealSSEService({ onSessionCreated });
@@ -722,63 +513,56 @@ describe("createRealSSEService — resetSession", () => {
 
     // onSessionCreated called twice (once per session creation)
     expect(onSessionCreated).toHaveBeenCalledTimes(2);
-
-    // POST /session called twice
-    const sessionCalls = (fetchMock.mock.calls as [string, RequestInit][]).filter(
-      ([url]) => typeof url === "string" && /\/session$/.test(url)
-    );
-    expect(sessionCalls).toHaveLength(2);
+    expect(sessionCreationCount).toBe(2);
   });
 
   it("does not fire onSessionCreated for a stale session when resetSession interrupts in-flight creation", async () => {
-    let sessionResolve: ((value: Response) => void) | null = null;
+    let resolveSession: ((value: Response) => void) | null = null;
+    let sessionHandlerReached: () => void;
+    const sessionHandlerPromise = new Promise<void>((r) => { sessionHandlerReached = r; });
+    const chatReached = vi.fn();
 
-    const fetchMock = vi.fn().mockImplementation((url: string) => {
-      if (typeof url === "string" && url.includes("/auth/verify")) {
-        return Promise.resolve({
-          ok: true,
-          body: null,
-          json: async () => AUTH_RESPONSE,
-        });
-      }
-      if (typeof url === "string" && url.includes("/session") && !url.includes("/chat")) {
-        // Hang the session creation — resolve manually
+    server.use(
+      http.post(`${BASE}/session`, () => {
+        sessionHandlerReached();
+        // Return a promise that hangs until we manually resolve it
         return new Promise<Response>((resolve) => {
-          sessionResolve = resolve;
+          resolveSession = (val) => resolve(val);
         });
-      }
-      return Promise.resolve({
-        ok: true,
-        body: makeSseBody([DONE_BLOCK]),
-        json: async () => ({}),
-      });
-    });
-
-    vi.stubGlobal("fetch", fetchMock);
-
-    const { createRealSSEService } = await import("@/services/real-sse");
+      }),
+      // If the stale session leaks through, this handler would fire — proves
+      // the first service() call is truly abandoned after resetSession().
+      http.post(`${BASE}/session/:sessionId/chat`, () => {
+        chatReached();
+        return new HttpResponse(
+          makeSseStream(toSseSpecs([DONE_EVENT as { event_type: string }])),
+          { status: 200, headers: SSE_HEADERS }
+        );
+      })
+    );
 
     const onSessionCreated = vi.fn();
     const { handler: service, resetSession } = createRealSSEService({ onSessionCreated });
 
-    // Start first message — session creation is pending
+    // Start first message — session creation is pending (intentionally untracked)
     service("first", "home", vi.fn(), vi.fn(), vi.fn());
 
-    // Wait a tick for the fetch to be called
-    await new Promise((r) => setTimeout(r, 10));
-    expect(sessionResolve).not.toBeNull();
+    // Wait until the session handler is actually entered — no arbitrary timeout
+    await sessionHandlerPromise;
+    expect(resolveSession).not.toBeNull();
 
     // Reset BEFORE the session creation resolves
     resetSession();
 
     // Now resolve the stale session creation
-    sessionResolve!({
-      ok: true,
-      body: null,
-      json: async () => SESSION_RESPONSE,
-    } as unknown as Response);
+    resolveSession!(
+      HttpResponse.json({
+        session_id: "test-session-123",
+        created_at: "2026-04-11T00:00:00.000Z",
+      })
+    );
 
-    // Wait for promise chain to settle
+    // Let the promise chain settle
     await new Promise((r) => setTimeout(r, 10));
 
     // onSessionCreated must NOT have been called — the generation was invalidated
@@ -790,11 +574,9 @@ describe("createRealSSEService — resetSession", () => {
 // Test 11 (F12): explanation text in assistant turn (SessionProvider integration)
 // ---------------------------------------------------------------------------
 
+// NOTE: Self-contained — injects a local stubService as the chatService prop.
+// Does not use createRealSSEService or MSW.
 describe("F12 — SessionProvider stores explanation in assistant turn", () => {
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
-
   it("assistant turn content equals the explanation event text", async () => {
     const { SessionProvider, useSession } = await import("@/context/session-context");
 
@@ -831,7 +613,6 @@ describe("F12 — SessionProvider stores explanation in assistant turn", () => {
     expect(assistantTurn).toBeDefined();
     expect(assistantTurn!.content).toBe(EXPLANATION_TEXT);
   });
-
 });
 
 // ---------------------------------------------------------------------------
@@ -839,33 +620,14 @@ describe("F12 — SessionProvider stores explanation in assistant turn", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — chat 404 handling", () => {
-  beforeEach(() => {
-    vi.resetModules();
-  });
-
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
-
   it("calls onError with session-expired message when chat returns 404", async () => {
-    const fetchMock = vi.fn().mockImplementation((url: string) => {
-      if (url.includes("/auth/verify")) {
-        return Promise.resolve({ ok: true, body: null, json: async () => AUTH_RESPONSE });
-      }
-      if (url.includes("/session") && !url.includes("/chat")) {
-        return Promise.resolve({ ok: true, body: null, json: async () => SESSION_RESPONSE });
-      }
-      // Chat endpoint returns 404 (session not found in DB)
-      return Promise.resolve({ ok: false, status: 404, body: null });
-    });
+    server.use(
+      http.post(`${BASE}/session/:sessionId/chat`, () => {
+        return new HttpResponse(null, { status: 404 });
+      })
+    );
 
-    vi.stubGlobal("fetch", fetchMock);
-
-    const { createRealSSEService } = await import("@/services/real-sse");
     const { handler: service } = createRealSSEService();
-
     const onError = vi.fn();
 
     await new Promise<void>((resolve) => {
@@ -884,29 +646,26 @@ describe("createRealSSEService — chat 404 handling", () => {
     let sessionCreationCount = 0;
     let chatCallCount = 0;
 
-    const fetchMock = vi.fn().mockImplementation((url: string) => {
-      if (url.includes("/auth/verify")) {
-        return Promise.resolve({ ok: true, body: null, json: async () => AUTH_RESPONSE });
-      }
-      if (url.includes("/session") && !url.includes("/chat")) {
+    server.use(
+      http.post(`${BASE}/session`, () => {
         sessionCreationCount++;
-        return Promise.resolve({ ok: true, body: null, json: async () => SESSION_RESPONSE });
-      }
-      // First chat call → 404; subsequent calls → success
-      chatCallCount++;
-      if (chatCallCount === 1) {
-        return Promise.resolve({ ok: false, status: 404, body: null });
-      }
-      return Promise.resolve({
-        ok: true,
-        body: makeSseBody([DONE_BLOCK]),
-        json: async () => ({}),
-      });
-    });
+        return HttpResponse.json({
+          session_id: "test-session-123",
+          created_at: "2026-04-11T00:00:00.000Z",
+        });
+      }),
+      http.post(`${BASE}/session/:sessionId/chat`, () => {
+        chatCallCount++;
+        if (chatCallCount === 1) {
+          return new HttpResponse(null, { status: 404 });
+        }
+        return new HttpResponse(
+          makeSseStream(toSseSpecs([DONE_EVENT as { event_type: string }])),
+          { status: 200, headers: SSE_HEADERS }
+        );
+      })
+    );
 
-    vi.stubGlobal("fetch", fetchMock);
-
-    const { createRealSSEService } = await import("@/services/real-sse");
     const { handler: service } = createRealSSEService();
 
     // First call → 404

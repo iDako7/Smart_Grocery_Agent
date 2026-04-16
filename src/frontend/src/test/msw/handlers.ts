@@ -16,6 +16,7 @@
 // tests and to serve as extension points for B2/B3 sub-issues.
 
 import { http, HttpResponse } from "msw";
+import { BASE, SSE_HEADERS } from "./constants";
 import { makeSseStream, toSseSpecs } from "./sse";
 import { STORES_API_RESPONSE } from "../fixtures/grocery";
 import {
@@ -23,7 +24,6 @@ import {
   EVENT_DONE_COMPLETE,
 } from "../fixtures/sse-sequences";
 
-const BASE = "http://localhost:8000";
 
 // ---------------------------------------------------------------------------
 // Minimal fixture shapes
@@ -122,11 +122,7 @@ export const handlers = [
     const stream = makeSseStream(DEFAULT_CHAT_SSE_EVENTS);
     return new HttpResponse(stream, {
       status: 200,
-      headers: {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive",
-      },
+      headers: SSE_HEADERS,
     });
   }),
 

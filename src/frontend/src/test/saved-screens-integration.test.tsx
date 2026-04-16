@@ -1,4 +1,6 @@
-// Integration tests for saved detail screens wired to real API.
+// Integration tests for saved detail screens wired to real API via MSW.
+// Migrated from vi.mock("@/services/api-client") to MSW handlers (issue #90).
+//
 // These tests verify that each screen:
 //   1. Fetches data by ID from URL params (not static mock data)
 //   2. Shows a loading state while fetching
@@ -6,33 +8,20 @@
 //   4. Shows an error/not-found state on API failure
 //   5. Works on page refresh (data sourced from URL param, not router state)
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Routes, Route } from "react-router";
+import { http, HttpResponse, delay } from "msw";
+
 import { SavedMealPlanScreen } from "@/screens/SavedMealPlanScreen";
 import { SavedRecipeScreen } from "@/screens/SavedRecipeScreen";
 import { SavedGroceryListScreen } from "@/screens/SavedGroceryListScreen";
+import { server } from "@/test/msw/server";
+import { BASE } from "@/test/msw/constants";
 import type { SavedMealPlan, SavedRecipe, SavedGroceryList } from "@/types/api";
 
 // ---------------------------------------------------------------------------
-// Mock the API client module so no real network calls are made
-// ---------------------------------------------------------------------------
-vi.mock("@/services/api-client", () => ({
-  getSavedMealPlan: vi.fn(),
-  getSavedRecipe: vi.fn(),
-  getSavedGroceryList: vi.fn(),
-  updateSavedGroceryList: vi.fn(),
-}));
-
-// Import the mocked functions for per-test configuration
-import {
-  getSavedMealPlan,
-  getSavedRecipe,
-  getSavedGroceryList,
-} from "@/services/api-client";
-
-// ---------------------------------------------------------------------------
-// Mock data
+// Mock data — same shapes as before, returned by MSW handlers
 // ---------------------------------------------------------------------------
 
 const mockMealPlan: SavedMealPlan = {
@@ -143,21 +132,19 @@ function renderInRoute(
   );
 }
 
-// ---------------------------------------------------------------------------
-// Reset mocks before each test
-// ---------------------------------------------------------------------------
-beforeEach(() => {
-  vi.resetAllMocks();
-});
-
 // ===========================================================================
 // SavedMealPlanScreen
 // ===========================================================================
 
 describe("SavedMealPlanScreen — loading state", () => {
-  it("shows a loading indicator while fetching", () => {
-    // Never-resolving promise keeps the screen in loading state
-    vi.mocked(getSavedMealPlan).mockReturnValue(new Promise(() => {}));
+  it("shows a loading indicator while fetching", async () => {
+    // Handler that never responds keeps screen in loading state
+    server.use(
+      http.get(`${BASE}/saved/meal-plans/:id`, async () => {
+        await delay("infinite");
+        return HttpResponse.json(mockMealPlan);
+      })
+    );
 
     renderInRoute(
       "/saved/plan/plan-1",
@@ -165,16 +152,21 @@ describe("SavedMealPlanScreen — loading state", () => {
       <SavedMealPlanScreen />
     );
 
-    // Screen wrapper must always be present (data-testid requirement)
     expect(screen.getByTestId("screen-saved-meal-plan")).toBeInTheDocument();
-    // Loading indicator must be visible
     expect(screen.getByTestId("loading-indicator")).toBeInTheDocument();
   });
 });
 
 describe("SavedMealPlanScreen — success", () => {
-  it("fetches and displays the plan name and recipe", async () => {
-    vi.mocked(getSavedMealPlan).mockResolvedValue(mockMealPlan);
+  it("fetches the correct ID from URL params and displays the plan", async () => {
+    let capturedId: string | undefined;
+
+    server.use(
+      http.get(`${BASE}/saved/meal-plans/:id`, ({ params }) => {
+        capturedId = params.id as string;
+        return HttpResponse.json(mockMealPlan);
+      })
+    );
 
     renderInRoute(
       "/saved/plan/plan-1",
@@ -182,30 +174,19 @@ describe("SavedMealPlanScreen — success", () => {
       <SavedMealPlanScreen />
     );
 
-    // Plan name and recipes rendered — wrap both in waitFor because
-    // recipes state syncs in a second render cycle after plan is set
     await waitFor(() => {
       expect(screen.getByText(/BBQ Plan/)).toBeInTheDocument();
       expect(screen.getByText("Grilled Chicken")).toBeInTheDocument();
     });
-  });
-
-  it("calls getSavedMealPlan with the correct ID from URL params", async () => {
-    vi.mocked(getSavedMealPlan).mockResolvedValue(mockMealPlan);
-
-    renderInRoute(
-      "/saved/plan/plan-1",
-      "/saved/plan/:id",
-      <SavedMealPlanScreen />
-    );
-
-    await waitFor(() =>
-      expect(getSavedMealPlan).toHaveBeenCalledWith("plan-1")
-    );
+    expect(capturedId).toBe("plan-1");
   });
 
   it("shows recipe count as deck text", async () => {
-    vi.mocked(getSavedMealPlan).mockResolvedValue(mockMealPlan);
+    server.use(
+      http.get(`${BASE}/saved/meal-plans/:id`, () => {
+        return HttpResponse.json(mockMealPlan);
+      })
+    );
 
     renderInRoute(
       "/saved/plan/plan-1",
@@ -221,7 +202,11 @@ describe("SavedMealPlanScreen — success", () => {
 
 describe("SavedMealPlanScreen — error", () => {
   it("shows a not-found message when API rejects", async () => {
-    vi.mocked(getSavedMealPlan).mockRejectedValue(new Error("404 Not Found"));
+    server.use(
+      http.get(`${BASE}/saved/meal-plans/:id`, () => {
+        return new HttpResponse(null, { status: 404 });
+      })
+    );
 
     renderInRoute(
       "/saved/plan/plan-1",
@@ -240,8 +225,13 @@ describe("SavedMealPlanScreen — error", () => {
 // ===========================================================================
 
 describe("SavedRecipeScreen — loading state", () => {
-  it("shows a loading indicator while fetching", () => {
-    vi.mocked(getSavedRecipe).mockReturnValue(new Promise(() => {}));
+  it("shows a loading indicator while fetching", async () => {
+    server.use(
+      http.get(`${BASE}/saved/recipes/:id`, async () => {
+        await delay("infinite");
+        return HttpResponse.json(mockSavedRecipe);
+      })
+    );
 
     renderInRoute(
       "/saved/recipe/recipe-1",
@@ -255,8 +245,15 @@ describe("SavedRecipeScreen — loading state", () => {
 });
 
 describe("SavedRecipeScreen — success", () => {
-  it("fetches and displays the recipe name and instructions", async () => {
-    vi.mocked(getSavedRecipe).mockResolvedValue(mockSavedRecipe);
+  it("fetches the correct ID from URL params and displays the recipe", async () => {
+    let capturedId: string | undefined;
+
+    server.use(
+      http.get(`${BASE}/saved/recipes/:id`, ({ params }) => {
+        capturedId = params.id as string;
+        return HttpResponse.json(mockSavedRecipe);
+      })
+    );
 
     renderInRoute(
       "/saved/recipe/recipe-1",
@@ -270,10 +267,15 @@ describe("SavedRecipeScreen — success", () => {
     expect(
       screen.getByText("Coat wings with baking powder and salt.")
     ).toBeInTheDocument();
+    expect(capturedId).toBe("recipe-1");
   });
 
   it("displays the CJK name", async () => {
-    vi.mocked(getSavedRecipe).mockResolvedValue(mockSavedRecipe);
+    server.use(
+      http.get(`${BASE}/saved/recipes/:id`, () => {
+        return HttpResponse.json(mockSavedRecipe);
+      })
+    );
 
     renderInRoute(
       "/saved/recipe/recipe-1",
@@ -285,25 +287,15 @@ describe("SavedRecipeScreen — success", () => {
       expect(screen.getByText("椒盐鸡翅")).toBeInTheDocument()
     );
   });
-
-  it("calls getSavedRecipe with the correct ID from URL params", async () => {
-    vi.mocked(getSavedRecipe).mockResolvedValue(mockSavedRecipe);
-
-    renderInRoute(
-      "/saved/recipe/recipe-1",
-      "/saved/recipe/:id",
-      <SavedRecipeScreen />
-    );
-
-    await waitFor(() =>
-      expect(getSavedRecipe).toHaveBeenCalledWith("recipe-1")
-    );
-  });
 });
 
 describe("SavedRecipeScreen — error", () => {
   it("shows a not-found message when API rejects", async () => {
-    vi.mocked(getSavedRecipe).mockRejectedValue(new Error("404 Not Found"));
+    server.use(
+      http.get(`${BASE}/saved/recipes/:id`, () => {
+        return new HttpResponse(null, { status: 404 });
+      })
+    );
 
     renderInRoute(
       "/saved/recipe/recipe-1",
@@ -322,8 +314,13 @@ describe("SavedRecipeScreen — error", () => {
 // ===========================================================================
 
 describe("SavedGroceryListScreen — loading state", () => {
-  it("shows a loading indicator while fetching", () => {
-    vi.mocked(getSavedGroceryList).mockReturnValue(new Promise(() => {}));
+  it("shows a loading indicator while fetching", async () => {
+    server.use(
+      http.get(`${BASE}/saved/grocery-lists/:id`, async () => {
+        await delay("infinite");
+        return HttpResponse.json(mockGroceryList);
+      })
+    );
 
     renderInRoute(
       "/saved/list/list-1",
@@ -339,8 +336,15 @@ describe("SavedGroceryListScreen — loading state", () => {
 });
 
 describe("SavedGroceryListScreen — success", () => {
-  it("fetches and displays the list name and items", async () => {
-    vi.mocked(getSavedGroceryList).mockResolvedValue(mockGroceryList);
+  it("fetches the correct ID from URL params and displays the list", async () => {
+    let capturedId: string | undefined;
+
+    server.use(
+      http.get(`${BASE}/saved/grocery-lists/:id`, ({ params }) => {
+        capturedId = params.id as string;
+        return HttpResponse.json(mockGroceryList);
+      })
+    );
 
     renderInRoute(
       "/saved/list/list-1",
@@ -348,31 +352,20 @@ describe("SavedGroceryListScreen — success", () => {
       <SavedGroceryListScreen />
     );
 
-    // List name rendered — use regex because name appears inside h1 with trailing span
     await waitFor(() =>
       expect(screen.getByText(/Weekly Shop/)).toBeInTheDocument()
     );
     expect(screen.getByText("Corn on the cob")).toBeInTheDocument();
     expect(screen.getByText("Cucumber")).toBeInTheDocument();
-  });
-
-  it("calls getSavedGroceryList with the correct ID from URL params", async () => {
-    vi.mocked(getSavedGroceryList).mockResolvedValue(mockGroceryList);
-
-    renderInRoute(
-      "/saved/list/list-1",
-      "/saved/list/:id",
-      <SavedGroceryListScreen />
-    );
-
-    await waitFor(() =>
-      expect(getSavedGroceryList).toHaveBeenCalledWith("list-1")
-    );
+    expect(capturedId).toBe("list-1");
   });
 
   it("page refresh works — fetches by ID without relying on router state", async () => {
-    // Simulate a direct URL visit (no navigation state) by using fresh render
-    vi.mocked(getSavedGroceryList).mockResolvedValue(mockGroceryList);
+    server.use(
+      http.get(`${BASE}/saved/grocery-lists/:id`, () => {
+        return HttpResponse.json(mockGroceryList);
+      })
+    );
 
     renderInRoute(
       "/saved/list/list-1",
@@ -380,15 +373,17 @@ describe("SavedGroceryListScreen — success", () => {
       <SavedGroceryListScreen />
     );
 
-    // Should still display data since it fetches from API
-    // Use regex because name appears inside h1 with trailing span
     await waitFor(() =>
       expect(screen.getByText(/Weekly Shop/)).toBeInTheDocument()
     );
   });
 
   it("flattens store departments into list items with correct store badge", async () => {
-    vi.mocked(getSavedGroceryList).mockResolvedValue(mockGroceryList);
+    server.use(
+      http.get(`${BASE}/saved/grocery-lists/:id`, () => {
+        return HttpResponse.json(mockGroceryList);
+      })
+    );
 
     renderInRoute(
       "/saved/list/list-1",
@@ -396,7 +391,6 @@ describe("SavedGroceryListScreen — success", () => {
       <SavedGroceryListScreen />
     );
 
-    // Both items from different stores should appear
     await waitFor(() =>
       expect(screen.getByText("Corn on the cob")).toBeInTheDocument()
     );
@@ -406,8 +400,10 @@ describe("SavedGroceryListScreen — success", () => {
 
 describe("SavedGroceryListScreen — error", () => {
   it("shows a not-found message when API rejects", async () => {
-    vi.mocked(getSavedGroceryList).mockRejectedValue(
-      new Error("404 Not Found")
+    server.use(
+      http.get(`${BASE}/saved/grocery-lists/:id`, () => {
+        return new HttpResponse(null, { status: 404 });
+      })
     );
 
     renderInRoute(
