@@ -574,10 +574,10 @@ describe("RecipesScreen — T10: info button triggers getRecipeDetail fetch", ()
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
-// T12: back button → ConfirmResetDialog → confirm → resetSession + navigate /
+// T12: back button → ConfirmResetDialog → confirm → navigates home
 // ---------------------------------------------------------------------------
 
-describe("RecipesScreen — T12: confirm reset calls resetSession and navigates home", () => {
+describe("RecipesScreen — T12: confirm Start Over navigates home", () => {
   it("test_recipes_screen_back_confirm_resets_and_navigates_home", async () => {
     const user = userEvent.setup();
 
