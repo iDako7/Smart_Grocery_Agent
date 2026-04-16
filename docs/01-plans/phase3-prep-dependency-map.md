@@ -13,7 +13,7 @@ graph TB
     subgraph Foundations["Foundations (test + DX + eval + research)"]
         B1["#89 (B1)<br/>MSW setup + pilot<br/><b>P0</b>"]
         EvalJudge["Eval task (promptfoo)<br/>the 'judge'<br/><b>P0</b>"]
-        CacheProbe["Cache probe spike<br/>OpenRouter cache_control<br/>(~1h research)<br/><b>P0</b>"]
+        CacheProbe["✅ Cache probe spike<br/>OpenRouter cache_control<br/>(Done 2026-04-15)<br/><b>P0</b>"]
         DX81["#81<br/>one-command dev<br/><b>P1</b>"]
         WF82["#82<br/>commit granularity<br/>(workflow rule)<br/><b>P1</b>"]
         WF83["#83<br/>worktree lifecycle<br/>(workflow rule)<br/><b>P2</b>"]
@@ -96,8 +96,8 @@ graph TB
 
 | Task | Priority | Notes |
 |---|---|---|
-| **Eval task (promptfoo) — the "judge"** | **P0** | **Promoted from P1.** Must exist *before* any AI prompt/orchestration changes — you can't fix fluctuating dish counts (#76) or ingredient noise (#63) reliably by hand. Automated cost + quality scores across 20+ test cases are the only way to prove prompt changes actually work. Lives in `evals/`, independent of all code paths. |
-| **Cache probe spike** | **P0 (new)** | ~1h research task. Verify OpenRouter passes through Anthropic `cache_control` headers end-to-end. The entire $65/mo budget depends on this. If OpenRouter strips the headers, caching strategy and cost model both break — must know *before* writing Terraform. Output: a one-page note in `docs/02-notes/` + a go/no-go call. |
+| **Eval task (promptfoo) — the "judge"** | **P0** | **Promoted from P1.** Recommend to exist *before* any AI prompt/orchestration changes — you can't fix fluctuating dish counts (#76) or ingredient noise (#63) reliably by hand. Automated cost + quality scores across 20+ test cases are the only way to prove prompt changes actually work. Lives in `evals/`, independent of all code paths. |
+| **✅ Cache probe spike** | **DONE** | **Resolved 2026-04-15.** OpenRouter correctly passes through `cache_control` headers with 0.1x cost multiplier. Evidence in `docs/02-notes/cache-probe-results.md`. |
 | #89 (B1) MSW setup + pilot | P0 | Blocker for B2 + B3, but itself has no prerequisites |
 | #79 N+1 KB hydration | P0 | Pure backend, isolated to `src/backend/api/sessions.py:204-214` |
 | #85 saved-plan UX (header, formatting) | P1 | Pure frontend, no backend/AI coupling. Split from original #78. |
@@ -148,12 +148,12 @@ Eval task ──> #75
 ```
 You cannot reliably fix fluctuating dish counts or ingredient noise by hand. The eval suite with cost + quality scores across 20+ test cases is the only way to *prove* a prompt change is an improvement rather than a regression. Build the judge before trying the fix. This is why eval was promoted from P1 to P0 and moved into Foundations.
 
-### Chain H — Cache probe gates Phase 3 design
+### Chain H — Cache probe gates Phase 3 design (Resolved)
 ```
-Cache probe spike ──> Phase 3 prompt caching
-Cache probe spike ──> AWS Terraform deploy
+✅ Cache probe spike ──> Phase 3 prompt caching
+✅ Cache probe spike ──> AWS Terraform deploy
 ```
-~1 hour research task: verify OpenRouter passes `cache_control` headers through to Anthropic. If it strips them, the entire caching design and the $65/mo cost model collapse. Must resolve *before* Terraform work locks in deploy assumptions. A no-go result forces a design pivot (direct Anthropic SDK, or different caching approach) *before* infra cost is sunk.
+**Resolved 2026-04-15:** OpenRouter successfully passes `cache_control` headers. Caching assumptions and Phase 3 cost model are validated. No pivot required.
 
 ### Chain E — Phase 3 AI-layer serialization
 ```
@@ -234,3 +234,4 @@ Skipping it doesn't block deploy, but every day of execution without it compound
 | 2026-04-15 | v1 | Initial dependency map for Phase 3 cleanup + deploy sequencing |
 | 2026-04-15 | v2 | Promoted eval task to P0 (the "judge" must exist before AI fixes) · added P0 cache probe spike (OpenRouter `cache_control` pass-through gate) · promoted #75 to P1 as prompt-caching blocker · added Chain G (eval→AI) and Chain H (cache probe→Phase 3) |
 | 2026-04-15 | v3 | Issue hygiene executed: #78 split into #85 (saved-plan UX) + #86 (clarify popup) · #63 and #76 merged into #87 (AI stability + alternatives) · all edges and chains updated to new issue numbers |
+| 2026-04-15 | v4 | Marked Cache probe spike as DONE (OpenRouter `cache_control` validated) |

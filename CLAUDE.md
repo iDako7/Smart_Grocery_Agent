@@ -43,12 +43,12 @@ React SPA (Vite) ──SSE──> FastAPI ──tool-use loop──> Claude via 
 ## Project Structure
 
 ```
-contracts/          ← Shared schemas (source of truth for all worktrees)
-src/backend/        ← FastAPI app, API endpoints, DB layer (WT2)
-src/ai/             ← Agent orchestrator, prompt assembly (WT2)
-src/frontend/       ← React SPA, Vite + Bun + Tailwind + shadcn/ui (WT3)
-data/               ← KB source data (WT1)
-scripts/            ← Migration scripts (WT1)
+contracts/          ← Shared schemas (source of truth across the codebase)
+src/backend/        ← FastAPI app, API endpoints, DB layer
+src/ai/             ← Agent orchestrator, prompt assembly
+src/frontend/       ← React SPA, Vite + Bun + Tailwind + shadcn/ui
+data/               ← KB source data
+scripts/            ← Migration scripts (JSON → SQLite)
 archive/prototype/  ← Phase 1 prototype (archived, reference only — do NOT import from src/)
 evals/              ← promptfoo eval suite
 docs/               ← Specs, plans, archives
@@ -56,7 +56,7 @@ docs/               ← Specs, plans, archives
 
 ## Contracts (`contracts/`)
 
-Shared schemas that all worktrees import. Contract changes go as small PRs to `main`.
+Shared schemas imported across the codebase. Contract changes go as small PRs to `main`.
 
 | File | Status | Contents |
 |---|---|---|
@@ -69,21 +69,25 @@ Shared schemas that all worktrees import. Contract changes go as small PRs to `m
 
 **Contract freeze protocol:** Once a contract file is marked `# Status: frozen`, only additive non-breaking changes are allowed (new optional fields, new event types, new endpoints). Breaking changes require a PR to `main` with a `CHANGELOG.md` entry.
 
-## Worktree Development Protocol
+## Tech Stack Details
 
-Three worktrees develop in parallel, each with its own `CLAUDE.md` defining scope:
+**Backend (`src/backend/`, `src/ai/`):**
+- FastAPI (async), asyncpg (PostgreSQL), aiosqlite (SQLite KB)
+- SQLAlchemy 2.0 Core (async) — no full ORM, no relationship mapping
+- Alembic for PostgreSQL migrations
+- `DATABASE_URL` env var for PostgreSQL connection
+- LLM via Claude on OpenRouter (AsyncOpenAI SDK with custom `base_url`)
 
-| Worktree | Branch | Owns | Scope file |
-|---|---|---|---|
-| WT1: KB + Data | `wt1-kb-data` | `data/`, `scripts/` | `data/CLAUDE.md` |
-| WT2: Backend + AI | `wt2-backend` | `src/backend/`, `src/ai/` | `src/backend/CLAUDE.md` |
-| WT3: Frontend | `wt3-frontend` | `src/frontend/` | `src/frontend/CLAUDE.md` |
+**Frontend (`src/frontend/`):**
+- React 19 + Vite + TypeScript, Bun runtime
+- Tailwind CSS v4 + shadcn/ui (Stone base color), Lucide icons
+- State: `useReducer` + Context (no Redux/Zustand)
+- Screen state machine: `IDLE → LOADING → STREAMING → COMPLETE`
+- Path aliases: `@/components`, `@/lib`, `@/hooks`
 
-**Rebase protocol:** When a contract is frozen or updated on `main`, all active worktrees must `git rebase main` before continuing. Check `contracts/CHANGELOG.md` for breaking changes.
+## Tooling
 
-**Worktree policy:** Prefer `claude --worktree <issue-name>` for any task that will produce a PR. Work on `main` only for read-only exploration, trivial one-line fixes, or contract updates that all worktrees need immediately.
-
-**GitHub:** Prefer `gh` CLI over GitHub MCP for all GitHub operations.
+- **GitHub:** Prefer `gh` CLI over GitHub MCP for all GitHub operations.
 
 ## Key Design Decisions
 
@@ -101,7 +105,6 @@ Three worktrees develop in parallel, each with its own `CLAUDE.md` defining scop
 - `docs/00-specs/product-spec-v2.md` — product spec v3: feature catalog (26 features), user journeys, acceptance criteria, system behavior
 - `docs/00-specs/architecture-spec-v2.md` — system architecture, API contract, deployment
 - `docs/00-specs/ai-layer-architecture-v2.md` — agent internals, ADRs (7 decisions documented)
-- `docs/01-plans/workflow-guide-v2.md` — worktree workflow guide
 
 ## Running Locally
 
