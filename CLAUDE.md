@@ -109,11 +109,11 @@ Shared schemas imported across the codebase. Contract changes go as small PRs to
 ## Running Locally
 
 ```bash
-# Backend (Docker: PostgreSQL + FastAPI)
-docker compose up
+# Full stack — one command (backend waited via healthcheck, then frontend)
+bun run dev
 
-# Frontend (standalone dev server)
-cd src/frontend && bun dev
+# Tear down backend containers
+bun run dev:stop
 
 # Evals (Phase 1 historical baseline — see evals/reasoning/README.md before trusting results)
 cd archive/prototype && uv run promptfoo eval -c ../../evals/reasoning/promptfooconfig.yaml
