@@ -40,10 +40,12 @@ _FIXTURE_RECIPE = {
     "time_minutes": 15,
     "flavor_tags": json.dumps(["savory", "umami"]),
     "serves": 2,
-    "ingredients": json.dumps([
-        {"name": "chicken", "amount": "200g", "pcsv": ["protein"]},
-        {"name": "bok choy", "amount": "1 bunch", "pcsv": ["veggie"]},
-    ]),
+    "ingredients": json.dumps(
+        [
+            {"name": "chicken", "amount": "200g", "pcsv": ["protein"]},
+            {"name": "bok choy", "amount": "1 bunch", "pcsv": ["veggie"]},
+        ]
+    ),
     "instructions": "1. Heat oil. 2. Add chicken. 3. Add bok choy. 4. Season and serve.",
     "is_ai_generated": 0,
 }
@@ -60,9 +62,11 @@ _FIXTURE_RECIPE_AI = {
     "time_minutes": 20,
     "flavor_tags": json.dumps(["mild"]),
     "serves": 1,
-    "ingredients": json.dumps([
-        {"name": "noodles", "amount": "100g", "pcsv": ["carb"]},
-    ]),
+    "ingredients": json.dumps(
+        [
+            {"name": "noodles", "amount": "100g", "pcsv": ["carb"]},
+        ]
+    ),
     "instructions": "Boil noodles until done.",
     "is_ai_generated": 1,
 }
@@ -155,9 +159,7 @@ async def _clean_db():
             text("INSERT INTO users (id, email) VALUES (:id, :email)"),
             {"id": _DEV_USER, "email": "dev@test.local"},
         )
-        await conn.execute(
-            text("INSERT INTO user_profiles (user_id) VALUES (:uid)"), {"uid": _DEV_USER}
-        )
+        await conn.execute(text("INSERT INTO user_profiles (user_id) VALUES (:uid)"), {"uid": _DEV_USER})
 
 
 @pytest_asyncio.fixture()

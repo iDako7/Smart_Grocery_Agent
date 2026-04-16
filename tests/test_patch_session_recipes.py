@@ -99,9 +99,7 @@ async def _clean_db():
             text("INSERT INTO users (id, email) VALUES (:id, :email)"),
             {"id": _DEV_USER, "email": "dev@test.local"},
         )
-        await conn.execute(
-            text("INSERT INTO user_profiles (user_id) VALUES (:uid)"), {"uid": _DEV_USER}
-        )
+        await conn.execute(text("INSERT INTO user_profiles (user_id) VALUES (:uid)"), {"uid": _DEV_USER})
 
 
 @pytest_asyncio.fixture()
@@ -151,9 +149,7 @@ async def _seed_session_with_recipes(client: AsyncClient, recipes: list[dict]) -
 
     async with _engine.begin() as conn:
         await conn.execute(
-            sessions.update()
-            .where(sessions.c.id == uuid.UUID(sid))
-            .values(state_snapshot={"recipes": recipes})
+            sessions.update().where(sessions.c.id == uuid.UUID(sid)).values(state_snapshot={"recipes": recipes})
         )
     return sid
 
@@ -345,10 +341,9 @@ async def test_patch_session_recipes_other_user_gets_404(client):
 
     # Confirm user A's snapshot was NOT mutated
     from src.backend.db.tables import sessions
+
     async with _engine.begin() as conn:
-        row = await conn.execute(
-            sessions.select().where(sessions.c.id == uuid.UUID(sid))
-        )
+        row = await conn.execute(sessions.select().where(sessions.c.id == uuid.UUID(sid)))
         snapshot = row.mappings().one()["state_snapshot"]
     assert snapshot["recipes"][0]["id"] == _RECIPE_A["id"], (
         "User A's snapshot was mutated by user B — ownership check failed"

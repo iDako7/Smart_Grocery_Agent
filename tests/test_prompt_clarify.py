@@ -44,8 +44,7 @@ def test_tool_instructions_tool_count_updated():
     """_TOOL_INSTRUCTIONS must say '8 tools' (not '7 tools') after adding
     emit_clarify_turn to the numbered list."""
     assert "8 tools" in _TOOL_INSTRUCTIONS, (
-        "_TOOL_INSTRUCTIONS still says '7 tools'. "
-        "Update the phrasing to '8 tools' after adding emit_clarify_turn."
+        "_TOOL_INSTRUCTIONS still says '7 tools'. Update the phrasing to '8 tools' after adding emit_clarify_turn."
     )
 
 
@@ -56,9 +55,9 @@ def test_tool_instructions_tool_count_updated():
 
 def test_rule_9_forbids_freetext_on_complex_input():
     """On the Clarify screen the assembled prompt must contain:
-      - 'EVEN IF'          — unconditional guard that survives complex inputs
-      - 'emit_clarify_turn' — tool name visible in the final prompt
-      - '[]'               — valid-empty-questions clause (questions=[] is legal)
+    - 'EVEN IF'          — unconditional guard that survives complex inputs
+    - 'emit_clarify_turn' — tool name visible in the final prompt
+    - '[]'               — valid-empty-questions clause (questions=[] is legal)
     """
     prompt = build_system_prompt(UserProfile(), screen="clarify")
 
@@ -67,9 +66,7 @@ def test_rule_9_forbids_freetext_on_complex_input():
         "Add language like 'EVEN IF the input is long or complex, you MUST call "
         "emit_clarify_turn' so the rule is unconditional."
     )
-    assert "emit_clarify_turn" in prompt, (
-        "Built clarify prompt does not mention 'emit_clarify_turn'."
-    )
+    assert "emit_clarify_turn" in prompt, "Built clarify prompt does not mention 'emit_clarify_turn'."
     assert "[]" in prompt, (
         "Rule #9 is missing the valid-empty-questions clause. "
         "Add language clarifying that questions=[] is a valid call."

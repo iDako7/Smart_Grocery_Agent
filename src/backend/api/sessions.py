@@ -126,9 +126,7 @@ async def patch_session_recipes(
     recipes[body.index] = body.recipe.model_dump()
     snapshot["recipes"] = recipes
 
-    await conn.execute(
-        sessions.update().where(sessions.c.id == session_id).values(state_snapshot=snapshot)
-    )
+    await conn.execute(sessions.update().where(sessions.c.id == session_id).values(state_snapshot=snapshot))
     await conn.commit()
 
     return SessionStateResponse(

@@ -49,14 +49,10 @@ async def _seed_dev_user() -> None:
     engine = get_engine()
     async with engine.begin() as conn:
         await conn.execute(
-            pg_insert(users)
-            .values(id=DEV_USER_ID, email="dev@localhost")
-            .on_conflict_do_nothing(index_elements=["id"])
+            pg_insert(users).values(id=DEV_USER_ID, email="dev@localhost").on_conflict_do_nothing(index_elements=["id"])
         )
         await conn.execute(
-            pg_insert(user_profiles)
-            .values(user_id=DEV_USER_ID)
-            .on_conflict_do_nothing(index_elements=["user_id"])
+            pg_insert(user_profiles).values(user_id=DEV_USER_ID).on_conflict_do_nothing(index_elements=["user_id"])
         )
 
 
@@ -72,7 +68,9 @@ app = FastAPI(title="Smart Grocery Assistant V2", version="0.1.0", lifespan=_lif
 
 _CORS_ORIGINS = [
     o.strip()
-    for o in os.environ.get("SGA_CORS_ORIGINS", "http://localhost:5173,http://localhost:5174,http://localhost:4173").split(",")
+    for o in os.environ.get(
+        "SGA_CORS_ORIGINS", "http://localhost:5173,http://localhost:5174,http://localhost:4173"
+    ).split(",")
     if o.strip()
 ]
 
