@@ -1,32 +1,27 @@
-// auth-header.integration.test.ts — TDD RED phase
+// auth-header.integration.test.ts
 //
-// Tests for auth header wiring:
+// Tests for auth header wiring — migrated from vi.stubGlobal("fetch") to MSW (issue #103).
+//
 //   1. getAuthToken calls POST /auth/verify and returns a JWT string
 //   2. createSession includes Authorization header in fetch call
 //   3. createRealSSEService handler includes Authorization header in chat fetch call
 
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+import { http, HttpResponse } from "msw";
+
+import { server } from "@/test/msw/server";
+import { BASE, SSE_HEADERS } from "@/test/msw/constants";
+import { makeSseStream } from "@/test/msw/sse";
 
 // ---------------------------------------------------------------------------
-// Helper: build SSE response body
+// Helper: build SSE event specs for the chat endpoint override
 // ---------------------------------------------------------------------------
 
-function makeSseBody(blocks: string[]): ReadableStream<Uint8Array> {
-  const text = blocks.join("");
-  const encoder = new TextEncoder();
-  return new ReadableStream({
-    start(controller) {
-      controller.enqueue(encoder.encode(text));
-      controller.close();
-    },
-  });
+function sseBlock(eventType: string, data: object): { event: string; data: unknown } {
+  return { event: eventType, data };
 }
 
-function sseBlock(eventType: string, data: object): string {
-  return `event: ${eventType}\ndata: ${JSON.stringify(data)}\n\n`;
-}
-
-const DONE_BLOCK = sseBlock("done", {
+const DONE_SPEC = sseBlock("done", {
   event_type: "done",
   status: "complete",
   reason: null,
@@ -37,16 +32,12 @@ const DONE_BLOCK = sseBlock("done", {
 // ---------------------------------------------------------------------------
 
 describe("getAuthToken", () => {
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
-
   it("calls POST /auth/verify with dev credentials and returns the token string", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ token: "test-jwt-abc", user_id: "u1" }),
+    const captured: Request[] = [];
+    server.use(
+      http.post(`${BASE}/auth/verify`, async ({ request }) => {
+        captured.push(request.clone());
+        return HttpResponse.json({ token: "test-jwt-abc", user_id: "u1" });
       })
     );
 
@@ -56,26 +47,22 @@ describe("getAuthToken", () => {
     const token = await getAuthToken();
 
     expect(token).toBe("test-jwt-abc");
+    expect(captured.length).toBe(1);
+    expect(captured[0].url).toMatch(/\/auth\/verify$/);
+    expect(captured[0].method).toBe("POST");
+    expect(captured[0].headers.get("Content-Type")).toBe("application/json");
 
-    const fetchMock = vi.mocked(globalThis.fetch);
-    expect(fetchMock).toHaveBeenCalledOnce();
-
-    const [url, init] = fetchMock.mock.calls[0] as [string, RequestInit];
-    expect(url).toMatch(/\/auth\/verify$/);
-    expect(init.method).toBe("POST");
-    expect((init.headers as Record<string, string>)["Content-Type"]).toBe("application/json");
-
-    const body = JSON.parse(init.body as string) as { email: string; code: string };
+    const body = await captured[0].json() as { email: string; code: string };
     expect(body.email).toBe("dev@sga.local");
     expect(body.code).toBe("000000");
   });
 
   it("returns cached token on second call without a new fetch", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ token: "cached-jwt", user_id: "u1" }),
+    let callCount = 0;
+    server.use(
+      http.post(`${BASE}/auth/verify`, () => {
+        callCount++;
+        return HttpResponse.json({ token: "cached-jwt", user_id: "u1" });
       })
     );
 
@@ -87,18 +74,17 @@ describe("getAuthToken", () => {
 
     expect(first).toBe("cached-jwt");
     expect(second).toBe("cached-jwt");
-    expect(vi.mocked(globalThis.fetch)).toHaveBeenCalledOnce();
+    expect(callCount).toBe(1);
   });
 
   it("resets and retries after a failed auth call", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn()
-        .mockResolvedValueOnce({ ok: false, status: 401 })
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => ({ token: "retry-jwt", user_id: "u1" }),
-        })
+    let callCount = 0;
+    server.use(
+      http.post(`${BASE}/auth/verify`, () => {
+        callCount++;
+        if (callCount === 1) return new HttpResponse(null, { status: 401 });
+        return HttpResponse.json({ token: "retry-jwt", user_id: "u1" });
+      })
     );
 
     const { getAuthToken, resetAuthToken } = await import("@/services/api-client");
@@ -117,24 +103,16 @@ describe("getAuthToken", () => {
 // ---------------------------------------------------------------------------
 
 describe("createSession with auth header", () => {
-  afterEach(() => {
-    vi.unstubAllGlobals();
-  });
-
   it("sends Authorization: Bearer <token> in the session creation fetch", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn()
-        // First call: /auth/verify
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => ({ token: "session-jwt", user_id: "u1" }),
-        })
-        // Second call: /session
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => ({ session_id: "s1", created_at: "2026-04-11T00:00:00.000Z" }),
-        })
+    const capturedSession: Request[] = [];
+    server.use(
+      http.post(`${BASE}/auth/verify`, () => {
+        return HttpResponse.json({ token: "session-jwt", user_id: "u1" });
+      }),
+      http.post(`${BASE}/session`, async ({ request }) => {
+        capturedSession.push(request.clone());
+        return HttpResponse.json({ session_id: "s1", created_at: "2026-04-11T00:00:00.000Z" });
+      })
     );
 
     const { createSession, resetAuthToken } = await import("@/services/api-client");
@@ -143,27 +121,19 @@ describe("createSession with auth header", () => {
     const result = await createSession();
 
     expect(result.session_id).toBe("s1");
-
-    const fetchMock = vi.mocked(globalThis.fetch);
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-
-    // Second call is /session — must carry the Authorization header
-    const [sessionUrl, sessionInit] = fetchMock.mock.calls[1] as [string, RequestInit];
-    expect(sessionUrl).toMatch(/\/session$/);
-    expect((sessionInit.headers as Record<string, string>)["Authorization"]).toBe(
-      "Bearer session-jwt"
-    );
+    expect(capturedSession.length).toBe(1);
+    expect(capturedSession[0].url).toMatch(/\/session$/);
+    expect(capturedSession[0].headers.get("Authorization")).toBe("Bearer session-jwt");
   });
 
   it("throws when session creation returns non-ok status", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn()
-        .mockResolvedValueOnce({
-          ok: true,
-          json: async () => ({ token: "t", user_id: "u1" }),
-        })
-        .mockResolvedValueOnce({ ok: false, status: 503 })
+    server.use(
+      http.post(`${BASE}/auth/verify`, () => {
+        return HttpResponse.json({ token: "t", user_id: "u1" });
+      }),
+      http.post(`${BASE}/session`, () => {
+        return new HttpResponse(null, { status: 503 });
+      })
     );
 
     const { createSession, resetAuthToken } = await import("@/services/api-client");
@@ -178,34 +148,25 @@ describe("createSession with auth header", () => {
 // ---------------------------------------------------------------------------
 
 describe("createRealSSEService — auth header in chat fetch", () => {
-  afterEach(async () => {
-    vi.unstubAllGlobals();
-    const { resetAuthToken } = await import("@/services/api-client");
-    resetAuthToken();
-  });
-
   it("sends Authorization: Bearer <token> in the chat POST fetch", async () => {
-    const sseBody = makeSseBody([DONE_BLOCK]);
+    const capturedChat: Request[] = [];
 
-    const fetchMock = vi.fn()
-      // Call 1: /auth/verify
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ token: "chat-jwt", user_id: "u1" }),
+    server.use(
+      http.post(`${BASE}/auth/verify`, () => {
+        return HttpResponse.json({ token: "chat-jwt", user_id: "u1" });
+      }),
+      http.post(`${BASE}/session`, () => {
+        return HttpResponse.json({
+          session_id: "chat-session",
+          created_at: "2026-04-11T00:00:00.000Z",
+        });
+      }),
+      http.post(`${BASE}/session/:id/chat`, async ({ request }) => {
+        capturedChat.push(request.clone());
+        const stream = makeSseStream([DONE_SPEC]);
+        return new HttpResponse(stream, { status: 200, headers: SSE_HEADERS });
       })
-      // Call 2: POST /session
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({ session_id: "chat-session", created_at: "2026-04-11T00:00:00.000Z" }),
-      })
-      // Call 3: POST /session/<id>/chat
-      .mockResolvedValueOnce({
-        ok: true,
-        body: sseBody,
-        json: async () => ({}),
-      });
-
-    vi.stubGlobal("fetch", fetchMock);
+    );
 
     const { resetAuthToken } = await import("@/services/api-client");
     resetAuthToken();
@@ -225,14 +186,8 @@ describe("createRealSSEService — auth header in chat fetch", () => {
       );
     });
 
-    // The third call should be the chat endpoint with the Authorization header
-    const calls = fetchMock.mock.calls as [string, RequestInit][];
-    const chatCall = calls.find(([url]) => typeof url === "string" && url.includes("/chat"));
-    expect(chatCall).toBeDefined();
-
-    const chatInit = chatCall![1];
-    const headers = chatInit.headers as Record<string, string>;
-    expect(headers["Authorization"]).toBe("Bearer chat-jwt");
-    expect(headers["Content-Type"]).toBe("application/json");
+    expect(capturedChat.length).toBe(1);
+    expect(capturedChat[0].headers.get("Authorization")).toBe("Bearer chat-jwt");
+    expect(capturedChat[0].headers.get("Content-Type")).toBe("application/json");
   });
 });

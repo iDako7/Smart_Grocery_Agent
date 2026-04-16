@@ -1,19 +1,20 @@
 // recipe-detail-flow.integration.test.tsx — Phase 5 of issue #57
 //
 // Full-flow integration: RecipesScreen (inside SessionProvider) + real
-// RecipeInfoSheet + real api-client.  Uses vi.stubGlobal("fetch") with
-// sequenced mocks to exercise the complete path from clicking the info
-// button through to rendered ingredient/instruction content.
+// RecipeInfoSheet + real api-client.  Uses MSW per-test overrides to exercise
+// the complete path from clicking the info button through to rendered
+// ingredient/instruction content.
 //
 // Test cases:
 //   1. clicking info button fetches recipe detail and renders ingredients +
 //      instructions + AI badge + source link
 //   2. reopening same recipe uses cache (fetch not called again)
 
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useEffect } from "react";
+import { http, HttpResponse } from "msw";
 
 // ---------------------------------------------------------------------------
 // Reset the module-level recipe cache before every test so tests are
@@ -32,6 +33,8 @@ import { RecipesScreen } from "@/screens/RecipesScreen";
 import { makeRecipeSummary } from "@/test/fixtures/recipes";
 import type { RecipeSummary } from "@/types/tools";
 import type { RecipeDetail } from "@/types/tools";
+import { server } from "@/test/msw/server";
+import { BASE } from "@/test/msw/constants";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -103,31 +106,6 @@ function RecipesWithSeeded({ recipes }: { recipes: RecipeSummary[] }) {
 }
 
 // ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-/**
- * Build the sequenced fetch mock used by both tests:
- *   call 1 → POST /auth/verify   → returns a JWT
- *   call 2 → GET /recipe/r001   → returns recipeDetailPayload
- *
- * Returns the vitest mock fn so callers can inspect call counts.
- */
-function buildFetchMock() {
-  return vi
-    .fn()
-    .mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({ token: "flow-test-jwt", user_id: "u1" }),
-    })
-    .mockResolvedValueOnce({
-      ok: true,
-      status: 200,
-      json: async () => recipeDetailPayload,
-    });
-}
-
-// ---------------------------------------------------------------------------
 // Setup / teardown
 // ---------------------------------------------------------------------------
 
@@ -138,10 +116,6 @@ beforeEach(async () => {
   resetAuthToken();
 });
 
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
-
 // ---------------------------------------------------------------------------
 // Test 1: clicking info button fetches recipe detail and renders content
 // ---------------------------------------------------------------------------
@@ -149,8 +123,14 @@ afterEach(() => {
 describe("recipe-detail flow — clicking info button", () => {
   it("fetches recipe detail and renders ingredients + instructions + AI badge + source link", async () => {
     const user = userEvent.setup();
-    const fetchMock = buildFetchMock();
-    vi.stubGlobal("fetch", fetchMock);
+
+    const capturedRequests: Request[] = [];
+    server.use(
+      http.get(`${BASE}/recipe/r001`, ({ request }) => {
+        capturedRequests.push(request);
+        return HttpResponse.json(recipeDetailPayload);
+      })
+    );
 
     const mock = createMockChatService();
     renderWithSession(
@@ -196,18 +176,13 @@ describe("recipe-detail flow — clicking info button", () => {
       "https://example.com/garlic-shrimp"
     );
 
-    // Exactly 2 fetch calls: auth/verify + /recipe/r001
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    // Recipe endpoint was hit exactly once
+    expect(capturedRequests).toHaveLength(1);
 
-    // Confirm the recipe endpoint was called with the correct id
-    const calls = fetchMock.mock.calls as [string, RequestInit][];
-    const recipeCall = calls.find(
-      ([url]) => typeof url === "string" && url.includes("/recipe/r001")
+    // Auth header present with the MSW default JWT
+    expect(capturedRequests[0].headers.get("Authorization")).toBe(
+      "Bearer msw-test-jwt"
     );
-    expect(recipeCall).toBeDefined();
-    // Auth header present
-    const recipeHeaders = recipeCall![1].headers as Record<string, string>;
-    expect(recipeHeaders["Authorization"]).toBe("Bearer flow-test-jwt");
   });
 });
 
@@ -218,8 +193,14 @@ describe("recipe-detail flow — clicking info button", () => {
 describe("recipe-detail flow — cache hit on reopen", () => {
   it("does not call fetch a second time when the same recipe is reopened", async () => {
     const user = userEvent.setup();
-    const fetchMock = buildFetchMock();
-    vi.stubGlobal("fetch", fetchMock);
+
+    const capturedRequests: Request[] = [];
+    server.use(
+      http.get(`${BASE}/recipe/r001`, ({ request }) => {
+        capturedRequests.push(request);
+        return HttpResponse.json(recipeDetailPayload);
+      })
+    );
 
     const mock = createMockChatService();
     renderWithSession(
@@ -239,8 +220,8 @@ describe("recipe-detail flow — cache hit on reopen", () => {
       expect(screen.getByText("rice")).toBeInTheDocument();
     });
 
-    // fetch called twice: auth + recipe
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    // Recipe endpoint called once after first open
+    expect(capturedRequests.filter(r => r.url.includes("/recipe/r001"))).toHaveLength(1);
 
     // --- Close the sheet ---
     const closeBtn = screen.getByRole("button", { name: /close/i });
@@ -263,14 +244,7 @@ describe("recipe-detail flow — cache hit on reopen", () => {
       expect(screen.getByText("rice")).toBeInTheDocument();
     });
 
-    // fetch was still called exactly twice — cache prevented a third call
-    expect(fetchMock).toHaveBeenCalledTimes(2);
-
-    // The recipe endpoint was only requested once across both opens
-    const calls = fetchMock.mock.calls as [string, RequestInit][];
-    const recipeCalls = calls.filter(
-      ([url]) => typeof url === "string" && url.includes("/recipe/r001")
-    );
-    expect(recipeCalls).toHaveLength(1);
+    // The recipe endpoint was only requested once across both opens (cache hit)
+    expect(capturedRequests.filter(r => r.url.includes("/recipe/r001"))).toHaveLength(1);
   });
 });
