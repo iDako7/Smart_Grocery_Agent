@@ -297,7 +297,7 @@ export function SessionProvider({
 
     // Reset screen state machine to idle
     dispatch({ type: "reset" });
-  }, [dispatch]);
+  }, [dispatch, sseService]);
 
   // --------------------------------------------------------------------------
   // Context value

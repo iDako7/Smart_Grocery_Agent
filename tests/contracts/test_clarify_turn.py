@@ -203,8 +203,9 @@ def test_emit_clarify_turn_in_tools_list():
     assert "selection_mode" in items_required
     assert "options" in items_required
 
-    assert q_props["selection_mode"].get("enum") == ["single", "multi"], \
+    assert q_props["selection_mode"].get("enum") == ["single", "multi"], (
         "selection_mode must declare enum=['single','multi'] for OpenAI function-calling to constrain the LLM"
+    )
 
     # Check options items schema
     option_items = q_props["options"]["items"]

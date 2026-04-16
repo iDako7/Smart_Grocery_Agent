@@ -67,5 +67,9 @@ export function collectBuyItems(
   }
 
   // Strip the internal _recipeNames tracking field before returning
-  return Array.from(map.values()).map(({ _recipeNames: _r, ...item }) => item);
+  return Array.from(map.values()).map((entry) => {
+    const { _recipeNames, ...item } = entry;
+    void _recipeNames;
+    return item;
+  });
 }

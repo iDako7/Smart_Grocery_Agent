@@ -72,7 +72,9 @@ class GroceryListEvent(BaseModel):
 
 class ClarifyTurnEvent(BaseModel):
     event_type: Literal["clarify_turn"] = "clarify_turn"
-    explanation: str = Field(description="≤30-word directional sentence, plain text, no markdown. Replaces the free-text explanation event on the Clarify screen only.")
+    explanation: str = Field(
+        description="≤30-word directional sentence, plain text, no markdown. Replaces the free-text explanation event on the Clarify screen only."
+    )
     questions: list[ClarifyQuestion] = Field(
         default_factory=list,
         description="0–3 chip-select clarifying questions. Empty list is valid when the user's message is specific and the profile is complete.",
@@ -104,6 +106,13 @@ class DoneEvent(BaseModel):
 # ---------------------------------------------------------------------------
 
 SSEEvent = Annotated[
-    ThinkingEvent | PcsvUpdateEvent | RecipeCardEvent | ExplanationEvent | GroceryListEvent | ClarifyTurnEvent | ErrorEvent | DoneEvent,
+    ThinkingEvent
+    | PcsvUpdateEvent
+    | RecipeCardEvent
+    | ExplanationEvent
+    | GroceryListEvent
+    | ClarifyTurnEvent
+    | ErrorEvent
+    | DoneEvent,
     Field(discriminator="event_type"),
 ]

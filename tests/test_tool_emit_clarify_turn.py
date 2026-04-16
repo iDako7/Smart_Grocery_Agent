@@ -93,28 +93,28 @@ async def test_orchestrator_dispatches_emit_clarify_turn():
     """Dispatcher routes emit_clarify_turn to the handler and returns validated payload."""
     from src.ai.orchestrator import _dispatch_tool
 
-    raw_args = json.dumps({
-        "explanation": "Here's the direction: quick weeknight stir-fry.",
-        "questions": [
-            {
-                "id": "cuisine",
-                "text": "Any cuisine preference?",
-                "selection_mode": "single",
-                "options": [
-                    {"label": "Chinese", "is_exclusive": False},
-                    {"label": "Thai", "is_exclusive": False},
-                ],
-            },
-        ],
-    })
+    raw_args = json.dumps(
+        {
+            "explanation": "Here's the direction: quick weeknight stir-fry.",
+            "questions": [
+                {
+                    "id": "cuisine",
+                    "text": "Any cuisine preference?",
+                    "selection_mode": "single",
+                    "options": [
+                        {"label": "Chinese", "is_exclusive": False},
+                        {"label": "Thai", "is_exclusive": False},
+                    ],
+                },
+            ],
+        }
+    )
 
     kb = MagicMock()
     pg = MagicMock()
     user_id = uuid.uuid4()
 
-    result_dict, tool_call = await _dispatch_tool(
-        "emit_clarify_turn", raw_args, kb, pg, user_id
-    )
+    result_dict, tool_call = await _dispatch_tool("emit_clarify_turn", raw_args, kb, pg, user_id)
 
     assert tool_call.name == "emit_clarify_turn"
     assert result_dict["explanation"] == "Here's the direction: quick weeknight stir-fry."

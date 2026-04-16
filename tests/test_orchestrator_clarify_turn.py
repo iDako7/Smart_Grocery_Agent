@@ -80,9 +80,7 @@ async def test_orchestrator_terminates_on_emit_clarify_turn(kb, seeded_user, db)
     )
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_with_tool, response_second]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_with_tool, response_second])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("I have chicken and peppers, what should I make?", kb, db, seeded_user)
@@ -123,9 +121,7 @@ async def test_orchestrator_non_terminal_tools_still_loop(kb, seeded_user, db):
     response_final = _make_response(content="Here are my suggestions!")
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_with_tool, response_final]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_with_tool, response_final])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent("I have chicken and rice", kb, db, seeded_user)
@@ -150,26 +146,18 @@ async def test_orchestrator_non_terminal_tools_still_loop(kb, seeded_user, db):
 # ---------------------------------------------------------------------------
 
 
-async def test_clarify_screen_freetext_response_forces_retry_with_tool_choice(
-    kb, seeded_user, db
-):
+async def test_clarify_screen_freetext_response_forces_retry_with_tool_choice(kb, seeded_user, db):
     """When screen=clarify and LLM ends with free-text (no tool call), orchestrator
     must make ONE additional forced LLM call with tool_choice=emit_clarify_turn.
     If the retry succeeds, AgentResult has clarify_turn populated."""
     # First call: free-text response — no tool calls, finish_reason="stop"
-    response_freetext = _make_response(
-        content="Here are some meal ideas for you!", finish_reason="stop"
-    )
+    response_freetext = _make_response(content="Here are some meal ideas for you!", finish_reason="stop")
     # Second call (forced retry): proper emit_clarify_turn tool call
     clarify_tool_call = _make_tool_call("emit_clarify_turn", _CLARIFY_ARGS, call_id="call_forced")
-    response_clarify = _make_response(
-        tool_calls=[clarify_tool_call], finish_reason="tool_calls"
-    )
+    response_clarify = _make_response(tool_calls=[clarify_tool_call], finish_reason="tool_calls")
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_freetext, response_clarify]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_freetext, response_clarify])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent(
@@ -197,24 +185,16 @@ async def test_clarify_screen_freetext_response_forces_retry_with_tool_choice(
     assert len(result.clarify_turn.questions) == 1
 
 
-async def test_clarify_screen_freetext_retry_also_fails_returns_error(
-    kb, seeded_user, db
-):
+async def test_clarify_screen_freetext_retry_also_fails_returns_error(kb, seeded_user, db):
     """When screen=clarify and BOTH the normal call AND the forced retry return
     free-text (pathological model), orchestrator must return status='partial'
     with reason='clarify_turn_enforcement_failed' and clarify_turn=None."""
     # Both calls return free-text — forced retry also fails
-    response_freetext_1 = _make_response(
-        content="Here are some meal ideas!", finish_reason="stop"
-    )
-    response_freetext_2 = _make_response(
-        content="Still just text, no tool call.", finish_reason="stop"
-    )
+    response_freetext_1 = _make_response(content="Here are some meal ideas!", finish_reason="stop")
+    response_freetext_2 = _make_response(content="Still just text, no tool call.", finish_reason="stop")
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_freetext_1, response_freetext_2]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_freetext_1, response_freetext_2])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent(
@@ -232,23 +212,15 @@ async def test_clarify_screen_freetext_retry_also_fails_returns_error(
     assert result.clarify_turn is None
 
 
-async def test_non_clarify_screen_freetext_response_does_not_retry(
-    kb, seeded_user, db
-):
+async def test_non_clarify_screen_freetext_response_does_not_retry(kb, seeded_user, db):
     """When screen != 'clarify', a free-text LLM response must NOT trigger a retry.
     Exactly ONE LLM call is made and response_text is returned as-is."""
-    response_freetext = _make_response(
-        content="Here are recipe suggestions!", finish_reason="stop"
-    )
+    response_freetext = _make_response(content="Here are recipe suggestions!", finish_reason="stop")
     # Define a second response to detect if a spurious second call is made
-    response_second = _make_response(
-        content="This should never be called.", finish_reason="stop"
-    )
+    response_second = _make_response(content="This should never be called.", finish_reason="stop")
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_freetext, response_second]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_freetext, response_second])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent(
@@ -266,9 +238,7 @@ async def test_non_clarify_screen_freetext_response_does_not_retry(
     assert result.clarify_turn is None
 
 
-async def test_clarify_screen_tool_calls_then_emit_clarify_turn_no_retry(
-    kb, seeded_user, db
-):
+async def test_clarify_screen_tool_calls_then_emit_clarify_turn_no_retry(kb, seeded_user, db):
     """Regression guard for the clarify-screen happy path: when the LLM calls
     emit_clarify_turn organically (after other tool calls), the loop exits
     normally with no forced retry. Three LLM calls total — NOT four."""
@@ -289,9 +259,7 @@ async def test_clarify_screen_tool_calls_then_emit_clarify_turn_no_retry(
     response_3 = _make_response(tool_calls=[tc3], finish_reason="tool_calls")
 
     mock_client = AsyncMock()
-    mock_client.chat.completions.create = AsyncMock(
-        side_effect=[response_1, response_2, response_3]
-    )
+    mock_client.chat.completions.create = AsyncMock(side_effect=[response_1, response_2, response_3])
 
     with patch("src.ai.orchestrator._get_client", return_value=mock_client):
         result = await run_agent(

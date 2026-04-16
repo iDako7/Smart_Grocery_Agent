@@ -33,16 +33,12 @@ def test_search_recipes_input_include_alternatives_defaults_false():
 
 
 def test_search_recipes_input_include_alternatives_explicit_true():
-    parsed = SearchRecipesInput.model_validate(
-        {"ingredients": ["chicken"], "include_alternatives": True}
-    )
+    parsed = SearchRecipesInput.model_validate({"ingredients": ["chicken"], "include_alternatives": True})
     assert parsed.include_alternatives is True
 
 
 def test_search_recipes_tools_entry_documents_include_alternatives():
-    search = next(
-        t for t in TOOLS if t["function"]["name"] == "search_recipes"
-    )
+    search = next(t for t in TOOLS if t["function"]["name"] == "search_recipes")
     props = search["function"]["parameters"]["properties"]
     assert "include_alternatives" in props
     assert props["include_alternatives"]["type"] == "boolean"

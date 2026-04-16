@@ -12,10 +12,8 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 from src.ai.context import load_context, save_turn
 from src.ai.kb import get_kb
 from src.ai.orchestrator import run_agent
-from src.ai.tools.get_recipe_detail import get_recipe_detail
-
-from contracts.tool_schemas import GetRecipeDetailInput
 from src.ai.sse import emit_agent_result
+from src.ai.tools.get_recipe_detail import get_recipe_detail
 from src.ai.types import AgentResult
 from src.backend.auth import get_current_user_id
 from src.backend.db.engine import get_db
@@ -30,6 +28,7 @@ from contracts.api_types import (
     SessionStateResponse,
 )
 from contracts.sse_events import AgentErrorCategory
+from contracts.tool_schemas import GetRecipeDetailInput
 
 logger = logging.getLogger(__name__)
 
@@ -127,9 +126,7 @@ async def patch_session_recipes(
     recipes[body.index] = body.recipe.model_dump()
     snapshot["recipes"] = recipes
 
-    await conn.execute(
-        sessions.update().where(sessions.c.id == session_id).values(state_snapshot=snapshot)
-    )
+    await conn.execute(sessions.update().where(sessions.c.id == session_id).values(state_snapshot=snapshot))
     await conn.commit()
 
     return SessionStateResponse(

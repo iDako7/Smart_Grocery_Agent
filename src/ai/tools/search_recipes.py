@@ -78,11 +78,7 @@ async def search_recipes(db: aiosqlite.Connection, input: SearchRecipesInput) ->
         used: set[str] = set()
         candidate_pool = [c for c in all_rows if c.id not in primary_ids]
         for primary in primaries:
-            scored = [
-                (_score_similarity(primary, c), c)
-                for c in candidate_pool
-                if c.id not in used
-            ]
+            scored = [(_score_similarity(primary, c), c) for c in candidate_pool if c.id not in used]
             scored = [(s, c) for s, c in scored if s > 0]
             scored.sort(key=lambda sc: (-sc[0], sc[1].id))
             top_alts = []
@@ -119,10 +115,7 @@ def _score_similarity(primary: RecipeSummary, candidate: RecipeSummary) -> int:
         score += 2
     if primary.cooking_method and primary.cooking_method.lower() == candidate.cooking_method.lower():
         score += 1
-    score += len(
-        {t.lower() for t in (primary.flavor_tags or [])}
-        & {t.lower() for t in (candidate.flavor_tags or [])}
-    )
+    score += len({t.lower() for t in (primary.flavor_tags or [])} & {t.lower() for t in (candidate.flavor_tags or [])})
     if primary.effort_level == candidate.effort_level:
         score += 1
     return score

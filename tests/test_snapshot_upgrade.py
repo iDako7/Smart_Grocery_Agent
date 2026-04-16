@@ -14,10 +14,10 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
-
-from contracts.tool_schemas import Ingredient, RecipeDetail, RecipeSummary
 from src.ai.types import AgentResult
 from src.backend.main import app
+
+from contracts.tool_schemas import Ingredient, RecipeDetail, RecipeSummary
 from tests.conftest import _engine, _ensure_tables
 
 _DEV_USER = uuid.UUID("00000000-0000-0000-0000-000000000001")
@@ -60,9 +60,7 @@ async def _clean_db():
             text("INSERT INTO users (id, email) VALUES (:id, :email)"),
             {"id": _DEV_USER, "email": "dev@test.local"},
         )
-        await conn.execute(
-            text("INSERT INTO user_profiles (user_id) VALUES (:uid)"), {"uid": _DEV_USER}
-        )
+        await conn.execute(text("INSERT INTO user_profiles (user_id) VALUES (:uid)"), {"uid": _DEV_USER})
 
 
 @pytest_asyncio.fixture()
@@ -161,9 +159,19 @@ async def test_create_meal_plan_lazy_upgrades_old_shape_snapshot(client):
     # Manually write an *old-shape* snapshot (no instructions key) into the DB
     # simulating a session written before the fix.
     import json as _json
-    old_snapshot = _json.dumps({
-        "recipes": [{"id": "r002", "name": "Garlic Butter Pasta", "ingredients_have": ["pasta"], "ingredients_need": ["butter"]}]
-    })
+
+    old_snapshot = _json.dumps(
+        {
+            "recipes": [
+                {
+                    "id": "r002",
+                    "name": "Garlic Butter Pasta",
+                    "ingredients_have": ["pasta"],
+                    "ingredients_need": ["butter"],
+                }
+            ]
+        }
+    )
     async with _engine.begin() as conn:
         # Use CAST rather than ::jsonb to avoid asyncpg parameter-binding conflicts.
         await conn.execute(

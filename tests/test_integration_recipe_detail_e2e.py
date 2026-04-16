@@ -50,12 +50,14 @@ _FULL_RECIPE = {
     "time_minutes": 20,
     "flavor_tags": json.dumps(["spicy", "umami", "savory"]),
     "serves": 2,
-    "ingredients": json.dumps([
-        {"name": "tofu", "amount": "300g", "pcsv": ["protein"]},
-        {"name": "rice", "amount": "1 cup", "pcsv": ["carb"]},
-        {"name": "bok choy", "amount": "200g", "pcsv": ["veggie"]},
-        {"name": "doubanjiang", "amount": "2 tbsp", "pcsv": ["sauce"]},
-    ]),
+    "ingredients": json.dumps(
+        [
+            {"name": "tofu", "amount": "300g", "pcsv": ["protein"]},
+            {"name": "rice", "amount": "1 cup", "pcsv": ["carb"]},
+            {"name": "bok choy", "amount": "200g", "pcsv": ["veggie"]},
+            {"name": "doubanjiang", "amount": "2 tbsp", "pcsv": ["sauce"]},
+        ]
+    ),
     "instructions": (
         "1. Press tofu and cut into cubes.\n"
         "2. Heat wok over high heat.\n"
@@ -74,18 +76,20 @@ _FULL_RECIPE = {
 _MINIMAL_RECIPE = {
     "id": "e2e-minimal-001",
     "name": "Plain Porridge",
-    "name_zh": "",          # empty string — frontend treats as absent
+    "name_zh": "",  # empty string — frontend treats as absent
     "source": "",
-    "source_url": "",       # falsy — source link must not render
+    "source_url": "",  # falsy — source link must not render
     "cuisine": "",
     "cooking_method": "",
     "effort_level": "medium",
     "time_minutes": 0,
     "flavor_tags": json.dumps([]),
     "serves": 0,
-    "ingredients": json.dumps([
-        {"name": "rice", "amount": "1 cup", "pcsv": ["carb"]},
-    ]),
+    "ingredients": json.dumps(
+        [
+            {"name": "rice", "amount": "1 cup", "pcsv": ["carb"]},
+        ]
+    ),
     "instructions": "Boil until soft.",
     "is_ai_generated": 0,
 }
@@ -109,9 +113,7 @@ CREATE TABLE recipes (
 );
 """
 
-_INSERT_SQL = (
-    "INSERT INTO recipes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-)
+_INSERT_SQL = "INSERT INTO recipes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
 
 
 def _row(recipe: dict) -> tuple:

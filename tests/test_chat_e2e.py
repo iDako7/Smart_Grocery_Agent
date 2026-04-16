@@ -104,7 +104,7 @@ async def test_full_e2e_flow(client):
     kb_ctx.__aenter__ = AsyncMock(return_value=kb_conn)
     kb_ctx.__aexit__ = AsyncMock(return_value=False)
 
-    from contracts.tool_schemas import RecipeDetail, Ingredient
+    from contracts.tool_schemas import Ingredient, RecipeDetail
 
     detail = RecipeDetail(
         id="r001",

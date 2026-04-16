@@ -133,31 +133,33 @@ _POLLUTED_ROWS = [
 ]
 
 
-@pytest.mark.parametrize("query,product_name", [
-    ("cornstarch", "Yellow Sweet Corn"),
-    ("white pepper", "Pointed Peppers"),
-    ("scallions", "Shallot"),
-])
+@pytest.mark.parametrize(
+    "query,product_name",
+    [
+        ("cornstarch", "Yellow Sweet Corn"),
+        ("white pepper", "Pointed Peppers"),
+        ("scallions", "Shallot"),
+    ],
+)
 def test_pollution_pairs_rejected(query, product_name):
     """Polluted matches from issue #72 must NOT appear at default threshold."""
     row = next(r for r in _POLLUTED_ROWS if r[0] == product_name)
     results = score_products([row], query)
     matched_names = [p["name"] for _, p in results]
-    assert product_name not in matched_names, (
-        f"{query!r} should not match {product_name!r} at default threshold"
-    )
+    assert product_name not in matched_names, f"{query!r} should not match {product_name!r} at default threshold"
 
 
-@pytest.mark.parametrize("query,product_name", [
-    ("tomatoes", "Roma Tomatoes"),
-    ("garlic", "Garlic Cloves"),
-    ("eggs", "Large Eggs"),
-])
+@pytest.mark.parametrize(
+    "query,product_name",
+    [
+        ("tomatoes", "Roma Tomatoes"),
+        ("garlic", "Garlic Cloves"),
+        ("eggs", "Large Eggs"),
+    ],
+)
 def test_correct_pairs_accepted(query, product_name):
     """Common ingredient queries must still resolve to the correct product."""
     row = next(r for r in _POLLUTED_ROWS if r[0] == product_name)
     results = score_products([row], query)
     matched_names = [p["name"] for _, p in results]
-    assert product_name in matched_names, (
-        f"{query!r} should match {product_name!r} at default threshold"
-    )
+    assert product_name in matched_names, f"{query!r} should match {product_name!r} at default threshold"

@@ -223,7 +223,7 @@ class ClarifyOption(BaseModel):
 
 class ClarifyQuestion(BaseModel):
     id: str = Field(description="Stable slug like 'cooking_setup', 'dietary', or an LLM-generated id.")
-    text: str = Field(description="The question text shown to the user, e.g., \"What's your cooking setup?\"")
+    text: str = Field(description='The question text shown to the user, e.g., "What\'s your cooking setup?"')
     selection_mode: Literal["single", "multi"]
     options: list[ClarifyOption]
 
@@ -240,9 +240,7 @@ class ClarifyTurnPayload(BaseModel):
     @model_validator(mode="after")
     def _check_question_count(self) -> ClarifyTurnPayload:
         if len(self.questions) > 3:
-            raise ValueError(
-                f"emit_clarify_turn accepts at most 3 questions, got {len(self.questions)}"
-            )
+            raise ValueError(f"emit_clarify_turn accepts at most 3 questions, got {len(self.questions)}")
         return self
 
 
