@@ -1,1120 +1,426 @@
-// TDD: Tests written BEFORE implementation (RED phase).
-// These tests define the contract for SessionProvider and useSession hook.
-// Run `bun test` to see them fail (RED), then implement the context (GREEN).
+// session-context.test.tsx — screen-level behavioral tests (MSW pilot, issue #89)
+//
+// Tests user-observable flows by rendering actual screens with MSW intercepting
+// the real SSE service. No vi.mock, no serviceSpy, no result.current.screenState.
+//
+// Interpretation A + split:
+//   This file: screen-level DOM tests (HomeScreen → ClarifyScreen flows)
+//   session-context.hooks.test.tsx: pure hook/reducer tests (renderHook)
 
-import type { ReactNode } from "react";
-import { describe, it, expect, vi } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter, Routes, Route } from "react-router";
+import { http, HttpResponse } from "msw";
 
+import { SessionProvider } from "@/context/session-context";
+import { HomeScreen } from "@/screens/HomeScreen";
+import { ClarifyScreen } from "@/screens/ClarifyScreen";
+import { server } from "@/test/msw/server";
+import { makeSseStream, makeDeferredSseStream, toSseSpecs } from "@/test/msw/sse";
 import {
-  SessionProvider,
-  useSession,
-} from "@/context/session-context";
-import type { ChatServiceHandler } from "@/context/session-context";
-import type { SSEEvent } from "@/types/sse";
-import { createMockChatService } from "@/test/test-utils";
+  EVENT_THINKING_ANALYZING,
+  EVENT_CLARIFY_TURN,
+  EVENT_ERROR_GENERIC,
+  EVENT_DONE_COMPLETE,
+} from "@/test/fixtures/sse-sequences";
 
 // ---------------------------------------------------------------------------
-// Test wrapper factory — allows injecting an optional chatService
+// Render helper — wraps HomeScreen + ClarifyScreen in MemoryRouter + SessionProvider.
+// Does NOT pass chatService — the real SSE service is used, intercepted by MSW.
 // ---------------------------------------------------------------------------
 
-function makeWrapper(chatService?: ChatServiceHandler) {
-  return function TestWrapper({ children }: { children: ReactNode }) {
-    return (
-      <SessionProvider chatService={chatService}>{children}</SessionProvider>
-    );
-  };
+function renderApp(initialRoute = "/") {
+  return render(
+    <MemoryRouter initialEntries={[initialRoute]}>
+      <SessionProvider>
+        <Routes>
+          <Route path="/" element={<HomeScreen />} />
+          <Route path="/clarify" element={<ClarifyScreen />} />
+        </Routes>
+      </SessionProvider>
+    </MemoryRouter>
+  );
 }
 
+// SSE response headers used in all chat handler overrides
+const SSE_HEADERS = {
+  "Content-Type": "text/event-stream",
+  "Cache-Control": "no-cache",
+  Connection: "keep-alive",
+};
+
 // ---------------------------------------------------------------------------
-// 1. Provider renders children
+// 1. Happy path: submit → loading → complete
 // ---------------------------------------------------------------------------
 
-describe("SessionProvider — renders children", () => {
-  it("wraps children without error", () => {
-    const { result } = renderHook(
-      () => {
-        // Just verify we can render inside the provider
-        return true;
+describe("screen-level: happy path submit", () => {
+  it("navigates to clarify screen and shows loading spinner after submitting a message", async () => {
+    // Use a deferred stream so the loading state is stable while we assert
+    const deferred = makeDeferredSseStream();
+
+    server.use(
+      http.post(
+        "http://localhost:8000/session/:sessionId/chat",
+        () =>
+          new HttpResponse(deferred.stream, { status: 200, headers: SSE_HEADERS })
+      )
+    );
+
+    const user = userEvent.setup();
+    renderApp("/");
+
+    const input = screen.getByPlaceholderText(
+      "BBQ for 8, or I have leftover chicken..."
+    );
+    await user.type(input, "I have chicken and rice");
+    await user.keyboard("{Enter}");
+
+    // Push a thinking event so the screen transitions to loading/streaming
+    deferred.push({
+      event: "thinking",
+      data: { event_type: "thinking", message: "Analyzing your request..." },
+    });
+
+    // Loading spinner should appear
+    const spinner = await screen.findByTestId("clarify-loading-spinner");
+    expect(spinner).toBeInTheDocument();
+    expect(
+      screen.getByText("Checking your ingredients for balance…")
+    ).toBeInTheDocument();
+
+    // Clean up — close the stream with a done event
+    deferred.push({
+      event: "done",
+      data: {
+        event_type: "done",
+        status: "complete",
+        reason: null,
+        error_category: null,
       },
-      {
-        wrapper: ({ children }) => (
-          <SessionProvider>{children}</SessionProvider>
-        ),
-      }
+    });
+    deferred.close();
+  });
+
+  it("shows completion state (clarify heading) after SSE stream finishes", async () => {
+    server.use(
+      http.post(
+        "http://localhost:8000/session/:sessionId/chat",
+        () =>
+          new HttpResponse(
+            makeSseStream(
+              toSseSpecs([
+                EVENT_THINKING_ANALYZING,
+                EVENT_CLARIFY_TURN,
+                EVENT_DONE_COMPLETE,
+              ])
+            ),
+            { status: 200, headers: SSE_HEADERS }
+          )
+      )
     );
 
-    expect(result.current).toBe(true);
+    const user = userEvent.setup();
+    renderApp("/");
+
+    const input = screen.getByPlaceholderText(
+      "BBQ for 8, or I have leftover chicken..."
+    );
+    await user.type(input, "BBQ for 8 people");
+    await user.keyboard("{Enter}");
+
+    // The heading is split across elements: "Here's what I " + <span>see</span> + "."
+    // Use getByRole('heading') to find it regardless of internal markup
+    const heading = await screen.findByRole("heading", {
+      level: 1,
+      name: /here's what i see/i,
+    });
+    expect(heading).toBeInTheDocument();
+
+    // Spinner must be gone
+    expect(screen.queryByTestId("clarify-loading-spinner")).not.toBeInTheDocument();
   });
 });
 
 // ---------------------------------------------------------------------------
-// 2. useSession throws outside provider
+// 2. MSW request body assertion
 // ---------------------------------------------------------------------------
 
-describe("useSession — throws outside provider", () => {
-  it("throws when called outside SessionProvider", () => {
-    // Suppress the React error boundary console output
-    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+describe("screen-level: MSW request body assertion", () => {
+  it("sends correct message and screen in POST body", async () => {
+    let capturedBody: { message?: string; screen?: string } = {};
 
-    expect(() => renderHook(() => useSession())).toThrow(
-      /useSession must be used inside SessionProvider/i
+    server.use(
+      http.post(
+        "http://localhost:8000/session/:sessionId/chat",
+        async ({ request }) => {
+          capturedBody = (await request.json()) as {
+            message?: string;
+            screen?: string;
+          };
+          return new HttpResponse(
+            makeSseStream([
+              {
+                event: "thinking",
+                data: { event_type: "thinking", message: "..." },
+              },
+              {
+                event: "done",
+                data: {
+                  event_type: "done",
+                  status: "complete",
+                  reason: null,
+                  error_category: null,
+                },
+              },
+            ]),
+            { status: 200, headers: SSE_HEADERS }
+          );
+        }
+      )
     );
 
-    consoleSpy.mockRestore();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 3. Initial state
-// ---------------------------------------------------------------------------
-
-describe("useSession — initial state", () => {
-  it("sessionId is null initially", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(result.current.sessionId).toBeNull();
-  });
-
-  it("conversationHistory is empty initially", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(result.current.conversationHistory).toEqual([]);
-  });
-
-  it("currentScreen is 'home' initially", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(result.current.currentScreen).toBe("home");
-  });
-
-  it("screenState is 'idle' initially", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(result.current.screenState).toBe("idle");
-  });
-
-  it("isLoading is false initially", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(result.current.isLoading).toBe(false);
-  });
-
-  it("isStreaming is false initially", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(result.current.isStreaming).toBe(false);
-  });
-
-  it("isComplete is false initially", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(result.current.isComplete).toBe(false);
-  });
-
-  it("isError is false initially", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(result.current.isError).toBe(false);
-  });
-
-  it("dispatch is a function", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(typeof result.current.dispatch).toBe("function");
-  });
-
-  it("sendMessage is a function", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(typeof result.current.sendMessage).toBe("function");
-  });
-
-  it("navigateToScreen is a function", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(typeof result.current.navigateToScreen).toBe("function");
-  });
-
-  it("resetSession is a function", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(typeof result.current.resetSession).toBe("function");
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 4. navigateToScreen
-// ---------------------------------------------------------------------------
-
-describe("useSession — navigateToScreen", () => {
-  it("updates currentScreen to 'recipes'", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.navigateToScreen("recipes");
-    });
-
-    expect(result.current.currentScreen).toBe("recipes");
-  });
-
-  it("updates currentScreen to 'grocery'", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.navigateToScreen("grocery");
-    });
-
-    expect(result.current.currentScreen).toBe("grocery");
-  });
-
-  it("does NOT reset screenState when navigating", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    // Put screen into loading state via dispatch
-    act(() => {
-      result.current.dispatch({ type: "start_loading" });
-    });
-
-    expect(result.current.screenState).toBe("loading");
-
-    // Navigate — should NOT reset screen state
-    act(() => {
-      result.current.navigateToScreen("clarify");
-    });
-
-    expect(result.current.screenState).toBe("loading");
-    expect(result.current.currentScreen).toBe("clarify");
-  });
-
-  it("can navigate back to 'home'", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.navigateToScreen("recipes");
-    });
-    act(() => {
-      result.current.navigateToScreen("home");
-    });
-
-    expect(result.current.currentScreen).toBe("home");
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 5. resetSession
-// ---------------------------------------------------------------------------
-
-describe("useSession — resetSession", () => {
-  it("clears conversationHistory", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    // Add a turn via sendMessage
-    act(() => {
-      result.current.sendMessage("hello");
-    });
-
-    expect(result.current.conversationHistory).toHaveLength(1);
-
-    act(() => {
-      result.current.resetSession();
-    });
-
-    expect(result.current.conversationHistory).toEqual([]);
-  });
-
-  it("resets sessionId to null", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.resetSession();
-    });
-
-    expect(result.current.sessionId).toBeNull();
-  });
-
-  it("dispatches reset to screenState machine — state returns to idle", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    // Drive to loading
-    act(() => {
-      result.current.sendMessage("plan BBQ");
-    });
-
-    expect(result.current.screenState).toBe("loading");
-
-    act(() => {
-      result.current.resetSession();
-    });
-
-    expect(result.current.screenState).toBe("idle");
-  });
-
-  it("sets currentScreen back to 'home'", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.navigateToScreen("recipes");
-    });
-
-    act(() => {
-      result.current.resetSession();
-    });
-
-    expect(result.current.currentScreen).toBe("home");
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 6. sendMessage dispatches start_loading
-// ---------------------------------------------------------------------------
-
-describe("useSession — sendMessage dispatches start_loading", () => {
-  it("screenState transitions to loading after sendMessage", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("I have chicken and rice");
-    });
-
-    expect(result.current.screenState).toBe("loading");
-    expect(result.current.isLoading).toBe(true);
-  });
-
-  it("is idempotent — second sendMessage during loading is ignored", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("first message");
-    });
-
-    expect(result.current.screenState).toBe("loading");
-
-    act(() => {
-      result.current.sendMessage("second message — should be ignored");
-    });
-
-    // chatService must only have been called once
-    expect(serviceSpy).toHaveBeenCalledTimes(1);
-    // History still has only 1 user turn
-    expect(result.current.conversationHistory).toHaveLength(1);
-  });
-
-  it("is idempotent during streaming — second sendMessage is ignored", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("first message");
-    });
-
-    // Drive to streaming
-    act(() => {
-      result.current.dispatch({ type: "start_streaming" });
-    });
-
-    expect(result.current.screenState).toBe("streaming");
-
-    act(() => {
-      result.current.sendMessage("second message — should be ignored");
-    });
-
-    expect(serviceSpy).toHaveBeenCalledTimes(1);
-    expect(result.current.conversationHistory).toHaveLength(1);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 7. sendMessage adds user turn to conversation history
-// ---------------------------------------------------------------------------
-
-describe("useSession — sendMessage adds user turn", () => {
-  it("adds a turn with role='user' and the message text", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("I have chicken and rice");
-    });
-
-    expect(result.current.conversationHistory).toHaveLength(1);
-    expect(result.current.conversationHistory[0].role).toBe("user");
-    expect(result.current.conversationHistory[0].content).toBe(
-      "I have chicken and rice"
+    const user = userEvent.setup();
+    renderApp("/");
+
+    const input = screen.getByPlaceholderText(
+      "BBQ for 8, or I have leftover chicken..."
     );
-  });
+    await user.type(input, "I have chicken, rice, and broccoli");
+    await user.keyboard("{Enter}");
 
-  it("adds a timestamp string to the turn", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("hello");
-    });
-
-    const turn = result.current.conversationHistory[0];
-    expect(typeof turn.timestamp).toBe("string");
-    expect(turn.timestamp.length).toBeGreaterThan(0);
-  });
-
-  it("accumulates multiple user turns", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    // First message
-    act(() => {
-      result.current.sendMessage("first message");
-    });
-
-    // Drive to complete so we can send a second message
-    act(() => {
-      result.current.dispatch({ type: "start_streaming" });
-    });
-    act(() => {
-      result.current.dispatch({ type: "complete", status: "complete" });
-    });
-
-    // Second message
-    act(() => {
-      result.current.sendMessage("second message");
-    });
-
-    // History has user + (no assistant from dispatch) + second user = 2 user turns
-    const userTurns = result.current.conversationHistory.filter(
-      (t) => t.role === "user"
+    // Wait for the stream to complete and completion state to appear
+    await screen.findByRole(
+      "heading",
+      { level: 1, name: /here's what i see/i },
+      { timeout: 5000 }
     );
-    expect(userTurns).toHaveLength(2);
-    expect(userTurns[0].content).toBe("first message");
-    expect(userTurns[1].content).toBe("second message");
+
+    expect(capturedBody.message).toBe("I have chicken, rice, and broccoli");
+    expect(capturedBody.screen).toBe("clarify");
   });
 });
 
 // ---------------------------------------------------------------------------
-// 8. sendMessage calls chatService
+// 3. Error flow
 // ---------------------------------------------------------------------------
 
-describe("useSession — sendMessage calls chatService", () => {
-  it("calls chatService with the message text", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("plan BBQ for 8 people");
-    });
-
-    expect(serviceSpy).toHaveBeenCalledTimes(1);
-    expect(serviceSpy.mock.calls[0][0]).toBe("plan BBQ for 8 people");
-  });
-
-  it("calls chatService with currentScreen", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.navigateToScreen("recipes");
-    });
-
-    act(() => {
-      result.current.sendMessage("show me more");
-    });
-
-    expect(serviceSpy.mock.calls[0][1]).toBe("recipes");
-  });
-
-  it("calls chatService with onEvent, onDone, onError callbacks", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("hello");
-    });
-
-    const call = serviceSpy.mock.calls[0];
-    expect(typeof call[2]).toBe("function"); // onEvent
-    expect(typeof call[3]).toBe("function"); // onDone
-    expect(typeof call[4]).toBe("function"); // onError
-  });
-
-  it("does NOT call chatService when no message provided (empty string)", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("");
-    });
-
-    expect(serviceSpy).not.toHaveBeenCalled();
-    expect(result.current.screenState).toBe("idle");
-    expect(result.current.conversationHistory).toHaveLength(0);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 9. chatService onEvent triggers streaming state
-// ---------------------------------------------------------------------------
-
-describe("useSession — chatService onEvent triggers streaming", () => {
-  it("transitions to streaming on first onEvent call", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("plan dinner");
-    });
-
-    expect(result.current.screenState).toBe("loading");
-
-    act(() => {
-      const event: SSEEvent = { event_type: "thinking", message: "Analyzing..." };
-      mock.getOnEvent()(event);
-    });
-
-    expect(result.current.screenState).toBe("streaming");
-    expect(result.current.isStreaming).toBe(true);
-  });
-
-  it("screenData accumulates thinking message from onEvent", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("plan dinner");
-    });
-
-    act(() => {
-      const event: SSEEvent = {
-        event_type: "thinking",
-        message: "Looking up recipes...",
-      };
-      mock.getOnEvent()(event);
-    });
-
-    expect(result.current.screenData.thinkingMessage).toBe(
-      "Looking up recipes..."
+describe("screen-level: error flow", () => {
+  it("shows ErrorBanner with role=alert when SSE returns an error event", async () => {
+    server.use(
+      http.post(
+        "http://localhost:8000/session/:sessionId/chat",
+        () =>
+          new HttpResponse(
+            makeSseStream(
+              toSseSpecs([EVENT_THINKING_ANALYZING, EVENT_ERROR_GENERIC])
+            ),
+            { status: 200, headers: SSE_HEADERS }
+          )
+      )
     );
-  });
 
-  it("subsequent onEvent calls stay in streaming and accumulate data", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
+    const user = userEvent.setup();
+    renderApp("/");
 
-    act(() => {
-      result.current.sendMessage("plan dinner");
-    });
+    const input = screen.getByPlaceholderText(
+      "BBQ for 8, or I have leftover chicken..."
+    );
+    await user.type(input, "Plan dinner");
+    await user.keyboard("{Enter}");
 
-    // First event — transitions to streaming
-    act(() => {
-      mock.getOnEvent()({ event_type: "thinking", message: "Thinking..." });
-    });
-
-    // Second event — accumulates recipe
-    act(() => {
-      const event: SSEEvent = {
-        event_type: "recipe_card",
-        recipe: {
-          id: "r001",
-          name: "Chicken Stir Fry",
-          name_zh: "鸡肉炒",
-          cuisine: "Chinese",
-          cooking_method: "stir-fry",
-          effort_level: "medium",
-          flavor_tags: ["savory"],
-          serves: 2,
-          pcsv_roles: { protein: ["chicken"] },
-          ingredients: [
-            { name: "chicken", amount: "400g", pcsv: ["protein"] as const },
-            { name: "soy sauce", amount: "2 tbsp", pcsv: ["sauce"] as const },
-          ],
-          ingredients_have: ["chicken"],
-          ingredients_need: ["soy sauce"],
-          alternatives: [],
-        },
-      };
-      mock.getOnEvent()(event);
-    });
-
-    expect(result.current.screenState).toBe("streaming");
-    expect(result.current.screenData.recipes).toHaveLength(1);
-    expect(result.current.screenData.recipes[0].id).toBe("r001");
+    // ErrorBanner has role="alert"
+    const alert = await screen.findByRole("alert");
+    expect(alert).toBeInTheDocument();
+    expect(alert).toHaveTextContent(EVENT_ERROR_GENERIC.message);
   });
 });
 
 // ---------------------------------------------------------------------------
-// 10. chatService onDone triggers complete
+// 4. Empty/whitespace message rejected
 // ---------------------------------------------------------------------------
 
-describe("useSession — chatService onDone triggers complete", () => {
-  it("screenState transitions to complete when onDone is called", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
+describe("screen-level: whitespace message rejected", () => {
+  it("stays on home screen when only whitespace is submitted", async () => {
+    const user = userEvent.setup();
+    renderApp("/");
 
-    act(() => {
-      result.current.sendMessage("plan dinner");
-    });
+    const input = screen.getByPlaceholderText(
+      "BBQ for 8, or I have leftover chicken..."
+    );
+    await user.type(input, "   ");
+    await user.keyboard("{Enter}");
 
-    // Must be in streaming before complete is valid
-    act(() => {
-      mock.getOnEvent()({ event_type: "thinking", message: "..." });
-    });
-
-    act(() => {
-      mock.getOnDone()("complete", null);
-    });
-
-    expect(result.current.screenState).toBe("complete");
-    expect(result.current.isComplete).toBe(true);
+    // Home screen stays visible
+    expect(screen.getByTestId("screen-home")).toBeInTheDocument();
+    // Clarify screen NOT rendered
+    expect(screen.queryByTestId("screen-clarify")).not.toBeInTheDocument();
   });
 
-  it("adds assistant turn to conversationHistory on onDone", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
+  it("stays on home screen when input is empty (just Enter)", async () => {
+    const user = userEvent.setup();
+    renderApp("/");
 
-    act(() => {
-      result.current.sendMessage("plan dinner");
-    });
+    const input = screen.getByPlaceholderText(
+      "BBQ for 8, or I have leftover chicken..."
+    );
+    await user.click(input);
+    await user.keyboard("{Enter}");
 
-    act(() => {
-      mock.getOnEvent()({ event_type: "thinking", message: "..." });
-    });
-
-    act(() => {
-      mock.getOnDone()("complete", null);
-    });
-
-    const history = result.current.conversationHistory;
-    expect(history).toHaveLength(2);
-    expect(history[1].role).toBe("assistant");
-  });
-
-  it("assistant turn has a timestamp", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("plan dinner");
-    });
-
-    act(() => {
-      mock.getOnEvent()({ event_type: "thinking", message: "..." });
-    });
-
-    act(() => {
-      mock.getOnDone()("complete", null);
-    });
-
-    const assistantTurn = result.current.conversationHistory[1];
-    expect(typeof assistantTurn.timestamp).toBe("string");
-    expect(assistantTurn.timestamp.length).toBeGreaterThan(0);
-  });
-
-  it("completionStatus is 'partial' when onDone called with partial", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("plan dinner");
-    });
-
-    act(() => {
-      mock.getOnEvent()({ event_type: "thinking", message: "..." });
-    });
-
-    act(() => {
-      mock.getOnDone()("partial", "max_iterations");
-    });
-
-    expect(result.current.screenState).toBe("complete");
-    expect(result.current.screenData.completionStatus).toBe("partial");
-    expect(result.current.screenData.completionReason).toBe("max_iterations");
+    expect(screen.getByTestId("screen-home")).toBeInTheDocument();
+    expect(screen.queryByTestId("screen-clarify")).not.toBeInTheDocument();
   });
 });
 
 // ---------------------------------------------------------------------------
-// 11. chatService onError triggers error
+// 5. SSE streaming events visible
 // ---------------------------------------------------------------------------
 
-describe("useSession — chatService onError triggers error", () => {
-  it("screenState transitions to error when onError is called", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
+describe("screen-level: SSE streaming events visible", () => {
+  it("shows clarify questions after SEQUENCE_THINKING_CLARIFY completes", async () => {
+    server.use(
+      http.post(
+        "http://localhost:8000/session/:sessionId/chat",
+        () =>
+          new HttpResponse(
+            makeSseStream(
+              toSseSpecs([
+                EVENT_THINKING_ANALYZING,
+                EVENT_CLARIFY_TURN,
+                EVENT_DONE_COMPLETE,
+              ])
+            ),
+            { status: 200, headers: SSE_HEADERS }
+          )
+      )
+    );
 
-    act(() => {
-      result.current.sendMessage("plan dinner");
-    });
+    const user = userEvent.setup();
+    renderApp("/");
 
-    act(() => {
-      mock.getOnError()("LLM timeout");
-    });
+    const input = screen.getByPlaceholderText(
+      "BBQ for 8, or I have leftover chicken..."
+    );
+    await user.type(input, "Weekend BBQ for 8");
+    await user.keyboard("{Enter}");
 
-    expect(result.current.screenState).toBe("error");
-    expect(result.current.isError).toBe(true);
+    // Wait for clarify questions from EVENT_CLARIFY_TURN fixture
+    await screen.findByText(EVENT_CLARIFY_TURN.questions[0].text);
+    expect(
+      screen.getByText(EVENT_CLARIFY_TURN.questions[1].text)
+    ).toBeInTheDocument();
+
+    // "Looks good, show recipes" CTA appears
+    expect(screen.getByText(/Looks good, show recipes/)).toBeInTheDocument();
   });
 
-  it("screenData.error contains the error message", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
+  it("shows loading spinner while stream is processing (deferred stream)", async () => {
+    const deferred = makeDeferredSseStream();
 
-    act(() => {
-      result.current.sendMessage("plan dinner");
+    server.use(
+      http.post(
+        "http://localhost:8000/session/:sessionId/chat",
+        () =>
+          new HttpResponse(deferred.stream, { status: 200, headers: SSE_HEADERS })
+      )
+    );
+
+    const user = userEvent.setup();
+    renderApp("/");
+
+    const input = screen.getByPlaceholderText(
+      "BBQ for 8, or I have leftover chicken..."
+    );
+    await user.type(input, "I have leftover chicken");
+    await user.keyboard("{Enter}");
+
+    // Push a thinking event to ensure loading/streaming state
+    deferred.push({
+      event: "thinking",
+      data: { event_type: "thinking", message: "Analyzing your request..." },
     });
 
-    act(() => {
-      mock.getOnError()("Connection refused");
-    });
+    // Spinner appears during loading/streaming
+    await screen.findByTestId("clarify-loading-spinner");
+    expect(
+      screen.getByText("Checking your ingredients for balance…")
+    ).toBeInTheDocument();
+    expect(screen.getByRole("status")).toBeInTheDocument();
 
-    expect(result.current.screenData.error).toBe("Connection refused");
+    // Clean up
+    deferred.push({
+      event: "done",
+      data: {
+        event_type: "done",
+        status: "complete",
+        reason: null,
+        error_category: null,
+      },
+    });
+    deferred.close();
   });
 });
 
 // ---------------------------------------------------------------------------
-// 12. cancel is stored and called on resetSession
+// 6. Session creation — POST /session is called before chat
 // ---------------------------------------------------------------------------
 
-describe("useSession — cancel is stored and callable", () => {
-  it("resetSession calls the cancel function from the last chatService call", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("plan dinner");
-    });
-
-    act(() => {
-      result.current.resetSession();
-    });
-
-    expect(mock.cancelFn).toHaveBeenCalledTimes(1);
-  });
-
-  it("cancel is not called if no sendMessage was called before resetSession", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.resetSession();
-    });
-
-    expect(mock.cancelFn).not.toHaveBeenCalled();
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 13. Default no-op chatService
-// ---------------------------------------------------------------------------
-
-describe("useSession — default no-op chatService", () => {
-  it("sendMessage does not throw when no chatService is injected", () => {
-    const wrapper = makeWrapper(); // no chatService
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(() => {
-      act(() => {
-        result.current.sendMessage("hello");
-      });
-    }).not.toThrow();
-  });
-
-  it("screenState becomes loading even with default no-op chatService", () => {
-    const wrapper = makeWrapper(); // no chatService
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("hello");
-    });
-
-    expect(result.current.screenState).toBe("loading");
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 14. screenData pass-through from useScreenState
-// ---------------------------------------------------------------------------
-
-describe("useSession — screenData pass-through", () => {
-  it("screenData is the initial empty data shape when idle", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    const { screenData } = result.current;
-    expect(screenData.pcsv).toBeNull();
-    expect(screenData.recipes).toEqual([]);
-    expect(screenData.groceryList).toEqual([]);
-    expect(screenData.explanation).toBe("");
-    expect(screenData.thinkingMessage).toBe("");
-    expect(screenData.error).toBeNull();
-    expect(screenData.completionStatus).toBeNull();
-    expect(screenData.completionReason).toBeNull();
-  });
-
-  it("direct dispatch via context updates screenData", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.dispatch({ type: "start_loading" });
-    });
-    act(() => {
-      result.current.dispatch({ type: "start_streaming" });
-    });
-    act(() => {
-      result.current.dispatch({
-        type: "receive_event",
-        event: { event_type: "explanation", text: "Here are your recipes." },
-      });
-    });
-
-    expect(result.current.screenData.explanation).toBe("Here are your recipes.");
-    expect(result.current.screenState).toBe("streaming");
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 15. Edge cases from code review
-// ---------------------------------------------------------------------------
-
-describe("useSession — edge cases", () => {
-  it("completes cleanly when onDone fires with no preceding onEvent", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("quick query");
-    });
-    expect(result.current.screenState).toBe("loading");
-
-    act(() => {
-      mock.getOnDone()("complete", null);
-    });
-
-    expect(result.current.screenState).toBe("complete");
-  });
-
-  it("onError during streaming transitions to error", () => {
-    const mock = createMockChatService();
-    const wrapper = makeWrapper(mock.service);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("plan dinner");
-    });
-    act(() => {
-      mock.getOnEvent()({ event_type: "thinking", message: "..." });
-    });
-    expect(result.current.screenState).toBe("streaming");
-
-    act(() => {
-      mock.getOnError()("Connection lost mid-stream");
-    });
-
-    expect(result.current.screenState).toBe("error");
-    expect(result.current.screenData.error).toBe("Connection lost mid-stream");
-  });
-
-  it("whitespace-only message is rejected", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.sendMessage("   ");
-    });
-
-    expect(serviceSpy).not.toHaveBeenCalled();
-    expect(result.current.screenState).toBe("idle");
-    expect(result.current.conversationHistory).toHaveLength(0);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 17. sendMessage with explicit targetScreen bypasses stale screen ref
-//
-// Regression test for issue #65:
-// navigateToScreen("clarify") + sendMessage(text) in the same event handler
-// causes a React 18 state-batching race — currentScreenRef.current still
-// returns "home" when sendMessage reads it one line later.  The fix adds an
-// optional targetScreen param so call sites can bypass the stale ref.
-// ---------------------------------------------------------------------------
-
-describe("useSession — sendMessage with explicit targetScreen", () => {
-  it("calls chatService with explicit targetScreen even when currentScreen is still 'home'", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    // currentScreen is "home" (initial). Simulate the race: navigateToScreen
-    // was called synchronously before sendMessage, but React hasn't committed
-    // the update yet.  sendMessage must use the explicit targetScreen.
-    act(() => {
-      result.current.sendMessage("I have beef, tomatoes, and eggs", "clarify");
-    });
-
-    expect(serviceSpy).toHaveBeenCalledTimes(1);
-    expect(serviceSpy.mock.calls[0][1]).toBe("clarify");
-  });
-
-  it("falls back to currentScreenRef when targetScreen is omitted", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    // Navigate first (committed in its own act), then send without targetScreen.
-    act(() => {
-      result.current.navigateToScreen("recipes");
-    });
-    act(() => {
-      result.current.sendMessage("show more");
-    });
-
-    expect(serviceSpy.mock.calls[0][1]).toBe("recipes");
-  });
-
-  it("accepts 'recipes' as targetScreen when clarify→recipes transition fires", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    // currentScreen is committed as "clarify" (separate act → ref is synced).
-    // Explicit targetScreen "recipes" must still win over the ref value.
-    act(() => {
-      result.current.navigateToScreen("clarify");
-    });
-    act(() => {
-      result.current.sendMessage("Looks good, show recipes.", "recipes");
-    });
-
-    expect(serviceSpy.mock.calls[0][1]).toBe("recipes");
-  });
-
-  it("accepts 'grocery' as targetScreen for recipes→grocery transition", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.navigateToScreen("recipes"); // base screen
-    });
-    act(() => {
-      result.current.sendMessage("Build my grocery list.", "grocery");
-    });
-
-    expect(serviceSpy.mock.calls[0][1]).toBe("grocery");
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 18. excludedByCard — toggle_ingredient_exclusion action
-// ---------------------------------------------------------------------------
-
-describe("useSession — excludedByCard toggle_ingredient_exclusion", () => {
-  it("excludedByCard is empty initially", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    expect(result.current.excludedByCard).toEqual({});
-  });
-
-  it("toggle action adds an entry for (recipeId, ingredientName)", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.toggleIngredientExclusion("r001", "garlic");
-    });
-
-    expect(result.current.excludedByCard).toEqual({ r001: ["garlic"] });
-  });
-
-  it("toggling the same (recipeId, ingredientName) twice removes the entry", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.toggleIngredientExclusion("r001", "garlic");
-    });
-    act(() => {
-      result.current.toggleIngredientExclusion("r001", "garlic");
-    });
-
-    expect(result.current.excludedByCard["r001"]).toEqual([]);
-  });
-
-  it("multiple ingredients can be excluded for the same recipe", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.toggleIngredientExclusion("r001", "garlic");
-    });
-    act(() => {
-      result.current.toggleIngredientExclusion("r001", "scallion");
-    });
-
-    expect(result.current.excludedByCard["r001"]).toContain("garlic");
-    expect(result.current.excludedByCard["r001"]).toContain("scallion");
-  });
-
-  it("exclusions for different recipeIds are stored independently", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.toggleIngredientExclusion("r001", "garlic");
-    });
-    act(() => {
-      result.current.toggleIngredientExclusion("r002", "lime");
-    });
-
-    expect(result.current.excludedByCard["r001"]).toEqual(["garlic"]);
-    expect(result.current.excludedByCard["r002"]).toEqual(["lime"]);
-  });
-
-  it("state survives across unrelated dispatches", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.toggleIngredientExclusion("r001", "garlic");
-    });
-
-    // Unrelated dispatch that does not clear excludedByCard
-    act(() => {
-      result.current.navigateToScreen("grocery");
-    });
-
-    expect(result.current.excludedByCard["r001"]).toEqual(["garlic"]);
-  });
-
-  it("resetSession clears excludedByCard", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.toggleIngredientExclusion("r001", "garlic");
-    });
-
-    expect(result.current.excludedByCard["r001"]).toEqual(["garlic"]);
-
-    act(() => {
-      result.current.resetSession();
-    });
-
-    expect(result.current.excludedByCard).toEqual({});
-  });
-});
-
-// ---------------------------------------------------------------------------
-// 16. addLocalTurn
-// ---------------------------------------------------------------------------
-
-describe("useSession — addLocalTurn", () => {
-  it("appends a ConversationTurn to conversationHistory", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    const turn = {
-      role: "user" as const,
-      content: "locally injected message",
-      timestamp: "2026-04-11T00:00:00.000Z",
-    };
-
-    act(() => {
-      result.current.addLocalTurn(turn);
-    });
-
-    expect(result.current.conversationHistory).toHaveLength(1);
-    expect(result.current.conversationHistory[0]).toEqual(turn);
-  });
-
-  it("does NOT change screenState — stays idle", () => {
-    const wrapper = makeWrapper();
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.addLocalTurn({
-        role: "assistant",
-        content: "injected assistant turn",
-        timestamp: "2026-04-11T00:00:01.000Z",
-      });
-    });
-
-    expect(result.current.screenState).toBe("idle");
-  });
-
-  it("does NOT trigger loading or streaming", () => {
-    const mock = createMockChatService();
-    const serviceSpy = vi.fn(mock.service);
-    const wrapper = makeWrapper(serviceSpy);
-    const { result } = renderHook(() => useSession(), { wrapper });
-
-    act(() => {
-      result.current.addLocalTurn({
-        role: "user",
-        content: "no chat service call",
-        timestamp: "2026-04-11T00:00:02.000Z",
-      });
-    });
-
-    // chatService must NOT be called
-    expect(serviceSpy).not.toHaveBeenCalled();
-    // State machine must stay idle
-    expect(result.current.isLoading).toBe(false);
-    expect(result.current.isStreaming).toBe(false);
+describe("screen-level: session creation", () => {
+  it("calls POST /session before the chat endpoint", async () => {
+    let sessionCreated = false;
+    let chatCalledAfterSession = false;
+
+    server.use(
+      http.post("http://localhost:8000/session", () => {
+        sessionCreated = true;
+        return HttpResponse.json({
+          session_id: "test-session-id",
+          created_at: "2026-04-15T00:00:00Z",
+        });
+      }),
+      http.post(
+        "http://localhost:8000/session/:sessionId/chat",
+        () => {
+          chatCalledAfterSession = sessionCreated;
+          return new HttpResponse(
+            makeSseStream([
+              {
+                event: "thinking",
+                data: { event_type: "thinking", message: "..." },
+              },
+              {
+                event: "done",
+                data: {
+                  event_type: "done",
+                  status: "complete",
+                  reason: null,
+                  error_category: null,
+                },
+              },
+            ]),
+            { status: 200, headers: SSE_HEADERS }
+          );
+        }
+      )
+    );
+
+    const user = userEvent.setup();
+    renderApp("/");
+
+    const input = screen.getByPlaceholderText(
+      "BBQ for 8, or I have leftover chicken..."
+    );
+    await user.type(input, "Test message");
+    await user.keyboard("{Enter}");
+
+    // Wait for completion state
+    await screen.findByRole(
+      "heading",
+      { level: 1, name: /here's what i see/i },
+      { timeout: 5000 }
+    );
+
+    expect(sessionCreated).toBe(true);
+    expect(chatCalledAfterSession).toBe(true);
   });
 });
