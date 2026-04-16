@@ -1765,7 +1765,7 @@ describe("RecipesScreen — T21: Save meal plan button disabled while in-flight 
 });
 
 // ---------------------------------------------------------------------------
-// T17: pill exclusion state persists across navigation to GroceryScreen and back
+// T-PillNav: pill exclusion state persists across navigation to GroceryScreen and back
 // ---------------------------------------------------------------------------
 //
 // This is the UAT regression test for issue #69.
