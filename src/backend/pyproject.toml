@@ -16,6 +16,7 @@ dependencies = [
     "aiosqlite>=0.21",
     "rapidfuzz>=3.0",
     "openai>=1.0",
+    "pyyaml>=6.0",
 ]
 
 [dependency-groups]

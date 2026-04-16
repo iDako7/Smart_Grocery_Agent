@@ -14,7 +14,7 @@
     screen: "home"
     category: "dish_count"
     expected_dish_min: 2
-    expected_dish_max: 4
+    expected_dish_max: 3
     party_size: 2
   assert:
     - type: javascript
@@ -36,7 +36,7 @@
     screen: "home"
     category: "dish_count"
     expected_dish_min: 3
-    expected_dish_max: 5
+    expected_dish_max: 4
     party_size: 4
   assert:
     - type: javascript
@@ -80,7 +80,7 @@
     screen: "home"
     category: "dish_count"
     expected_dish_min: 4
-    expected_dish_max: 8
+    expected_dish_max: 5
     party_size: 8
   assert:
     - type: javascript
@@ -106,7 +106,7 @@
     screen: "home"
     category: "ingredient_noise"
     expected_dish_min: 2
-    expected_dish_max: 4
+    expected_dish_max: 3
     party_size: 2
   assert:
     - type: javascript
@@ -128,7 +128,7 @@
     screen: "home"
     category: "ingredient_noise"
     expected_dish_min: 3
-    expected_dish_max: 5
+    expected_dish_max: 4
     party_size: 4
   assert:
     - type: javascript
@@ -154,7 +154,7 @@
     screen: "home"
     category: "diverse_inputs"
     expected_dish_min: 2
-    expected_dish_max: 4
+    expected_dish_max: 3
     party_size: 2
   assert:
     - type: javascript
@@ -179,7 +179,7 @@
     screen: "home"
     category: "diverse_inputs"
     expected_dish_min: 2
-    expected_dish_max: 4
+    expected_dish_max: 3
     party_size: 2
   assert:
     - type: javascript

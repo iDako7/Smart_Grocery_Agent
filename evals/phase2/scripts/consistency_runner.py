@@ -15,29 +15,54 @@ import argparse
 import json
 import math
 import os
+import re
 import sys
 from datetime import datetime, timezone
 from itertools import combinations
+from pathlib import Path
 
 import requests
+import yaml
 
 DEFAULT_BASE_URL = "http://localhost:8000"
 CHAT_TIMEOUT = 120  # seconds
 
-DEFAULT_CASES = [
-    {
-        "id": "A1",
-        "message": "I have chicken and broccoli. Please help me prepare dinner for two people.",
-        "screen": "home",
-        "party_size": 2,
-    },
-    {
-        "id": "A2",
-        "message": "I have beef, egg, and rice. Please help me to prepare dinner for four people.",
-        "screen": "home",
-        "party_size": 4,
-    },
-]
+TEST_CASES_YAML = Path(__file__).parent.parent / "test_cases.yaml"
+
+
+def load_cases(yaml_path: Path = TEST_CASES_YAML) -> list[dict]:
+    """Load dish_count cases from YAML and map to the runner's dict shape.
+
+    Only cases with category == "dish_count" are returned — the variance +
+    range gate is dish-count specific (PR #105). Ingredient_noise and
+    diverse_inputs cases are out of scope.
+    """
+    with open(yaml_path, "r", encoding="utf-8") as f:
+        raw_cases = yaml.safe_load(f)
+
+    mapped = []
+    for entry in raw_cases:
+        vars_ = entry.get("vars", {}) or {}
+        if vars_.get("category") != "dish_count":
+            continue
+
+        description = entry.get("description", "")
+        # Parse id from description prefix (e.g. "A1: chicken+broccoli..." -> "A1")
+        match = re.match(r"^\s*([A-Za-z]\d+)\s*[:\-]", description)
+        case_id = match.group(1) if match else description.split(":", 1)[0].strip()
+
+        mapped.append(
+            {
+                "id": case_id,
+                "message": vars_["input"],
+                "screen": vars_.get("screen", "home"),
+                "party_size": vars_["party_size"],
+                "expected_dish_min": vars_["expected_dish_min"],
+                "expected_dish_max": vars_["expected_dish_max"],
+            }
+        )
+
+    return mapped
 
 
 # ---------------------------------------------------------------------------
@@ -251,6 +276,8 @@ def run_case(base_url: str, case: dict, num_runs: int) -> dict:
 
     return {
         "party_size": case["party_size"],
+        "expected_dish_min": case.get("expected_dish_min"),
+        "expected_dish_max": case.get("expected_dish_max"),
         "runs": all_runs,
         "stats": stats,
     }
@@ -303,6 +330,99 @@ def print_summary(report: dict) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Gate logic
+# ---------------------------------------------------------------------------
+
+def check_gates(report: dict) -> int:
+    """Gate merges on dish-count variance AND range-fit.
+
+    For each case in the report:
+      - Variance gate: stats.dish_count.stddev == 0.0 across successful runs
+      - Range gate: every individual run's dish_count is within
+        [expected_dish_min, expected_dish_max]
+      - Cases with errors or fewer than 2 successful runs fail the gate
+        (can't verify variance).
+
+    Prints any failures to stderr in a clearly-flagged block and returns
+    0 if all gates pass, 1 otherwise.
+    """
+    failures: list[tuple[str, str]] = []
+    runs_per_case = report.get("runs_per_case", 0)
+
+    for case_id, case_data in report.get("cases", {}).items():
+        all_runs = case_data.get("runs", [])
+        successful_runs = [r for r in all_runs if "error" not in r]
+        error_count = len(all_runs) - len(successful_runs)
+        stats = case_data.get("stats")
+        expected_min = case_data.get("expected_dish_min")
+        expected_max = case_data.get("expected_dish_max")
+
+        # Cases with errors or <2 successful runs can't verify variance.
+        if error_count > 0:
+            failures.append(
+                (
+                    case_id,
+                    f"{error_count}/{runs_per_case or len(all_runs)} runs errored "
+                    f"— cannot verify variance",
+                )
+            )
+            continue
+
+        if len(successful_runs) < 2:
+            failures.append(
+                (
+                    case_id,
+                    f"only {len(successful_runs)} successful run(s) — need >=2 to "
+                    f"verify variance",
+                )
+            )
+            continue
+
+        # Variance gate
+        if stats is None:
+            failures.append((case_id, "no stats computed — cannot verify variance"))
+            continue
+
+        stddev = stats.get("dish_count", {}).get("stddev", 0.0)
+        if stddev != 0.0:
+            dish_counts = [r.get("dish_count") for r in successful_runs]
+            failures.append(
+                (
+                    case_id,
+                    f"variance gate: dish_count.stddev={stddev} != 0.0 "
+                    f"(counts={dish_counts})",
+                )
+            )
+
+        # Range gate (checked independently of variance — both can fail)
+        if expected_min is not None and expected_max is not None:
+            out_of_range = [
+                r.get("dish_count")
+                for r in successful_runs
+                if not (expected_min <= r.get("dish_count", -1) <= expected_max)
+            ]
+            if out_of_range:
+                failures.append(
+                    (
+                        case_id,
+                        f"range gate: {len(out_of_range)}/{len(successful_runs)} runs "
+                        f"outside [{expected_min}, {expected_max}] "
+                        f"(counts={out_of_range})",
+                    )
+                )
+
+    if failures:
+        print("\n=== GATE FAILURES ===", file=sys.stderr)
+        for case_id, reason in failures:
+            print(f"  [{case_id}] {reason}", file=sys.stderr)
+        print(f"Total failures: {len(failures)}", file=sys.stderr)
+        return 1
+
+    print("\n=== GATES PASSED ===", file=sys.stderr)
+    return 0
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -322,6 +442,15 @@ def main() -> None:
         default=None,
         help=f"Backend URL (default: {DEFAULT_BASE_URL})",
     )
+    parser.add_argument(
+        "--no-gate",
+        action="store_true",
+        help=(
+            "Skip the dish-count variance + range gate. Useful for baseline "
+            "runs or exploration. Default: gate is enforced and non-zero exit "
+            "signals failure."
+        ),
+    )
     args = parser.parse_args()
 
     base_url = (
@@ -335,9 +464,12 @@ def main() -> None:
     health_check(base_url)
     print("Backend is healthy.\n", file=sys.stderr, flush=True)
 
+    # Load cases from YAML (dish_count category only)
+    cases = load_cases()
+
     # Run each case
     cases_results = {}
-    for case in DEFAULT_CASES:
+    for case in cases:
         print(f"Running case {case['id']}...", file=sys.stderr, flush=True)
         cases_results[case["id"]] = run_case(base_url, case, args.runs)
 
@@ -354,6 +486,12 @@ def main() -> None:
 
     # Human-readable summary to stderr
     print_summary(report)
+
+    # Gate on dish-count variance + range-fit unless explicitly skipped
+    if args.no_gate:
+        print("(gate skipped via --no-gate)", file=sys.stderr)
+        sys.exit(0)
+    sys.exit(check_gates(report))
 
 
 if __name__ == "__main__":
