@@ -16,8 +16,6 @@ from src.backend.db.tables import (
     sessions,
 )
 
-from contracts.tool_schemas import GetRecipeDetailInput
-
 from contracts.api_types import (
     SavedGroceryList,
     SavedGroceryListSummary,
@@ -32,6 +30,7 @@ from contracts.api_types import (
     UpdateMealPlanRequest,
     UpdateSavedRecipeRequest,
 )
+from contracts.tool_schemas import GetRecipeDetailInput
 
 router = APIRouter(prefix="/saved")
 

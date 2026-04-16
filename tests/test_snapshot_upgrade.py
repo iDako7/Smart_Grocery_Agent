@@ -14,10 +14,10 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
-
-from contracts.tool_schemas import Ingredient, RecipeDetail, RecipeSummary
 from src.ai.types import AgentResult
 from src.backend.main import app
+
+from contracts.tool_schemas import Ingredient, RecipeDetail, RecipeSummary
 from tests.conftest import _engine, _ensure_tables
 
 _DEV_USER = uuid.UUID("00000000-0000-0000-0000-000000000001")
