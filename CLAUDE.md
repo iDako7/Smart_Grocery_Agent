@@ -6,13 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Smart Grocery Assistant V2 (SGA V2) — a conversational AI agent that helps users plan meals and shop smarter. Targets Vancouver users: immigrants exploring Western grocery items (bilingual EN/ZH) and locals exploring cultural foods.
 
-**Current status:** Phase 2 — scaffolding complete (Phase 0.3), parallel worktree development next.
+**Current status:** Phase 3 — deployable app shipped, optimizing based on usage data.
 
 ## Three-Phase Plan
 
 - **Phase 1:** *(done)* Validated agent reasoning via Claude artifact + promptfoo evals.
-- **Phase 2 (current):** Ship deployable app — FastAPI backend, React SPA frontend, real KB. See `docs/01-plans/phase-2-implementation-plan.md`.
-- **Phase 3:** Optimize based on usage data (progressive streaming, vector search, model routing).
+- **Phase 2:** *(done)* Shipped deployable app — FastAPI backend, React SPA frontend, real KB.
+- **Phase 3 (current):** Optimize based on usage data (progressive streaming, vector search, model routing).
 
 ## Architecture
 
@@ -101,7 +101,7 @@ Three worktrees develop in parallel, each with its own `CLAUDE.md` defining scop
 - `docs/00-specs/product-spec-v2.md` — product spec v3: feature catalog (26 features), user journeys, acceptance criteria, system behavior
 - `docs/00-specs/architecture-spec-v2.md` — system architecture, API contract, deployment
 - `docs/00-specs/ai-layer-architecture-v2.md` — agent internals, ADRs (7 decisions documented)
-- `docs/01-plans/phase-2-implementation-plan.md` — phase plan, worktree protocol, sync points
+- `docs/01-plans/workflow-guide-v2.md` — worktree workflow guide
 
 ## Running Locally
 
