@@ -48,6 +48,7 @@ class SearchRecipesInput(BaseModel):
     flavor_tags: list[str] | None = None
     serves: int | None = None
     include_alternatives: bool = False
+    max_results: int | None = Field(default=None, ge=1, le=20)
 
 
 class LookupStoreProductInput(BaseModel):
@@ -325,6 +326,12 @@ TOOLS: list[dict] = [
                     "include_alternatives": {
                         "type": "boolean",
                         "description": "When true, each returned recipe summary may include an `alternatives` array of similar recipes for swap UX. Defaults to false. Set to true for meal-plan requests (user asking for multiple dinners, a week's worth, alternatives, etc.); omit for specific single-recipe lookups.",
+                    },
+                    "max_results": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 20,
+                        "description": "Optional cap on the number of primary recipes returned. Use this to scale output to party size (e.g., 1-2 for 1 person, 2-3 for 2-3 people, 3-4 for 4-6 people, 4-5 for 7+ people). Omit to get the default cap of 10.",
                     },
                 },
                 "required": ["ingredients"],
