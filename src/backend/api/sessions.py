@@ -204,13 +204,21 @@ async def chat(
             # Hydrate each RecipeSummary with canonical `ingredients` + `instructions`
             # from the KB so both the SSE emit path and the saved meal plan path
             # carry full detail (issue #71). AI-generated recipes have no KB row —
-            # leave ingredients/instructions at their defaults.
+            # leave ingredients/instructions at their defaults. Alternatives
+            # nested under each primary also need hydration — otherwise the
+            # frontend swap-in-place flow renders zero ingredient pills when
+            # the user picks an alternative (PR #112 UAT bug).
             async with get_kb() as kb:
                 for r in result.recipes:
                     detail = await get_recipe_detail(kb, GetRecipeDetailInput(recipe_id=r.id))
                     if detail is not None:
                         r.ingredients = detail.ingredients
                         r.instructions = detail.instructions
+                    for alt in r.alternatives:
+                        alt_detail = await get_recipe_detail(kb, GetRecipeDetailInput(recipe_id=alt.id))
+                        if alt_detail is not None:
+                            alt.ingredients = alt_detail.ingredients
+                            alt.instructions = alt_detail.instructions
             snapshot["recipes"] = [s.model_dump() for s in result.recipes]
         if result.grocery_list:
             snapshot["grocery_list"] = [s.model_dump() for s in result.grocery_list]
