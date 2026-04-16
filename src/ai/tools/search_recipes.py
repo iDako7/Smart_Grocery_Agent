@@ -71,7 +71,8 @@ async def search_recipes(db: aiosqlite.Connection, input: SearchRecipesInput) ->
         results.append((score, summary))
 
     results.sort(key=lambda r: r[0], reverse=True)
-    primaries = [r[1] for r in results[:10]]
+    limit = input.max_results or 10
+    primaries = [r[1] for r in results[:limit]]
 
     if input.include_alternatives and primaries:
         primary_ids = {p.id for p in primaries}

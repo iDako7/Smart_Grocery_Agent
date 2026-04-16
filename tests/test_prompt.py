@@ -76,3 +76,12 @@ def test_prompt_screen_section_includes_flow():
     profile = UserProfile()
     result = build_system_prompt(profile, screen="clarify")
     assert "Flow:" in result
+
+
+def test_prompt_contains_dish_count_rule():
+    """The rules section must include the party-size → dish-count ladder."""
+    prompt = build_system_prompt(UserProfile())
+    assert "Dish count" in prompt
+    assert "max_results" in prompt
+    assert "1-2 dishes" in prompt
+    assert "4-5 dishes" in prompt

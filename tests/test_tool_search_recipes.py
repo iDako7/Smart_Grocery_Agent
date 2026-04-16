@@ -1,5 +1,6 @@
 """Tests for search_recipes tool against real SQLite KB."""
 
+import pytest
 import pytest_asyncio
 from src.ai.kb import get_kb
 from src.ai.tools.search_recipes import _score_similarity, search_recipes
@@ -141,3 +142,10 @@ def test_score_similarity_protein_match_dominates():
     cand_chicken = _make_summary("a", cuisine="Italian", method="bake", proteins=["chicken"])
     cand_beef = _make_summary("b", cuisine="Italian", method="bake", proteins=["beef"])
     assert _score_similarity(primary, cand_chicken) > _score_similarity(primary, cand_beef)
+
+
+@pytest.mark.parametrize("max_results", [3, 5, 10])
+async def test_search_recipes_honors_max_results(kb, max_results):
+    """search_recipes must cap results to at most max_results."""
+    result = await search_recipes(kb, SearchRecipesInput(ingredients=["salt", "oil", "garlic"], max_results=max_results))
+    assert len(result) <= max_results

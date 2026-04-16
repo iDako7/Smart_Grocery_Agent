@@ -82,7 +82,9 @@ _TOOL_REGISTRY: dict[str, tuple[type, str]] = {
 }
 
 
-async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens, tool_choice=None):
+async def _llm_call_with_retry(
+    client, *, model, messages, tools, max_tokens, tool_choice=None, temperature=0.3
+):
     """Call LLM with one retry + exponential backoff on transient errors."""
     last_error = None
     for attempt in range(LLM_MAX_RETRIES + 1):
@@ -92,6 +94,7 @@ async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens, to
                 messages=messages,
                 tools=tools,
                 max_tokens=max_tokens,
+                temperature=temperature,
             )
             if tool_choice is not None:
                 kwargs["tool_choice"] = tool_choice
