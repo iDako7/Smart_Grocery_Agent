@@ -3,11 +3,10 @@ import { vi, beforeAll, afterEach, afterAll } from "vitest";
 import { server } from "./msw/server";
 
 // ---------------------------------------------------------------------------
-// MSW lifecycle — intercepts unhandled requests with 'bypass' so existing
-// vi.stubGlobal("fetch", ...) tests continue to work unchanged.
-// TODO(#90): tighten to 'error' once B2 (#90) migrates remaining vi.stubGlobal("fetch") files
+// MSW lifecycle — 'error' mode catches unhandled requests at test time,
+// preventing misconfigured handlers and URL typos from silently passing.
 // ---------------------------------------------------------------------------
-beforeAll(() => server.listen({ onUnhandledRequest: "bypass" }));
+beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
