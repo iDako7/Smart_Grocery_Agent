@@ -13,23 +13,39 @@ on:
       - "ruff.toml"
   pull_request:
     branches: [main]
-    paths:
-      - ".github/workflows/ci-backend.yml"
-      - "src/backend/**"
-      - "src/ai/**"
-      - "contracts/**"
-      - "tests/**"
-      - "pytest.ini"
-      - "ruff.toml"
 
 concurrency:
   group: backend-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - '.github/workflows/ci-backend.yml'
+              - 'src/backend/**'
+              - 'src/ai/**'
+              - 'contracts/**'
+              - 'tests/**'
+              - 'pytest.ini'
+              - 'ruff.toml'
+
   lint:
     name: Ruff lint & format
     runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
     steps:
       - uses: actions/checkout@v4
 
@@ -44,7 +60,8 @@ jobs:
   test:
     name: Pytest
     runs-on: ubuntu-latest
-    needs: lint
+    needs: [changes, lint]
+    if: needs.changes.outputs.backend == 'true'
     services:
       postgres:
         image: postgres:16-alpine
@@ -85,7 +102,8 @@ jobs:
   docker:
     name: Docker build check
     runs-on: ubuntu-latest
-    needs: test
+    needs: [changes, test]
+    if: needs.changes.outputs.backend == 'true'
     steps:
       - uses: actions/checkout@v4
 
