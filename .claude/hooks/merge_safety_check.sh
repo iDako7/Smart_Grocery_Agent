@@ -16,12 +16,12 @@ if [[ -z "$cmd" ]]; then
 fi
 
 # Match risky git operations.
+# Use grep -E with word boundaries to avoid false positives on command substrings
+# that appear inside quoted args (e.g. "restore" mentioned in a PR body).
 is_risky=0
-case "$cmd" in
-  *"git merge"*|*"git worktree remove"*|*"git branch -D"*|*"git branch -d"*|*"git clean"*|*"git reset --hard"*|*"git checkout -- "*|*"git restore ."*)
-    is_risky=1
-    ;;
-esac
+if printf '%s' "$cmd" | grep -qE '(^|[;&|`$(]| )git[[:space:]]+(merge([[:space:]]|$)|worktree[[:space:]]+remove|branch[[:space:]]+-[dD]([[:space:]]|$)|clean([[:space:]]|$)|reset[[:space:]]+--hard|checkout[[:space:]]+--([[:space:]]|$)|restore[[:space:]]+\.([[:space:]]|$))'; then
+  is_risky=1
+fi
 
 if [[ $is_risky -eq 0 ]]; then
   exit 0
