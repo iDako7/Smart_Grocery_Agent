@@ -273,7 +273,8 @@ async def test_run_agent_system_message_is_content_block_list(kb, seeded_user, d
 
     Without a screen argument we expect 4 blocks: persona, rules,
     tool_instructions, and profile.  Every block must have type="text" and
-    non-empty text.
+    non-empty text. The internal ``_cache_boundary`` sentinel must be
+    stripped before the blocks reach the LLM.
     """
     mock_response = _make_response(content="Got it!")
     mock_client = AsyncMock()
@@ -293,6 +294,9 @@ async def test_run_agent_system_message_is_content_block_list(kb, seeded_user, d
     for block in system_msg["content"]:
         assert block.get("type") == "text", f"block missing type='text': {block}"
         assert block.get("text"), f"block has empty text: {block}"
+        assert "_cache_boundary" not in block, (
+            f"_cache_boundary sentinel must be stripped before sending to LLM: {block}"
+        )
 
 
 async def test_run_agent_cache_control_on_tool_instructions_only(kb, seeded_user, db):
@@ -324,6 +328,43 @@ async def test_run_agent_cache_control_on_tool_instructions_only(kb, seeded_user
     cached_texts = {cached["text"]}
     for block in non_cached:
         assert block["text"] not in cached_texts  # sanity: they are different blocks
+
+
+async def test_run_agent_cache_control_with_screen_5_blocks(kb, seeded_user, db):
+    """With screen='recipes', 5 blocks are sent; cache_control is on tool_instructions only.
+
+    Regression guard: the screen block (block 4) must NOT carry cache_control —
+    only the tool_instructions block (which contains '## Tool Usage') should.
+    The internal ``_cache_boundary`` sentinel must be stripped from all blocks.
+    """
+    mock_response = _make_response(content="Got it!")
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        result = await run_agent("What should I cook?", kb, db, seeded_user, screen="recipes")
+
+    assert result.status == "complete"
+    call_kwargs = mock_client.chat.completions.create.call_args.kwargs
+    blocks = call_kwargs["messages"][0]["content"]
+
+    assert len(blocks) == 5, f"expected 5 blocks with screen, got {len(blocks)}"
+
+    cached_blocks = [b for b in blocks if "cache_control" in b]
+    assert len(cached_blocks) == 1, f"expected 1 cached block, got {len(cached_blocks)}"
+
+    cached = cached_blocks[0]
+    assert "## Tool Usage" in cached["text"], "cache_control must be on tool_instructions, not screen block"
+    assert "## Current Screen" not in cached["text"], "screen block must NOT carry cache_control"
+
+    screen_block = blocks[-1]
+    assert "cache_control" not in screen_block, "screen block (last) must not have cache_control"
+    assert "## Current Screen" in screen_block["text"]
+
+    for block in blocks:
+        assert "_cache_boundary" not in block, (
+            f"_cache_boundary sentinel must be stripped before sending to LLM: {block}"
+        )
 
 
 async def test_run_agent_uses_anthropic_provider_pin(kb, seeded_user, db):

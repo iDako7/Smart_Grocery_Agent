@@ -247,15 +247,37 @@ async def _dispatch_tool(
     )
 
 
-def _system_blocks_with_cache(profile, screen):
+def _system_blocks_with_cache(
+    profile: "UserProfile", screen: "Screen | None"
+) -> "list[dict[str, Any]]":
     """Build the system content blocks with cache_control on the last static block.
 
-    Option-A order: persona → rules → tool_instructions → profile → [screen].
-    Caching marker sits on tool_instructions (index 2): everything up to and
-    including it is cached; profile + screen are the dynamic tail.
+    Locates the cache boundary via the ``_cache_boundary`` sentinel set by
+    ``build_system_blocks`` — never by index. This keeps cache placement
+    correct even if blocks are inserted before tool_instructions in the future.
+
+    Raises RuntimeError if the sentinel is missing or appears more than once
+    (would indicate a bug in build_system_blocks).
     """
-    blocks = build_system_blocks(profile, screen=screen)
-    blocks[2] = {**blocks[2], "cache_control": {"type": "ephemeral"}}
+    from typing import Any  # local import to avoid circular at module level
+
+    raw = build_system_blocks(profile, screen=screen)
+
+    boundary_indices = [i for i, b in enumerate(raw) if b.get("_cache_boundary") is True]
+    if len(boundary_indices) != 1:
+        raise RuntimeError(
+            f"build_system_blocks must have exactly 1 _cache_boundary sentinel, "
+            f"found {len(boundary_indices)}"
+        )
+    boundary_idx = boundary_indices[0]
+
+    blocks: list[dict[str, Any]] = []
+    for i, block in enumerate(raw):
+        # Intentional shallow copy: do not mutate the list returned by build_system_blocks
+        clean = {k: v for k, v in block.items() if k != "_cache_boundary"}
+        if i == boundary_idx:
+            clean["cache_control"] = {"type": "ephemeral"}
+        blocks.append(clean)
     return blocks
 
 
