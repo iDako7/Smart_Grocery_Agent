@@ -81,6 +81,20 @@ def accumulate_recipe_results(
     return [RecipeSummary.model_validate(r) if isinstance(r, dict) else r for r in new_raw]
 
 
+def _as_int(val) -> int:
+    try:
+        return int(val) if val is not None else 0
+    except (TypeError, ValueError):
+        return 0
+
+
+def _as_float(val) -> float:
+    try:
+        return float(val) if val is not None else 0.0
+    except (TypeError, ValueError):
+        return 0.0
+
+
 def _accumulate_usage(acc: dict, response) -> dict:
     """Sum per-call usage into `acc`. Safe against partial/missing fields.
 
@@ -99,18 +113,6 @@ def _accumulate_usage(acc: dict, response) -> dict:
         return acc
     if not isinstance(data, dict):
         return acc
-
-    def _as_int(val) -> int:
-        try:
-            return int(val) if val is not None else 0
-        except (TypeError, ValueError):
-            return 0
-
-    def _as_float(val) -> float:
-        try:
-            return float(val) if val is not None else 0.0
-        except (TypeError, ValueError):
-            return 0.0
 
     acc["prompt_tokens"] = acc.get("prompt_tokens", 0) + _as_int(data.get("prompt_tokens"))
     acc["completion_tokens"] = acc.get("completion_tokens", 0) + _as_int(data.get("completion_tokens"))

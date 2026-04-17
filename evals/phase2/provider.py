@@ -282,6 +282,15 @@ def call_api(prompt: str, options: dict, context: dict) -> dict:
             turns = [turns]
         else:
             turns = decoded
+    elif isinstance(turns, list):
+        logger.warning(
+            "vars.turns is a raw YAML list — promptfoo may expand it into "
+            "separate parametric rows, breaking multi-turn semantics. "
+            "Encode it as a JSON string in test_cases.yaml instead."
+        )
+        if not all(isinstance(t, str) for t in turns):
+            logger.warning("vars.turns list contains non-str elements; treating as single-turn.")
+            turns = [str(turns)]
     if turns and vars_.get("input"):
         logger.warning("Both vars.input and vars.turns provided; using vars.turns.")
     if not turns:
