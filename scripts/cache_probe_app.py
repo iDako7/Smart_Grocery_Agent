@@ -68,6 +68,8 @@ async def run_once(label: str, captured: list[dict]):
     start_idx = len(captured)
     t0 = time.monotonic()
     async with get_kb() as kb:
+        # pg=None is safe here: the probe never exercises PostgreSQL-touching tools.
+        # The stubbed get_user_profile bypasses the only direct DB read in run_agent.
         result = await orchestrator.run_agent(
             USER_MESSAGE,
             kb,
@@ -99,6 +101,15 @@ async def main():
     crud.get_user_profile = _stub_get_user_profile
     import src.ai.orchestrator as orch_mod
     orch_mod.get_user_profile = _stub_get_user_profile
+
+    # Verify stubs applied to the correct module references.
+    # If these fail, import order changed — re-check the monkey-patch targets.
+    assert crud.get_user_profile is _stub_get_user_profile, (
+        "probe stub not applied to crud module — import order may have changed"
+    )
+    assert orch_mod.get_user_profile is _stub_get_user_profile, (
+        "probe stub not applied to orchestrator module — import order may have changed"
+    )
 
     if not os.environ.get("OPENROUTER_API_KEY"):
         print("ERROR: OPENROUTER_API_KEY not set", file=sys.stderr)
