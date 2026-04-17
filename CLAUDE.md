@@ -97,6 +97,7 @@ Shared schemas imported across the codebase. Contract changes go as small PRs to
 - **User profile** is a structured Pydantic model (~500 tokens) injected into every system prompt, not RAG-based memory.
 - **Prompt assembly rebuilds every `/chat` call** — reads latest user profile from PostgreSQL each time.
 - **System prompt** = persona snippet + rules snippet + tool instructions snippet (skill files concatenated at build time).
+- **Prompt caching** (issue #116) — the system prompt is sent as a content-block array; `cache_control: {type: "ephemeral"}` sits on the `tool_instructions` block (last static block). Order is load-bearing: `persona → rules → tool_instructions → [cache breakpoint] → profile → screen`. Reordering kills caching. Tool-schema caching deferred.
 - **Dietary restrictions are hard constraints** — never violated.
 - **Auth:** Magic link (passwordless email) + JWT. Token in memory, not localStorage.
 - **PostgreSQL access:** SQLAlchemy 2.0 Core (async) + asyncpg + Alembic. No full ORM.

@@ -21,7 +21,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 
 logger = logging.getLogger(__name__)
 
-from src.ai.prompt import build_system_prompt
+from src.ai.prompt import build_system_blocks, build_system_prompt
 from src.ai.schema_coercion import coerce_tool_args
 from src.ai.tools.analyze_pcsv import analyze_pcsv
 from src.ai.tools.emit_clarify_turn import emit_clarify_turn
@@ -169,7 +169,7 @@ async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens, to
                 tools=tools,
                 max_tokens=max_tokens,
                 temperature=temperature,
-                extra_body={"usage": {"include": True}},
+                extra_body={"usage": {"include": True}, "provider": {"order": ["Anthropic"]}},
             )
             if tool_choice is not None:
                 kwargs["tool_choice"] = tool_choice
@@ -247,6 +247,18 @@ async def _dispatch_tool(
     )
 
 
+def _system_blocks_with_cache(profile, screen):
+    """Build the system content blocks with cache_control on the last static block.
+
+    Option-A order: persona → rules → tool_instructions → profile → [screen].
+    Caching marker sits on tool_instructions (index 2): everything up to and
+    including it is cached; profile + screen are the dynamic tail.
+    """
+    blocks = build_system_blocks(profile, screen=screen)
+    blocks[2] = {**blocks[2], "cache_control": {"type": "ephemeral"}}
+    return blocks
+
+
 async def run_agent(
     user_message: str,
     kb: aiosqlite.Connection,
@@ -257,9 +269,8 @@ async def run_agent(
 ) -> AgentResult:
     """Run the agent orchestration loop for a single user message."""
     profile = await get_user_profile(pg, user_id)
-    system = build_system_prompt(profile, screen=screen)
 
-    messages: list[dict] = [{"role": "system", "content": system}]
+    messages: list[dict] = [{"role": "system", "content": _system_blocks_with_cache(profile, screen)}]
     if history:
         messages.extend(history)
     messages.append({"role": "user", "content": user_message})

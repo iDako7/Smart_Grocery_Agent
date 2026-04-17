@@ -1,6 +1,6 @@
 """Tests for prompt assembly."""
 
-from src.ai.prompt import build_system_prompt
+from src.ai.prompt import build_system_prompt, build_system_blocks
 
 from contracts.tool_schemas import UserProfile
 
@@ -88,3 +88,47 @@ def test_prompt_contains_dish_count_rule():
     assert "max_results" in prompt
     assert "1 person → 1-2" in prompt
     assert "7+ people → 4-5" in prompt
+
+
+# ---------------------------------------------------------------------------
+# Phase 3 prompt caching — Option A ordering + build_system_blocks (#116)
+# ---------------------------------------------------------------------------
+
+
+def test_build_system_blocks_option_a_order():
+    """build_system_blocks returns 4 blocks in Option-A order:
+    persona → rules → tool_instructions → profile.
+    """
+    blocks = build_system_blocks(UserProfile())
+    assert len(blocks) == 4
+    assert "# Smart Grocery Assistant" in blocks[0]["text"]  # persona
+    assert "## Rules" in blocks[1]["text"]                   # rules
+    assert "## Tool Usage" in blocks[2]["text"]              # tool_instructions
+    assert "## User Profile" in blocks[3]["text"]            # profile
+
+
+def test_build_system_blocks_with_screen_appends_screen_block():
+    """build_system_blocks(profile, screen=...) returns 5 blocks;
+    block 4 is the Current Screen section.
+    """
+    blocks = build_system_blocks(UserProfile(), screen="clarify")
+    assert len(blocks) == 5
+    assert "## Current Screen" in blocks[4]["text"]
+
+
+def test_build_system_blocks_block_shape():
+    """Every block must be a dict with exactly keys {'type', 'text'},
+    type == 'text', text is a non-empty string, and no cache_control key.
+    """
+    blocks = build_system_blocks(UserProfile(), screen="recipes")
+    for i, block in enumerate(blocks):
+        assert set(block.keys()) == {"type", "text"}, (
+            f"Block {i} has unexpected keys: {set(block.keys())}"
+        )
+        assert block["type"] == "text", f"Block {i} type is not 'text'"
+        assert isinstance(block["text"], str) and block["text"], (
+            f"Block {i} text is empty or not a string"
+        )
+        assert "cache_control" not in block, (
+            f"Block {i} must not have cache_control at this layer (Phase 2 concern)"
+        )

@@ -261,3 +261,88 @@ async def test_llm_call_uses_temperature_0_3(kb, seeded_user, db):
     assert call_kwargs["temperature"] == 0.3
     assert "seed" not in call_kwargs
     assert "top_p" not in call_kwargs
+
+
+# ---------------------------------------------------------------------------
+# Prompt-caching / content-block tests (#116 Phase 2)
+# ---------------------------------------------------------------------------
+
+
+async def test_run_agent_system_message_is_content_block_list(kb, seeded_user, db):
+    """System message must be a list of content blocks, not a plain string.
+
+    Without a screen argument we expect 4 blocks: persona, rules,
+    tool_instructions, and profile.  Every block must have type="text" and
+    non-empty text.
+    """
+    mock_response = _make_response(content="Got it!")
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        result = await run_agent("What should I cook?", kb, db, seeded_user)
+
+    assert result.status == "complete"
+    call_kwargs = mock_client.chat.completions.create.call_args.kwargs
+    messages = call_kwargs["messages"]
+
+    system_msg = messages[0]
+    assert system_msg["role"] == "system"
+    assert isinstance(system_msg["content"], list), "system content must be a list of blocks"
+    assert len(system_msg["content"]) == 4, "expected 4 blocks when screen=None"
+    for block in system_msg["content"]:
+        assert block.get("type") == "text", f"block missing type='text': {block}"
+        assert block.get("text"), f"block has empty text: {block}"
+
+
+async def test_run_agent_cache_control_on_tool_instructions_only(kb, seeded_user, db):
+    """Exactly one block must carry cache_control, and it must be the tool_instructions block.
+
+    The persona, rules, and profile blocks must NOT have a cache_control key.
+    """
+    mock_response = _make_response(content="Got it!")
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        result = await run_agent("What should I cook?", kb, db, seeded_user)
+
+    assert result.status == "complete"
+    call_kwargs = mock_client.chat.completions.create.call_args.kwargs
+    blocks = call_kwargs["messages"][0]["content"]
+
+    cached_blocks = [b for b in blocks if "cache_control" in b]
+    assert len(cached_blocks) == 1, f"expected 1 cached block, got {len(cached_blocks)}"
+
+    cached = cached_blocks[0]
+    assert cached["cache_control"] == {"type": "ephemeral"}
+    assert "## Tool Usage" in cached["text"], "cache_control must be on the tool_instructions block"
+
+    # All OTHER blocks must NOT carry cache_control
+    non_cached = [b for b in blocks if "cache_control" not in b]
+    assert len(non_cached) == 3
+    cached_texts = {cached["text"]}
+    for block in non_cached:
+        assert block["text"] not in cached_texts  # sanity: they are different blocks
+
+
+async def test_run_agent_uses_anthropic_provider_pin(kb, seeded_user, db):
+    """The LLM call must include extra_body with the Anthropic provider pin.
+
+    This forces OpenRouter to route to Anthropic (required for cache_control
+    to be honoured — other providers silently drop the field).
+    """
+    mock_response = _make_response(content="Got it!")
+    mock_client = AsyncMock()
+    mock_client.chat.completions.create = AsyncMock(return_value=mock_response)
+
+    with patch("src.ai.orchestrator._get_client", return_value=mock_client):
+        result = await run_agent("What should I cook?", kb, db, seeded_user)
+
+    assert result.status == "complete"
+    call_kwargs = mock_client.chat.completions.create.call_args.kwargs
+    assert "extra_body" in call_kwargs, "extra_body must be passed to the LLM client"
+    extra_body = call_kwargs["extra_body"]
+    assert extra_body.get("provider") == {"order": ["Anthropic"]}, (
+        f"provider pin missing or wrong: {extra_body.get('provider')}"
+    )
