@@ -21,20 +21,8 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 
 logger = logging.getLogger(__name__)
 
-from src.ai.prompt import build_system_prompt
-from src.ai.schema_coercion import coerce_tool_args
-from src.ai.tools.analyze_pcsv import analyze_pcsv
-from src.ai.tools.emit_clarify_turn import emit_clarify_turn
-from src.ai.tools.get_recipe_detail import get_recipe_detail
-from src.ai.tools.get_substitutions import get_substitutions
-from src.ai.tools.lookup_store_product import lookup_store_product
-from src.ai.tools.search_recipes import search_recipes
-from src.ai.tools.translate_term import translate_term
-from src.ai.tools.update_user_profile import update_user_profile
-from src.ai.types import AgentResult, ToolCall
-from src.backend.db.crud import get_user_profile
-
 from contracts.api_types import Screen
+from contracts.sse_events import TokenUsage
 from contracts.tool_schemas import (
     TOOLS,
     AnalyzePcsvInput,
@@ -48,9 +36,21 @@ from contracts.tool_schemas import (
     TranslateTermInput,
     UpdateUserProfileInput,
 )
+from src.ai.prompt import build_system_prompt
+from src.ai.schema_coercion import coerce_tool_args
+from src.ai.tools.analyze_pcsv import analyze_pcsv
+from src.ai.tools.emit_clarify_turn import emit_clarify_turn
+from src.ai.tools.get_recipe_detail import get_recipe_detail
+from src.ai.tools.get_substitutions import get_substitutions
+from src.ai.tools.lookup_store_product import lookup_store_product
+from src.ai.tools.search_recipes import search_recipes
+from src.ai.tools.translate_term import translate_term
+from src.ai.tools.update_user_profile import update_user_profile
+from src.ai.types import AgentResult, ToolCall
+from src.backend.db.crud import get_user_profile
 
 MAX_ITERATIONS = 10
-MODEL = os.environ.get("SGA_MODEL", "anthropic/claude-sonnet-4.6")
+MODEL = os.environ.get("SGA_MODEL", "openai/gpt-5.4-mini")
 OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 
 LLM_MAX_RETRIES = 1
@@ -79,6 +79,58 @@ def accumulate_recipe_results(
     if not new_raw:
         return existing
     return [RecipeSummary.model_validate(r) if isinstance(r, dict) else r for r in new_raw]
+
+
+def _accumulate_usage(acc: dict, response) -> dict:
+    """Sum per-call usage into `acc`. Safe against partial/missing fields.
+
+    OpenRouter (via `extra_body={"usage": {"include": True}}`) returns cost +
+    cached_tokens/cache_write_tokens under `prompt_tokens_details`. The OpenAI
+    SDK surfaces `cost` as an extra attribute on CompletionUsage. We read from
+    `response.usage.model_dump()` so both typed fields and extras land in one
+    dict and sum cleanly.
+    """
+    usage = getattr(response, "usage", None)
+    if usage is None:
+        return acc
+    try:
+        data = usage.model_dump() if hasattr(usage, "model_dump") else dict(usage)
+    except Exception:
+        return acc
+    if not isinstance(data, dict):
+        return acc
+
+    def _as_int(val) -> int:
+        try:
+            return int(val) if val is not None else 0
+        except (TypeError, ValueError):
+            return 0
+
+    def _as_float(val) -> float:
+        try:
+            return float(val) if val is not None else 0.0
+        except (TypeError, ValueError):
+            return 0.0
+
+    acc["prompt_tokens"] = acc.get("prompt_tokens", 0) + _as_int(data.get("prompt_tokens"))
+    acc["completion_tokens"] = acc.get("completion_tokens", 0) + _as_int(data.get("completion_tokens"))
+    # Derive total from prompt+completion — keeps the invariant even if a
+    # provider emits inconsistent total_tokens for a single call.
+    acc["total_tokens"] = acc["prompt_tokens"] + acc["completion_tokens"]
+    acc["cost"] = acc.get("cost", 0.0) + _as_float(data.get("cost"))
+
+    details = data.get("prompt_tokens_details") or {}
+    if isinstance(details, dict):
+        acc["cached_tokens"] = acc.get("cached_tokens", 0) + _as_int(details.get("cached_tokens"))
+        acc["cache_write_tokens"] = acc.get("cache_write_tokens", 0) + _as_int(details.get("cache_write_tokens"))
+    else:
+        acc.setdefault("cached_tokens", 0)
+        acc.setdefault("cache_write_tokens", 0)
+
+    model_name = getattr(response, "model", None)
+    if isinstance(model_name, str) and model_name and acc.get("model") is None:
+        acc["model"] = model_name
+    return acc
 
 
 def _get_client() -> AsyncOpenAI:
@@ -114,6 +166,7 @@ async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens, to
                 tools=tools,
                 max_tokens=max_tokens,
                 temperature=temperature,
+                extra_body={"usage": {"include": True}},
             )
             if tool_choice is not None:
                 kwargs["tool_choice"] = tool_choice
@@ -214,6 +267,7 @@ async def run_agent(
     pcsv_result = None
     recipe_results: list = []
     last_content = ""
+    usage_acc: dict = {}
 
     for iteration in range(MAX_ITERATIONS):
         response = await _llm_call_with_retry(
@@ -223,6 +277,7 @@ async def run_agent(
             tools=TOOLS,
             max_tokens=4096,
         )
+        _accumulate_usage(usage_acc, response)
 
         choice = response.choices[0]
         message = choice.message
@@ -241,6 +296,7 @@ async def run_agent(
                     max_tokens=4096,
                     tool_choice=forced_tc,
                 )
+                _accumulate_usage(usage_acc, retry_response)
                 retry_choice = retry_response.choices[0]
                 retry_message = retry_choice.message
                 clarify_payload = None
@@ -265,6 +321,7 @@ async def run_agent(
                         pcsv=pcsv_result,
                         recipes=recipe_results,
                         clarify_turn=clarify_payload,
+                        token_usage=TokenUsage(**usage_acc),
                     )
                 return AgentResult(
                     status="partial",
@@ -274,6 +331,7 @@ async def run_agent(
                     pcsv=pcsv_result,
                     recipes=recipe_results,
                     reason="clarify_turn_enforcement_failed",
+                    token_usage=TokenUsage(**usage_acc),
                 )
             return AgentResult(
                 status="complete",
@@ -282,6 +340,7 @@ async def run_agent(
                 total_iterations=iteration + 1,
                 pcsv=pcsv_result,
                 recipes=recipe_results,
+                token_usage=TokenUsage(**usage_acc),
             )
 
         # Process tool calls
@@ -325,6 +384,7 @@ async def run_agent(
                 pcsv=pcsv_result,
                 recipes=recipe_results,
                 clarify_turn=clarify_turn_payload,
+                token_usage=TokenUsage(**usage_acc),
             )
 
     # Max iterations reached
@@ -336,4 +396,5 @@ async def run_agent(
         pcsv=pcsv_result,
         recipes=recipe_results,
         reason="max_iterations",
+        token_usage=TokenUsage(**usage_acc),
     )

@@ -7,8 +7,6 @@ typed events in rapid sequence.
 import json
 from collections.abc import AsyncIterator
 
-from src.ai.types import AgentResult
-
 from contracts.sse_events import (
     AgentErrorCategory,
     ClarifyTurnEvent,
@@ -20,6 +18,7 @@ from contracts.sse_events import (
     RecipeCardEvent,
     ThinkingEvent,
 )
+from src.ai.types import AgentResult
 
 
 def _sse_line(event_type: str, data: dict) -> str:
@@ -85,7 +84,12 @@ async def emit_agent_result(
     if result.status == "complete":
         if error_category is not None:
             raise ValueError("error_category must be None when status='complete'")
-        done = DoneEvent(status="complete")
+        done = DoneEvent(status="complete", token_usage=result.token_usage)
     else:
-        done = DoneEvent(status="partial", reason=result.reason, error_category=error_category)
+        done = DoneEvent(
+            status="partial",
+            reason=result.reason,
+            error_category=error_category,
+            token_usage=result.token_usage,
+        )
     yield _sse_line("done", done.model_dump())

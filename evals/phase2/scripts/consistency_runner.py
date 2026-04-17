@@ -46,6 +46,24 @@ def load_cases(yaml_path: Path = TEST_CASES_YAML) -> list[dict]:
         if vars_.get("category") != "dish_count":
             continue
 
+        # Consistency runner is single-turn only; multi-turn entries (vars.turns)
+        # are skipped with a warning. Entries missing both input and turns are
+        # likewise skipped to avoid KeyError.
+        if "input" not in vars_:
+            description = entry.get("description", "")
+            if "turns" in vars_:
+                print(
+                    f"Skipping multi-turn entry ({description!r}); "
+                    "consistency runner supports single-turn only.",
+                    file=sys.stderr,
+                )
+            else:
+                print(
+                    f"Skipping entry without vars.input ({description!r}).",
+                    file=sys.stderr,
+                )
+            continue
+
         description = entry.get("description", "")
         # Parse id from description prefix (e.g. "A1: chicken+broccoli..." -> "A1")
         match = re.match(r"^\s*([A-Za-z]\d+)\s*[:\-]", description)
