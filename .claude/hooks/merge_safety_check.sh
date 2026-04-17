@@ -5,8 +5,19 @@
 
 set -euo pipefail
 
+# Escape hatch: user has already seen the state and explicitly approved the op.
+# Set in the command itself: SGA_SKIP_MERGE_SAFETY=1 git worktree remove ...
+if [[ "${SGA_SKIP_MERGE_SAFETY:-0}" == "1" ]]; then
+  exit 0
+fi
+
 # Hook input arrives on stdin as JSON: { "tool_name": "...", "tool_input": { "command": "..." } }
 input="$(cat)"
+
+# Also allow bypass via an inline env-var prefix in the command itself.
+if printf '%s' "$input" | grep -qE 'SGA_SKIP_MERGE_SAFETY=1'; then
+  exit 0
+fi
 
 # Extract the bash command (best-effort, no jq required).
 cmd="$(printf '%s' "$input" | sed -n 's/.*"command"[[:space:]]*:[[:space:]]*"\(.*\)".*/\1/p' | head -1)"
