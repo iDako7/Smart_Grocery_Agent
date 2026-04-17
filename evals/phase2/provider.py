@@ -39,11 +39,7 @@ CHAT_TIMEOUT = 120  # seconds — LLM calls can be slow
 def _get_base_url(options: dict) -> str:
     """Resolve backend base URL from config, env var, or default."""
     config = options.get("config") or {}
-    return (
-        config.get("base_url")
-        or os.environ.get("SGA_EVAL_BASE_URL")
-        or DEFAULT_BASE_URL
-    )
+    return config.get("base_url") or os.environ.get("SGA_EVAL_BASE_URL") or DEFAULT_BASE_URL
 
 
 def _health_check(base_url: str) -> None:
@@ -51,15 +47,13 @@ def _health_check(base_url: str) -> None:
     try:
         resp = requests.get(f"{base_url}/health", timeout=10)
         resp.raise_for_status()
-    except requests.ConnectionError:
-        raise RuntimeError(
-            f"Backend not running. Run: docker compose up  (tried {base_url}/health)"
-        )
+    except requests.ConnectionError as err:
+        raise RuntimeError(f"Backend not running. Run: docker compose up  (tried {base_url}/health)") from err
     except requests.HTTPError as exc:
         raise RuntimeError(
             f"Backend health check failed ({exc.response.status_code}). "
             f"Run: docker compose up  (tried {base_url}/health)"
-        )
+        ) from exc
 
 
 def _create_session(base_url: str) -> str:
@@ -105,9 +99,9 @@ def _parse_sse(raw_text: str) -> list[tuple[str, dict]]:
 
         for line in block.split("\n"):
             if line.startswith("event:"):
-                event_type = line[len("event:"):].strip()
+                event_type = line[len("event:") :].strip()
             elif line.startswith("data:"):
-                data_line = line[len("data:"):].strip()
+                data_line = line[len("data:") :].strip()
 
         if event_type and data_line:
             try:
@@ -226,21 +220,23 @@ def _run_single_turn(
     try:
         resp = _send_chat(base_url, session_id, message, screen)
     except requests.Timeout:
-        return [], int((time.monotonic() - t0) * 1000), {
-            "output": json.dumps({"error": "timeout: chat request exceeded 120s"})
-        }
+        return (
+            [],
+            int((time.monotonic() - t0) * 1000),
+            {"output": json.dumps({"error": "timeout: chat request exceeded 120s"})},
+        )
     except requests.ConnectionError:
-        return [], int((time.monotonic() - t0) * 1000), {
-            "output": json.dumps({"error": "connection_error: backend unreachable during chat"})
-        }
+        return (
+            [],
+            int((time.monotonic() - t0) * 1000),
+            {"output": json.dumps({"error": "connection_error: backend unreachable during chat"})},
+        )
 
     latency_ms = int((time.monotonic() - t0) * 1000)
 
     if resp.status_code != 200:
         body = resp.text[:2000]
-        return [], latency_ms, {
-            "output": json.dumps({"error": f"{resp.status_code}: {body}"})
-        }
+        return [], latency_ms, {"output": json.dumps({"error": f"{resp.status_code}: {body}"})}
 
     events = _parse_sse(resp.text)
     return events, latency_ms, None
@@ -275,8 +271,7 @@ def call_api(prompt: str, options: dict, context: dict) -> dict:
             decoded = [turns]
         if not isinstance(decoded, list) or not all(isinstance(t, str) for t in decoded):
             logger.warning(
-                "vars.turns JSON did not decode to list[str] (got %r); "
-                "treating as single-turn string.",
+                "vars.turns JSON did not decode to list[str] (got %r); treating as single-turn string.",
                 type(decoded).__name__,
             )
             turns = [turns]
@@ -311,9 +306,7 @@ def call_api(prompt: str, options: dict, context: dict) -> dict:
     final_events: list[tuple[str, dict]] = []
 
     for turn_message in turns:
-        events, latency_ms, error_out = _run_single_turn(
-            base_url, session_id, turn_message, screen
-        )
+        events, latency_ms, error_out = _run_single_turn(base_url, session_id, turn_message, screen)
         accumulated_latency += latency_ms
         if error_out is not None:
             return error_out

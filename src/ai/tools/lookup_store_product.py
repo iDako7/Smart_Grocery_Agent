@@ -1,9 +1,8 @@
 """Store product lookup: fuzzy match against SQLite KB using rapidfuzz."""
 
 import aiosqlite
-from rapidfuzz import fuzz
-
 from contracts.tool_schemas import LookupStoreProductInput, StoreProduct
+from rapidfuzz import fuzz
 
 
 def score_products(

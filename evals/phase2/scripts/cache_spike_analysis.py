@@ -19,12 +19,10 @@ script operates purely on the dump files on disk.
 from __future__ import annotations
 
 import json
-import os
 import re
 import sys
 from collections import defaultdict
 from pathlib import Path
-from typing import Any
 
 import tiktoken
 
@@ -97,7 +95,7 @@ def load_dumps(dump_dir: Path = DUMP_DIR) -> list[dict]:
     files = sorted(dump_dir.glob("*.json"))
     out = []
     for f in files:
-        with open(f, "r", encoding="utf-8") as fh:
+        with open(f, encoding="utf-8") as fh:
             d = json.load(fh)
         d["_file"] = f.name
         # parse case+iter out of filename if `case` key isn't accurate
@@ -134,7 +132,7 @@ def analyze_system_prompt(dumps: list[dict]) -> dict:
     if hdr_positions:
         hdr_positions.append(len(content))
         for i in range(len(hdr_positions) - 1):
-            chunk = content[hdr_positions[i]:hdr_positions[i + 1]]
+            chunk = content[hdr_positions[i] : hdr_positions[i + 1]]
             first_line = chunk.splitlines()[0] if chunk.splitlines() else ""
             sections.append({"header": first_line.strip(), "tokens": tcount(chunk)})
     return {
@@ -207,9 +205,7 @@ def analyze_stable_volatile(dumps: list[dict], case: str = "A1") -> dict:
     definition of a stable prefix that must equal volatile-in-last if the
     prefix is maximal).
     """
-    case_dumps = sorted(
-        [d for d in dumps if d["_case"] == case], key=lambda d: d["_iter"]
-    )
+    case_dumps = sorted([d for d in dumps if d["_case"] == case], key=lambda d: d["_iter"])
     if len(case_dumps) < 2:
         return {"error": f"Need >=2 iterations for case {case}, have {len(case_dumps)}"}
 
@@ -296,7 +292,6 @@ def analyze_projected_savings(stable_vs_volatile: dict) -> dict:
 
     auto_cache_pct = cached_tokens_agg / prompt_tokens_agg
     uncached_tokens_agg = prompt_tokens_agg - cached_tokens_agg
-    per_run_prompt = prompt_tokens_agg / cases
     per_run_uncached = uncached_tokens_agg / cases
     # Cost share of uncached = (1 - auto_cache_pct) × total cost as a first-order proxy.
     # (Exact formula needs the cache-discount ratio; we follow the mission spec.)
@@ -310,8 +305,9 @@ def analyze_projected_savings(stable_vs_volatile: dict) -> dict:
     cacheable_tokens_per_run = per_run_uncached * stable_pct
     non_cacheable_tokens_per_run = per_run_uncached * volatile_pct
 
-    projected_savings_per_run = cacheable_tokens_per_run / per_run_uncached * per_run_uncached_cost \
-        if per_run_uncached else 0.0
+    projected_savings_per_run = (
+        cacheable_tokens_per_run / per_run_uncached * per_run_uncached_cost if per_run_uncached else 0.0
+    )
     pct_delta_on_total_cost = (projected_savings_per_run / per_run_cost * 100) if per_run_cost else 0.0
 
     return {

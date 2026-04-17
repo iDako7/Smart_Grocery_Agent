@@ -2,12 +2,11 @@
 
 import uuid
 
+from contracts.tool_schemas import UserProfile
 from sqlalchemy import text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncConnection
 from src.backend.db.tables import user_profiles, users
-
-from contracts.tool_schemas import UserProfile
 
 
 async def ensure_user_exists(conn: AsyncConnection, user_id: uuid.UUID, email: str) -> None:

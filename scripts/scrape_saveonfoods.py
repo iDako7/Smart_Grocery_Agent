@@ -194,13 +194,15 @@ OUTPUT_DIR = Path(__file__).resolve().parent.parent / "data" / "saveonfoods_raw"
 def build_search_url(query: str, breadcrumb_parent: str, breadcrumb_slug: str, skip: int = 0) -> str:
     """Build the search API URL with query, pagination, and breadcrumb filter."""
     breadcrumb_value = f"grocery/{breadcrumb_parent}/{breadcrumb_slug}"
-    params = urllib.parse.urlencode({
-        "q": query,
-        "take": TAKE,
-        "skip": skip,
-        "sort": "relevance",
-        "f": f"Breadcrumb:{breadcrumb_value}",
-    })
+    params = urllib.parse.urlencode(
+        {
+            "q": query,
+            "take": TAKE,
+            "skip": skip,
+            "sort": "relevance",
+            "f": f"Breadcrumb:{breadcrumb_value}",
+        }
+    )
     return f"{API_BASE}/stores/{STORE_ID}/search?{params}"
 
 
@@ -217,10 +219,16 @@ _SSL_CTX = _ssl_context()
 
 def fetch_json(url: str) -> dict:
     """Fetch a URL and parse the JSON response."""
-    req = urllib.request.Request(url, headers={
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "application/json",
-    })
+    req = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": (
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            ),
+            "Accept": "application/json",
+        },
+    )
     with urllib.request.urlopen(req, timeout=30, context=_SSL_CTX) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
@@ -307,19 +315,17 @@ def scrape_department(dept: dict, dry_run: bool = False) -> dict:
     breadcrumb_parent = dept["breadcrumb_parent"]
     subcategories = dept["subcategories"]
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Department: {dept['name']} ({key})")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     seen_skus: set[str] = set()
     all_products: list[dict] = []
 
-    for subcat_name, subcat_id, search_term, breadcrumb_slug in subcategories:
+    for subcat_name, _subcat_id, search_term, breadcrumb_slug in subcategories:
         print(f"\n  Subcategory: {subcat_name}")
 
-        products = scrape_subcategory(
-            subcat_name, search_term, breadcrumb_parent, breadcrumb_slug, dry_run
-        )
+        products = scrape_subcategory(subcat_name, search_term, breadcrumb_parent, breadcrumb_slug, dry_run)
 
         # Deduplicate by productId within the department
         new_count = 0
@@ -360,9 +366,7 @@ def save_department(dept_data: dict) -> Path:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Scrape Save-On-Foods grocery products for store 1982 (Langley BC)"
-    )
+    parser = argparse.ArgumentParser(description="Scrape Save-On-Foods grocery products for store 1982 (Langley BC)")
     parser.add_argument(
         "--dry-run",
         action="store_true",
@@ -405,13 +409,14 @@ def main():
             subcat_count = len(dept["subcategories"])
             print(f"  Would scrape {subcat_count} subcategories")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     if args.dry_run:
         total_subcats = sum(len(d["subcategories"]) for d in departments_to_scrape)
-        print(f"DRY RUN complete. Would scrape {total_subcats} subcategories across {len(departments_to_scrape)} departments.")
+        dept_count = len(departments_to_scrape)
+        print(f"DRY RUN complete. Would scrape {total_subcats} subcategories across {dept_count} departments.")
     else:
         print(f"Scrape complete. {total_products} total products across {len(departments_to_scrape)} departments.")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
 
 if __name__ == "__main__":

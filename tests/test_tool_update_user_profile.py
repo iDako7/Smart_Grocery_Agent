@@ -1,9 +1,8 @@
 """Tests for update_user_profile tool against PostgreSQL."""
 
+from contracts.tool_schemas import UpdateUserProfileInput
 from src.ai.tools.update_user_profile import update_user_profile
 from src.backend.db.crud import get_user_profile
-
-from contracts.tool_schemas import UpdateUserProfileInput
 
 
 async def test_update_household_size(seeded_user, db):

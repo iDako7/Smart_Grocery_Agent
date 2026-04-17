@@ -21,11 +21,11 @@ from unittest.mock import patch
 
 import aiosqlite
 import pytest_asyncio
+from contracts.tool_schemas import RecipeDetail
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
 from src.backend.main import app
 
-from contracts.tool_schemas import RecipeDetail
 from tests.conftest import _engine, _ensure_tables
 
 # ---------------------------------------------------------------------------

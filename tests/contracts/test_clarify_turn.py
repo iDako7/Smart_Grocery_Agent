@@ -1,8 +1,6 @@
 """Contract tests for ClarifyTurnPayload, ClarifyTurnEvent, and emit_clarify_turn TOOLS entry."""
 
 import pytest
-from pydantic import TypeAdapter, ValidationError
-
 from contracts.sse_events import ClarifyTurnEvent, ExplanationEvent, SSEEvent
 from contracts.tool_schemas import (
     TOOLS,
@@ -10,6 +8,7 @@ from contracts.tool_schemas import (
     ClarifyQuestion,
     ClarifyTurnPayload,
 )
+from pydantic import TypeAdapter, ValidationError
 
 # ---------------------------------------------------------------------------
 # Test 1: Roundtrip
@@ -223,9 +222,8 @@ def test_clarify_turn_event_deserializes_without_questions_key():
     """W2 regression: a JSON payload that omits the `questions` key should
     still parse, defaulting to an empty list. Guards against serializer
     fragility where an empty array might be omitted."""
-    from pydantic import TypeAdapter
-
     from contracts.sse_events import ClarifyTurnEvent, SSEEvent
+    from pydantic import TypeAdapter
 
     # Minimal payload — no questions key at all
     payload_json = '{"event_type": "clarify_turn", "explanation": "Here is the direction: Korean BBQ."}'

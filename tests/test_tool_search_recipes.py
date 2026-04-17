@@ -2,10 +2,9 @@
 
 import pytest
 import pytest_asyncio
+from contracts.tool_schemas import RecipeSummary, SearchRecipesInput
 from src.ai.kb import get_kb
 from src.ai.tools.search_recipes import _score_similarity, search_recipes
-
-from contracts.tool_schemas import RecipeSummary, SearchRecipesInput
 
 
 @pytest_asyncio.fixture()

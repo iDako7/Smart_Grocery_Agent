@@ -6,6 +6,8 @@ Reads schema from contracts/kb_schema.sql and loads data from data/*.json.
 Output: data/kb.sqlite (idempotent — deletes and rebuilds on each run).
 Dependencies: Python stdlib only.
 """
+
+import contextlib
 import json
 import sqlite3
 from pathlib import Path
@@ -26,11 +28,20 @@ def _load_recipes(cur: sqlite3.Cursor, data_dir: Path) -> int:
                 instructions, is_ai_generated)
                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (
-                r["id"], r["name"], r["name_zh"], r["source"], r["source_url"],
-                r["cuisine"], r["cooking_method"], r["effort_level"],
-                r["time_minutes"], json.dumps(r["flavor_tags"]),
-                r["serves"], json.dumps(r["ingredients"]),
-                r["instructions"], int(r["is_ai_generated"]),
+                r["id"],
+                r["name"],
+                r["name_zh"],
+                r["source"],
+                r["source_url"],
+                r["cuisine"],
+                r["cooking_method"],
+                r["effort_level"],
+                r["time_minutes"],
+                json.dumps(r["flavor_tags"]),
+                r["serves"],
+                json.dumps(r["ingredients"]),
+                r["instructions"],
+                int(r["is_ai_generated"]),
             ),
         )
     return len(recipes)
@@ -151,10 +162,8 @@ def migrate(db_path: Path = None, data_dir: Path = None) -> Path:
         # explicit call makes the intent unambiguous and is robust against
         # future changes to the connection lifecycle.
         conn.rollback()
-        try:
+        with contextlib.suppress(OSError):
             db_path.unlink(missing_ok=True)
-        except OSError:
-            pass
         raise
     finally:
         conn.close()

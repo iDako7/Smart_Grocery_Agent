@@ -27,7 +27,7 @@ import statistics
 import subprocess
 import sys
 import time
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from pathlib import Path
 
 import requests
@@ -63,7 +63,7 @@ def load_cases(yaml_path: Path = TEST_CASES_YAML) -> list[dict]:
     Single-turn entries (vars.input) are wrapped as turns=[input].
     Multi-turn entries (vars.turns) pass through.
     """
-    with open(yaml_path, "r", encoding="utf-8") as f:
+    with open(yaml_path, encoding="utf-8") as f:
         raw_cases = yaml.safe_load(f) or []
 
     cases = []
@@ -79,12 +79,14 @@ def load_cases(yaml_path: Path = TEST_CASES_YAML) -> list[dict]:
                 continue
             turns = [single]
 
-        cases.append({
-            "id": case_id,
-            "category": vars_.get("category", "unknown"),
-            "screen": vars_.get("screen", "home"),
-            "turns": list(turns),
-        })
+        cases.append(
+            {
+                "id": case_id,
+                "category": vars_.get("category", "unknown"),
+                "screen": vars_.get("screen", "home"),
+                "turns": list(turns),
+            }
+        )
 
     return cases
 
@@ -94,10 +96,7 @@ def health_check(base_url: str) -> None:
         resp = requests.get(f"{base_url}/health", timeout=10)
         resp.raise_for_status()
     except requests.RequestException as exc:
-        raise RuntimeError(
-            f"Backend not reachable at {base_url}/health — run `docker compose up`. "
-            f"({exc})"
-        )
+        raise RuntimeError(f"Backend not reachable at {base_url}/health — run `docker compose up`. ({exc})") from exc
 
 
 def create_session(base_url: str) -> str:
@@ -127,9 +126,9 @@ def parse_sse(body: str) -> list[tuple[str, dict]]:
         data = ""
         for line in block.split("\n"):
             if line.startswith("event:"):
-                event_type = line[len("event:"):].strip()
+                event_type = line[len("event:") :].strip()
             elif line.startswith("data:"):
-                data = line[len("data:"):].strip()
+                data = line[len("data:") :].strip()
         if event_type and data:
             try:
                 events.append((event_type, json.loads(data)))
@@ -184,8 +183,14 @@ def run_case_once(base_url: str, case: dict) -> dict:
         raw = send_chat(base_url, session_id, turn, case["screen"])
         events = parse_sse(raw)
         turn_usage = extract_done_usage(events)
-        for key in ["prompt_tokens", "completion_tokens", "total_tokens",
-                    "cached_tokens", "cache_write_tokens", "cost"]:
+        for key in [
+            "prompt_tokens",
+            "completion_tokens",
+            "total_tokens",
+            "cached_tokens",
+            "cache_write_tokens",
+            "cost",
+        ]:
             summed[key] += turn_usage[key]
         if turn_usage.get("model"):
             model = turn_usage["model"]
@@ -228,8 +233,7 @@ def summarize_case(runs: list[dict]) -> dict:
 
 def compute_aggregate(cases_report: dict) -> dict:
     """Totals across case medians — coarse but useful for headline comparison."""
-    totals = {"total_tokens": 0, "prompt_tokens": 0, "completion_tokens": 0,
-              "cached_tokens": 0, "cost": 0.0}
+    totals = {"total_tokens": 0, "prompt_tokens": 0, "completion_tokens": 0, "cached_tokens": 0, "cost": 0.0}
     latencies = []
     cache_ratios = []
     case_count = 0
@@ -284,7 +288,7 @@ def run_baseline(base_url: str, runs: int) -> dict:
 
     report = {
         "git_ref": git_ref(),
-        "captured_at": datetime.now(timezone.utc).isoformat(),
+        "captured_at": datetime.now(UTC).isoformat(),
         "base_url": base_url,
         "runs_per_case": runs,
         "cases": cases_report,
@@ -307,13 +311,11 @@ def write_baseline(report: dict, tag: str | None) -> Path:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Capture a telemetry baseline.")
-    parser.add_argument("--runs", type=int, default=DEFAULT_RUNS,
-                        help=f"Runs per case (default: {DEFAULT_RUNS})")
-    parser.add_argument("--base-url", type=str, default=None,
-                        help=f"Backend URL (default: {DEFAULT_BASE_URL})")
-    parser.add_argument("--tag", type=str, default=None,
-                        help="Override the ref prefix for the output filename "
-                             "(default: git branch).")
+    parser.add_argument("--runs", type=int, default=DEFAULT_RUNS, help=f"Runs per case (default: {DEFAULT_RUNS})")
+    parser.add_argument("--base-url", type=str, default=None, help=f"Backend URL (default: {DEFAULT_BASE_URL})")
+    parser.add_argument(
+        "--tag", type=str, default=None, help="Override the ref prefix for the output filename (default: git branch)."
+    )
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
 
@@ -323,11 +325,7 @@ def main() -> int:
         stream=sys.stderr,
     )
 
-    base_url = (
-        args.base_url
-        or os.environ.get("SGA_EVAL_BASE_URL")
-        or DEFAULT_BASE_URL
-    )
+    base_url = args.base_url or os.environ.get("SGA_EVAL_BASE_URL") or DEFAULT_BASE_URL
 
     logger.info("Checking backend at %s ...", base_url)
     health_check(base_url)
@@ -339,9 +337,14 @@ def main() -> int:
     logger.info("\n=== Baseline written ===")
     logger.info("File: %s", out_path)
     agg = report["aggregate"]
-    logger.info("Cases: %d | total_tokens: %d | cost: $%.4f | mean_latency: %dms | cache_hit: %.2f%%",
-                agg["cases_counted"], agg["total_tokens"], agg["total_cost_usd"],
-                agg["mean_latency_ms"], agg["mean_cache_hit_ratio"] * 100)
+    logger.info(
+        "Cases: %d | total_tokens: %d | cost: $%.4f | mean_latency: %dms | cache_hit: %.2f%%",
+        agg["cases_counted"],
+        agg["total_tokens"],
+        agg["total_cost_usd"],
+        agg["mean_latency_ms"],
+        agg["mean_cache_hit_ratio"] * 100,
+    )
     return 0
 
 

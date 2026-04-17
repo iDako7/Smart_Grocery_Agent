@@ -2,10 +2,9 @@
 
 import uuid
 
+from contracts.tool_schemas import UserProfile
 from src.backend.db.crud import ensure_user_exists, get_user_profile, update_user_profile_field
 from src.backend.db.tables import user_profiles, users
-
-from contracts.tool_schemas import UserProfile
 
 
 async def test_get_user_profile_defaults(seeded_user, db):

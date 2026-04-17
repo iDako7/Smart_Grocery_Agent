@@ -146,9 +146,7 @@ def _make_response_with_usage(content=None):
     message = MagicMock()
     message.content = content
     message.tool_calls = []
-    message.model_dump = MagicMock(
-        return_value={"role": "assistant", "content": content, "tool_calls": None}
-    )
+    message.model_dump = MagicMock(return_value={"role": "assistant", "content": content, "tool_calls": None})
     choice = MagicMock()
     choice.message = message
     choice.finish_reason = "stop"
