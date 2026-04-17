@@ -88,6 +88,7 @@ Shared schemas imported across the codebase. Contract changes go as small PRs to
 ## Tooling
 
 - **GitHub:** Prefer `gh` CLI over GitHub MCP for all GitHub operations.
+- **Before merges, worktree removals, or branch deletions:** pause and flag any files that would be dropped (untracked, or branch-only) so the user can decide what to keep.
 
 ## Key Design Decisions
 
