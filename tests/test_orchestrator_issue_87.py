@@ -9,9 +9,10 @@ import json
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest_asyncio
-from contracts.tool_schemas import RecipeSummary
 from src.ai.kb import get_kb
 from src.ai.orchestrator import accumulate_recipe_results, run_agent
+
+from contracts.tool_schemas import RecipeSummary
 
 
 @pytest_asyncio.fixture()

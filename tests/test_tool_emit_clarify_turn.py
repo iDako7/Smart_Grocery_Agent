@@ -4,8 +4,9 @@ import json
 import uuid
 from unittest.mock import MagicMock
 
-from contracts.tool_schemas import ClarifyOption, ClarifyQuestion, ClarifyTurnPayload
 from src.ai.tools.emit_clarify_turn import emit_clarify_turn
+
+from contracts.tool_schemas import ClarifyOption, ClarifyQuestion, ClarifyTurnPayload
 
 
 async def test_emit_clarify_turn_handler_validates_payload():

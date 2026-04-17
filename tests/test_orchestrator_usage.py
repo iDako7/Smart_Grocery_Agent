@@ -14,9 +14,10 @@ import json
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest_asyncio
-from contracts.sse_events import DoneEvent, TokenUsage
 from src.ai.kb import get_kb
 from src.ai.orchestrator import _accumulate_usage, run_agent
+
+from contracts.sse_events import DoneEvent, TokenUsage
 
 
 @pytest_asyncio.fixture()

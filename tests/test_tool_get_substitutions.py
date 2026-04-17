@@ -1,9 +1,10 @@
 """Tests for get_substitutions tool against real SQLite KB."""
 
 import pytest_asyncio
-from contracts.tool_schemas import GetSubstitutionsInput
 from src.ai.kb import get_kb
 from src.ai.tools.get_substitutions import get_substitutions
+
+from contracts.tool_schemas import GetSubstitutionsInput
 
 
 @pytest_asyncio.fixture()

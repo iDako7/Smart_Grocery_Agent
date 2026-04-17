@@ -1,9 +1,10 @@
 """Tests for get_recipe_detail tool against real SQLite KB."""
 
 import pytest_asyncio
-from contracts.tool_schemas import GetRecipeDetailInput
 from src.ai.kb import get_kb
 from src.ai.tools.get_recipe_detail import get_recipe_detail
+
+from contracts.tool_schemas import GetRecipeDetailInput
 
 
 @pytest_asyncio.fixture()
