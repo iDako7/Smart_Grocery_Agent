@@ -1,5 +1,5 @@
 {
-  "database": "/Users/dako/LocalDocument/200-Project/SGA_V2/.claude/worktrees/issue-87/data/kb.sqlite",
+  "database": "/Users/dako/LocalDocument/200-Project/SGA_V2/data/kb.sqlite",
   "total_recipes": 120,
   "ingredient_counts": {
     "average": 13.4,
@@ -875,9 +875,9 @@
     ]
   },
   "pantry_staples": {
-    "recipes_with_3_plus": 64,
-    "recipes_with_3_plus_percentage": 53.3,
-    "average_per_recipe": 2.6,
+    "recipes_with_3_plus": 88,
+    "recipes_with_3_plus_percentage": 73.3,
+    "average_per_recipe": 3.6,
     "most_common": [
       {
         "name": "salt",
