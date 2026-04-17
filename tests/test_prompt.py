@@ -117,13 +117,16 @@ def test_build_system_blocks_with_screen_appends_screen_block():
 
 
 def test_build_system_blocks_block_shape():
-    """Every block must be a dict with exactly keys {'type', 'text'},
-    type == 'text', text is a non-empty string, and no cache_control key.
+    """Every block must have type='text', non-empty text, and no cache_control.
+
+    Blocks may carry ``_cache_boundary: True`` (internal sentinel for the
+    orchestrator); that key is allowed but cache_control is not.
     """
     blocks = build_system_blocks(UserProfile(), screen="recipes")
+    allowed_keys = {"type", "text", "_cache_boundary"}
     for i, block in enumerate(blocks):
-        assert set(block.keys()) == {"type", "text"}, (
-            f"Block {i} has unexpected keys: {set(block.keys())}"
+        assert set(block.keys()) <= allowed_keys, (
+            f"Block {i} has unexpected keys: {set(block.keys()) - allowed_keys}"
         )
         assert block["type"] == "text", f"Block {i} type is not 'text'"
         assert isinstance(block["text"], str) and block["text"], (
@@ -132,3 +135,22 @@ def test_build_system_blocks_block_shape():
         assert "cache_control" not in block, (
             f"Block {i} must not have cache_control at this layer (Phase 2 concern)"
         )
+
+
+def test_build_system_blocks_has_exactly_one_cache_boundary_sentinel():
+    """Exactly one block must carry ``_cache_boundary: True``."""
+    blocks = build_system_blocks(UserProfile())
+    sentinel_blocks = [b for b in blocks if b.get("_cache_boundary") is True]
+    assert len(sentinel_blocks) == 1, (
+        f"Expected exactly 1 sentinel block, got {len(sentinel_blocks)}"
+    )
+
+
+def test_build_system_blocks_cache_boundary_on_tool_instructions_block():
+    """The ``_cache_boundary`` sentinel must be on the tool_instructions block."""
+    blocks = build_system_blocks(UserProfile())
+    sentinel_blocks = [b for b in blocks if b.get("_cache_boundary") is True]
+    assert len(sentinel_blocks) == 1
+    assert "## Tool Usage" in sentinel_blocks[0]["text"], (
+        "Sentinel must be on the tool_instructions block (contains '## Tool Usage')"
+    )

@@ -13,14 +13,20 @@ def build_system_blocks(profile: UserProfile, screen: Screen | None = None) -> l
 
     Order is LOAD-BEARING for prompt caching (issue #116). Static blocks
     (persona, rules, tool_instructions) MUST precede dynamic blocks
-    (profile, screen). The orchestrator applies ``cache_control`` on the
-    last static block (``tool_instructions``, index 2). Reordering — in
-    particular moving the profile block above tool_instructions — will
-    silently invalidate the cache and kill the ~60% cost savings.
+    (profile, screen). Reordering — in particular moving the profile block
+    above tool_instructions — will silently invalidate the cache and kill
+    the ~60% cost savings.
 
-    Returns plain ``{"type": "text", "text": ...}`` dicts. No ``cache_control``
-    keys are set here — that is the orchestrator's concern
-    (``_system_blocks_with_cache`` in ``src/ai/orchestrator.py``).
+    The ``tool_instructions`` block (last static block) carries
+    ``_cache_boundary: True`` as an internal sentinel. The orchestrator
+    (``_system_blocks_with_cache``) locates this block by the sentinel key,
+    strips it, and adds ``cache_control`` before sending to the LLM — so
+    inserting new blocks before tool_instructions remains safe as long as
+    the sentinel stays on the last static block.
+
+    Returns ``{"type": "text", "text": ...}`` dicts (tool_instructions block
+    also carries ``_cache_boundary: True``). No ``cache_control`` keys are
+    set here — that is the orchestrator's concern.
 
     Args:
         profile: The user's persisted profile.
@@ -30,7 +36,7 @@ def build_system_blocks(profile: UserProfile, screen: Screen | None = None) -> l
     blocks = [
         {"type": "text", "text": _PERSONA},
         {"type": "text", "text": _RULES},
-        {"type": "text", "text": _TOOL_INSTRUCTIONS},
+        {"type": "text", "text": _TOOL_INSTRUCTIONS, "_cache_boundary": True},
         {"type": "text", "text": _build_profile_section(profile)},
     ]
     if screen is not None:
