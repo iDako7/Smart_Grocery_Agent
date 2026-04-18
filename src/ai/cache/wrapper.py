@@ -58,6 +58,8 @@ def cached_tool(
                 return await func(db, input)
 
             # Step 3: GET
+            # redis.exceptions.RedisError covers all Redis-layer errors;
+            # builtin TimeoutError catches asyncio/OS-level timeouts not wrapped by redis-py.
             try:
                 raw = await client.get(key)
             except (redis.exceptions.ConnectionError, TimeoutError, redis.exceptions.RedisError) as exc:
@@ -66,15 +68,19 @@ def cached_tool(
                 return await func(db, input)
 
             if raw is not None:
-                logger.info("cache.hit tool=%s", tool_name)
-                return decode_value(raw, return_type)
+                try:
+                    logger.info("cache.hit tool=%s", tool_name)
+                    return decode_value(raw, return_type)
+                except Exception as exc:
+                    logger.warning("cache.error op=decode tool=%s error=%s", tool_name, exc)
+                    # Corrupt/stale entry — fall through to live handler below
 
             logger.info("cache.miss tool=%s", tool_name)
 
             # Step 4: call handler
             result = await func(db, input)
 
-            # Step 5: SET
+            # Step 5: SET (same exception tuple rationale as GET above)
             try:
                 await client.set(key, encode_value(result), ex=ttl_seconds)
             except (redis.exceptions.ConnectionError, TimeoutError, redis.exceptions.RedisError) as exc:
