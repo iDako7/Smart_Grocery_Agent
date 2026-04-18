@@ -25,3 +25,6 @@ postgres_data/
 
 # Regeneratable KB artifact (built by scripts/migrate_kb.py)
 data/kb.sqlite
+
+# Phase 2 eval cache spike dumps (see evals/phase2/scripts/cache_spike_analysis.py)
+evals/phase2/.spike_dumps/

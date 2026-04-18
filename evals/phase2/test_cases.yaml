@@ -27,8 +27,15 @@
       value: file://assertions/ingredient_noise.js
       metric: ingredient_noise
     - type: llm-rubric
-      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      value: |
+        Evaluate this meal suggestion for {{party_size}} people with ingredients {{input}}.
+        Score 1-5 on three criteria, then give an overall score (the minimum of the three):
+        (1) Practicality: are the dishes executable with the stated ingredients without requiring unusual tools or techniques?
+        (2) Count fit: is the total number of recipes between {{expected_dish_min}} and {{expected_dish_max}}?
+        (3) Variety: are the recipes meaningfully different (different protein treatment, cuisine, or technique — not two pan-fried chicken dishes)?
+        Return the overall score.
       metric: overall_quality
+      threshold: 3
 
 - description: "A2: beef+egg+rice dinner for 4"
   vars:
@@ -49,8 +56,15 @@
       value: file://assertions/ingredient_noise.js
       metric: ingredient_noise
     - type: llm-rubric
-      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      value: |
+        Evaluate this meal suggestion for {{party_size}} people with ingredients {{input}}.
+        Score 1-5 on three criteria, then give an overall score (the minimum of the three):
+        (1) Practicality: are the dishes executable with the stated ingredients without requiring unusual tools or techniques?
+        (2) Count fit: is the total number of recipes between {{expected_dish_min}} and {{expected_dish_max}}?
+        (3) Variety: are the recipes meaningfully different (different protein treatment, cuisine, or technique — not two pan-fried chicken dishes)?
+        Return the overall score.
       metric: overall_quality
+      threshold: 3
 
 - description: "A3: salmon+asparagus dinner for 1"
   vars:
@@ -71,8 +85,15 @@
       value: file://assertions/ingredient_noise.js
       metric: ingredient_noise
     - type: llm-rubric
-      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      value: |
+        Evaluate this meal suggestion for {{party_size}} people with ingredients {{input}}.
+        Score 1-5 on three criteria, then give an overall score (the minimum of the three):
+        (1) Practicality: are the dishes executable with the stated ingredients without requiring unusual tools or techniques?
+        (2) Count fit: is the total number of recipes between {{expected_dish_min}} and {{expected_dish_max}}?
+        (3) Variety: are the recipes meaningfully different (different protein treatment, cuisine, or technique — not two pan-fried chicken dishes)?
+        Return the overall score.
       metric: overall_quality
+      threshold: 3
 
 - description: "A4: chicken+rice+veggies BBQ dinner for 8"
   vars:
@@ -93,8 +114,15 @@
       value: file://assertions/ingredient_noise.js
       metric: ingredient_noise
     - type: llm-rubric
-      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      value: |
+        Evaluate this meal suggestion for {{party_size}} people with ingredients {{input}}.
+        Score 1-5 on three criteria, then give an overall score (the minimum of the three):
+        (1) Practicality: are the dishes executable with the stated ingredients without requiring unusual tools or techniques?
+        (2) Count fit: is the total number of recipes between {{expected_dish_min}} and {{expected_dish_max}}?
+        (3) Variety: are the recipes meaningfully different (different protein treatment, cuisine, or technique — not two pan-fried chicken dishes)?
+        Return the overall score.
       metric: overall_quality
+      threshold: 3
 
 # ---------------------------------------------------------------------------
 # Category B — Ingredient noise (2 cases, reuse A1 and A2 inputs)
@@ -119,8 +147,25 @@
       value: file://assertions/ingredient_noise.js
       metric: ingredient_noise
     - type: llm-rubric
-      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      value: |
+        Evaluate this meal suggestion for {{party_size}} people with ingredients {{input}}.
+        Score 1-5 on three criteria, then give an overall score (the minimum of the three):
+        (1) Practicality: are the dishes executable with the stated ingredients without requiring unusual tools or techniques?
+        (2) Count fit: is the total number of recipes between {{expected_dish_min}} and {{expected_dish_max}}?
+        (3) Variety: are the recipes meaningfully different (different protein treatment, cuisine, or technique — not two pan-fried chicken dishes)?
+        Return the overall score.
       metric: overall_quality
+      threshold: 3
+    - type: llm-rubric
+      value: |
+        The user provided these ingredients: {{input}}. Common pantry staples (salt, pepper, oil, garlic, onion, basic spices, soy sauce, vinegar) are acceptable.
+        Score 1-5:
+        5 = All ingredients in recipes are either user-provided, pantry staples, or minor acceptable extras (1-2 per recipe).
+        3 = Several unlisted non-staple ingredients appear but don't dominate.
+        1 = Recipes are loaded with ingredients the user didn't mention (e.g., needing butter, cream, specialty produce, fresh herbs not named).
+        Return the score.
+      metric: ingredient_faithfulness
+      threshold: 3
 
 - description: "B2: ingredient noise focus — beef+egg+rice dinner for 4"
   vars:
@@ -141,8 +186,25 @@
       value: file://assertions/ingredient_noise.js
       metric: ingredient_noise
     - type: llm-rubric
-      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      value: |
+        Evaluate this meal suggestion for {{party_size}} people with ingredients {{input}}.
+        Score 1-5 on three criteria, then give an overall score (the minimum of the three):
+        (1) Practicality: are the dishes executable with the stated ingredients without requiring unusual tools or techniques?
+        (2) Count fit: is the total number of recipes between {{expected_dish_min}} and {{expected_dish_max}}?
+        (3) Variety: are the recipes meaningfully different (different protein treatment, cuisine, or technique — not two pan-fried chicken dishes)?
+        Return the overall score.
       metric: overall_quality
+      threshold: 3
+    - type: llm-rubric
+      value: |
+        The user provided these ingredients: {{input}}. Common pantry staples (salt, pepper, oil, garlic, onion, basic spices, soy sauce, vinegar) are acceptable.
+        Score 1-5:
+        5 = All ingredients in recipes are either user-provided, pantry staples, or minor acceptable extras (1-2 per recipe).
+        3 = Several unlisted non-staple ingredients appear but don't dominate.
+        1 = Recipes are loaded with ingredients the user didn't mention (e.g., needing butter, cream, specialty produce, fresh herbs not named).
+        Return the score.
+      metric: ingredient_faithfulness
+      threshold: 3
 
 # ---------------------------------------------------------------------------
 # Category C — Diverse inputs (3 cases)
@@ -167,11 +229,24 @@
       value: file://assertions/ingredient_noise.js
       metric: ingredient_noise
     - type: llm-rubric
-      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      value: |
+        Evaluate this vegetarian (no-dairy) meal suggestion for {{party_size}} people with ingredients {{input}}.
+        Score 1-5 on three criteria, then give an overall score (the minimum of the three):
+        (1) Practicality: are the dishes executable with the stated vegetarian ingredients (tofu, mushrooms) without unusual tools or techniques?
+        (2) Count fit: is the total number of recipes between {{expected_dish_min}} and {{expected_dish_max}}?
+        (3) Variety: are the recipes meaningfully different (different technique or cuisine — not two near-identical stir-fries)?
+        Return the overall score.
       metric: overall_quality
+      threshold: 3
     - type: llm-rubric
-      value: "Does this response strictly comply with the stated dietary restrictions (vegetarian, no dairy)? Score 1-5 where 1=clear violation, 3=mostly compliant with minor concerns, 5=fully compliant with no violations."
+      value: |
+        The user said vegetarian AND no dairy. Score 1-5:
+        5 = Zero violations (no meat/poultry/fish/seafood/gelatin; no milk/cream/butter/cheese/yogurt). At least one concrete recipe is present.
+        3 = Mostly compliant but a borderline ingredient is ambiguous (e.g., "broth" without specifying vegetable broth).
+        1 = Clear violation — any dairy or animal protein appears.
+        Return the score.
       metric: dietary_compliance
+      threshold: 4
 
 - description: "C2: Chinese input — chicken+broccoli dinner for 2 (bilingual test)"
   vars:
@@ -192,8 +267,24 @@
       value: file://assertions/ingredient_noise.js
       metric: ingredient_noise
     - type: llm-rubric
-      value: "Rate the overall quality of this meal suggestion for {{party_size}} people on a scale of 1-5. Consider: Are the dishes practical? Is the number of dishes reasonable? Are the recipes diverse enough? Score 1=terrible, 3=acceptable, 5=excellent."
+      value: |
+        Evaluate this meal suggestion for {{party_size}} people with ingredients {{input}} (Chinese: chicken + broccoli for two).
+        Score 1-5 on three criteria, then give an overall score (the minimum of the three):
+        (1) Practicality: are the dishes executable with chicken and broccoli without requiring unusual tools or techniques?
+        (2) Count fit: is the total number of recipes between {{expected_dish_min}} and {{expected_dish_max}}?
+        (3) Variety: are the recipes meaningfully different (different protein treatment, cuisine, or technique)?
+        Return the overall score.
       metric: overall_quality
+      threshold: 3
+    - type: llm-rubric
+      value: |
+        The user message is in Chinese (我有鸡肉和西兰花，帮我准备两个人的晚餐 = "I have chicken and broccoli, help me prepare dinner for two people"). Score 1-5:
+        5 = Response correctly understands ingredients and party size; recipe names are readable (English or Chinese both fine); instructions are coherent.
+        3 = Mostly correct but missed nuance (wrong party size, missed one ingredient).
+        1 = Misread — responded in an unrelated language, wrong ingredients, garbled.
+        Return the score.
+      metric: bilingual_handling
+      threshold: 3
 
 - description: "C3: vague input — no ingredients, no party size"
   vars:
@@ -206,5 +297,66 @@
       value: file://assertions/structural.js
       metric: agent_completes
     - type: llm-rubric
-      value: "The user gave a vague input ('I want to cook something'). Does the agent handle this well — either by asking clarifying questions or by making reasonable assumptions and proceeding? Score 1-5."
+      value: |
+        The user gave a vague prompt. Score 1-5 on three criteria, return the minimum:
+        (1) Acknowledgment: does the response recognize the input is underspecified?
+        (2) Forward motion: does it EITHER ask 1-2 targeted clarifying questions OR make a small reasonable assumption and proceed (not both, not neither)?
+        (3) Usefulness: if assumptions were made, is the output still usable? If clarifications were asked, are they the right ones (ingredients on hand, party size, dietary constraints)?
+        Return the overall score.
       metric: vague_input_handling
+      threshold: 3
+
+# ---------------------------------------------------------------------------
+# Category D — Dietary enforcement + multi-turn (new, issue #115)
+# ---------------------------------------------------------------------------
+
+- description: "D1: halal constraint — chicken+rice+broccoli dinner"
+  vars:
+    input: "I have chicken breast, rice, and broccoli, and I need halal recipes. Please help me plan dinner for two people."
+    screen: "home"
+    category: "dietary_enforcement"
+    expected_dish_min: 2
+    expected_dish_max: 3
+    party_size: 2
+  assert:
+    - type: javascript
+      value: file://assertions/structural.js
+      metric: agent_completes
+    - type: javascript
+      value: file://assertions/dish_count.js
+      metric: dish_count
+    - type: llm-rubric
+      value: |
+        The user requested halal recipes. Does this response strictly comply with halal dietary rules? It must NOT suggest pork, ham, bacon, lard, or any non-halal proteins (e.g., non-halal gelatin, alcohol as an ingredient). At least one concrete recipe must be clearly present in the response.
+        Score 1-5 where:
+        5 = Zero violations AND at least one concrete recipe is present.
+        3 = Mostly compliant with minor concerns (e.g., a borderline ingredient like unspecified broth).
+        1 = Clear violation (e.g., pork, alcohol, non-halal gelatin appears), or no concrete recipe present.
+        Return the score.
+      metric: dietary_compliance
+      threshold: 4
+
+- description: "D3: recipes swap with 2-turn history — vegetarian swap"
+  vars:
+    # NOTE: `turns` is a JSON-encoded string (not a YAML list) to prevent
+    # promptfoo from expanding it into separate parametric test rows (which
+    # would break the multi-turn semantics — same session_id across turns).
+    # `provider.py` json-decodes this back to list[str].
+    turns: '["Plan me 3 dinners with chicken, rice, and vegetables for four people.", "Swap the first recipe for something vegetarian."]'
+    screen: "home"
+    category: "recipes_swap"
+    party_size: 4
+  assert:
+    - type: javascript
+      value: file://assertions/structural.js
+      metric: agent_completes
+    - type: llm-rubric
+      value: |
+        Context: user asked for 3 dinners with chicken/rice/vegetables for 4, then asked to swap the first recipe for something vegetarian. Judge the FINAL response only.
+        Score 1-5 on three criteria, return the minimum:
+        (1) Swap executed: recipe 1 has been REPLACED (not added) and is clearly vegetarian (no meat/poultry/fish).
+        (2) Count preserved: total recipes = 3 (not 4, not 2).
+        (3) Continuity: recipes 2 and 3 are the same or consistent with the previous turn (the user only asked to change recipe 1).
+        Return the overall score.
+      metric: recipes_swap_quality
+      threshold: 3

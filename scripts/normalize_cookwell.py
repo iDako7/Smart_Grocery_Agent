@@ -7,7 +7,6 @@ Output: data/cookwell_raw/normalized_recipes.json
 Does NOT modify recipes.json — that happens in the merge step.
 """
 
-import glob
 import json
 import re
 from pathlib import Path
@@ -18,6 +17,7 @@ OUTPUT = RAW_DIR / "normalized_recipes.json"
 
 # ── Time parsing ──────────────────────────────────────────────────────────────
 
+
 def parse_time_minutes(cook_time: str) -> int:
     """Parse free-text cook time to minutes. Returns best estimate."""
     if not cook_time:
@@ -26,8 +26,8 @@ def parse_time_minutes(cook_time: str) -> int:
 
     total = 0
     # Match patterns like "4 hrs 30 mins", "1 hour", "45 minutes", "2 hours 30 minutes"
-    hr_match = re.findall(r'(\d+)\s*(?:hrs?|hours?)', s)
-    min_match = re.findall(r'(\d+)\s*(?:mins?|minutes?)', s)
+    hr_match = re.findall(r"(\d+)\s*(?:hrs?|hours?)", s)
+    min_match = re.findall(r"(\d+)\s*(?:mins?|minutes?)", s)
 
     for h in hr_match:
         total += int(h) * 60
@@ -39,17 +39,17 @@ def parse_time_minutes(cook_time: str) -> int:
 
     # Handle "30 minutes plus marinating time" — just take the cook time
     # Handle ranges like "15-20 minutes" — take midpoint
-    range_match = re.search(r'(\d+)\s*-\s*(\d+)\s*(?:mins?|minutes?)', s)
+    range_match = re.search(r"(\d+)\s*-\s*(\d+)\s*(?:mins?|minutes?)", s)
     if range_match:
         return (int(range_match.group(1)) + int(range_match.group(2))) // 2
 
     # Plain number with "min"
-    plain = re.search(r'(\d+)\s*min', s)
+    plain = re.search(r"(\d+)\s*min", s)
     if plain:
         return int(plain.group(1))
 
     # Just a number
-    just_num = re.search(r'(\d+)', s)
+    just_num = re.search(r"(\d+)", s)
     if just_num:
         return int(just_num.group(1))
 
@@ -67,18 +67,19 @@ def effort_from_minutes(minutes: int) -> str:
 
 # ── Servings parsing ──────────────────────────────────────────────────────────
 
+
 def parse_servings(servings_text: str) -> int:
     if not servings_text:
         return 4
     s = servings_text.lower()
 
     # "serves 3-4" or "3-4 servings" → take higher
-    range_match = re.search(r'(\d+)\s*[-–]\s*(\d+)', s)
+    range_match = re.search(r"(\d+)\s*[-–]\s*(\d+)", s)
     if range_match:
         return int(range_match.group(2))
 
     # "4 servings" or "serves 4"
-    num_match = re.search(r'(\d+)', s)
+    num_match = re.search(r"(\d+)", s)
     if num_match:
         return int(num_match.group(1))
 
@@ -100,6 +101,7 @@ COOKING_METHODS = [
     ("sear|pan", "pan-sear"),
     ("wok", "stir-fry"),
 ]
+
 
 def infer_cooking_method(instructions: str, title: str) -> str:
     text = (title + " " + instructions).lower()
@@ -150,6 +152,7 @@ EXTRA_FLAVOR_SIGNALS = [
     (r"smoke|charr|bbq|grill", "smoky"),
 ]
 
+
 def infer_flavor_tags(cuisine: str, ingredients: list, instructions: str) -> list[str]:
     tags = set(CUISINE_FLAVOR_MAP.get(cuisine, ["savory"]))
 
@@ -168,27 +171,28 @@ def infer_flavor_tags(cuisine: str, ingredients: list, instructions: str) -> lis
 
 # Prep/descriptor suffixes to strip from ingredient names
 PREP_PATTERNS = [
-    r',\s*(thinly\s+)?sliced.*$',
-    r',\s*diced.*$',
-    r',\s*minced.*$',
-    r',\s*chopped.*$',
-    r',\s*grated.*$',
-    r',\s*julienned.*$',
-    r',\s*cubed.*$',
-    r',\s*finely\s+\w+.*$',
-    r',\s*optional.*$',
-    r',\s*crushed.*$',
-    r',\s*peeled.*$',
-    r'\s*\(.*\)$',  # strip parenthetical notes
-    r',\s*low-cal.*$',
-    r',\s*for\s+\w+.*$',
+    r",\s*(thinly\s+)?sliced.*$",
+    r",\s*diced.*$",
+    r",\s*minced.*$",
+    r",\s*chopped.*$",
+    r",\s*grated.*$",
+    r",\s*julienned.*$",
+    r",\s*cubed.*$",
+    r",\s*finely\s+\w+.*$",
+    r",\s*optional.*$",
+    r",\s*crushed.*$",
+    r",\s*peeled.*$",
+    r"\s*\(.*\)$",  # strip parenthetical notes
+    r",\s*low-cal.*$",
+    r",\s*for\s+\w+.*$",
 ]
+
 
 def normalize_ingredient_name(name: str) -> str:
     """Lowercase and strip prep notes to get a clean ingredient name."""
     n = name.strip().lower()
     for pattern in PREP_PATTERNS:
-        n = re.sub(pattern, '', n, flags=re.IGNORECASE)
+        n = re.sub(pattern, "", n, flags=re.IGNORECASE)
     return n.strip()
 
 
@@ -218,11 +222,13 @@ CUISINE_NORMALIZE = {
     "Southeast Asian": "Southeast Asian",
 }
 
+
 def normalize_cuisine(cuisine: str) -> str:
     return CUISINE_NORMALIZE.get(cuisine, cuisine)
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────
+
 
 def normalize_all():
     # Load all batches
@@ -245,11 +251,13 @@ def normalize_all():
 
         ingredients = []
         for ing in deduped:
-            ingredients.append({
-                "name": normalize_ingredient_name(ing["name"]),
-                "amount": ing.get("amount", ""),
-                "pcsv": []  # filled in B6
-            })
+            ingredients.append(
+                {
+                    "name": normalize_ingredient_name(ing["name"]),
+                    "amount": ing.get("amount", ""),
+                    "pcsv": [],  # filled in B6
+                }
+            )
 
         recipe = {
             "id": recipe_id,

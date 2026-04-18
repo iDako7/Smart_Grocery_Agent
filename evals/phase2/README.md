@@ -59,8 +59,14 @@ evals/phase2/
 | C | C1 | vegetarian no-dairy, tofu+mushrooms | Dietary compliance |
 | C | C2 | Chinese input (equivalent to A1) | Bilingual handling |
 | C | C3 | "I want to cook something" | Vague input handling |
+| D | D1 | halal + chicken+rice+broccoli | Hard dietary constraint (no pork/non-halal) |
+| D | D3 | 2-turn swap: "plan 3 dinners" -> "swap #1 for vegetarian" | Multi-turn history + recipe swap (R2) |
 
 B1/B2 reuse A1/A2 inputs with the same assertions — they produce independent eval rows so we get duplicate measurements, which is useful for measuring per-run variance even within a single promptfoo run.
+
+D3 uses `vars.turns` instead of `vars.input`. The provider sends each turn as a separate `/chat` request on the same `session_id` and aggregates token usage across turns; `output` is the response from the last turn. The consistency runner is single-turn only and skips `vars.turns` entries.
+
+**Encoding note:** `vars.turns` must be a **JSON-encoded string** (e.g. `turns: '["first turn", "second turn"]'`), not a native YAML list. Promptfoo treats list-valued vars as a cartesian parameter and expands them into one test row per element — that would break the multi-turn design (same `session_id` across turns, output = last turn's response). Encoding as a scalar string keeps the test as a single row; the provider `json.loads()`-decodes it back into `list[str]`. A real YAML list is also accepted for backward compatibility and ad-hoc use, but please keep the canonical form as a JSON string in `test_cases.yaml`.
 
 ## Metrics recorded
 
@@ -86,6 +92,25 @@ All metrics are **measure-only** (no pass/fail thresholds). The only pass/fail g
 - `cost` — per-call dollar cost
 - `latency` — wall-clock milliseconds
 - Token usage (prompt + completion)
+
+## Telemetry fields
+
+The provider surfaces the following telemetry on every result (issue #115).
+Backend plumbs `token_usage` into the SSE `done` event; the provider reads
+it and exposes it via promptfoo's standard output shape.
+
+- `tokenUsage.total` — total tokens (sum across multi-turn cases)
+- `tokenUsage.prompt` — prompt tokens
+- `tokenUsage.completion` — completion tokens
+- `tokenUsage.cached` — cached prompt tokens (prompt-cache hits)
+- `cost` — USD, straight from OpenRouter's `token_usage.cost`
+- `latency_ms` — wall-clock milliseconds (sum across multi-turn cases)
+- `cache_hit_ratio` — `cached_tokens / prompt_tokens` (0.0 if prompt is 0)
+- `metadata.model` — model id reported by the backend
+- `metadata.cache_write_tokens` — tokens written to the cache
+
+Note: D3 uses `vars.turns` for multi-turn. Token usage and latency are
+summed across turns; `output` is the response from the final turn.
 
 ## Consistency runner
 

@@ -88,6 +88,23 @@ class ErrorEvent(BaseModel):
     recoverable: bool = True
 
 
+class TokenUsage(BaseModel):
+    """Per-run token / cost telemetry summed across all LLM calls in run_agent.
+
+    OpenRouter-normalized via `extra_body={"usage": {"include": True}}`:
+    - `cached_tokens` / `cache_write_tokens` come from `usage.prompt_tokens_details`.
+    - `cost` is the OpenRouter-reported USD cost (sum of per-call costs).
+    """
+
+    prompt_tokens: int = 0
+    completion_tokens: int = 0
+    total_tokens: int = 0
+    cached_tokens: int = 0
+    cache_write_tokens: int = 0
+    cost: float = 0.0
+    model: str | None = None
+
+
 class DoneEvent(BaseModel):
     event_type: Literal["done"] = "done"
     status: Literal["complete", "partial"]
@@ -98,6 +115,10 @@ class DoneEvent(BaseModel):
     error_category: AgentErrorCategory | None = Field(
         default=None,
         description="Error taxonomy when status='partial'. None on success.",
+    )
+    token_usage: TokenUsage | None = Field(
+        default=None,
+        description="Summed token usage + cost across all LLM calls in the run. Optional; absent when the agent short-circuits before any LLM call.",
     )
 
 

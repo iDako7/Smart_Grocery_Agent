@@ -15,4 +15,18 @@ prompts:
 providers:
   - id: python:provider.py
 
+# Pin the grader so model-graded assertions (llm-rubric) are stable across runs.
+# We wrap Claude Sonnet 4.6 via OpenRouter using the openai-chat provider with a
+# custom apiBaseUrl (promptfoo does not yet ship a first-class `openrouter:`
+# provider, but OpenRouter is OpenAI-API-compatible). temperature: 0 for
+# determinism. Environment variable uses Nunjucks env syntax (NOT shell $VAR).
+defaultTest:
+  options:
+    provider:
+      id: openai:chat:anthropic/claude-sonnet-4.6
+      config:
+        apiBaseUrl: https://openrouter.ai/api/v1
+        apiKey: '{{env.OPENROUTER_API_KEY}}'
+        temperature: 0
+
 tests: file://test_cases.yaml

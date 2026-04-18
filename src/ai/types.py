@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 
-from contracts.sse_events import GroceryStore
+from contracts.sse_events import GroceryStore, TokenUsage
 from contracts.tool_schemas import ClarifyTurnPayload, PCSVResult, RecipeSummary
 
 
@@ -24,3 +24,4 @@ class AgentResult:
     grocery_list: list[GroceryStore] = field(default_factory=list)
     clarify_turn: ClarifyTurnPayload | None = None
     reason: str | None = None
+    token_usage: TokenUsage | None = None

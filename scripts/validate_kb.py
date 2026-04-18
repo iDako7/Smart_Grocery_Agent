@@ -6,6 +6,7 @@ Checks row counts, spot-check queries, and constraint domains.
 Exit code 0 if all pass, 1 if any fail.
 Dependencies: Python stdlib only.
 """
+
 import json
 import sqlite3
 import sys
@@ -21,13 +22,15 @@ CheckResult = namedtuple("CheckResult", ["name", "passed", "detail"])
 # Explicit whitelist of table names that may appear in f-string SQL queries.
 # Trust boundary: only names in this set are ever interpolated into SQL.
 # Any table name not present here will raise ValueError before query execution.
-ALLOWED_TABLES: frozenset = frozenset({
-    "recipes",
-    "pcsv_mappings",
-    "products",
-    "substitutions",
-    "glossary",
-})
+ALLOWED_TABLES: frozenset = frozenset(
+    {
+        "recipes",
+        "pcsv_mappings",
+        "products",
+        "substitutions",
+        "glossary",
+    }
+)
 
 # Expected counts derived from source data at migration time.
 # All keys must be members of ALLOWED_TABLES (asserted at module load time below).
@@ -42,8 +45,7 @@ EXPECTED_COUNTS = {
 # Module-load assertion: every EXPECTED_COUNTS key must be in ALLOWED_TABLES.
 # This catches accidental drift between the two constants during development.
 assert set(EXPECTED_COUNTS.keys()) <= ALLOWED_TABLES, (
-    "EXPECTED_COUNTS contains table names not in ALLOWED_TABLES: "
-    f"{set(EXPECTED_COUNTS.keys()) - ALLOWED_TABLES}"
+    f"EXPECTED_COUNTS contains table names not in ALLOWED_TABLES: {set(EXPECTED_COUNTS.keys()) - ALLOWED_TABLES}"
 )
 
 
@@ -55,17 +57,16 @@ def _check_row_counts(conn: sqlite3.Connection) -> list:
         # by this module, but we validate defensively to prevent any future
         # mutation (e.g. from tests or calling code) from reaching sqlite.
         if table not in ALLOWED_TABLES:
-            raise ValueError(
-                f"Table name '{table}' is not in ALLOWED_TABLES; "
-                "refusing to interpolate into SQL query."
-            )
+            raise ValueError(f"Table name '{table}' is not in ALLOWED_TABLES; refusing to interpolate into SQL query.")
         actual = conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
         passed = actual == expected
-        results.append(CheckResult(
-            name=f"{table} row count",
-            passed=passed,
-            detail=f"{actual}/{expected}",
-        ))
+        results.append(
+            CheckResult(
+                name=f"{table} row count",
+                passed=passed,
+                detail=f"{actual}/{expected}",
+            )
+        )
     return results
 
 

@@ -46,9 +46,7 @@ def is_similar(a: str, b: str) -> bool:
     if na in nb or nb in na:
         return True
     words_a, words_b = na.split(), nb.split()
-    if words_a and words_b and words_a[-1] == words_b[-1]:
-        return True
-    return False
+    return bool(words_a and words_b and words_a[-1] == words_b[-1])
 
 
 def find_overlaps(ingredients: list[dict]) -> list[tuple[str, str]]:
@@ -169,11 +167,13 @@ def main():
         # Overlaps
         overlaps = find_overlaps(ingredients)
         if overlaps:
-            recipes_with_overlaps.append({
-                "id": recipe_id,
-                "name": recipe_name,
-                "overlaps": overlaps,
-            })
+            recipes_with_overlaps.append(
+                {
+                    "id": recipe_id,
+                    "name": recipe_name,
+                    "overlaps": overlaps,
+                }
+            )
             for a, b in overlaps:
                 # Canonical ordering for consistent counting
                 pair = tuple(sorted([normalize(a), normalize(b)]))
@@ -185,11 +185,13 @@ def main():
         for s in staples:
             staple_counter[normalize(s)] += 1
         if len(staples) >= 3:
-            recipes_with_3plus_staples.append({
-                "id": recipe_id,
-                "name": recipe_name,
-                "staples": staples,
-            })
+            recipes_with_3plus_staples.append(
+                {
+                    "id": recipe_id,
+                    "name": recipe_name,
+                    "staples": staples,
+                }
+            )
 
     # Compute stats
     avg_ingredients = sum(all_ingredient_counts) / total_recipes if total_recipes else 0
@@ -268,10 +270,7 @@ def main():
             "overlapping_ingredients": {
                 "count": overlap_count,
                 "percentage": round(overlap_pct, 1),
-                "top_pairs": [
-                    {"pair": list(pair), "count": n}
-                    for pair, n in top_overlap_pairs
-                ],
+                "top_pairs": [{"pair": list(pair), "count": n} for pair, n in top_overlap_pairs],
                 "affected_recipes": [
                     {
                         "id": r["id"],
@@ -285,9 +284,7 @@ def main():
                 "recipes_with_3_plus": staple3_count,
                 "recipes_with_3_plus_percentage": round(staple3_pct, 1),
                 "average_per_recipe": round(avg_staples, 1),
-                "most_common": [
-                    {"name": name, "count": n} for name, n in top_staples
-                ],
+                "most_common": [{"name": name, "count": n} for name, n in top_staples],
             },
         }
         json_path.write_text(json.dumps(results, indent=2) + "\n")

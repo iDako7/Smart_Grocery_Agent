@@ -156,11 +156,13 @@ async def step0_preflight(ctx: Ctx) -> list[Check]:
         r = await ctx.client.get("/health")
         checks.append(Check("Backend reachable (GET /health)", r.status_code == 200, f"HTTP {r.status_code}"))
     except httpx.ConnectError as exc:
-        checks.append(Check(
-            "Backend reachable (GET /health)",
-            False,
-            f"Connection refused — is 'bun run dev' running?\n{exc}",
-        ))
+        checks.append(
+            Check(
+                "Backend reachable (GET /health)",
+                False,
+                f"Connection refused — is 'bun run dev' running?\n{exc}",
+            )
+        )
 
     try:
         val = await ctx.pg.fetchval("SELECT 1")
@@ -211,11 +213,13 @@ async def step2_turn1_chat(ctx: Ctx) -> list[Check]:
 
     # Must-be-true #1: AI responses stream via SSE (≥2 events before done)
     non_done = [e for e in events if e.get("_type") != "done"]
-    checks.append(Check(
-        f"#1 SSE streaming: ≥2 events received before done (got {len(non_done)})",
-        len(non_done) >= 2,
-        f"event types: {[e.get('_type') for e in non_done]}",
-    ))
+    checks.append(
+        Check(
+            f"#1 SSE streaming: ≥2 events received before done (got {len(non_done)})",
+            len(non_done) >= 2,
+            f"event types: {[e.get('_type') for e in non_done]}",
+        )
+    )
 
     # Must-be-true #2: pcsv_update event with structured gap data
     pcsv_events = _of_type(events, "pcsv_update")
@@ -223,35 +227,42 @@ async def step2_turn1_chat(ctx: Ctx) -> list[Check]:
         pcsv = pcsv_events[0].get("pcsv", {})
         has_all_roles = all(k in pcsv for k in ("protein", "carb", "veggie", "sauce"))
         valid_statuses = all(
-            pcsv.get(r, {}).get("status") in ("gap", "low", "ok")
-            for r in ("protein", "carb", "veggie", "sauce")
+            pcsv.get(r, {}).get("status") in ("gap", "low", "ok") for r in ("protein", "carb", "veggie", "sauce")
         )
-        checks.append(Check(
-            "#2 pcsv_update has protein/carb/veggie/sauce with valid status",
-            has_all_roles and valid_statuses,
-            f"roles_present={has_all_roles}, valid_statuses={valid_statuses}",
-        ))
+        checks.append(
+            Check(
+                "#2 pcsv_update has protein/carb/veggie/sauce with valid status",
+                has_all_roles and valid_statuses,
+                f"roles_present={has_all_roles}, valid_statuses={valid_statuses}",
+            )
+        )
         gap_roles = [r for r in ("protein", "carb", "veggie", "sauce") if pcsv.get(r, {}).get("status") == "gap"]
-        checks.append(Check(
-            f"#2 pcsv_update has at least one gap indicator (got: {gap_roles})",
-            len(gap_roles) > 0,
-            "BBQ-with-only-meat input should show carb/veggie gaps",
-        ))
+        checks.append(
+            Check(
+                f"#2 pcsv_update has at least one gap indicator (got: {gap_roles})",
+                len(gap_roles) > 0,
+                "BBQ-with-only-meat input should show carb/veggie gaps",
+            )
+        )
     else:
-        checks.append(Check(
-            "#2 pcsv_update event received",
-            False,
-            f"event types seen: {[e.get('_type') for e in events]}",
-        ))
+        checks.append(
+            Check(
+                "#2 pcsv_update event received",
+                False,
+                f"event types seen: {[e.get('_type') for e in events]}",
+            )
+        )
 
     # Expect a response event (clarify_turn on home screen, or explanation)
     ct = _of_type(events, "clarify_turn")
     ex = _of_type(events, "explanation")
-    checks.append(Check(
-        f"Turn 1 emits clarify_turn or explanation (got ct={len(ct)}, ex={len(ex)})",
-        bool(ct or ex),
-        "If neither present, issue #87 LLM flakiness may be the cause",
-    ))
+    checks.append(
+        Check(
+            f"Turn 1 emits clarify_turn or explanation (got ct={len(ct)}, ex={len(ex)})",
+            bool(ct or ex),
+            "If neither present, issue #87 LLM flakiness may be the cause",
+        )
+    )
 
     # done event
     done = _of_type(events, "done")
@@ -259,11 +270,13 @@ async def step2_turn1_chat(ctx: Ctx) -> list[Check]:
         status = done[0].get("status")
         checks.append(Check("Turn 1 ends with done event", True, f"status={status!r}"))
         if status != "complete":
-            checks.append(Check(
-                "Turn 1 done.status=complete",
-                False,
-                f"status={status!r}, reason={done[0].get('reason')!r} — likely issue #87 LLM flakiness",
-            ))
+            checks.append(
+                Check(
+                    "Turn 1 done.status=complete",
+                    False,
+                    f"status={status!r}, reason={done[0].get('reason')!r} — likely issue #87 LLM flakiness",
+                )
+            )
     else:
         checks.append(Check("Turn 1 ends with done event", False, f"types seen: {[e.get('_type') for e in events]}"))
 
@@ -286,19 +299,23 @@ async def step3_db_regression(ctx: Ctx) -> list[Check]:
     )
     all_rows = [(r["id"], r["role"], r["content"]) for r in rows]
 
-    checks.append(Check(
-        f"DB: conversation_turns rows found ({len(all_rows)})",
-        len(all_rows) > 0,
-        f"roles: {[role for _, role, _ in all_rows]}",
-    ))
+    checks.append(
+        Check(
+            f"DB: conversation_turns rows found ({len(all_rows)})",
+            len(all_rows) > 0,
+            f"roles: {[role for _, role, _ in all_rows]}",
+        )
+    )
 
     assistant_rows = [(rid, content) for rid, role, content in all_rows if role == "assistant"]
     empty = [rid for rid, content in assistant_rows if not content]
-    checks.append(Check(
-        f"Bug #98: {len(assistant_rows)} assistant rows all have non-empty content",
-        len(empty) == 0,
-        f"empty assistant row ids: {empty}" if empty else "",
-    ))
+    checks.append(
+        Check(
+            f"Bug #98: {len(assistant_rows)} assistant rows all have non-empty content",
+            len(empty) == 0,
+            f"empty assistant row ids: {empty}" if empty else "",
+        )
+    )
 
     return checks
 
@@ -322,18 +339,22 @@ async def step4_turn2_chat(ctx: Ctx) -> list[Check]:
 
     recipe_events = _of_type(events, "recipe_card")
     n = len(recipe_events)
-    checks.append(Check(
-        f"Turn 2: recipe_card events received (spec 3–5, got {n})",
-        n >= 1,
-        f"count={n}",
-    ))
+    checks.append(
+        Check(
+            f"Turn 2: recipe_card events received (spec 3–5, got {n})",
+            n >= 1,
+            f"count={n}",
+        )
+    )
 
     valid = sum(1 for e in recipe_events if e.get("recipe", {}).get("id") and e.get("recipe", {}).get("name"))
-    checks.append(Check(
-        f"Turn 2: recipe cards have id + name ({valid}/{n} valid)",
-        valid == n and n > 0,
-        "",
-    ))
+    checks.append(
+        Check(
+            f"Turn 2: recipe cards have id + name ({valid}/{n} valid)",
+            valid == n and n > 0,
+            "",
+        )
+    )
 
     ctx.recipes = [e.get("recipe", {}) for e in recipe_events]
 
@@ -365,12 +386,14 @@ async def step5_grocery_list(ctx: Ctx) -> list[Check]:
             items.append({"ingredient_name": ing, "amount": "1 unit", "recipe_name": rname, "recipe_id": rid})
 
     # Synthetic item: deliberately obscure so it never matches product KB → forces an "Other" entry
-    items.append({
-        "ingredient_name": "xzqw-synthetic-unmatched-ingredient",
-        "amount": "1 tsp",
-        "recipe_name": "Synthetic Other Test",
-        "recipe_id": "test-other",
-    })
+    items.append(
+        {
+            "ingredient_name": "xzqw-synthetic-unmatched-ingredient",
+            "amount": "1 tsp",
+            "recipe_name": "Synthetic Other Test",
+            "recipe_id": "test-other",
+        }
+    )
 
     r = await ctx.client.post(f"/session/{ctx.session_id}/grocery-list", json={"items": items})
     checks.append(Check("#5 POST grocery-list → 200", r.status_code == 200, f"HTTP {r.status_code}"))
@@ -380,11 +403,13 @@ async def step5_grocery_list(ctx: Ctx) -> list[Check]:
     stores = r.json()
 
     # #5: response is a list (synchronous, deterministic — not an SSE stream)
-    checks.append(Check(
-        f"#5 Response is list[GroceryStore] (deterministic, {len(stores)} stores)",
-        isinstance(stores, list),
-        f"type={type(stores).__name__}",
-    ))
+    checks.append(
+        Check(
+            f"#5 Response is list[GroceryStore] (deterministic, {len(stores)} stores)",
+            isinstance(stores, list),
+            f"type={type(stores).__name__}",
+        )
+    )
 
     # #5: items carry recipe attribution
     has_attribution = any(
@@ -393,32 +418,34 @@ async def step5_grocery_list(ctx: Ctx) -> list[Check]:
         for dept in store.get("departments", [])
         for item in dept.get("items", [])
     )
-    checks.append(Check(
-        "#5 Grocery items have recipe attribution (recipe_context field)",
-        has_attribution,
-        "At least one item should have recipe_context set",
-    ))
+    checks.append(
+        Check(
+            "#5 Grocery items have recipe attribution (recipe_context field)",
+            has_attribution,
+            "At least one item should have recipe_context set",
+        )
+    )
 
     # #6: "Other" store present (from synthetic unmatched item)
     store_names = [s.get("store_name") for s in stores]
     other = next((s for s in stores if s.get("store_name") == "Other"), None)
-    checks.append(Check(
-        "#6 'Other' store present for unmatched items",
-        other is not None,
-        f"stores: {store_names}",
-    ))
+    checks.append(
+        Check(
+            "#6 'Other' store present for unmatched items",
+            other is not None,
+            f"stores: {store_names}",
+        )
+    )
 
     if other:
-        other_names = [
-            item.get("name", "")
-            for dept in other.get("departments", [])
-            for item in dept.get("items", [])
-        ]
-        checks.append(Check(
-            "#6 Synthetic unmatched item appears in Other store",
-            any("xzqw" in name.lower() for name in other_names),
-            f"Other store items: {other_names}",
-        ))
+        other_names = [item.get("name", "") for dept in other.get("departments", []) for item in dept.get("items", [])]
+        checks.append(
+            Check(
+                "#6 Synthetic unmatched item appears in Other store",
+                any("xzqw" in name.lower() for name in other_names),
+                f"Other store items: {other_names}",
+            )
+        )
 
     return checks
 
@@ -460,13 +487,15 @@ async def step6_save_grocery_list(ctx: Ctx) -> list[Check]:
         "SELECT COUNT(*) FROM saved_meal_plans WHERE user_id=$1 AND created_at > NOW() - INTERVAL '10 seconds'",
         uuid.UUID(DEV_USER_ID),
     )
-    checks.append(Check(
-        "#7 [EXPECTED FAIL D1] Linked meal plan row created alongside grocery list",
-        int(recent) > 0,
-        f"saved_meal_plans created in last 10s: {recent}. "
-        f"Spec §3 Journey 1: 'grocery list and meal plan persisted as linked pair'. "
-        f"Implementation gap: saved.py:284-305 inserts only into saved_grocery_lists.",
-    ))
+    checks.append(
+        Check(
+            "#7 [EXPECTED FAIL D1] Linked meal plan row created alongside grocery list",
+            int(recent) > 0,
+            f"saved_meal_plans created in last 10s: {recent}. "
+            f"Spec §3 Journey 1: 'grocery list and meal plan persisted as linked pair'. "
+            f"Implementation gap: saved.py:284-305 inserts only into saved_grocery_lists.",
+        )
+    )
 
     return checks
 
@@ -480,11 +509,13 @@ async def step7_cleanup(ctx: Ctx) -> list[Check]:
     checks: list[Check] = []
     if ctx.grocery_id:
         r = await ctx.client.delete(f"/saved/grocery-lists/{ctx.grocery_id}")
-        checks.append(Check(
-            f"Cleanup DELETE /saved/grocery-lists/{ctx.grocery_id}",
-            r.status_code in (200, 204, 404),
-            f"HTTP {r.status_code}",
-        ))
+        checks.append(
+            Check(
+                f"Cleanup DELETE /saved/grocery-lists/{ctx.grocery_id}",
+                r.status_code in (200, 204, 404),
+                f"HTTP {r.status_code}",
+            )
+        )
     return checks
 
 
@@ -553,7 +584,11 @@ async def main(verbose: bool, cleanup: bool, base_url: str) -> int:
     if ctx.session_id:
         print()
         print(f"  session_id : {ctx.session_id}")
-        print(f"  psql query : SELECT id, role, LEFT(content,80) AS content FROM conversation_turns WHERE session_id='{ctx.session_id}' ORDER BY id;")
+        sid = ctx.session_id
+        print(
+            f"  psql query : SELECT id, role, LEFT(content,80) AS content"
+            f" FROM conversation_turns WHERE session_id='{sid}' ORDER BY id;"
+        )
 
     return 0 if not unexpected_fails else 1
 
@@ -562,6 +597,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Journey 1 end-to-end verification — SGA V2")
     parser.add_argument("--verbose", action="store_true", help="Print raw SSE lines")
     parser.add_argument("--cleanup", action="store_true", help="Delete saved list after run")
-    parser.add_argument("--base-url", default="http://localhost:8000", help="Backend base URL (default: http://localhost:8000)")
+    parser.add_argument(
+        "--base-url", default="http://localhost:8000", help="Backend base URL (default: http://localhost:8000)"
+    )
     args = parser.parse_args()
     sys.exit(asyncio.run(main(args.verbose, args.cleanup, args.base_url)))

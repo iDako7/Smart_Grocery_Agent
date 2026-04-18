@@ -17,7 +17,7 @@ import math
 import os
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from itertools import combinations
 from pathlib import Path
 
@@ -37,13 +37,30 @@ def load_cases(yaml_path: Path = TEST_CASES_YAML) -> list[dict]:
     range gate is dish-count specific (PR #105). Ingredient_noise and
     diverse_inputs cases are out of scope.
     """
-    with open(yaml_path, "r", encoding="utf-8") as f:
+    with open(yaml_path, encoding="utf-8") as f:
         raw_cases = yaml.safe_load(f)
 
     mapped = []
     for entry in raw_cases:
         vars_ = entry.get("vars", {}) or {}
         if vars_.get("category") != "dish_count":
+            continue
+
+        # Consistency runner is single-turn only; multi-turn entries (vars.turns)
+        # are skipped with a warning. Entries missing both input and turns are
+        # likewise skipped to avoid KeyError.
+        if "input" not in vars_:
+            description = entry.get("description", "")
+            if "turns" in vars_:
+                print(
+                    f"Skipping multi-turn entry ({description!r}); consistency runner supports single-turn only.",
+                    file=sys.stderr,
+                )
+            else:
+                print(
+                    f"Skipping entry without vars.input ({description!r}).",
+                    file=sys.stderr,
+                )
             continue
 
         description = entry.get("description", "")
@@ -69,20 +86,19 @@ def load_cases(yaml_path: Path = TEST_CASES_YAML) -> list[dict]:
 # HTTP helpers
 # ---------------------------------------------------------------------------
 
+
 def health_check(base_url: str) -> None:
     """Verify backend is reachable. Raises RuntimeError on failure."""
     try:
         resp = requests.get(f"{base_url}/health", timeout=10)
         resp.raise_for_status()
-    except requests.ConnectionError:
-        raise RuntimeError(
-            f"Backend not running. Run: docker compose up  (tried {base_url}/health)"
-        )
+    except requests.ConnectionError as err:
+        raise RuntimeError(f"Backend not running. Run: docker compose up  (tried {base_url}/health)") from err
     except requests.HTTPError as exc:
         raise RuntimeError(
             f"Backend health check failed ({exc.response.status_code}). "
             f"Run: docker compose up  (tried {base_url}/health)"
-        )
+        ) from exc
 
 
 def create_session(base_url: str) -> str:
@@ -108,6 +124,7 @@ def send_chat(base_url: str, session_id: str, message: str, screen: str) -> str:
 # SSE parsing
 # ---------------------------------------------------------------------------
 
+
 def parse_sse(body: str) -> list[tuple[str, dict]]:
     """Parse an SSE stream body into (event_type, data_dict) tuples."""
     events = []
@@ -119,9 +136,9 @@ def parse_sse(body: str) -> list[tuple[str, dict]]:
         data = ""
         for line in block.split("\n"):
             if line.startswith("event:"):
-                event_type = line[len("event:"):].strip()
+                event_type = line[len("event:") :].strip()
             elif line.startswith("data:"):
-                data = line[len("data:"):].strip()
+                data = line[len("data:") :].strip()
         if event_type and data:
             try:
                 events.append((event_type, json.loads(data)))
@@ -133,6 +150,7 @@ def parse_sse(body: str) -> list[tuple[str, dict]]:
 # ---------------------------------------------------------------------------
 # Metric extraction
 # ---------------------------------------------------------------------------
+
 
 def extract_metrics(events: list[tuple[str, dict]]) -> dict:
     """Extract dish_count, ingredient_count_avg, and recipe_names from SSE events."""
@@ -150,9 +168,7 @@ def extract_metrics(events: list[tuple[str, dict]]) -> dict:
         ingredients = recipe.get("ingredients") or []
         ingredient_counts.append(len(ingredients))
 
-    ingredient_count_avg = (
-        sum(ingredient_counts) / len(ingredient_counts) if ingredient_counts else 0.0
-    )
+    ingredient_count_avg = sum(ingredient_counts) / len(ingredient_counts) if ingredient_counts else 0.0
 
     return {
         "dish_count": dish_count,
@@ -164,6 +180,7 @@ def extract_metrics(events: list[tuple[str, dict]]) -> dict:
 # ---------------------------------------------------------------------------
 # Statistics
 # ---------------------------------------------------------------------------
+
 
 def _mean(values: list[float]) -> float:
     return sum(values) / len(values) if values else 0.0
@@ -239,6 +256,7 @@ def compute_stats(runs: list[dict]) -> dict:
 # Runner
 # ---------------------------------------------------------------------------
 
+
 def run_single(base_url: str, case: dict) -> dict:
     """Execute one run of a test case. Returns metrics dict or error dict."""
     try:
@@ -287,6 +305,7 @@ def run_case(base_url: str, case: dict, num_runs: int) -> dict:
 # Output formatting
 # ---------------------------------------------------------------------------
 
+
 def print_summary(report: dict) -> None:
     """Print human-readable summary to stderr."""
     print("\n=== Consistency Analysis ===", file=sys.stderr)
@@ -333,6 +352,7 @@ def print_summary(report: dict) -> None:
 # Gate logic
 # ---------------------------------------------------------------------------
 
+
 def check_gates(report: dict) -> int:
     """Gate merges on dish-count variance AND range-fit.
 
@@ -362,8 +382,7 @@ def check_gates(report: dict) -> int:
             failures.append(
                 (
                     case_id,
-                    f"{error_count}/{runs_per_case or len(all_runs)} runs errored "
-                    f"— cannot verify variance",
+                    f"{error_count}/{runs_per_case or len(all_runs)} runs errored — cannot verify variance",
                 )
             )
             continue
@@ -372,8 +391,7 @@ def check_gates(report: dict) -> int:
             failures.append(
                 (
                     case_id,
-                    f"only {len(successful_runs)} successful run(s) — need >=2 to "
-                    f"verify variance",
+                    f"only {len(successful_runs)} successful run(s) — need >=2 to verify variance",
                 )
             )
             continue
@@ -389,8 +407,7 @@ def check_gates(report: dict) -> int:
             failures.append(
                 (
                     case_id,
-                    f"variance gate: dish_count.stddev={stddev} != 0.0 "
-                    f"(counts={dish_counts})",
+                    f"variance gate: dish_count.stddev={stddev} != 0.0 (counts={dish_counts})",
                 )
             )
 
@@ -426,10 +443,9 @@ def check_gates(report: dict) -> int:
 # Main
 # ---------------------------------------------------------------------------
 
+
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Run SGA V2 test cases N times and measure output variance."
-    )
+    parser = argparse.ArgumentParser(description="Run SGA V2 test cases N times and measure output variance.")
     parser.add_argument(
         "--runs",
         type=int,
@@ -453,11 +469,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    base_url = (
-        args.base_url
-        or os.environ.get("SGA_EVAL_BASE_URL")
-        or DEFAULT_BASE_URL
-    )
+    base_url = args.base_url or os.environ.get("SGA_EVAL_BASE_URL") or DEFAULT_BASE_URL
 
     # Health check
     print(f"Checking backend at {base_url}...", file=sys.stderr, flush=True)
@@ -476,7 +488,7 @@ def main() -> None:
     # Build report
     report = {
         "runs_per_case": args.runs,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "cases": cases_results,
     }
 

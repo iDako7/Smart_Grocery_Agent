@@ -85,7 +85,12 @@ async def emit_agent_result(
     if result.status == "complete":
         if error_category is not None:
             raise ValueError("error_category must be None when status='complete'")
-        done = DoneEvent(status="complete")
+        done = DoneEvent(status="complete", token_usage=result.token_usage)
     else:
-        done = DoneEvent(status="partial", reason=result.reason, error_category=error_category)
+        done = DoneEvent(
+            status="partial",
+            reason=result.reason,
+            error_category=error_category,
+            token_usage=result.token_usage,
+        )
     yield _sse_line("done", done.model_dump())
