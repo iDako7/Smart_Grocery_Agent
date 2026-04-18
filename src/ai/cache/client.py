@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 
 import redis.asyncio as redis
 from redis.exceptions import ConnectionError, TimeoutError
@@ -16,18 +17,34 @@ from redis.exceptions import ConnectionError, TimeoutError
 logger = logging.getLogger(__name__)
 
 _DEFAULT_URL = "redis://localhost:6379/0"
+_RETRY_COOLDOWN: int = 60  # seconds between re-ping attempts after a failed ping
 
 # Module-level singleton state.
 # Sentinel distinguishes "not yet initialized" from "initialized as None (unavailable)".
 _UNSET: object = object()
 _client: redis.Redis | None | object = _UNSET
+_last_ping_failed_at: float | None = None
 
 
 async def get_redis_client() -> redis.Redis | None:
-    """Return the shared Redis client, or None if Redis is unreachable."""
-    global _client
-    if _client is not _UNSET:
+    """Return the shared Redis client, or None if Redis is unreachable.
+
+    After a failed ping the client stays None for ``_RETRY_COOLDOWN`` seconds
+    to avoid hammering a down Redis on every request. Once the cooldown elapses
+    the next call re-pings and reconnects if Redis has recovered.
+    """
+    global _client, _last_ping_failed_at
+
+    # Fast path: client already available.
+    if _client is not _UNSET and _client is not None:
         return _client  # type: ignore[return-value]
+
+    # Previously unavailable — honour cooldown before re-pinging.
+    if _client is None:
+        now = time.monotonic()
+        if _last_ping_failed_at is not None and (now - _last_ping_failed_at) < _RETRY_COOLDOWN:
+            return None
+        _client = _UNSET  # cooldown elapsed — fall through to ping attempt
 
     url = os.getenv("REDIS_URL", _DEFAULT_URL)
     client = redis.from_url(url, decode_responses=False)
@@ -40,18 +57,21 @@ async def get_redis_client() -> redis.Redis | None:
         except Exception:  # noqa: BLE001 — best-effort cleanup
             pass
         _client = None
+        _last_ping_failed_at = time.monotonic()
         return None
 
     _client = client
+    _last_ping_failed_at = None
     return client
 
 
 async def close_redis_client() -> None:
     """Close the singleton (if open) and reset so the next call re-pings."""
-    global _client
+    global _client, _last_ping_failed_at
     if _client is not _UNSET and _client is not None:
         try:
             await _client.aclose()  # type: ignore[union-attr]
         except Exception:  # noqa: BLE001 — best-effort cleanup
             pass
     _client = _UNSET
+    _last_ping_failed_at = None
