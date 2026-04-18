@@ -14,6 +14,10 @@ Sequence rule (from src/ai/sse.py):
 
 import json
 
+from pydantic import TypeAdapter
+from src.ai.sse import emit_agent_result
+from src.ai.types import AgentResult, ToolCall
+
 from contracts.sse_events import SSEEvent
 from contracts.tool_schemas import (
     ClarifyOption,
@@ -23,9 +27,6 @@ from contracts.tool_schemas import (
     PCSVResult,
     RecipeSummary,
 )
-from pydantic import TypeAdapter
-from src.ai.sse import emit_agent_result
-from src.ai.types import AgentResult, ToolCall
 
 # ---------------------------------------------------------------------------
 # Helpers (inlined so this file is self-contained and independent)
