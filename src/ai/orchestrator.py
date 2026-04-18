@@ -8,6 +8,7 @@ import json
 import logging
 import os
 import uuid
+from typing import Any
 
 import aiosqlite
 from openai import (
@@ -21,7 +22,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 
 logger = logging.getLogger(__name__)
 
-from src.ai.prompt import build_system_blocks, build_system_prompt
+from src.ai.prompt import build_system_blocks
 from src.ai.schema_coercion import coerce_tool_args
 from src.ai.tools.analyze_pcsv import analyze_pcsv
 from src.ai.tools.emit_clarify_turn import emit_clarify_turn
@@ -48,6 +49,7 @@ from contracts.tool_schemas import (
     SearchRecipesInput,
     TranslateTermInput,
     UpdateUserProfileInput,
+    UserProfile,
 )
 
 MAX_ITERATIONS = 10
@@ -247,9 +249,7 @@ async def _dispatch_tool(
     )
 
 
-def _system_blocks_with_cache(
-    profile: "UserProfile", screen: "Screen | None"
-) -> "list[dict[str, Any]]":
+def _system_blocks_with_cache(profile: "UserProfile", screen: "Screen | None") -> list[dict[str, Any]]:
     """Build the system content blocks with cache_control on the last static block.
 
     Locates the cache boundary via the ``_cache_boundary`` sentinel set by
@@ -259,15 +259,12 @@ def _system_blocks_with_cache(
     Raises RuntimeError if the sentinel is missing or appears more than once
     (would indicate a bug in build_system_blocks).
     """
-    from typing import Any  # local import to avoid circular at module level
-
     raw = build_system_blocks(profile, screen=screen)
 
     boundary_indices = [i for i, b in enumerate(raw) if b.get("_cache_boundary") is True]
     if len(boundary_indices) != 1:
         raise RuntimeError(
-            f"build_system_blocks must have exactly 1 _cache_boundary sentinel, "
-            f"found {len(boundary_indices)}"
+            f"build_system_blocks must have exactly 1 _cache_boundary sentinel, found {len(boundary_indices)}"
         )
     boundary_idx = boundary_indices[0]
 

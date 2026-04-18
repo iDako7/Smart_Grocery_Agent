@@ -1,6 +1,6 @@
 """Tests for prompt assembly."""
 
-from src.ai.prompt import build_system_prompt, build_system_blocks
+from src.ai.prompt import build_system_blocks, build_system_prompt
 
 from contracts.tool_schemas import UserProfile
 
@@ -102,9 +102,9 @@ def test_build_system_blocks_option_a_order():
     blocks = build_system_blocks(UserProfile())
     assert len(blocks) == 4
     assert "# Smart Grocery Assistant" in blocks[0]["text"]  # persona
-    assert "## Rules" in blocks[1]["text"]                   # rules
-    assert "## Tool Usage" in blocks[2]["text"]              # tool_instructions
-    assert "## User Profile" in blocks[3]["text"]            # profile
+    assert "## Rules" in blocks[1]["text"]  # rules
+    assert "## Tool Usage" in blocks[2]["text"]  # tool_instructions
+    assert "## User Profile" in blocks[3]["text"]  # profile
 
 
 def test_build_system_blocks_with_screen_appends_screen_block():
@@ -125,25 +125,17 @@ def test_build_system_blocks_block_shape():
     blocks = build_system_blocks(UserProfile(), screen="recipes")
     allowed_keys = {"type", "text", "_cache_boundary"}
     for i, block in enumerate(blocks):
-        assert set(block.keys()) <= allowed_keys, (
-            f"Block {i} has unexpected keys: {set(block.keys()) - allowed_keys}"
-        )
+        assert set(block.keys()) <= allowed_keys, f"Block {i} has unexpected keys: {set(block.keys()) - allowed_keys}"
         assert block["type"] == "text", f"Block {i} type is not 'text'"
-        assert isinstance(block["text"], str) and block["text"], (
-            f"Block {i} text is empty or not a string"
-        )
-        assert "cache_control" not in block, (
-            f"Block {i} must not have cache_control at this layer (Phase 2 concern)"
-        )
+        assert isinstance(block["text"], str) and block["text"], f"Block {i} text is empty or not a string"
+        assert "cache_control" not in block, f"Block {i} must not have cache_control at this layer (Phase 2 concern)"
 
 
 def test_build_system_blocks_has_exactly_one_cache_boundary_sentinel():
     """Exactly one block must carry ``_cache_boundary: True``."""
     blocks = build_system_blocks(UserProfile())
     sentinel_blocks = [b for b in blocks if b.get("_cache_boundary") is True]
-    assert len(sentinel_blocks) == 1, (
-        f"Expected exactly 1 sentinel block, got {len(sentinel_blocks)}"
-    )
+    assert len(sentinel_blocks) == 1, f"Expected exactly 1 sentinel block, got {len(sentinel_blocks)}"
 
 
 def test_build_system_blocks_cache_boundary_on_tool_instructions_block():
