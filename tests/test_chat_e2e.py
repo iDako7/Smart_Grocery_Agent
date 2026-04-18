@@ -118,9 +118,9 @@ async def test_full_e2e_flow(client):
         with patch("src.backend.api.sessions.get_kb") as mock_kb:
             mock_kb.return_value = kb_ctx
             with patch(
-                "src.backend.api.sessions.get_recipe_detail",
+                "src.backend.api.sessions.get_recipe_details_batch",
                 new_callable=AsyncMock,
-                return_value=detail,
+                return_value={"r001": detail},
             ):
                 resp = await client.post(
                     f"/session/{sid}/chat",

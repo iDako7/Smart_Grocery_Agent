@@ -99,8 +99,10 @@ async def test_verify_token_is_valid_jwt():
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         resp = await client.post("/auth/verify", json={"email": "test@example.com", "code": "000000"})
     data = resp.json()
-    # JWT_SECRET not set in test env → falls back to "dev-secret"
-    payload = jwt.decode(data["token"], "dev-secret", algorithms=["HS256"])
+    from src.backend.auth import get_jwt_secret
+
+    secret = get_jwt_secret() or "dev-secret"
+    payload = jwt.decode(data["token"], secret, algorithms=["HS256"])
     assert payload["sub"] == data["user_id"]
 
 
@@ -113,7 +115,10 @@ async def test_verify_jwt_has_exp_claim():
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         resp = await client.post("/auth/verify", json={"email": "test@example.com", "code": "000000"})
     data = resp.json()
-    payload = jwt.decode(data["token"], "dev-secret", algorithms=["HS256"])
+    from src.backend.auth import get_jwt_secret
+
+    secret = get_jwt_secret() or "dev-secret"
+    payload = jwt.decode(data["token"], secret, algorithms=["HS256"])
     assert "exp" in payload
     # exp should be roughly 24 h (86400 s) in the future
     now = int(time.time())

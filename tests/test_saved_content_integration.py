@@ -88,9 +88,9 @@ async def test_save_meal_plan_from_session(client):
         with patch("src.backend.api.sessions.get_kb") as mock_get_kb:
             mock_get_kb.return_value = _make_kb_ctx(kb_conn)
             with patch(
-                "src.backend.api.sessions.get_recipe_detail",
+                "src.backend.api.sessions.get_recipe_details_batch",
                 new_callable=AsyncMock,
-                return_value=detail,
+                return_value={"r001": detail},
             ):
                 await client.post(
                     f"/session/{sid}/chat",

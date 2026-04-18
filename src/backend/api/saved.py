@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncConnection
 from src.ai.kb import get_kb
-from src.ai.tools.get_recipe_detail import get_recipe_detail
+from src.ai.tools.get_recipe_detail import get_recipe_details_batch
 from src.backend.auth import get_current_user_id
 from src.backend.db.engine import get_db
 from src.backend.db.tables import (
@@ -30,7 +30,6 @@ from contracts.api_types import (
     UpdateMealPlanRequest,
     UpdateSavedRecipeRequest,
 )
-from contracts.tool_schemas import GetRecipeDetailInput
 
 router = APIRouter(prefix="/saved")
 
@@ -53,15 +52,18 @@ async def create_meal_plan(
     recipes_data = (sess_row.state_snapshot or {}).get("recipes", []) if sess_row else []
 
     # Lazy upgrade: pre-existing sessions may have un-hydrated RecipeSummary
-    # entries (no `instructions` / empty `ingredients`). Re-fetch detail from
-    # the KB and hydrate in place before persisting (issue #71).
-    async with get_kb() as kb:
+    # entries (no `instructions` / empty `ingredients`). Batch-fetch detail
+    # from the KB and hydrate in place before persisting (issue #71, #79).
+    ids_to_fetch = [
+        entry["id"] for entry in recipes_data if not entry.get("instructions") and not entry.get("ingredients")
+    ]
+    if ids_to_fetch:
+        async with get_kb() as kb:
+            details = await get_recipe_details_batch(kb, ids_to_fetch)
         for entry in recipes_data:
-            if not entry.get("instructions") and not entry.get("ingredients"):
-                detail = await get_recipe_detail(kb, GetRecipeDetailInput(recipe_id=entry["id"]))
-                if detail is not None:
-                    entry["ingredients"] = [i.model_dump() for i in detail.ingredients]
-                    entry["instructions"] = detail.instructions
+            if (detail := details.get(entry["id"])) is not None:
+                entry["ingredients"] = [i.model_dump() for i in detail.ingredients]
+                entry["instructions"] = detail.instructions
 
     pid = uuid.uuid4()
     result = await conn.execute(

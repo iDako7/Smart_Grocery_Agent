@@ -8,24 +8,18 @@ from src.ai.cache.config import TTL_SECONDS
 
 from contracts.tool_schemas import GetRecipeDetailInput, Ingredient, RecipeDetail
 
+_RECIPE_COLUMNS = (
+    "id, name, name_zh, source, source_url, cuisine, cooking_method, "
+    "effort_level, time_minutes, flavor_tags, serves, ingredients, instructions, "
+    "is_ai_generated"
+)
 
-@cached_tool("get_recipe_detail", TTL_SECONDS["get_recipe_detail"], RecipeDetail | None)
-async def get_recipe_detail(db: aiosqlite.Connection, input: GetRecipeDetailInput) -> RecipeDetail | None:
-    cursor = await db.execute(
-        "SELECT id, name, name_zh, source, source_url, cuisine, cooking_method, "
-        "effort_level, time_minutes, flavor_tags, serves, ingredients, instructions, "
-        "is_ai_generated FROM recipes WHERE id = ?",
-        (input.recipe_id,),
-    )
-    row = await cursor.fetchone()
-    if row is None:
-        return None
 
+def _row_to_recipe_detail(row) -> RecipeDetail:
     ingredients_raw = json.loads(row[11]) if row[11] else []
     ingredients = [
         Ingredient(name=i["name"], amount=i.get("amount", ""), pcsv=i.get("pcsv", [])) for i in ingredients_raw
     ]
-
     return RecipeDetail(
         id=row[0],
         name=row[1],
@@ -42,3 +36,43 @@ async def get_recipe_detail(db: aiosqlite.Connection, input: GetRecipeDetailInpu
         instructions=row[12] or "",
         is_ai_generated=bool(row[13]),
     )
+
+
+@cached_tool("get_recipe_detail", TTL_SECONDS["get_recipe_detail"], RecipeDetail | None)
+async def get_recipe_detail(db: aiosqlite.Connection, input: GetRecipeDetailInput) -> RecipeDetail | None:
+    cursor = await db.execute(
+        f"SELECT {_RECIPE_COLUMNS} FROM recipes WHERE id = ?",
+        (input.recipe_id,),
+    )
+    row = await cursor.fetchone()
+    if row is None:
+        return None
+    return _row_to_recipe_detail(row)
+
+
+async def get_recipe_details_batch(
+    db: aiosqlite.Connection,
+    recipe_ids: list[str],
+) -> dict[str, RecipeDetail]:
+    """Fetch RecipeDetail for each id in a single SQLite round-trip.
+
+    Returns a dict keyed by recipe_id. Ids with no KB row are omitted — caller
+    treats absence the same as `get_recipe_detail` returning None. Empty list
+    returns {} without querying. Duplicate ids are deduped.
+
+    Bypasses the Redis read-through cache used by `get_recipe_detail` by design:
+    one SQLite `IN (...)` on PRIMARY KEY is faster than N serial Redis RTTs on
+    the hydration hot path. SQLite's SQLITE_MAX_VARIABLE_NUMBER
+    default (999) is far above realistic meal-plan sizes; no chunking here.
+    """
+    if not recipe_ids:
+        return {}
+
+    unique_ids = list(dict.fromkeys(recipe_ids))
+    placeholders = ",".join("?" * len(unique_ids))
+    cursor = await db.execute(
+        f"SELECT {_RECIPE_COLUMNS} FROM recipes WHERE id IN ({placeholders})",
+        unique_ids,
+    )
+    rows = await cursor.fetchall()
+    return {row[0]: _row_to_recipe_detail(row) for row in rows}

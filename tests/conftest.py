@@ -3,7 +3,9 @@
 import os
 import uuid
 from collections.abc import AsyncIterator
+from unittest.mock import AsyncMock, patch
 
+import fakeredis.aioredis
 import pytest
 import pytest_asyncio
 from sqlalchemy import text
@@ -44,6 +46,21 @@ async def db() -> AsyncIterator[AsyncConnection]:
     finally:
         await txn.rollback()
         await conn.close()
+
+
+@pytest_asyncio.fixture(autouse=True)
+async def _fake_redis():
+    """Replace the Redis singleton with a per-test fakeredis instance.
+
+    Prevents two classes of test failures:
+    - Cross-event-loop errors: real Redis connection attached to loop N reused
+      in loop N+1 (pytest-asyncio creates a new loop per test).
+    - CI failures when no Redis is available (localhost:6379 unreachable).
+    """
+    fake = fakeredis.aioredis.FakeRedis(decode_responses=False)
+    with patch("src.ai.cache.wrapper.get_redis_client", new=AsyncMock(return_value=fake)):
+        yield
+    await fake.aclose()
 
 
 @pytest.fixture()
