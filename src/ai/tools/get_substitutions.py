@@ -5,11 +5,7 @@ import aiosqlite
 from contracts.tool_schemas import GetSubstitutionsInput, Substitution
 from src.ai.cache import cached_tool
 from src.ai.cache.config import TTL_SECONDS
-
-
-def _escape_like(value: str) -> str:
-    """Escape LIKE special characters to prevent wildcard injection."""
-    return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+from src.ai.tools._sql_utils import _escape_like
 
 
 @cached_tool("get_substitutions", TTL_SECONDS["get_substitutions"], list[Substitution])
