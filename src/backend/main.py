@@ -16,6 +16,7 @@ from src.backend.api.sessions import router as sessions_router
 from src.backend.auth import DEV_USER_ID
 from src.backend.db.engine import get_engine
 from src.backend.db.tables import user_profiles, users
+from src.backend.frontend_serve import mount_frontend
 from starlette.middleware.cors import CORSMiddleware
 
 load_dotenv()
@@ -67,21 +68,24 @@ async def _lifespan(app: FastAPI):
 
 app = FastAPI(title="Smart Grocery Assistant V2", version="0.1.0", lifespan=_lifespan)
 
-_CORS_ORIGINS = [
-    o.strip()
-    for o in os.environ.get(
-        "SGA_CORS_ORIGINS", "http://localhost:5173,http://localhost:5174,http://localhost:4173"
-    ).split(",")
-    if o.strip()
-]
+_SERVE_FRONTEND = os.environ.get("SERVE_FRONTEND", "").lower() == "true"
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=_CORS_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+if not _SERVE_FRONTEND:
+    _CORS_ORIGINS = [
+        o.strip()
+        for o in os.environ.get(
+            "SGA_CORS_ORIGINS", "http://localhost:5173,http://localhost:5174,http://localhost:4173"
+        ).split(",")
+        if o.strip()
+    ]
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=_CORS_ORIGINS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 app.include_router(auth_router)
 app.include_router(sessions_router)
@@ -94,3 +98,7 @@ app.include_router(internal_router)
 @app.get("/health")
 async def health() -> dict:
     return {"status": "ok"}
+
+
+if _SERVE_FRONTEND:
+    mount_frontend(app, os.environ.get("FRONTEND_STATIC_DIR", "/app/static"))
