@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from src.backend.api.auth import router as auth_router
 from src.backend.api.grocery import router as grocery_router
+from src.backend.api.internal import router as internal_router
 from src.backend.api.recipes import router as recipes_router
 from src.backend.api.saved import router as saved_router
 from src.backend.api.sessions import router as sessions_router
@@ -87,6 +88,7 @@ app.include_router(sessions_router)
 app.include_router(grocery_router)
 app.include_router(saved_router)
 app.include_router(recipes_router)
+app.include_router(internal_router)
 
 
 @app.get("/health")
