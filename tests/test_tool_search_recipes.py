@@ -31,6 +31,7 @@ async def test_results_sorted_by_match_score(kb):
         # after we account for dedupe.
         def pantry_cov(r):
             return len(r.ingredients_have) / len(user)
+
         for i in range(len(result) - 1):
             assert pantry_cov(result[i]) >= pantry_cov(result[i + 1]) or (
                 result[i].cooking_method and result[i].cooking_method != result[i + 1].cooking_method
@@ -244,13 +245,47 @@ async def test_no_fallback_when_filters_absent(kb):
 # Issue #124: pantry-coverage scoring, primary-protein filter, dietary filter
 # ---------------------------------------------------------------------------
 
-_HALAL_BAD_WORDS = {"pork", "bacon", "ham", "lard", "guanciale", "prosciutto", "pancetta", "chorizo", "pepperoni", "salami", "sausage", "wine", "beer", "sake", "mirin", "gelatin"}
-_VEGETARIAN_BAD_WORDS = {"chicken", "beef", "pork", "lamb", "turkey", "duck", "bacon", "ham", "sausage", "salmon", "tuna", "shrimp", "prawn", "fish", "anchovy"}
+_HALAL_BAD_WORDS = {
+    "pork",
+    "bacon",
+    "ham",
+    "lard",
+    "guanciale",
+    "prosciutto",
+    "pancetta",
+    "chorizo",
+    "pepperoni",
+    "salami",
+    "sausage",
+    "wine",
+    "beer",
+    "sake",
+    "mirin",
+    "gelatin",
+}
+_VEGETARIAN_BAD_WORDS = {
+    "chicken",
+    "beef",
+    "pork",
+    "lamb",
+    "turkey",
+    "duck",
+    "bacon",
+    "ham",
+    "sausage",
+    "salmon",
+    "tuna",
+    "shrimp",
+    "prawn",
+    "fish",
+    "anchovy",
+}
 
 
 def _contains_bad_word(text: str, bad_words: set[str]) -> str | None:
     """Token-based check — prevents 'ham' matching 'muhammara'."""
     import re as _re
+
     tokens = set(_re.findall(r"\w+", text.lower()))
     for bad in bad_words:
         if bad in tokens:
@@ -358,6 +393,7 @@ async def test_primary_protein_soft_rank_beef_egg(kb):
 async def test_rice_does_not_match_rice_vinegar(kb):
     """Token-boundary staple exclusion: user 'rice' shouldn't count 'rice vinegar' as a match."""
     from src.ai.tools.search_recipes import _ingredient_matches
+
     assert _ingredient_matches("rice", "rice vinegar") is False
     assert _ingredient_matches("rice", "rice wine") is False
     assert _ingredient_matches("rice", "rice noodles") is False
@@ -434,9 +470,7 @@ async def test_cuisine_cap_limits_primaries_to_one_per_cuisine(kb):
     # Allow at most one duplicate only if KB genuinely lacks variety for this
     # query; with 10+ cuisines containing beef or rice in KB this should be
     # fully distinct.
-    assert len(cuisines) == len(set(cuisines)), (
-        f"cuisine-cap should prevent same-cuisine primaries; got {cuisines}"
-    )
+    assert len(cuisines) == len(set(cuisines)), f"cuisine-cap should prevent same-cuisine primaries; got {cuisines}"
 
 
 async def test_extras_penalty_discounts_specialty_recipes(kb):
