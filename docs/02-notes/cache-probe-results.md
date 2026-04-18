@@ -114,3 +114,39 @@ Latency: 1.51s
   }
 }
 ```
+
+---
+
+## Application Probe (2026-04-17) — issue #116
+
+**Status:** ✅ PASS | **Script:** `scripts/cache_probe_app.py` | **Path:** real `run_agent` orchestrator (not synthetic)
+
+Confirms the Phase 3 implementation (Option-A prompt order + `cache_control` on the tool_instructions block + `provider: {"order": ["Anthropic"]}` pin) produces cached-read tokens end-to-end through the application's actual code path.
+
+- **Cold Call:** 3,134 prompt tokens · 0 cached · **$0.002778** · 2.79s latency
+- **Warm Call:** 3,134 prompt tokens · **2,560 cached** (82% of prompt) · **$0.001136** · 5.68s latency
+- **Cost reduction:** ~59% per call on this workload (dynamic tail = 574 tokens of profile + user message).
+
+Inputs: `USER_MESSAGE="Hello, can you see this message?"`, `screen=None`, default `UserProfile()`, empty history, 5s inter-call sleep.
+
+```json
+{
+  "cold_first": {
+    "prompt_tokens": 3134,
+    "completion_tokens": 95,
+    "cost": 0.002778,
+    "prompt_tokens_details": {"cached_tokens": 0, "cache_write_tokens": 0}
+  },
+  "warm_first": {
+    "prompt_tokens": 3134,
+    "completion_tokens": 114,
+    "cost": 0.0011355,
+    "prompt_tokens_details": {"cached_tokens": 2560, "cache_write_tokens": 0}
+  }
+}
+```
+
+**Notes:**
+- `cached_tokens=2560` corresponds to the static prefix (persona + rules + tool_instructions). The 574-token uncached tail is the dynamic suffix (profile + user message) — exactly as designed by Option-A ordering.
+- Cold call does not report `cache_write_tokens > 0` in OpenRouter's normalized view in this run, but the subsequent warm hit confirms the write happened. Primary acceptance signal (`cached_tokens > 0` on warm call) is met.
+- Latency sample is small; broader latency data to come from the #115-instrumented eval diff.

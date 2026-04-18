@@ -8,6 +8,7 @@ import json
 import logging
 import os
 import uuid
+from typing import Any
 
 import aiosqlite
 from openai import (
@@ -21,7 +22,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 
 logger = logging.getLogger(__name__)
 
-from src.ai.prompt import build_system_prompt
+from src.ai.prompt import build_system_blocks
 from src.ai.schema_coercion import coerce_tool_args
 from src.ai.tools.analyze_pcsv import analyze_pcsv
 from src.ai.tools.emit_clarify_turn import emit_clarify_turn
@@ -48,6 +49,7 @@ from contracts.tool_schemas import (
     SearchRecipesInput,
     TranslateTermInput,
     UpdateUserProfileInput,
+    UserProfile,
 )
 
 MAX_ITERATIONS = 10
@@ -169,7 +171,7 @@ async def _llm_call_with_retry(client, *, model, messages, tools, max_tokens, to
                 tools=tools,
                 max_tokens=max_tokens,
                 temperature=temperature,
-                extra_body={"usage": {"include": True}},
+                extra_body={"usage": {"include": True}, "provider": {"order": ["Anthropic"]}},
             )
             if tool_choice is not None:
                 kwargs["tool_choice"] = tool_choice
@@ -247,6 +249,35 @@ async def _dispatch_tool(
     )
 
 
+def _system_blocks_with_cache(profile: "UserProfile", screen: "Screen | None") -> list[dict[str, Any]]:
+    """Build the system content blocks with cache_control on the last static block.
+
+    Locates the cache boundary via the ``_cache_boundary`` sentinel set by
+    ``build_system_blocks`` — never by index. This keeps cache placement
+    correct even if blocks are inserted before tool_instructions in the future.
+
+    Raises RuntimeError if the sentinel is missing or appears more than once
+    (would indicate a bug in build_system_blocks).
+    """
+    raw = build_system_blocks(profile, screen=screen)
+
+    boundary_indices = [i for i, b in enumerate(raw) if b.get("_cache_boundary") is True]
+    if len(boundary_indices) != 1:
+        raise RuntimeError(
+            f"build_system_blocks must have exactly 1 _cache_boundary sentinel, found {len(boundary_indices)}"
+        )
+    boundary_idx = boundary_indices[0]
+
+    blocks: list[dict[str, Any]] = []
+    for i, block in enumerate(raw):
+        # Intentional shallow copy: do not mutate the list returned by build_system_blocks
+        clean = {k: v for k, v in block.items() if k != "_cache_boundary"}
+        if i == boundary_idx:
+            clean["cache_control"] = {"type": "ephemeral"}
+        blocks.append(clean)
+    return blocks
+
+
 async def run_agent(
     user_message: str,
     kb: aiosqlite.Connection,
@@ -257,9 +288,8 @@ async def run_agent(
 ) -> AgentResult:
     """Run the agent orchestration loop for a single user message."""
     profile = await get_user_profile(pg, user_id)
-    system = build_system_prompt(profile, screen=screen)
 
-    messages: list[dict] = [{"role": "system", "content": system}]
+    messages: list[dict] = [{"role": "system", "content": _system_blocks_with_cache(profile, screen)}]
     if history:
         messages.extend(history)
     messages.append({"role": "user", "content": user_message})

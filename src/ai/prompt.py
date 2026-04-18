@@ -8,8 +8,47 @@ from contracts.api_types import Screen
 from contracts.tool_schemas import UserProfile
 
 
+def build_system_blocks(profile: UserProfile, screen: Screen | None = None) -> list[dict]:
+    """Build the system prompt as a list of typed content blocks (Option-A order).
+
+    Order is LOAD-BEARING for prompt caching (issue #116). Static blocks
+    (persona, rules, tool_instructions) MUST precede dynamic blocks
+    (profile, screen). Reordering — in particular moving the profile block
+    above tool_instructions — will silently invalidate the cache and kill
+    the ~60% cost savings.
+
+    The ``tool_instructions`` block (last static block) carries
+    ``_cache_boundary: True`` as an internal sentinel. The orchestrator
+    (``_system_blocks_with_cache``) locates this block by the sentinel key,
+    strips it, and adds ``cache_control`` before sending to the LLM — so
+    inserting new blocks before tool_instructions remains safe as long as
+    the sentinel stays on the last static block.
+
+    Returns ``{"type": "text", "text": ...}`` dicts (tool_instructions block
+    also carries ``_cache_boundary: True``). No ``cache_control`` keys are
+    set here — that is the orchestrator's concern.
+
+    Args:
+        profile: The user's persisted profile.
+        screen: Optional current screen name. When provided, a fifth block
+                containing the Current Screen section is appended.
+    """
+    blocks = [
+        {"type": "text", "text": _PERSONA},
+        {"type": "text", "text": _RULES},
+        {"type": "text", "text": _TOOL_INSTRUCTIONS, "_cache_boundary": True},
+        {"type": "text", "text": _build_profile_section(profile)},
+    ]
+    if screen is not None:
+        blocks.append({"type": "text", "text": _build_screen_section(screen)})
+    return blocks
+
+
 def build_system_prompt(profile: UserProfile, screen: Screen | None = None) -> str:
-    """Build the full system prompt with profile section.
+    """Build the full system prompt as a single string.
+
+    Thin wrapper over :func:`build_system_blocks` — joins all block texts with
+    double newlines.  Preserves the same interface for all existing callers.
 
     Args:
         profile: The user's persisted profile.
@@ -17,10 +56,7 @@ def build_system_prompt(profile: UserProfile, screen: Screen | None = None) -> s
                 When provided a 'Current Screen' section is appended so the
                 agent knows the user's navigation context.
     """
-    parts = [_PERSONA, _RULES, _build_profile_section(profile), _TOOL_INSTRUCTIONS]
-    if screen is not None:
-        parts.append(_build_screen_section(screen))
-    return "\n\n".join(parts)
+    return "\n\n".join(b["text"] for b in build_system_blocks(profile, screen))
 
 
 def _build_screen_section(screen: Screen) -> str:
