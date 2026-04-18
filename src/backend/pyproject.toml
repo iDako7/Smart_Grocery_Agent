@@ -17,6 +17,7 @@ dependencies = [
     "rapidfuzz>=3.0",
     "openai>=1.0",
     "pyyaml>=6.0",
+    "redis>=5.0",
 ]
 
 [dependency-groups]
@@ -25,6 +26,7 @@ dev = [
     "pytest-asyncio>=0.25,<1.0",
     "httpx>=0.28",
     "psycopg2-binary>=2.9",
+    "fakeredis>=2.20",
 ]
 
 [tool.pytest.ini_options]
