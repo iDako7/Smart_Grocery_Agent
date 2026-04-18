@@ -5,7 +5,11 @@ postgres_data
 *.pyc
 __pycache__
 .env
-src/frontend
 evals
 docs
 prototype
+tests
+.claude
+.venv
+.pytest_cache
+.ruff_cache
