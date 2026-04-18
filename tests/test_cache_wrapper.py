@@ -312,3 +312,35 @@ async def test_list_return_type_roundtrip():
     assert isinstance(result2[0], RecipeSummary)
     assert result2[0].id == "r001"
     assert result2[1].name == "Salmon Bowl"
+
+
+# ---------------------------------------------------------------------------
+# Test 9: corrupt cache entry falls through to handler (M1 fix)
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_corrupt_cache_entry_falls_through_to_handler(caplog):
+    """Corrupt bytes in Redis must log WARN op=decode and fall through, not raise."""
+    from src.ai.cache.wrapper import cached_tool
+    from src.ai.cache.keys import compute_key
+
+    calls = {"n": 0}
+
+    @cached_tool("fake_tool", ttl_seconds=3600, return_type=_Output)
+    async def handler(db, input: _Input) -> _Output:
+        calls["n"] += 1
+        return _Output(value=input.x * 2)
+
+    fake_redis = _make_fake_redis()
+    key = compute_key("fake_tool", _Input(x=5).model_dump(mode="json"))
+    await fake_redis.set(key, b"not-valid-json!!!")  # inject corrupt entry
+
+    with _patch_client(fake_redis):
+        with caplog.at_level(logging.WARNING, logger="src.ai.cache.wrapper"):
+            result = await handler(None, _Input(x=5))
+
+    assert result.value == 10
+    assert calls["n"] == 1, "handler must run after decode failure"
+    warns = [r.message for r in caplog.records if r.levelno == logging.WARNING]
+    assert any("op=decode" in m for m in warns), f"expected WARN with op=decode, got: {warns}"
