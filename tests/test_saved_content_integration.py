@@ -4,12 +4,12 @@ import uuid
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest_asyncio
+from contracts.tool_schemas import Ingredient, RecipeDetail, RecipeSummary
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
 from src.ai.types import AgentResult
 from src.backend.main import app
 
-from contracts.tool_schemas import Ingredient, RecipeDetail, RecipeSummary
 from tests.conftest import _engine, _ensure_tables
 
 _DEV_USER = uuid.UUID("00000000-0000-0000-0000-000000000001")
@@ -88,9 +88,9 @@ async def test_save_meal_plan_from_session(client):
         with patch("src.backend.api.sessions.get_kb") as mock_get_kb:
             mock_get_kb.return_value = _make_kb_ctx(kb_conn)
             with patch(
-                "src.backend.api.sessions.get_recipe_detail",
+                "src.backend.api.sessions.get_recipe_details_batch",
                 new_callable=AsyncMock,
-                return_value=detail,
+                return_value={"r001": detail},
             ):
                 await client.post(
                     f"/session/{sid}/chat",

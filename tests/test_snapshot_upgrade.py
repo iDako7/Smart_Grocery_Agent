@@ -12,12 +12,12 @@ import uuid
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest_asyncio
+from contracts.tool_schemas import Ingredient, RecipeDetail, RecipeSummary
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import text
 from src.ai.types import AgentResult
 from src.backend.main import app
 
-from contracts.tool_schemas import Ingredient, RecipeDetail, RecipeSummary
 from tests.conftest import _engine, _ensure_tables
 
 _DEV_USER = uuid.UUID("00000000-0000-0000-0000-000000000001")
@@ -117,17 +117,17 @@ async def test_chat_turn_snapshot_contains_recipe_detail_shape(client):
         with patch("src.backend.api.sessions.get_kb") as mock_get_kb:
             mock_get_kb.return_value = _make_kb_ctx(kb_conn)
             with patch(
-                "src.backend.api.sessions.get_recipe_detail",
+                "src.backend.api.sessions.get_recipe_details_batch",
                 new_callable=AsyncMock,
-                return_value=detail,
-            ) as mock_detail:
+                return_value={"r001": detail},
+            ) as mock_batch:
                 resp = await client.post(
                     f"/session/{sid}/chat",
                     json={"message": "Find me recipes", "screen": "recipes"},
                 )
 
     assert resp.status_code == 200
-    mock_detail.assert_called_once()
+    mock_batch.assert_called_once()
 
     # Read back session state
     resp = await client.get(f"/session/{sid}")
@@ -182,10 +182,10 @@ async def test_create_meal_plan_lazy_upgrades_old_shape_snapshot(client):
     detail = _make_recipe_detail("r002", "Garlic Butter Pasta")
 
     with patch(
-        "src.backend.api.saved.get_recipe_detail",
+        "src.backend.api.saved.get_recipe_details_batch",
         new_callable=AsyncMock,
-        return_value=detail,
-    ) as mock_detail:
+        return_value={"r002": detail},
+    ) as mock_batch:
         with patch("src.backend.api.saved.get_kb") as mock_get_kb:
             kb_conn = AsyncMock()
             mock_get_kb.return_value = _make_kb_ctx(kb_conn)
@@ -195,7 +195,7 @@ async def test_create_meal_plan_lazy_upgrades_old_shape_snapshot(client):
             )
 
     assert resp.status_code == 201
-    mock_detail.assert_called_once()
+    mock_batch.assert_called_once()
 
     body = resp.json()
     assert body["recipes"], "meal plan must contain recipes"
@@ -244,9 +244,7 @@ async def test_chat_turn_hydrates_alternatives(client):
         is_ai_generated=False,
     )
 
-    async def _detail_side_effect(_kb, input):
-        mapping = {"r001": primary_detail, "r_alt_01": alt_detail}
-        return mapping.get(input.recipe_id)
+    batch_return = {"r001": primary_detail, "r_alt_01": alt_detail}
 
     kb_conn = AsyncMock()
 
@@ -258,9 +256,9 @@ async def test_chat_turn_hydrates_alternatives(client):
         with patch("src.backend.api.sessions.get_kb") as mock_get_kb:
             mock_get_kb.return_value = _make_kb_ctx(kb_conn)
             with patch(
-                "src.backend.api.sessions.get_recipe_detail",
+                "src.backend.api.sessions.get_recipe_details_batch",
                 new_callable=AsyncMock,
-                side_effect=_detail_side_effect,
+                return_value=batch_return,
             ):
                 resp = await client.post(
                     f"/session/{sid}/chat",
@@ -302,9 +300,9 @@ async def test_chat_turn_ai_generated_recipe_persisted_as_summary_fallback(clien
         with patch("src.backend.api.sessions.get_kb") as mock_get_kb:
             mock_get_kb.return_value = _make_kb_ctx(kb_conn)
             with patch(
-                "src.backend.api.sessions.get_recipe_detail",
+                "src.backend.api.sessions.get_recipe_details_batch",
                 new_callable=AsyncMock,
-                return_value=None,  # AI-generated — no KB row
+                return_value={},  # AI-generated — batch yields no row for this id
             ):
                 resp = await client.post(
                     f"/session/{sid}/chat",
@@ -321,3 +319,155 @@ async def test_chat_turn_ai_generated_recipe_persisted_as_summary_fallback(clien
     rec = data["recipes"][0]
     assert rec["id"] == "ai-xyz"
     assert rec["name"] == "AI Fusion Bowl"
+
+
+# ---------------------------------------------------------------------------
+# Test A (issue #79) — zero KB reads when every RecipeSummary is pre-hydrated
+# ---------------------------------------------------------------------------
+
+
+async def test_hydration_skipped_when_recipes_pre_hydrated(client):
+    """If every RecipeSummary already carries `instructions`, the hydration
+    path must issue zero KB reads — no get_kb(), no batch call."""
+    resp = await client.post("/session")
+    sid = resp.json()["session_id"]
+
+    pre_hydrated = RecipeSummary(
+        id="r001",
+        name="Pre-hydrated",
+        ingredients=[Ingredient(name="x", amount="1", pcsv=["protein"])],
+        instructions="Already cooked.",
+    )
+    mock_result = AgentResult(
+        status="complete",
+        response_text="ok",
+        recipes=[pre_hydrated],
+        total_iterations=1,
+    )
+
+    # Note: get_kb is also opened for the agent run at the top of /chat.
+    # The hydration block should NOT open a second get_kb context.
+    kb_conn = AsyncMock()
+    with patch("src.backend.api.sessions.run_agent", new_callable=AsyncMock, return_value=mock_result):
+        with patch("src.backend.api.sessions.get_kb") as mock_get_kb:
+            mock_get_kb.return_value = _make_kb_ctx(kb_conn)
+            with patch(
+                "src.backend.api.sessions.get_recipe_details_batch",
+                new_callable=AsyncMock,
+            ) as mock_batch:
+                resp = await client.post(
+                    f"/session/{sid}/chat",
+                    json={"message": "x", "screen": "recipes"},
+                )
+
+    assert resp.status_code == 200
+    mock_batch.assert_not_called()
+    # Exactly one get_kb — for the agent run only, not for hydration
+    assert mock_get_kb.call_count == 1, f"hydration opened a second KB connection (call_count={mock_get_kb.call_count})"
+
+
+# ---------------------------------------------------------------------------
+# Test B (issue #79) — N un-hydrated recipes → exactly ONE batch call
+# ---------------------------------------------------------------------------
+
+
+async def test_hydration_uses_single_batch_call_for_n_recipes(client):
+    """3 primaries × 2 alternatives (9 recipes total) all un-hydrated:
+    hydration must issue exactly ONE get_recipe_details_batch call carrying
+    all 9 ids."""
+    resp = await client.post("/session")
+    sid = resp.json()["session_id"]
+
+    def _primary(i: int) -> RecipeSummary:
+        return RecipeSummary(
+            id=f"p{i}",
+            name=f"Primary {i}",
+            alternatives=[
+                RecipeSummary(id=f"p{i}a1", name="alt1"),
+                RecipeSummary(id=f"p{i}a2", name="alt2"),
+            ],
+        )
+
+    primaries = [_primary(1), _primary(2), _primary(3)]
+    mock_result = AgentResult(
+        status="complete",
+        response_text="ok",
+        recipes=primaries,
+        total_iterations=1,
+    )
+
+    expected_ids = {"p1", "p1a1", "p1a2", "p2", "p2a1", "p2a2", "p3", "p3a1", "p3a2"}
+    batch_return = {rid: _make_recipe_detail(rid) for rid in expected_ids}
+    kb_conn = AsyncMock()
+
+    with patch("src.backend.api.sessions.run_agent", new_callable=AsyncMock, return_value=mock_result):
+        with patch("src.backend.api.sessions.get_kb") as mock_get_kb:
+            mock_get_kb.return_value = _make_kb_ctx(kb_conn)
+            with patch(
+                "src.backend.api.sessions.get_recipe_details_batch",
+                new_callable=AsyncMock,
+                return_value=batch_return,
+            ) as mock_batch:
+                resp = await client.post(
+                    f"/session/{sid}/chat",
+                    json={"message": "x", "screen": "recipes"},
+                )
+
+    assert resp.status_code == 200
+    assert mock_batch.call_count == 1, "hydration must use exactly ONE batch call"
+
+    call_args = mock_batch.call_args
+    passed_ids = call_args.args[1] if len(call_args.args) > 1 else call_args.kwargs["recipe_ids"]
+    assert set(passed_ids) == expected_ids
+    assert len(passed_ids) == 9
+
+
+# ---------------------------------------------------------------------------
+# Test C (issue #79) — AI-generated ids absent from batch dict → defaults kept
+# ---------------------------------------------------------------------------
+
+
+async def test_batch_returns_empty_dict_for_ai_generated_ids(client):
+    """Mixed KB-backed + AI-generated recipes: the batch omits the AI id from
+    its result dict. Hydration loop leaves ingredients/instructions at defaults
+    for the AI entry and hydrates the KB entry. Snapshot persists both without
+    crash."""
+    resp = await client.post("/session")
+    sid = resp.json()["session_id"]
+
+    ai_recipe = RecipeSummary(id="ai-xyz", name="AI Fusion Bowl")
+    kb_recipe = RecipeSummary(id="r001", name="Real KB Recipe")
+    mock_result = AgentResult(
+        status="complete",
+        response_text="ok",
+        recipes=[kb_recipe, ai_recipe],
+        total_iterations=1,
+    )
+
+    batch_return = {"r001": _make_recipe_detail("r001")}
+    kb_conn = AsyncMock()
+
+    with patch("src.backend.api.sessions.run_agent", new_callable=AsyncMock, return_value=mock_result):
+        with patch("src.backend.api.sessions.get_kb") as mock_get_kb:
+            mock_get_kb.return_value = _make_kb_ctx(kb_conn)
+            with patch(
+                "src.backend.api.sessions.get_recipe_details_batch",
+                new_callable=AsyncMock,
+                return_value=batch_return,
+            ):
+                resp = await client.post(
+                    f"/session/{sid}/chat",
+                    json={"message": "x", "screen": "recipes"},
+                )
+
+    assert resp.status_code == 200
+
+    resp = await client.get(f"/session/{sid}")
+    recs = resp.json()["recipes"]
+    ai_entry = next(r for r in recs if r["id"] == "ai-xyz")
+    assert ai_entry["name"] == "AI Fusion Bowl"
+    assert ai_entry.get("instructions", "") == ""
+    assert ai_entry.get("ingredients", []) == []
+    kb_entry = next(r for r in recs if r["id"] == "r001")
+    assert kb_entry["instructions"] == "Step 1: Cook the chicken."
+    assert kb_entry["ingredients"][0]["name"] == "chicken"

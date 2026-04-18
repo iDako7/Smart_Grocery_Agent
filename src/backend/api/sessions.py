@@ -5,20 +5,6 @@ import uuid
 
 import openai
 import pydantic
-from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import StreamingResponse
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncConnection
-from src.ai.context import load_context, save_turn
-from src.ai.kb import get_kb
-from src.ai.orchestrator import run_agent
-from src.ai.sse import emit_agent_result
-from src.ai.tools.get_recipe_detail import get_recipe_detail
-from src.ai.types import AgentResult
-from src.backend.auth import get_current_user_id
-from src.backend.db.engine import get_db
-from src.backend.db.tables import conversation_turns, sessions
-
 from contracts.api_types import (
     ChatRequest,
     ConversationTurn,
@@ -28,7 +14,19 @@ from contracts.api_types import (
     SessionStateResponse,
 )
 from contracts.sse_events import AgentErrorCategory
-from contracts.tool_schemas import GetRecipeDetailInput
+from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncConnection
+from src.ai.context import load_context, save_turn
+from src.ai.kb import get_kb
+from src.ai.orchestrator import run_agent
+from src.ai.sse import emit_agent_result
+from src.ai.tools.get_recipe_detail import get_recipe_details_batch
+from src.ai.types import AgentResult
+from src.backend.auth import get_current_user_id
+from src.backend.db.engine import get_db
+from src.backend.db.tables import conversation_turns, sessions
 
 logger = logging.getLogger(__name__)
 
@@ -203,22 +201,30 @@ async def chat(
         if result.recipes:
             # Hydrate each RecipeSummary with canonical `ingredients` + `instructions`
             # from the KB so both the SSE emit path and the saved meal plan path
-            # carry full detail (issue #71). AI-generated recipes have no KB row —
-            # leave ingredients/instructions at their defaults. Alternatives
-            # nested under each primary also need hydration — otherwise the
-            # frontend swap-in-place flow renders zero ingredient pills when
-            # the user picks an alternative (PR #112 UAT bug).
-            async with get_kb() as kb:
+            # carry full detail (issue #71). Alternatives nested under each primary
+            # also need hydration — otherwise the frontend swap-in-place flow
+            # renders zero ingredient pills when the user picks an alternative
+            # (PR #112 UAT bug). One batch KB query covers every un-hydrated id
+            # (issue #79); pre-hydrated recipes skip KB entirely.
+            ids_to_fetch: list[str] = []
+            for r in result.recipes:
+                if not r.instructions:
+                    ids_to_fetch.append(r.id)
+                for alt in r.alternatives:
+                    if not alt.instructions:
+                        ids_to_fetch.append(alt.id)
+
+            if ids_to_fetch:
+                async with get_kb() as kb:
+                    details = await get_recipe_details_batch(kb, ids_to_fetch)
                 for r in result.recipes:
-                    detail = await get_recipe_detail(kb, GetRecipeDetailInput(recipe_id=r.id))
-                    if detail is not None:
-                        r.ingredients = detail.ingredients
-                        r.instructions = detail.instructions
+                    if not r.instructions and (d := details.get(r.id)) is not None:
+                        r.ingredients = d.ingredients
+                        r.instructions = d.instructions
                     for alt in r.alternatives:
-                        alt_detail = await get_recipe_detail(kb, GetRecipeDetailInput(recipe_id=alt.id))
-                        if alt_detail is not None:
-                            alt.ingredients = alt_detail.ingredients
-                            alt.instructions = alt_detail.instructions
+                        if not alt.instructions and (d := details.get(alt.id)) is not None:
+                            alt.ingredients = d.ingredients
+                            alt.instructions = d.instructions
             snapshot["recipes"] = [s.model_dump() for s in result.recipes]
         if result.grocery_list:
             snapshot["grocery_list"] = [s.model_dump() for s in result.grocery_list]
