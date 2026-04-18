@@ -315,34 +315,44 @@ async def test_dietary_vegetarian_filters_meat(kb):
         assert bad is None, f"vegetarian violation: '{bad}' in {joined}"
 
 
-async def test_primary_protein_hard_filter_chicken(kb):
-    """User says chicken → no chicken-free recipe in primaries (e.g., pure beef dishes)."""
+async def test_primary_protein_soft_rank_chicken(kb):
+    """User says chicken → top-scored primaries share chicken.
+
+    Iter 2 softened this from hard filter to soft +2.0 score bonus. We still
+    expect the TOP primary to share the user's protein when the KB has
+    qualifying recipes, but we tolerate lower-ranked primaries that don't
+    (keeps B2 beef+egg from collapsing to 1 recipe).
+    """
     result = await search_recipes(
         kb,
         SearchRecipesInput(ingredients=["chicken", "broccoli"], max_results=5),
     )
     assert len(result) > 0
-    # Every primary must have a chicken-related protein in pcsv_roles['protein']
-    for r in result:
-        proteins_str = " ".join(r.pcsv_roles.get("protein", [])).lower()
-        assert "chicken" in proteins_str, (
-            f"recipe {r.id} ({r.name}) has proteins {r.pcsv_roles.get('protein')} — "
-            f"expected chicken since user only listed chicken as protein"
-        )
+    top_proteins = " ".join(result[0].pcsv_roles.get("protein", [])).lower()
+    assert "chicken" in top_proteins, (
+        f"top primary {result[0].id} has proteins {result[0].pcsv_roles.get('protein')} — "
+        f"expected chicken to rank first via soft protein bonus"
+    )
 
 
-async def test_primary_protein_hard_filter_beef(kb):
-    """User says beef+egg → every primary has beef OR egg (not pure pork/chicken)."""
+async def test_primary_protein_soft_rank_beef_egg(kb):
+    """User says beef+egg+rice → at least one top primary shares beef OR egg.
+
+    Soft-rank version (iter 2): we don't require every result to share a
+    named protein (that was the iter 1 over-filter). We DO require the top
+    primary to share one, and that we return >=2 recipes (B2 regression
+    sentinel — iter 1 returned 1).
+    """
     result = await search_recipes(
         kb,
         SearchRecipesInput(ingredients=["beef", "egg", "rice"], max_results=5),
     )
-    assert len(result) > 0
-    for r in result:
-        proteins_str = " ".join(r.pcsv_roles.get("protein", [])).lower()
-        assert "beef" in proteins_str or "egg" in proteins_str, (
-            f"{r.id} ({r.name}) has proteins {r.pcsv_roles.get('protein')} — expected beef or egg"
-        )
+    assert len(result) >= 2, f"expected >=2 primaries for beef+egg+rice (iter 1 regression), got {len(result)}"
+    top_proteins = " ".join(result[0].pcsv_roles.get("protein", [])).lower()
+    assert "beef" in top_proteins or "egg" in top_proteins, (
+        f"top primary {result[0].id} has proteins {result[0].pcsv_roles.get('protein')} — "
+        f"expected beef or egg to rank first via soft protein bonus"
+    )
 
 
 async def test_rice_does_not_match_rice_vinegar(kb):
@@ -356,19 +366,21 @@ async def test_rice_does_not_match_rice_vinegar(kb):
     assert _ingredient_matches("rice", "white rice") is True
 
 
-async def test_variety_dedupe_by_cooking_method(kb):
-    """When many stir-fries match, primary list should not be dominated by stir-fries."""
+async def test_variety_dedupe_by_cuisine_and_method(kb):
+    """Top-N primaries should not repeat the same (cuisine, cooking_method) combo.
+
+    Iter 2: dedupe key is (cuisine, method) — catches A2's "two Korean rice
+    bowls" and C1's "two Chinese stir-fries" which slipped through
+    method-alone dedupe.
+    """
     result = await search_recipes(
         kb,
         SearchRecipesInput(ingredients=["tofu", "mushrooms"], max_results=3),
     )
-    methods = [r.cooking_method for r in result if r.cooking_method]
-    # At most one duplicate method in top 3 (allows some slack if KB is method-thin)
-    if len(methods) == 3:
-        from collections import Counter
-        counts = Counter(methods)
-        assert max(counts.values()) <= 2, (
-            f"cooking_method dedupe failed: {counts}"
+    combos = [(r.cuisine.lower(), r.cooking_method.lower()) for r in result if r.cuisine and r.cooking_method]
+    if len(combos) >= 2:
+        assert len(set(combos)) == len(combos), (
+            f"(cuisine, method) dedupe failed — duplicates in top-{len(result)}: {combos}"
         )
 
 

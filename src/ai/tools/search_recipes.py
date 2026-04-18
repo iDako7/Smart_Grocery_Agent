@@ -29,7 +29,9 @@ _DIETARY_DENYLIST: dict[str, set[str]] = {
         "gelatin",
     },
     "vegetarian": {
-        "chicken", "beef", "pork", "lamb", "turkey", "duck", "veal",
+        "chicken", "beef", "pork", "lamb", "turkey", "duck", "veal", "venison",
+        "steak", "brisket", "ribs", "ribeye", "sirloin", "tenderloin", "chuck",
+        "ground meat", "meatball", "meatballs", "oxtail", "liver", "kidney",
         "bacon", "ham", "sausage", "chorizo", "pepperoni", "prosciutto",
         "guanciale", "pancetta", "salami",
         "salmon", "tuna", "cod", "tilapia", "halibut", "trout", "mackerel",
@@ -38,7 +40,9 @@ _DIETARY_DENYLIST: dict[str, set[str]] = {
         "gelatin",
     },
     "vegan": {
-        "chicken", "beef", "pork", "lamb", "turkey", "duck", "veal",
+        "chicken", "beef", "pork", "lamb", "turkey", "duck", "veal", "venison",
+        "steak", "brisket", "ribs", "ribeye", "sirloin", "tenderloin", "chuck",
+        "ground meat", "meatball", "meatballs", "oxtail", "liver", "kidney",
         "bacon", "ham", "sausage", "chorizo", "pepperoni", "prosciutto",
         "guanciale", "pancetta", "salami",
         "salmon", "tuna", "cod", "tilapia", "halibut", "trout", "mackerel",
@@ -196,33 +200,45 @@ async def search_recipes(db: aiosqlite.Connection, input: SearchRecipesInput) ->
         if _recipe_violates_dietary(all_ing_names, restrictions):
             continue
 
-        # Hard filter: if user named a protein, recipe must share it (#124).
-        if user_proteins and not _recipe_shares_protein(pcsv_roles, user_proteins):
-            continue
-
         if not have:
             continue
 
         pantry_cov = len(have) / max(len(user_ingredients), 1)
         recipe_cov = len(have) / len(ingredients_json) if ingredients_json else 0
-        results.append(((pantry_cov, recipe_cov), summary))
+
+        # Soft ranker: recipes that share a user-named protein rank higher
+        # (iter 2 — replaces hard protein filter, which over-filtered the KB
+        # for multi-protein queries like beef+egg+rice).
+        protein_bonus = 2.0 if user_proteins and _recipe_shares_protein(pcsv_roles, user_proteins) else 0.0
+
+        # Extras penalty: recipes that require many ingredients the user does
+        # not have rank lower. Targets B1/B2 ingredient_faithfulness + A1/A4
+        # where overloaded recipes ignore the user's veggies.
+        extras_penalty = 0.05 * len(need)
+
+        score = pantry_cov + protein_bonus - extras_penalty
+        results.append(((score, recipe_cov), summary))
 
     # Primary sort: pantry coverage (how much of user's pantry this uses).
     # Secondary: recipe coverage (how little the user has to go buy).
     results.sort(key=lambda r: r[0], reverse=True)
 
-    # Variety dedupe: keep the highest-scored recipe per cooking_method; spill
-    # duplicates to a leftover queue so we still hit max_results if the KB is thin.
-    seen_methods: set[str] = set()
+    # Variety dedupe: keep the highest-scored recipe per (cuisine, method)
+    # combo; spill duplicates to leftover so we still hit max_results if the KB
+    # is thin. Iter 2 — cuisine-aware: catches "two Korean rice bowls" /
+    # "two Chinese stir-fries" that the method-only dedupe missed.
+    seen_combos: set[tuple[str, str]] = set()
     deduped: list[tuple[tuple[float, float], RecipeSummary]] = []
     leftover: list[tuple[tuple[float, float], RecipeSummary]] = []
     for score_tuple, summary in results:
+        cuisine = (summary.cuisine or "").lower()
         method = (summary.cooking_method or "").lower()
-        if method and method in seen_methods:
+        combo = (cuisine, method)
+        if cuisine and method and combo in seen_combos:
             leftover.append((score_tuple, summary))
             continue
-        if method:
-            seen_methods.add(method)
+        if cuisine and method:
+            seen_combos.add(combo)
         deduped.append((score_tuple, summary))
 
     limit = input.max_results or 10
