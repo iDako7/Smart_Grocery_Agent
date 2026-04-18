@@ -279,3 +279,12 @@ def test_encode_empty_list_of_models():
 
     decoded = decode_value(encoded, list[RecipeSummary])
     assert decoded == []
+
+
+def test_decode_value_unsupported_return_type_raises():
+    """decode_value must raise TypeError for return types it cannot handle."""
+    from src.ai.cache.keys import encode_value, decode_value
+
+    encoded = encode_value({"x": 1})  # kind="dict"
+    with pytest.raises(TypeError, match="unsupported return_type"):
+        decode_value(encoded, str)  # str is not dict/BaseModel/list[BaseModel]
