@@ -49,6 +49,7 @@ class SearchRecipesInput(BaseModel):
     serves: int | None = None
     include_alternatives: bool = False
     max_results: int | None = Field(default=None, ge=1, le=20)
+    dietary_restrictions: list[str] | None = None
 
 
 class LookupStoreProductInput(BaseModel):
@@ -332,6 +333,11 @@ TOOLS: list[dict] = [
                         "minimum": 1,
                         "maximum": 20,
                         "description": "Optional cap on the number of primary recipes returned. Use this to scale output to party size (e.g., 1-2 for 1 person, 2-3 for 2-3 people, 3-4 for 4-6 people, 4-5 for 7+ people). Omit to get the default cap of 10.",
+                    },
+                    "dietary_restrictions": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Hard dietary filter applied to primaries AND alternatives. Pass the user's restrictions verbatim (e.g., ['halal'], ['vegetarian', 'no dairy'], ['vegan']). Supported values: 'halal', 'vegetarian', 'vegan', 'no dairy', 'dairy-free'. ALWAYS pass this when the user profile lists any dietary restriction OR when the user states one in their message.",
                     },
                 },
                 "required": ["ingredients"],
