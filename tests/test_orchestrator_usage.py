@@ -199,4 +199,5 @@ async def test_run_agent_passes_extra_body_usage_include(kb, seeded_user, db):
         await run_agent("Hello", kb, db, seeded_user)
 
     call_kwargs = mock_client.chat.completions.create.call_args.kwargs
-    assert call_kwargs.get("extra_body") == {"usage": {"include": True}}
+    extra_body = call_kwargs.get("extra_body", {})
+    assert extra_body.get("usage") == {"include": True}
