@@ -4,6 +4,8 @@ import json
 import re
 
 import aiosqlite
+from src.ai.cache import cached_tool
+from src.ai.cache.config import TTL_SECONDS
 
 from contracts.tool_schemas import AnalyzePcsvInput, PCSVCategory, PCSVResult
 
@@ -16,6 +18,7 @@ def _status(count: int) -> str:
     return "ok"
 
 
+@cached_tool("analyze_pcsv", TTL_SECONDS["analyze_pcsv"], PCSVResult)
 async def analyze_pcsv(db: aiosqlite.Connection, input: AnalyzePcsvInput) -> PCSVResult:
     categories: dict[str, list[str]] = {
         "protein": [],

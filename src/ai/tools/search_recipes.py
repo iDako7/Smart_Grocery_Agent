@@ -3,10 +3,13 @@
 import json
 
 import aiosqlite
+from src.ai.cache import cached_tool
+from src.ai.cache.config import TTL_SECONDS
 
 from contracts.tool_schemas import RecipeSummary, SearchRecipesInput
 
 
+@cached_tool("search_recipes", TTL_SECONDS["search_recipes"], list[RecipeSummary])
 async def search_recipes(db: aiosqlite.Connection, input: SearchRecipesInput) -> list[RecipeSummary]:
     # Build SQL query with optional filters
     clauses = []

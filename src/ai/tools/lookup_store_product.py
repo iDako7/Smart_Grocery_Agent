@@ -2,6 +2,8 @@
 
 import aiosqlite
 from rapidfuzz import fuzz
+from src.ai.cache import cached_tool
+from src.ai.cache.config import TTL_SECONDS
 
 from contracts.tool_schemas import LookupStoreProductInput, StoreProduct
 
@@ -69,6 +71,7 @@ async def fuzzy_match_products(
     return score_products(rows, query, threshold)
 
 
+@cached_tool("lookup_store_product", TTL_SECONDS["lookup_store_product"], StoreProduct | None)
 async def lookup_store_product(db: aiosqlite.Connection, input: LookupStoreProductInput) -> StoreProduct | None:
     scored = await fuzzy_match_products(db, input.item_name, store=input.store)
 

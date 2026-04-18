@@ -1,19 +1,18 @@
 """Bilingual EN↔ZH glossary lookup from SQLite KB."""
 
 import aiosqlite
+from src.ai.cache import cached_tool
+from src.ai.cache.config import TTL_SECONDS
+from src.ai.tools._sql_utils import _escape_like
 
 from contracts.tool_schemas import TranslateTermInput, TranslateTermResult
-
-
-def _escape_like(value: str) -> str:
-    """Escape LIKE special characters to prevent wildcard injection."""
-    return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
 
 def _contains_chinese(text: str) -> bool:
     return any("\u4e00" <= ch <= "\u9fff" for ch in text)
 
 
+@cached_tool("translate_term", TTL_SECONDS["translate_term"], TranslateTermResult)
 async def translate_term(db: aiosqlite.Connection, input: TranslateTermInput) -> TranslateTermResult:
     term = input.term.strip()
     direction = input.direction or "auto"
