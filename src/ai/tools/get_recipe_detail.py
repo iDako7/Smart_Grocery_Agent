@@ -5,8 +5,11 @@ import json
 import aiosqlite
 
 from contracts.tool_schemas import GetRecipeDetailInput, Ingredient, RecipeDetail
+from src.ai.cache import cached_tool
+from src.ai.cache.config import TTL_SECONDS
 
 
+@cached_tool("get_recipe_detail", TTL_SECONDS["get_recipe_detail"], RecipeDetail | None)
 async def get_recipe_detail(db: aiosqlite.Connection, input: GetRecipeDetailInput) -> RecipeDetail | None:
     cursor = await db.execute(
         "SELECT id, name, name_zh, source, source_url, cuisine, cooking_method, "
