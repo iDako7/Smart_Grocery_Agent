@@ -16,7 +16,7 @@ Referenced as "the judge" in `docs/01-plans/phase3-prep-dependency-map.md` — m
 # 1. Start backend
 docker compose up -d
 
-# 2. Run promptfoo eval (10 test cases)
+# 2. Run promptfoo eval (5 test cases)
 cd evals/phase2 && npx promptfoo eval -c promptfooconfig.yaml
 
 # 3. View results in browser
@@ -35,7 +35,7 @@ python scripts/kb_audit.py --json
 evals/phase2/
   promptfooconfig.yaml          # Main promptfoo config
   provider.py                   # HTTP provider (POST /session/{id}/chat)
-  test_cases.yaml               # 10 test cases across 3 categories
+  test_cases.yaml               # 5 test cases across 3 categories
   assertions/
     structural.js               # Pass/fail: agent completes, done event exists
     dish_count.js               # Metric: dish count, dishes per person
@@ -51,18 +51,10 @@ evals/phase2/
 | Cat | ID | Input summary | What we measure |
 |---|---|---|---|
 | A | A1 | chicken+broccoli, dinner for 2 | Dish count for small party |
-| A | A2 | beef+egg+rice, dinner for 4 | Dish count for medium party |
-| A | A3 | salmon+asparagus, dinner for 1 | Dish count for solo |
-| A | A4 | chicken+rice+veggies, BBQ for 8 | Dish count for large party |
-| B | B1 | = A1 | Ingredient noise (overlap, pantry staples) |
-| B | B2 | = A2 | Ingredient noise |
 | C | C1 | vegetarian no-dairy, tofu+mushrooms | Dietary compliance |
-| C | C2 | Chinese input (equivalent to A1) | Bilingual handling |
 | C | C3 | "I want to cook something" | Vague input handling |
 | D | D1 | halal + chicken+rice+broccoli | Hard dietary constraint (no pork/non-halal) |
 | D | D3 | 2-turn swap: "plan 3 dinners" -> "swap #1 for vegetarian" | Multi-turn history + recipe swap (R2) |
-
-B1/B2 reuse A1/A2 inputs with the same assertions — they produce independent eval rows so we get duplicate measurements, which is useful for measuring per-run variance even within a single promptfoo run.
 
 D3 uses `vars.turns` instead of `vars.input`. The provider sends each turn as a separate `/chat` request on the same `session_id` and aggregates token usage across turns; `output` is the response from the last turn. The consistency runner is single-turn only and skips `vars.turns` entries.
 
@@ -85,7 +77,7 @@ All metrics are **measure-only** (no pass/fail thresholds). The only pass/fail g
 
 ### LLM-graded (promptfoo llm-rubric, score 1-5)
 - `overall_quality` — practical, well-organized meal suggestion
-- `dietary_compliance` — strict adherence to stated restrictions (C1 only)
+- `dietary_compliance` — strict adherence to stated restrictions (C1 and D1)
 - `vague_input_handling` — graceful handling of underspecified input (C3 only)
 
 ### Built-in (promptfoo native)
