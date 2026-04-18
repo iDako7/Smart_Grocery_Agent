@@ -189,8 +189,8 @@ def decode_value(data: bytes, return_type: Any) -> Any:
             )
         return TypeAdapter(inner_type).validate_python(envelope["data"])
 
-    # ------------------------------------------------------------------
-    # Fallback: let TypeAdapter try (handles unusual annotations)
-    # ------------------------------------------------------------------
-    adapter = TypeAdapter(return_type)
-    return adapter.validate_python(envelope.get("data"))
+    # Unsupported return type — fail loud rather than silently accepting unknown shapes.
+    raise TypeError(
+        f"decode_value: unsupported return_type {return_type!r} — "
+        "expected BaseModel subclass, list[BaseModel], dict, or X | None"
+    )
