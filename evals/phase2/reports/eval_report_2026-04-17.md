@@ -136,3 +136,42 @@ JS deterministic asserts (`agent_completes`, `dish_count`, `ingredient_noise`) p
 - The eval rubrics continue to surface quality bugs (overall_quality on 8/11 cases; B-series ingredient_faithfulness; D1 halal) that prompt caching cannot address. These are now the demonstrably-higher-ROI backlog items.
 
 **Phase 1 Defer #116 verdict is confirmed and strengthened — clean-measurement economics are even tighter than the spike projected; priority should shift fully to the `overall_quality`, `ingredient_faithfulness`, and `dietary_compliance` quality tracks surfaced by rubrics.**
+
+## 6. Root cause of the quality failures
+
+> Tracked in [#124](https://github.com/iDako7/Smart_Grocery_Agent/issues/124).
+
+A1, A2, A3, A4, B1, B2, and D1 — 7 of the 8 `overall_quality`/`ingredient_faithfulness`/`dietary_compliance` failures — share a single root cause inside `src/ai/tools/search_recipes.py`. The matcher is recall-biased on a single fuzzy-matched ingredient and has no concept of "must use," "must avoid," or "intent."
+
+**Mechanism (verified by reading the tool):**
+
+1. **Score is recipe-internal coverage, not user-pantry coverage** (`search_recipes.py:70`):
+   ```python
+   score = len(have) / len(ingredients_json)
+   ```
+   This rewards "what fraction of *this recipe's* ingredients overlap the user pantry" — so a recipe whose primary protein the user does not have still ranks if any user ingredient (even `rice` or `salt`) appears.
+
+2. **Match test is fuzzy substring** (`search_recipes.py:43`): `ui in name or name in ui`. `rice` matches `rice vinegar`, `fried rice`, etc.
+
+3. **Inclusion gate only requires non-empty overlap** (`search_recipes.py:67`): `if not have: continue`. One matching staple keeps a recipe alive.
+
+4. **No primary-protein constraint.** Beef+egg+rice → "Za'atar **Chicken** Bowl" qualifies because `rice` matches (A2, B2).
+
+5. **No penalty for unused user ingredients.** Chicken+broccoli → bowls/bento/chilaquiles win because `chicken` matches; `broccoli` is silently dropped (A1, B1).
+
+6. **No intent honoring.** "BBQ dinner for 8" doesn't bind `cooking_method="grill"`, and the relaxation fallback at `search_recipes.py:83` discards what filters were passed when results are empty (A4).
+
+7. **Dietary restrictions never reach the search layer.** `SearchRecipesInput` carries `cuisine`, `cooking_method`, `effort_level`, `max_results`, `include_alternatives` — but no `dietary_restrictions`. The agent prompt declares dietary as a hard constraint; the tool cannot enforce it.
+
+8. **Alternatives are dietary-blind too.** `_score_similarity` (`search_recipes.py:119`) ranks alts by shared protein (+3) / cuisine (+2) / cooking method (+1) / flavor tags / effort. No dietary filter. For halal user D1, this attaches:
+   - `r010` (Chicken Ginger Stir Fry) → alt **`r012` Crispy Braised Chicken Thighs with Cabbage and Bacon**
+   - `r077` (Chicken Pad See Ew) → alt **`r074` Thai Chile Pork & Cabbage Stir Fry**
+   - `r102` (Za'atar Chicken Bowl) → alt **`r057` Fiery Carbonara (guanciale)**
+   These appear in the SwapPanel UI (`src/frontend/src/components/swap-panel.tsx`) — user-visible.
+
+**Cases not explained by this root cause:**
+
+- **C1 variety (3,2 — both fail):** primaries aren't deduped by `cooking_method`, so two stir-fries can co-occupy the top slate. Fix is local to the primary selection loop.
+- **C2 (Chinese, 0 recipe cards, scores 1/1):** the bilingual path stops after `analyze_pcsv` + `explanation` and never calls `search_recipes`. **Out of scope** — bilingual support has been deprioritized; only Chinese dish-name display is required and `RecipeSummary.name_zh` (`search_recipes.py:55`) already carries it. C2 will be removed from the suite.
+
+**Grader independence check:** the judge's pork callout on D1 is *not* hallucination. The recipe IDs r012/r057/r074 appear in the response payload inside `recipe_cards[].alternatives[]` (verified by grep). The grader read the data correctly.
