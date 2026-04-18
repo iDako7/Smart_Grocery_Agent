@@ -2,9 +2,10 @@
 
 import pytest
 import pytest_asyncio
-from contracts.tool_schemas import LookupStoreProductInput
 from src.ai.kb import get_kb
 from src.ai.tools.lookup_store_product import lookup_store_product, score_products
+
+from contracts.tool_schemas import LookupStoreProductInput
 
 
 @pytest_asyncio.fixture()

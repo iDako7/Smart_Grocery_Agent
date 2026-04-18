@@ -5,16 +5,6 @@ import uuid
 
 import openai
 import pydantic
-from contracts.api_types import (
-    ChatRequest,
-    ConversationTurn,
-    CreateSessionRequest,
-    CreateSessionResponse,
-    PatchSessionRecipeRequest,
-    SessionStateResponse,
-)
-from contracts.sse_events import AgentErrorCategory
-from contracts.tool_schemas import GetRecipeDetailInput
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from sqlalchemy import select
@@ -28,6 +18,17 @@ from src.ai.types import AgentResult
 from src.backend.auth import get_current_user_id
 from src.backend.db.engine import get_db
 from src.backend.db.tables import conversation_turns, sessions
+
+from contracts.api_types import (
+    ChatRequest,
+    ConversationTurn,
+    CreateSessionRequest,
+    CreateSessionResponse,
+    PatchSessionRecipeRequest,
+    SessionStateResponse,
+)
+from contracts.sse_events import AgentErrorCategory
+from contracts.tool_schemas import GetRecipeDetailInput
 
 logger = logging.getLogger(__name__)
 

@@ -1,8 +1,9 @@
 """Tests for SSE emitter — event sequence and format."""
 
-from contracts.tool_schemas import PCSVCategory, PCSVResult, RecipeSummary
 from src.ai.sse import emit_agent_result
 from src.ai.types import AgentResult, ToolCall
+
+from contracts.tool_schemas import PCSVCategory, PCSVResult, RecipeSummary
 
 
 async def _collect_events(result: AgentResult) -> list[str]:

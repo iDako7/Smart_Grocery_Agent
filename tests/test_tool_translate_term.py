@@ -1,9 +1,10 @@
 """Tests for translate_term tool against real SQLite KB."""
 
 import pytest_asyncio
-from contracts.tool_schemas import TranslateTermInput
 from src.ai.kb import get_kb
 from src.ai.tools.translate_term import translate_term
+
+from contracts.tool_schemas import TranslateTermInput
 
 
 @pytest_asyncio.fixture()

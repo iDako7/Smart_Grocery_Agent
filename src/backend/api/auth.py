@@ -8,14 +8,15 @@ The API shape (request/response types and URL paths) stays unchanged.
 import time
 
 import jwt
+from fastapi import APIRouter, HTTPException
+from src.backend.auth import DEV_USER_ID, JWT_ALGORITHM, get_jwt_secret, is_dev_mode
+
 from contracts.api_types import (
     SendCodeRequest,
     SendCodeResponse,
     VerifyRequest,
     VerifyResponse,
 )
-from fastapi import APIRouter, HTTPException
-from src.backend.auth import DEV_USER_ID, JWT_ALGORITHM, get_jwt_secret, is_dev_mode
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
