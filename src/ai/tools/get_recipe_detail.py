@@ -61,7 +61,7 @@ async def get_recipe_details_batch(
 
     Bypasses the Redis read-through cache used by `get_recipe_detail` by design:
     one SQLite `IN (...)` on PRIMARY KEY is faster than N serial Redis RTTs on
-    the hydration hot path (see issue #79). SQLite's SQLITE_MAX_VARIABLE_NUMBER
+    the hydration hot path. SQLite's SQLITE_MAX_VARIABLE_NUMBER
     default (999) is far above realistic meal-plan sizes; no chunking here.
     """
     if not recipe_ids:

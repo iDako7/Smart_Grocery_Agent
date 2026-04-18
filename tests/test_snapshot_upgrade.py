@@ -417,7 +417,7 @@ async def test_hydration_uses_single_batch_call_for_n_recipes(client):
     assert mock_batch.call_count == 1, "hydration must use exactly ONE batch call"
 
     call_args = mock_batch.call_args
-    passed_ids = call_args.args[1] if len(call_args.args) > 1 else call_args.kwargs["recipe_ids"]
+    passed_ids = call_args.args[1]
     assert set(passed_ids) == expected_ids
     assert len(passed_ids) == 9
 
