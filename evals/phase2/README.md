@@ -135,11 +135,33 @@ python scripts/kb_audit.py --json     # Also writes kb_audit_results.json
 
 Reports: overlap pairs, pantry staple frequency, ingredient count distribution, affected recipes.
 
+## Per-test profile reset (#126)
+
+All test cases share the hardcoded dev user (`00000000-0000-0000-0000-000000000001`).
+C1 and D1 write dietary restrictions onto that row via `update_user_profile`,
+and without a reset those restrictions persist into the next case — e.g. A1
+and A3 return 0 recipes because the agent (correctly) refuses chicken/salmon
+for a "vegetarian" user carried over from C1.
+
+The provider calls `POST /internal/reset-dev-profile` at the start of every
+test case to restore schema defaults. The endpoint is **dev-mode only**
+(returns 404 when `SGA_AUTH_MODE=prod`) and always targets the hardcoded dev
+UUID.
+
+- Enabled by default. Set `SGA_EVAL_RESET_PROFILE=0` to disable (e.g. to
+  reproduce the pre-fix flakiness as a negative control).
+- Residual risk under concurrency ≥ 2: if two tests interleave reset→chat
+  with another test's mutating tool call, restrictions can still leak
+  mid-run. The issue's ±1 score variance tolerance accounts for this; if
+  it's breached, escalate to Option B (per-test user_id) rather than
+  tuning Option A.
+
 ## Environment variables
 
 | Variable | Default | Purpose |
 |---|---|---|
 | `SGA_EVAL_BASE_URL` | `http://localhost:8000` | Backend URL for provider + consistency runner |
+| `SGA_EVAL_RESET_PROFILE` | `1` | If `1`, provider calls `/internal/reset-dev-profile` per case (see #126). Set `0` to disable. |
 
 ## Relationship to dependency map
 

@@ -53,3 +53,29 @@ async def update_user_profile_field(conn: AsyncConnection, user_id: uuid.UUID, f
         .values(**{field: value, "updated_at": text("now()")})
     )
     return result.rowcount > 0
+
+
+# Defaults mirror contracts/pg_schema.sql (user_profiles column defaults).
+# Keep in sync if the schema changes.
+_PROFILE_DEFAULTS: dict[str, object] = {
+    "household_size": 2,
+    "dietary_restrictions": [],
+    "preferred_cuisines": [],
+    "disliked_ingredients": [],
+    "preferred_stores": ["costco"],
+    "notes": "",
+}
+
+
+async def reset_user_profile_to_defaults(conn: AsyncConnection, user_id: uuid.UUID) -> None:
+    """Reset every user_profiles column to its schema default for ``user_id``.
+
+    Upsert-style: if the row is missing (e.g. fresh DB before _seed_dev_user),
+    it is inserted at defaults. If present, it is overwritten in one statement.
+    """
+    stmt = pg_insert(user_profiles).values(user_id=user_id, **_PROFILE_DEFAULTS)
+    stmt = stmt.on_conflict_do_update(
+        index_elements=["user_id"],
+        set_={**_PROFILE_DEFAULTS, "updated_at": text("now()")},
+    )
+    await conn.execute(stmt)

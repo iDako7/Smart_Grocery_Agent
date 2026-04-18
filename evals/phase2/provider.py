@@ -13,7 +13,11 @@ Usage in promptfooconfig.yaml:
       - id: python:provider.py
 
 Environment variables:
-    SGA_EVAL_BASE_URL  — override backend URL (default: http://localhost:8000)
+    SGA_EVAL_BASE_URL         — override backend URL (default: http://localhost:8000)
+    SGA_EVAL_RESET_PROFILE    — if "1", call /internal/reset-dev-profile at the
+                                 start of each test case (default: "1"). See #126:
+                                 C1/D1 mutate the shared dev profile and can
+                                 leak restrictions into A1/A3 without this.
 
 Test case vars available via context.vars:
     input               — the user message (also passed as `prompt`)
@@ -54,6 +58,29 @@ def _health_check(base_url: str) -> None:
             f"Backend health check failed ({exc.response.status_code}). "
             f"Run: docker compose up  (tried {base_url}/health)"
         ) from exc
+
+
+def _reset_dev_profile(base_url: str) -> None:
+    """Reset the shared dev user's profile row before a test case (#126).
+
+    Gated on SGA_EVAL_RESET_PROFILE (default "1"). Logs and proceeds on
+    non-2xx so a misconfigured backend still yields diagnosable output
+    instead of silently masking all test failures as infra errors.
+    """
+    if os.environ.get("SGA_EVAL_RESET_PROFILE", "1") != "1":
+        return
+    try:
+        resp = requests.post(f"{base_url}/internal/reset-dev-profile", timeout=5)
+    except requests.RequestException as exc:
+        logger.warning("reset-dev-profile request failed (%s); proceeding without reset", exc)
+        return
+    if resp.status_code != 200:
+        logger.warning(
+            "reset-dev-profile returned %d (expected 200). "
+            "Confirm SGA_AUTH_MODE=dev and that /internal is mounted. Body: %s",
+            resp.status_code,
+            resp.text[:200],
+        )
 
 
 def _create_session(base_url: str) -> str:
@@ -294,13 +321,16 @@ def call_api(prompt: str, options: dict, context: dict) -> dict:
     # 1. Health check
     _health_check(base_url)
 
-    # 2. Create session (shared across all turns)
+    # 2. Reset dev profile so C1/D1 mutations from prior tests don't leak (#126)
+    _reset_dev_profile(base_url)
+
+    # 3. Create session (shared across all turns)
     try:
         session_id = _create_session(base_url)
     except requests.HTTPError as exc:
         return {"output": json.dumps({"error": f"{exc.response.status_code}: {exc.response.text}"})}
 
-    # 3. Loop over turns on the same session_id
+    # 4. Loop over turns on the same session_id
     accumulated_tu = _empty_token_usage()
     accumulated_latency = 0
     final_events: list[tuple[str, dict]] = []
