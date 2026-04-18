@@ -1,5 +1,6 @@
 """Redis-backed tool cache (issue #121)."""
-from src.ai.cache.client import get_redis_client, close_redis_client
+
+from src.ai.cache.client import close_redis_client, get_redis_client
 from src.ai.cache.config import TTL_SECONDS
 from src.ai.cache.wrapper import cached_tool
 

@@ -4,10 +4,10 @@ import json
 import re
 
 import aiosqlite
-
-from contracts.tool_schemas import AnalyzePcsvInput, PCSVCategory, PCSVResult
 from src.ai.cache import cached_tool
 from src.ai.cache.config import TTL_SECONDS
+
+from contracts.tool_schemas import AnalyzePcsvInput, PCSVCategory, PCSVResult
 
 
 def _status(count: int) -> str:

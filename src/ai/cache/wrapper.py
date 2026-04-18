@@ -15,14 +15,15 @@ Runtime behavior on each call:
 Redis exceptions from GET are swallowed (WARN logged); SET exceptions are also
 swallowed. Handler exceptions are NOT swallowed.
 """
+
 from __future__ import annotations
 
 import functools
 import logging
-from typing import Any, Callable, TypeVar
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 import redis.exceptions
-
 from src.ai.cache.client import get_redis_client
 from src.ai.cache.keys import compute_key, decode_value, encode_value
 

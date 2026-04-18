@@ -13,21 +13,11 @@ from __future__ import annotations
 
 import logging
 import uuid
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock
 
 import pytest
 import pytest_asyncio
 from fakeredis.aioredis import FakeRedis
-
-from contracts.tool_schemas import (
-    AnalyzePcsvInput,
-    GetRecipeDetailInput,
-    GetSubstitutionsInput,
-    LookupStoreProductInput,
-    SearchRecipesInput,
-    TranslateTermInput,
-    UpdateUserProfileInput,
-)
 from src.ai.cache import wrapper as cache_wrapper_mod
 from src.ai.kb import get_kb
 from src.ai.tools.analyze_pcsv import analyze_pcsv
@@ -38,6 +28,15 @@ from src.ai.tools.search_recipes import search_recipes
 from src.ai.tools.translate_term import translate_term
 from src.ai.tools.update_user_profile import update_user_profile
 
+from contracts.tool_schemas import (
+    AnalyzePcsvInput,
+    GetRecipeDetailInput,
+    GetSubstitutionsInput,
+    LookupStoreProductInput,
+    SearchRecipesInput,
+    TranslateTermInput,
+    UpdateUserProfileInput,
+)
 
 # ---------------------------------------------------------------------------
 # Fixtures

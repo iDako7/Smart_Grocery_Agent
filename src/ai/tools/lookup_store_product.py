@@ -2,10 +2,10 @@
 
 import aiosqlite
 from rapidfuzz import fuzz
-
-from contracts.tool_schemas import LookupStoreProductInput, StoreProduct
 from src.ai.cache import cached_tool
 from src.ai.cache.config import TTL_SECONDS
+
+from contracts.tool_schemas import LookupStoreProductInput, StoreProduct
 
 
 def score_products(

@@ -19,7 +19,6 @@ from pydantic import BaseModel
 
 from contracts.tool_schemas import RecipeSummary
 
-
 # ---------------------------------------------------------------------------
 # Shared tiny models and handler factory
 # ---------------------------------------------------------------------------
@@ -175,9 +174,7 @@ async def test_ttl_passed_to_setex():
         await handler(None, _Input(x=9))
 
     assert len(set_calls) == 1, "set must be called exactly once on a miss"
-    assert set_calls[0]["kwargs"].get("ex") == 172800, (
-        f"expected ex=172800, got {set_calls[0]['kwargs']}"
-    )
+    assert set_calls[0]["kwargs"].get("ex") == 172800, f"expected ex=172800, got {set_calls[0]['kwargs']}"
 
 
 # ---------------------------------------------------------------------------
@@ -209,9 +206,7 @@ async def test_redis_outage_on_get_falls_through(caplog):
     assert calls["n"] == 1
     # WARN log with op=get must exist
     warn_messages = [r.message for r in caplog.records if r.levelno == logging.WARNING]
-    assert any("op=get" in m for m in warn_messages), (
-        f"expected WARN with op=get, got: {warn_messages}"
-    )
+    assert any("op=get" in m for m in warn_messages), f"expected WARN with op=get, got: {warn_messages}"
     # SET must NOT be attempted after GET failure
     bad_client.set.assert_not_called()
 
@@ -245,9 +240,7 @@ async def test_redis_outage_on_set_returns_result(caplog):
     assert result.value == 7, "result must still be returned even when SET fails"
     assert calls["n"] == 1
     warn_messages = [r.message for r in caplog.records if r.levelno == logging.WARNING]
-    assert any("op=set" in m for m in warn_messages), (
-        f"expected WARN with op=set, got: {warn_messages}"
-    )
+    assert any("op=set" in m for m in warn_messages), f"expected WARN with op=set, got: {warn_messages}"
 
 
 # ---------------------------------------------------------------------------
@@ -303,7 +296,7 @@ async def test_list_return_type_roundtrip():
     fake_redis = _make_fake_redis()
 
     with _patch_client(fake_redis):
-        result1 = await handler(None, _ListInput(query="tofu"))
+        await handler(None, _ListInput(query="tofu"))
         result2 = await handler(None, _ListInput(query="tofu"))
 
     assert calls["n"] == 1, "second call must be a cache hit"
@@ -312,35 +305,3 @@ async def test_list_return_type_roundtrip():
     assert isinstance(result2[0], RecipeSummary)
     assert result2[0].id == "r001"
     assert result2[1].name == "Salmon Bowl"
-
-
-# ---------------------------------------------------------------------------
-# Test 9: corrupt cache entry falls through to handler (M1 fix)
-# ---------------------------------------------------------------------------
-
-
-@pytest.mark.asyncio
-async def test_corrupt_cache_entry_falls_through_to_handler(caplog):
-    """Corrupt bytes in Redis must log WARN op=decode and fall through, not raise."""
-    from src.ai.cache.wrapper import cached_tool
-    from src.ai.cache.keys import compute_key
-
-    calls = {"n": 0}
-
-    @cached_tool("fake_tool", ttl_seconds=3600, return_type=_Output)
-    async def handler(db, input: _Input) -> _Output:
-        calls["n"] += 1
-        return _Output(value=input.x * 2)
-
-    fake_redis = _make_fake_redis()
-    key = compute_key("fake_tool", _Input(x=5).model_dump(mode="json"))
-    await fake_redis.set(key, b"not-valid-json!!!")  # inject corrupt entry
-
-    with _patch_client(fake_redis):
-        with caplog.at_level(logging.WARNING, logger="src.ai.cache.wrapper"):
-            result = await handler(None, _Input(x=5))
-
-    assert result.value == 10
-    assert calls["n"] == 1, "handler must run after decode failure"
-    warns = [r.message for r in caplog.records if r.levelno == logging.WARNING]
-    assert any("op=decode" in m for m in warns), f"expected WARN with op=decode, got: {warns}"

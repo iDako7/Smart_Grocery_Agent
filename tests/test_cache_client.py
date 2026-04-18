@@ -8,7 +8,6 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 import redis.asyncio as aioredis
 from redis.exceptions import ConnectionError as RedisConnectionError
-
 from src.ai.cache.client import close_redis_client, get_redis_client
 
 

@@ -1,11 +1,11 @@
 """Bilingual EN↔ZH glossary lookup from SQLite KB."""
 
 import aiosqlite
-
-from contracts.tool_schemas import TranslateTermInput, TranslateTermResult
 from src.ai.cache import cached_tool
 from src.ai.cache.config import TTL_SECONDS
 from src.ai.tools._sql_utils import _escape_like
+
+from contracts.tool_schemas import TranslateTermInput, TranslateTermResult
 
 
 def _contains_chinese(text: str) -> bool:

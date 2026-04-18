@@ -5,8 +5,10 @@ On first use the client is lazily created and pinged once. If the ping fails
 gracefully without re-pinging on every call. Call `close_redis_client()` to
 reset the singleton and force a fresh ping on the next `get_redis_client()`.
 """
+
 from __future__ import annotations
 
+import contextlib
 import logging
 import os
 import time
@@ -52,10 +54,8 @@ async def get_redis_client() -> redis.Redis | None:
         await client.ping()
     except (ConnectionError, TimeoutError, OSError) as exc:
         logger.warning("cache.client.unavailable url=%s error=%s", url, exc)
-        try:
+        with contextlib.suppress(Exception):
             await client.aclose()
-        except Exception:  # noqa: BLE001 — best-effort cleanup
-            pass
         _client = None
         _last_ping_failed_at = time.monotonic()
         return None
@@ -69,9 +69,7 @@ async def close_redis_client() -> None:
     """Close the singleton (if open) and reset so the next call re-pings."""
     global _client, _last_ping_failed_at
     if _client is not _UNSET and _client is not None:
-        try:
+        with contextlib.suppress(Exception):
             await _client.aclose()  # type: ignore[union-attr]
-        except Exception:  # noqa: BLE001 — best-effort cleanup
-            pass
     _client = _UNSET
     _last_ping_failed_at = None

@@ -12,7 +12,6 @@ from typing import Any, get_args, get_origin
 
 from pydantic import BaseModel, TypeAdapter
 
-
 # ---------------------------------------------------------------------------
 # canonical_json
 # ---------------------------------------------------------------------------
@@ -76,8 +75,7 @@ def encode_value(result: Any) -> bytes:
         for i, item in enumerate(result):
             if not isinstance(item, BaseModel):
                 raise TypeError(
-                    f"encode_value: unsupported list item at index {i} — "
-                    f"expected BaseModel, got {type(item).__name__}"
+                    f"encode_value: unsupported list item at index {i} — expected BaseModel, got {type(item).__name__}"
                 )
         envelope = {"kind": "list", "data": [item.model_dump(mode="json") for item in result]}
 
@@ -161,11 +159,9 @@ def decode_value(data: bytes, return_type: Any) -> Any:
     # ------------------------------------------------------------------
     # dict return type — no Pydantic, just give back the raw dict.
     # ------------------------------------------------------------------
-    if inner_type is dict or inner_type == dict:
+    if inner_type is dict:
         if kind != "dict":
-            raise ValueError(
-                f"decode_value: kind mismatch — expected 'dict' but got '{kind}'"
-            )
+            raise ValueError(f"decode_value: kind mismatch — expected 'dict' but got '{kind}'")
         return envelope["data"]
 
     # ------------------------------------------------------------------
@@ -173,9 +169,7 @@ def decode_value(data: bytes, return_type: Any) -> Any:
     # ------------------------------------------------------------------
     if _is_list_of_model(inner_type):
         if kind != "list":
-            raise ValueError(
-                f"decode_value: kind mismatch — expected 'list' for {inner_type} but got '{kind}'"
-            )
+            raise ValueError(f"decode_value: kind mismatch — expected 'list' for {inner_type} but got '{kind}'")
         adapter = TypeAdapter(inner_type)
         return adapter.validate_python(envelope["data"])
 

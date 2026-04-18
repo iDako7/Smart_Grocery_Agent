@@ -1,11 +1,11 @@
 """Substitution lookup from SQLite KB."""
 
 import aiosqlite
-
-from contracts.tool_schemas import GetSubstitutionsInput, Substitution
 from src.ai.cache import cached_tool
 from src.ai.cache.config import TTL_SECONDS
 from src.ai.tools._sql_utils import _escape_like
+
+from contracts.tool_schemas import GetSubstitutionsInput, Substitution
 
 
 @cached_tool("get_substitutions", TTL_SECONDS["get_substitutions"], list[Substitution])

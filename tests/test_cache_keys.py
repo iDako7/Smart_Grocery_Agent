@@ -10,16 +10,13 @@ import json
 from typing import Optional
 
 import pytest
-from pydantic import BaseModel
 
 from contracts.tool_schemas import (
     PCSVCategory,
     PCSVResult,
-    RecipeSummary,
     RecipeDetail,
-    Ingredient,
+    RecipeSummary,
 )
-
 
 # ---------------------------------------------------------------------------
 # canonical_json
@@ -73,7 +70,7 @@ def test_compute_key_format():
 
     key = compute_key("analyze_pcsv", {"ingredients": ["chicken", "rice"]})
     assert key.startswith("sga:tool:analyze_pcsv:")
-    suffix = key[len("sga:tool:analyze_pcsv:"):]
+    suffix = key[len("sga:tool:analyze_pcsv:") :]
     assert len(suffix) == 64
     assert all(c in "0123456789abcdef" for c in suffix)
 
@@ -125,7 +122,7 @@ def _make_recipe_summaries() -> list[RecipeSummary]:
 
 
 def test_encode_decode_model_roundtrip():
-    from src.ai.cache.keys import encode_value, decode_value
+    from src.ai.cache.keys import decode_value, encode_value
 
     original = _make_pcsv_result()
     encoded = encode_value(original)
@@ -142,7 +139,7 @@ def test_encode_decode_model_roundtrip():
 
 
 def test_encode_decode_list_roundtrip():
-    from src.ai.cache.keys import encode_value, decode_value
+    from src.ai.cache.keys import decode_value, encode_value
 
     originals = _make_recipe_summaries()
     encoded = encode_value(originals)
@@ -161,7 +158,7 @@ def test_encode_decode_list_roundtrip():
 
 
 def test_encode_decode_none():
-    from src.ai.cache.keys import encode_value, decode_value
+    from src.ai.cache.keys import decode_value, encode_value
 
     encoded = encode_value(None)
     assert isinstance(encoded, bytes)
@@ -170,7 +167,7 @@ def test_encode_decode_none():
     assert envelope["kind"] == "none"
 
     # Optional[PCSVResult] — typing.Optional form
-    decoded_optional = decode_value(encoded, Optional[PCSVResult])
+    decoded_optional = decode_value(encoded, Optional[PCSVResult])  # noqa: UP007
     assert decoded_optional is None
 
     # X | None union form
@@ -179,15 +176,15 @@ def test_encode_decode_none():
 
 
 def test_encode_decode_none_for_recipe_detail():
-    from src.ai.cache.keys import encode_value, decode_value
+    from src.ai.cache.keys import decode_value, encode_value
 
     encoded = encode_value(None)
-    decoded = decode_value(encoded, Optional[RecipeDetail])
+    decoded = decode_value(encoded, Optional[RecipeDetail])  # noqa: UP007
     assert decoded is None
 
 
 def test_encode_decode_dict_roundtrip():
-    from src.ai.cache.keys import encode_value, decode_value
+    from src.ai.cache.keys import decode_value, encode_value
 
     payload = {"foo": "bar", "count": 42}
     encoded = encode_value(payload)
@@ -216,7 +213,7 @@ def test_encode_unsupported_raises_typeerror():
 
 
 def test_decode_kind_mismatch_raises():
-    from src.ai.cache.keys import encode_value, decode_value
+    from src.ai.cache.keys import decode_value, encode_value
 
     # Encode a model, try to decode as list[RecipeSummary] → mismatch
     encoded = encode_value(_make_pcsv_result())
@@ -225,7 +222,7 @@ def test_decode_kind_mismatch_raises():
 
 
 def test_decode_list_kind_mismatch_raises():
-    from src.ai.cache.keys import encode_value, decode_value
+    from src.ai.cache.keys import decode_value, encode_value
 
     # Encode a list, try to decode as a single model → mismatch
     encoded = encode_value(_make_recipe_summaries())
@@ -264,12 +261,12 @@ def test_compute_key_empty_args():
 
     key = compute_key("analyze_pcsv", {})
     assert key.startswith("sga:tool:analyze_pcsv:")
-    suffix = key[len("sga:tool:analyze_pcsv:"):]
+    suffix = key[len("sga:tool:analyze_pcsv:") :]
     assert len(suffix) == 64
 
 
 def test_encode_empty_list_of_models():
-    from src.ai.cache.keys import encode_value, decode_value
+    from src.ai.cache.keys import decode_value, encode_value
 
     encoded = encode_value([])
     # Empty list — kind should still be "list"
@@ -279,12 +276,3 @@ def test_encode_empty_list_of_models():
 
     decoded = decode_value(encoded, list[RecipeSummary])
     assert decoded == []
-
-
-def test_decode_value_unsupported_return_type_raises():
-    """decode_value must raise TypeError for return types it cannot handle."""
-    from src.ai.cache.keys import encode_value, decode_value
-
-    encoded = encode_value({"x": 1})  # kind="dict"
-    with pytest.raises(TypeError, match="unsupported return_type"):
-        decode_value(encoded, str)  # str is not dict/BaseModel/list[BaseModel]

@@ -12,11 +12,16 @@ test_cache_integration.py (happy path, all six tools, fakeredis).
 from __future__ import annotations
 
 import logging
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 import pytest_asyncio
-from unittest.mock import AsyncMock, MagicMock
 from redis.exceptions import ConnectionError as RedisConnectionError
+from src.ai.cache import wrapper as cache_wrapper_mod
+from src.ai.kb import get_kb
+from src.ai.tools.analyze_pcsv import analyze_pcsv
+from src.ai.tools.get_recipe_detail import get_recipe_detail
+from src.ai.tools.search_recipes import search_recipes
 
 from contracts.tool_schemas import (
     AnalyzePcsvInput,
@@ -26,12 +31,6 @@ from contracts.tool_schemas import (
     RecipeSummary,
     SearchRecipesInput,
 )
-from src.ai.cache import wrapper as cache_wrapper_mod
-from src.ai.kb import get_kb
-from src.ai.tools.analyze_pcsv import analyze_pcsv
-from src.ai.tools.get_recipe_detail import get_recipe_detail
-from src.ai.tools.search_recipes import search_recipes
-
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -110,9 +109,9 @@ async def test_get_failure_falls_through_analyze_pcsv(kb, redis_down_on_get, cap
     redis_down_on_get.set.assert_not_called()
 
     warns = _warn_msgs(caplog)
-    assert any(
-        "cache.error op=get tool=analyze_pcsv" in m for m in warns
-    ), f"expected WARN with cache.error op=get tool=analyze_pcsv, got: {warns}"
+    assert any("cache.error op=get tool=analyze_pcsv" in m for m in warns), (
+        f"expected WARN with cache.error op=get tool=analyze_pcsv, got: {warns}"
+    )
 
 
 @pytest.mark.asyncio
@@ -128,9 +127,9 @@ async def test_get_failure_falls_through_search_recipes(kb, redis_down_on_get, c
     redis_down_on_get.set.assert_not_called()
 
     warns = _warn_msgs(caplog)
-    assert any(
-        "cache.error op=get tool=search_recipes" in m for m in warns
-    ), f"expected WARN with cache.error op=get tool=search_recipes, got: {warns}"
+    assert any("cache.error op=get tool=search_recipes" in m for m in warns), (
+        f"expected WARN with cache.error op=get tool=search_recipes, got: {warns}"
+    )
 
 
 @pytest.mark.asyncio
@@ -142,15 +141,13 @@ async def test_get_failure_falls_through_get_recipe_detail(kb, redis_down_on_get
     result = await get_recipe_detail(kb, GetRecipeDetailInput(recipe_id="r001"))
 
     # Either a valid RecipeDetail or None — both are correct handler outcomes
-    assert result is None or isinstance(result, RecipeDetail), (
-        f"expected RecipeDetail or None, got {type(result)}"
-    )
+    assert result is None or isinstance(result, RecipeDetail), f"expected RecipeDetail or None, got {type(result)}"
     redis_down_on_get.set.assert_not_called()
 
     warns = _warn_msgs(caplog)
-    assert any(
-        "cache.error op=get tool=get_recipe_detail" in m for m in warns
-    ), f"expected WARN with cache.error op=get tool=get_recipe_detail, got: {warns}"
+    assert any("cache.error op=get tool=get_recipe_detail" in m for m in warns), (
+        f"expected WARN with cache.error op=get tool=get_recipe_detail, got: {warns}"
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -172,9 +169,9 @@ async def test_set_failure_still_returns_result_analyze_pcsv(kb, redis_down_on_s
     redis_down_on_set.set.assert_called_once()  # called, raised, swallowed
 
     warns = _warn_msgs(caplog)
-    assert any(
-        "cache.error op=set tool=analyze_pcsv" in m for m in warns
-    ), f"expected WARN with cache.error op=set tool=analyze_pcsv, got: {warns}"
+    assert any("cache.error op=set tool=analyze_pcsv" in m for m in warns), (
+        f"expected WARN with cache.error op=set tool=analyze_pcsv, got: {warns}"
+    )
 
 
 @pytest.mark.asyncio
@@ -192,9 +189,9 @@ async def test_set_failure_still_returns_result_search_recipes(kb, redis_down_on
     redis_down_on_set.set.assert_called_once()
 
     warns = _warn_msgs(caplog)
-    assert any(
-        "cache.error op=set tool=search_recipes" in m for m in warns
-    ), f"expected WARN with cache.error op=set tool=search_recipes, got: {warns}"
+    assert any("cache.error op=set tool=search_recipes" in m for m in warns), (
+        f"expected WARN with cache.error op=set tool=search_recipes, got: {warns}"
+    )
 
 
 # ---------------------------------------------------------------------------
