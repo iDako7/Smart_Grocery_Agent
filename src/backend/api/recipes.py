@@ -2,12 +2,11 @@
 
 import uuid
 
+from contracts.tool_schemas import GetRecipeDetailInput, RecipeDetail
 from fastapi import APIRouter, Depends, HTTPException
 from src.ai.kb import get_kb
 from src.ai.tools.get_recipe_detail import get_recipe_detail
 from src.backend.auth import get_current_user_id
-
-from contracts.tool_schemas import GetRecipeDetailInput, RecipeDetail
 
 router = APIRouter()
 
