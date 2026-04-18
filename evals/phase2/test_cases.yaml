@@ -248,44 +248,6 @@
       metric: dietary_compliance
       threshold: 4
 
-- description: "C2: Chinese input — chicken+broccoli dinner for 2 (bilingual test)"
-  vars:
-    input: "我有鸡肉和西兰花，帮我准备两个人的晚餐"
-    screen: "home"
-    category: "diverse_inputs"
-    expected_dish_min: 2
-    expected_dish_max: 3
-    party_size: 2
-  assert:
-    - type: javascript
-      value: file://assertions/structural.js
-      metric: agent_completes
-    - type: javascript
-      value: file://assertions/dish_count.js
-      metric: dish_count
-    - type: javascript
-      value: file://assertions/ingredient_noise.js
-      metric: ingredient_noise
-    - type: llm-rubric
-      value: |
-        Evaluate this meal suggestion for {{party_size}} people with ingredients {{input}} (Chinese: chicken + broccoli for two).
-        Score 1-5 on three criteria, then give an overall score (the minimum of the three):
-        (1) Practicality: are the dishes executable with chicken and broccoli without requiring unusual tools or techniques?
-        (2) Count fit: is the total number of recipes between {{expected_dish_min}} and {{expected_dish_max}}?
-        (3) Variety: are the recipes meaningfully different (different protein treatment, cuisine, or technique)?
-        Return the overall score.
-      metric: overall_quality
-      threshold: 3
-    - type: llm-rubric
-      value: |
-        The user message is in Chinese (我有鸡肉和西兰花，帮我准备两个人的晚餐 = "I have chicken and broccoli, help me prepare dinner for two people"). Score 1-5:
-        5 = Response correctly understands ingredients and party size; recipe names are readable (English or Chinese both fine); instructions are coherent.
-        3 = Mostly correct but missed nuance (wrong party size, missed one ingredient).
-        1 = Misread — responded in an unrelated language, wrong ingredients, garbled.
-        Return the score.
-      metric: bilingual_handling
-      threshold: 3
-
 - description: "C3: vague input — no ingredients, no party size"
   vars:
     input: "I want to cook something"

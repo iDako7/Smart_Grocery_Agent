@@ -21,17 +21,20 @@ async def test_returns_results_for_common_ingredients(kb):
 
 
 async def test_results_sorted_by_match_score(kb):
-    result = await search_recipes(kb, SearchRecipesInput(ingredients=["chicken", "garlic", "soy sauce"]))
+    user = ["chicken", "garlic", "soy sauce"]
+    result = await search_recipes(kb, SearchRecipesInput(ingredients=user))
     if len(result) >= 2:
-        # Results should be sorted by match score (descending)
+        # Primary sort: pantry coverage (len(have) / len(user_ingredients)).
+        # Secondary: recipe coverage. Variety dedupe by cooking_method may
+        # interleave a lower-coverage different-method recipe ahead of a
+        # duplicate-method higher one, so we check pairwise non-increasing
+        # after we account for dedupe.
+        def pantry_cov(r):
+            return len(r.ingredients_have) / len(user)
         for i in range(len(result) - 1):
-            have_ratio_a = len(result[i].ingredients_have) / (
-                len(result[i].ingredients_have) + len(result[i].ingredients_need)
-            )
-            have_ratio_b = len(result[i + 1].ingredients_have) / (
-                len(result[i + 1].ingredients_have) + len(result[i + 1].ingredients_need)
-            )
-            assert have_ratio_a >= have_ratio_b
+            assert pantry_cov(result[i]) >= pantry_cov(result[i + 1]) or (
+                result[i].cooking_method and result[i].cooking_method != result[i + 1].cooking_method
+            ), f"pantry-cov order or variety-dedupe expected at index {i}"
 
 
 async def test_max_10_results(kb):
@@ -235,3 +238,153 @@ async def test_no_fallback_when_filters_absent(kb):
     result is empty (not a fallback case)."""
     result = await search_recipes(kb, SearchRecipesInput(ingredients=["xyznonexistent_qwerty"]))
     assert result == []
+
+
+# ---------------------------------------------------------------------------
+# Issue #124: pantry-coverage scoring, primary-protein filter, dietary filter
+# ---------------------------------------------------------------------------
+
+_HALAL_BAD_WORDS = {"pork", "bacon", "ham", "lard", "guanciale", "prosciutto", "pancetta", "chorizo", "pepperoni", "salami", "sausage", "wine", "beer", "sake", "mirin", "gelatin"}
+_VEGETARIAN_BAD_WORDS = {"chicken", "beef", "pork", "lamb", "turkey", "duck", "bacon", "ham", "sausage", "salmon", "tuna", "shrimp", "prawn", "fish", "anchovy"}
+
+
+def _contains_bad_word(text: str, bad_words: set[str]) -> str | None:
+    """Token-based check — prevents 'ham' matching 'muhammara'."""
+    import re as _re
+    tokens = set(_re.findall(r"\w+", text.lower()))
+    for bad in bad_words:
+        if bad in tokens:
+            return bad
+    return None
+
+
+async def test_dietary_halal_filters_pork_from_primaries(kb):
+    """User with halal restriction: no primary result may contain pork/bacon/etc."""
+    result = await search_recipes(
+        kb,
+        SearchRecipesInput(
+            ingredients=["chicken", "rice", "broccoli"],
+            dietary_restrictions=["halal"],
+            include_alternatives=True,
+            max_results=5,
+        ),
+    )
+    assert len(result) > 0, "halal chicken+rice should still yield primaries"
+    for r in result:
+        joined = " ".join(r.ingredients_have + r.ingredients_need)
+        bad = _contains_bad_word(joined, _HALAL_BAD_WORDS)
+        assert bad is None, f"halal violation: primary {r.id} contains '{bad}' in '{joined}'"
+
+
+async def test_dietary_halal_filters_alternatives(kb):
+    """Alternatives must respect the dietary filter too (issue #124 root cause)."""
+    result = await search_recipes(
+        kb,
+        SearchRecipesInput(
+            ingredients=["chicken", "rice", "broccoli"],
+            dietary_restrictions=["halal"],
+            include_alternatives=True,
+            max_results=5,
+        ),
+    )
+    for r in result:
+        for alt in r.alternatives:
+            joined = " ".join(alt.ingredients_have + alt.ingredients_need)
+            bad = _contains_bad_word(joined, _HALAL_BAD_WORDS)
+            assert bad is None, f"halal violation in alternative {alt.id}: '{bad}'"
+
+
+async def test_dietary_vegetarian_filters_meat(kb):
+    """Vegetarian user: no primary or alternative may contain meat/poultry/fish."""
+    result = await search_recipes(
+        kb,
+        SearchRecipesInput(
+            ingredients=["tofu", "mushrooms"],
+            dietary_restrictions=["vegetarian"],
+            include_alternatives=True,
+            max_results=3,
+        ),
+    )
+    assert len(result) > 0
+    for r in result:
+        all_names = r.ingredients_have + r.ingredients_need
+        for alt in r.alternatives:
+            all_names += alt.ingredients_have + alt.ingredients_need
+        joined = " ".join(all_names)
+        bad = _contains_bad_word(joined, _VEGETARIAN_BAD_WORDS)
+        assert bad is None, f"vegetarian violation: '{bad}' in {joined}"
+
+
+async def test_primary_protein_hard_filter_chicken(kb):
+    """User says chicken → no chicken-free recipe in primaries (e.g., pure beef dishes)."""
+    result = await search_recipes(
+        kb,
+        SearchRecipesInput(ingredients=["chicken", "broccoli"], max_results=5),
+    )
+    assert len(result) > 0
+    # Every primary must have a chicken-related protein in pcsv_roles['protein']
+    for r in result:
+        proteins_str = " ".join(r.pcsv_roles.get("protein", [])).lower()
+        assert "chicken" in proteins_str, (
+            f"recipe {r.id} ({r.name}) has proteins {r.pcsv_roles.get('protein')} — "
+            f"expected chicken since user only listed chicken as protein"
+        )
+
+
+async def test_primary_protein_hard_filter_beef(kb):
+    """User says beef+egg → every primary has beef OR egg (not pure pork/chicken)."""
+    result = await search_recipes(
+        kb,
+        SearchRecipesInput(ingredients=["beef", "egg", "rice"], max_results=5),
+    )
+    assert len(result) > 0
+    for r in result:
+        proteins_str = " ".join(r.pcsv_roles.get("protein", [])).lower()
+        assert "beef" in proteins_str or "egg" in proteins_str, (
+            f"{r.id} ({r.name}) has proteins {r.pcsv_roles.get('protein')} — expected beef or egg"
+        )
+
+
+async def test_rice_does_not_match_rice_vinegar(kb):
+    """Token-boundary staple exclusion: user 'rice' shouldn't count 'rice vinegar' as a match."""
+    from src.ai.tools.search_recipes import _ingredient_matches
+    assert _ingredient_matches("rice", "rice vinegar") is False
+    assert _ingredient_matches("rice", "rice wine") is False
+    assert _ingredient_matches("rice", "rice noodles") is False
+    # Still allows real rice matches
+    assert _ingredient_matches("rice", "jasmine rice") is True
+    assert _ingredient_matches("rice", "white rice") is True
+
+
+async def test_variety_dedupe_by_cooking_method(kb):
+    """When many stir-fries match, primary list should not be dominated by stir-fries."""
+    result = await search_recipes(
+        kb,
+        SearchRecipesInput(ingredients=["tofu", "mushrooms"], max_results=3),
+    )
+    methods = [r.cooking_method for r in result if r.cooking_method]
+    # At most one duplicate method in top 3 (allows some slack if KB is method-thin)
+    if len(methods) == 3:
+        from collections import Counter
+        counts = Counter(methods)
+        assert max(counts.values()) <= 2, (
+            f"cooking_method dedupe failed: {counts}"
+        )
+
+
+async def test_dietary_preserved_across_filter_relaxation(kb):
+    """Relaxation fallback must NOT drop dietary_restrictions (issue #124)."""
+    result = await search_recipes(
+        kb,
+        SearchRecipesInput(
+            ingredients=["chicken", "rice"],
+            cuisine="BBQ",  # unlikely to match → triggers relaxation
+            dietary_restrictions=["halal"],
+            max_results=5,
+        ),
+    )
+    assert len(result) > 0, "expected relaxation fallback to return results"
+    for r in result:
+        joined = " ".join(r.ingredients_have + r.ingredients_need)
+        bad = _contains_bad_word(joined, _HALAL_BAD_WORDS)
+        assert bad is None, f"relaxation dropped halal filter: '{bad}' in {r.id}"
