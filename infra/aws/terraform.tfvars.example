@@ -1,0 +1,10 @@
+# Template for terraform.tfvars — copy to terraform.tfvars and fill in real values.
+# terraform.tfvars is gitignored; this template is safe to commit.
+
+db_password        = "REPLACE_WITH_STRONG_PASSWORD"
+openrouter_api_key = "REPLACE_WITH_OPENROUTER_KEY"
+jwt_secret         = "REPLACE_WITH_RANDOM_JWT_SECRET"
+
+# Front the ALB with CloudFront for HTTPS on the default *.cloudfront.net
+# hostname. Set to false to skip CloudFront (ALB HTTP-only).
+# enable_cloudfront = true

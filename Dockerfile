@@ -9,7 +9,13 @@
 #
 # Pinned base tags keep the build reproducible across PRs / CI / deploys.
 
-FROM oven/bun:1.3.12 AS frontend
+# Bun 1.3.11 pinned for reproducibility. The real fix for #146 (tailwind v4
+# dropping numeric spacing utilities) is building on linux/arm64 — the
+# @tailwindcss/oxide linux-amd64 native binary produces a broken CSS bundle
+# (36 KB, no .p-*/.m-*/.gap-* utilities) while linux-arm64 produces the
+# correct 48 KB bundle from the same source. AWS Fargate runs this image
+# on Graviton (ARM64); see infra/aws/ecs.tf runtime_platform.
+FROM oven/bun:1.3.11 AS frontend
 WORKDIR /app/src/frontend
 COPY src/frontend/package.json src/frontend/bun.lock ./
 RUN bun install --frozen-lockfile

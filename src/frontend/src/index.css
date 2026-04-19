@@ -2,6 +2,12 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* Explicit source globs — do not rely on Tailwind v4's implicit source
+ * detection. Some bun versions (1.3.12 seen) caused the detector to miss
+ * our TSX files, producing a 36 KB CSS with zero spacing utilities. See #146. */
+@source "./**/*.{ts,tsx}";
+@source "../index.html";
+
 @theme inline {
     /* Soft Bento color palette */
     --color-cream: #f5efe4;
@@ -126,7 +132,8 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+    outline-color: color-mix(in oklab, var(--color-ring) 50%, transparent);
     }
   body {
     @apply bg-background text-foreground;

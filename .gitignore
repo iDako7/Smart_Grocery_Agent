@@ -28,3 +28,12 @@ data/kb.sqlite
 
 # Phase 2 eval cache spike dumps (see evals/phase2/scripts/cache_spike_analysis.py)
 evals/phase2/.spike_dumps/
+
+# Terraform (AWS deploy track)
+infra/aws/*.tfstate*
+infra/aws/.terraform/
+infra/aws/.terraform.lock.hcl
+infra/aws/*.tfvars
+!infra/aws/*.example.tfvars
+infra/aws/tfplan
+infra/aws/crash.log
