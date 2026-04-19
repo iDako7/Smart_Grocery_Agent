@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+# Presentation expansion suite — bilingual + adversarial cases.
+# Reuses evals/phase2/provider.py (HTTP -> deployed Fly app or local backend).
+# Run: cd evals/presentation && npx promptfoo eval -c promptfooconfig.yaml
+
+description: >-
+  SGA V2 presentation expansion — bilingual EN/ZH + adversarial robustness.
+
+prompts:
+  - "{{input}}"
+
+providers:
+  - id: python:../phase2/provider.py
+
+defaultTest:
+  options:
+    provider:
+      id: openai:chat:anthropic/claude-sonnet-4.6
+      config:
+        apiBaseUrl: https://openrouter.ai/api/v1
+        apiKey: '{{env.OPENROUTER_API_KEY}}'
+        temperature: 0
+
+tests: file://expansion_cases.yaml
