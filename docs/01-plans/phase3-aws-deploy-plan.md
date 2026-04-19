@@ -141,6 +141,7 @@ Files:
 | 3 | Gitignore `*.tfstate*`, `.terraform/`, `*.tfvars`; commit `*.example.tfvars` | Standard terraform hygiene; creds never reach git |
 | 4 | Bundled SPA (`SERVE_FRONTEND=true`) not S3/CloudFront | Zero backend delta, no CORS surgery, trivial Fly ↔ AWS parity |
 | 5 | Token streaming deferred | Scope guard; current collect-then-emit works |
+| 6 | Showcase scale target: ≤10 concurrent | Fly load-test (#143) shows Postgres pool saturates at 20u (p99=90s, 14.9% fail); `desired_count=1` + `db.t4g.micro` is demo-appropriate, not a production ceiling |
 
 ---
 
@@ -149,3 +150,4 @@ Files:
 | Date | Version | Changes |
 |---|---|---|
 | 2026-04-18 | v1 | Initial plan: parallel AWS track (us-west-2, Learner Lab), bundled SPA + ALB + Fargate + RDS + ElastiCache + SSM, HTTP-only demo, apply/destroy showcase cadence |
+| 2026-04-19 | v1.1 | Rebased on main; noted asyncpg ssl fix (#142) strengthens RDS connection story; added scale-target decision row citing #143 load-test findings |
