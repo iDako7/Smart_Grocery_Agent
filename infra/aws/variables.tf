@@ -165,3 +165,9 @@ variable "sga_model" {
   type        = string
   default     = "openai/gpt-5.4-mini"
 }
+
+variable "enable_cloudfront" {
+  description = "If true, provision a CloudFront distribution in front of the ALB to provide HTTPS on the default *.cloudfront.net hostname. ALB remains HTTP-only."
+  type        = bool
+  default     = true
+}
