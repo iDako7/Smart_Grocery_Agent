@@ -1,0 +1,21 @@
+{
+  "config": {
+    "base_url": "https://sga-v2.fly.dev",
+    "cold_gap_s": 360,
+    "n_cold": 1,
+    "n_warm": 0,
+    "started_at": "2026-04-18T22:38:00+00:00",
+    "note": "Probe truncated to 1 cold sample for time. Warm baseline derived from locust steady-state run instead of dedicated warm samples."
+  },
+  "calls": [
+    {
+      "index": 0,
+      "kind": "cold",
+      "session_create_ms": 8059.0,
+      "ttfe_ms": 4791.0,
+      "ttd_ms": 4793.0,
+      "ok": true,
+      "error": null
+    }
+  ]
+}

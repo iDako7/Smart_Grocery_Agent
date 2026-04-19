@@ -1,0 +1,3 @@
+Method,Name,Error,Occurrences
+POST,POST /session/{id}/chat,CatchResponseError('chat returned 500'),11
+GET,GET /session/{id},HTTPError('500 Server Error: Internal Server Error for url: GET /session/{id}'),2
