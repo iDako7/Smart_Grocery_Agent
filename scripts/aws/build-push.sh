@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# build-push.sh — build the multi-stage Docker image for linux/amd64 and push
-# it to the ECR repo managed by terraform (infra/aws/ecr.tf).
+# build-push.sh — build the multi-stage Docker image for linux/arm64 and push
+# it to the ECR repo managed by terraform (infra/aws/ecr.tf). Must match the
+# Fargate runtime_platform (ARM64) set in infra/aws/ecs.tf — see #146.
 #
 # Prerequisites: docker (running), aws cli v2, git, terraform apply must have
 # already created the ECR repo.
@@ -69,10 +70,12 @@ aws ecr get-login-password --region "${AWS_REGION}" \
   | docker login --username AWS --password-stdin "${ECR_HOST}"
 
 # --- build --------------------------------------------------------------------
-printf '==> [2/4] docker build --platform linux/amd64 (context=%s)\n' "${REPO_ROOT}"
+# Build for linux/arm64 to match the Fargate runtime_platform (Graviton).
+# Required for #146 (tailwind v4 oxide amd64 binary emits a broken CSS bundle).
+printf '==> [2/4] docker build --platform linux/arm64 (context=%s)\n' "${REPO_ROOT}"
 cd "${REPO_ROOT}"
 docker build \
-  --platform linux/amd64 \
+  --platform linux/arm64 \
   -t "${REPO_NAME}:${IMAGE_TAG}" \
   -t "${REPO_NAME}:latest" \
   -f Dockerfile \
