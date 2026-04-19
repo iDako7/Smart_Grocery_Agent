@@ -48,9 +48,7 @@ def get_engine() -> AsyncEngine:
         if not url:
             raise RuntimeError("DATABASE_URL environment variable is not set")
         normalized_url, connect_args = _normalize_for_asyncpg(url)
-        _engine = create_async_engine(
-            normalized_url, pool_pre_ping=True, connect_args=connect_args
-        )
+        _engine = create_async_engine(normalized_url, pool_pre_ping=True, connect_args=connect_args)
     return _engine
 
 
