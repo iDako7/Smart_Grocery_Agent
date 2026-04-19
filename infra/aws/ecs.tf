@@ -24,6 +24,14 @@ resource "aws_ecs_task_definition" "app" {
   execution_role_arn       = local.execution_role_arn
   task_role_arn            = local.task_role_arn
 
+  # Run on Graviton (ARM64). Fixes #146: Tailwind v4's @tailwindcss/oxide
+  # linux-amd64 native binary emits a broken CSS bundle missing every
+  # numeric spacing utility; linux-arm64 produces the correct bundle.
+  runtime_platform {
+    cpu_architecture        = "ARM64"
+    operating_system_family = "LINUX"
+  }
+
   container_definitions = jsonencode([
     {
       name      = "app"
