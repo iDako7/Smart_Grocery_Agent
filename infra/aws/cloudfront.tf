@@ -30,7 +30,11 @@ resource "aws_cloudfront_distribution" "this" {
       https_port             = 443
       origin_protocol_policy = "http-only"
       origin_ssl_protocols   = ["TLSv1.2"]
-      origin_read_timeout    = 60
+      # 60s is the CloudFront default for ALB origins and the max without a
+      # service quota bump. If an LLM turn stays silent longer than 60s,
+      # CloudFront will close the upstream connection mid-stream — keep SSE
+      # events flowing (thinking/heartbeat) to avoid silent truncation.
+      origin_read_timeout = 60
     }
   }
 

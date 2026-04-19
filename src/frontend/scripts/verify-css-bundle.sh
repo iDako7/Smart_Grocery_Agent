@@ -31,7 +31,7 @@ REQUIRED_CLASSES=(
 if [[ $# -gt 0 ]]; then
   CSS_FILE="$1"
 else
-  CSS_FILE="$(ls -1 dist/assets/index-*.css 2>/dev/null | head -n1 || true)"
+  CSS_FILE="$(ls -t1 dist/assets/index-*.css 2>/dev/null | head -n1 || true)"
 fi
 
 if [[ -z "${CSS_FILE}" || ! -f "${CSS_FILE}" ]]; then

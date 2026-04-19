@@ -52,5 +52,7 @@ output "resource_prefix" {
 
 output "cloudfront_url" {
   description = "Public HTTPS URL (CloudFront). Empty when enable_cloudfront = false."
-  value       = var.enable_cloudfront ? "https://${aws_cloudfront_distribution.this[0].domain_name}" : ""
+  # try() guards against index-panic when count = 0 — terraform evaluates both
+  # branches of ?: in some versions even when enable_cloudfront = false.
+  value = var.enable_cloudfront ? "https://${try(aws_cloudfront_distribution.this[0].domain_name, "")}" : ""
 }
