@@ -13,13 +13,15 @@ from sqlalchemy.ext.asyncio import (
 _engine: AsyncEngine | None = None
 
 
-def _normalize_for_asyncpg(url: str) -> str:
+def _normalize_for_asyncpg(url: str) -> tuple[str, dict]:
     """Coerce a postgres URL into the form `create_async_engine` wants.
 
-    Fly.io (and Heroku-style providers) inject `DATABASE_URL` as
-    `postgres://…?sslmode=disable`. SQLAlchemy's async engine needs the
-    explicit `postgresql+asyncpg://` driver prefix and does not recognize
-    the libpq `sslmode` query parameter (asyncpg uses `ssl=` instead).
+    Returns (normalized_url, connect_args). Fly.io (and Heroku-style
+    providers) inject `DATABASE_URL` as `postgres://…?sslmode=disable`.
+    asyncpg does not honor libpq's `sslmode` — if we just strip it, asyncpg
+    defaults to attempting TLS and Fly's internal Postgres reset the
+    handshake. So we translate `sslmode` into a `connect_args={"ssl": …}`
+    entry that asyncpg actually respects.
     """
     if url.startswith("postgres://"):
         url = "postgresql+asyncpg://" + url[len("postgres://") :]
@@ -27,8 +29,15 @@ def _normalize_for_asyncpg(url: str) -> str:
         url = "postgresql+asyncpg://" + url[len("postgresql://") :]
 
     parsed = urlparse(url)
-    params = [(k, v) for k, v in parse_qsl(parsed.query) if k != "sslmode"]
-    return urlunparse(parsed._replace(query=urlencode(params)))
+    query_pairs = parse_qsl(parsed.query)
+    sslmode = next((v for k, v in query_pairs if k == "sslmode"), None)
+    remaining = [(k, v) for k, v in query_pairs if k != "sslmode"]
+    connect_args: dict = {}
+    if sslmode == "disable":
+        connect_args["ssl"] = False
+    elif sslmode in ("require", "verify-ca", "verify-full"):
+        connect_args["ssl"] = True
+    return urlunparse(parsed._replace(query=urlencode(remaining))), connect_args
 
 
 def get_engine() -> AsyncEngine:
@@ -38,7 +47,10 @@ def get_engine() -> AsyncEngine:
         url = os.environ.get("DATABASE_URL", "")
         if not url:
             raise RuntimeError("DATABASE_URL environment variable is not set")
-        _engine = create_async_engine(_normalize_for_asyncpg(url), pool_pre_ping=True)
+        normalized_url, connect_args = _normalize_for_asyncpg(url)
+        _engine = create_async_engine(
+            normalized_url, pool_pre_ping=True, connect_args=connect_args
+        )
     return _engine
 
 
