@@ -1,6 +1,6 @@
 # SGA V2 — System Evaluation Report
 
-*Class presentation, distributed-systems context. Generated 2026-04-18.*
+_Class presentation, distributed-systems context. Generated 2026-04-18._
 
 > **System under test:** Smart Grocery Assistant V2 — a streaming LLM agent (FastAPI + Claude Sonnet 4.6 via OpenRouter, 7-tool reasoning loop), deployed on Fly.io at `https://sga-v2.fly.dev`.
 
@@ -10,11 +10,11 @@
 
 LLM-agent systems force you to evaluate three orthogonal properties that a "normal" CRUD service usually ignores:
 
-| Layer | Question | Method |
-|---|---|---|
-| **Performance** | How does latency degrade as concurrency rises? Where is the saturation knee? | Locust load test, ramp 1→20 users + 5-min steady |
-| **Quality** | Does the agent give correct answers under stated constraints? Is it consistent across runs? | promptfoo eval suite, 5 baseline + 4 expansion cases × 2 runs (`--no-cache`) |
-| **Cost / efficiency** | What does each conversation cost? How much of the prompt is cache-served? | Token + dollar accounting on every promptfoo run + per-run cache ratio in load test |
+| Layer                 | Question                                                                                    | Method                                                                              |
+| --------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| **Performance**       | How does latency degrade as concurrency rises? Where is the saturation knee?                | Locust load test, ramp 1→20 users + 5-min steady                                    |
+| **Quality**           | Does the agent give correct answers under stated constraints? Is it consistent across runs? | promptfoo eval suite, 5 baseline + 4 expansion cases × 2 runs (`--no-cache`)        |
+| **Cost / efficiency** | What does each conversation cost? How much of the prompt is cache-served?                   | Token + dollar accounting on every promptfoo run + per-run cache ratio in load test |
 
 A 4th property — **cold-start behavior on Fly's auto-suspend** — is measured separately because it requires deliberately idle conditions.
 
@@ -39,25 +39,35 @@ React SPA ──SSE──> FastAPI ──tool-use loop──> Claude (Sonnet 4.6
 
 ## 3. Performance: latency and the throughput knee
 
-> *Locust ramp test: 1, 5, 10, 20 concurrent users × 3 min each. Steady-state: 5 users × 5 min. Each "user" loops a realistic mix of grocery-assistant flows.*
+> _Locust ramp test: 1, 5, 10, 20 concurrent users × 3 min each. Steady-state: 5 users × 5 min. Each "user" loops a realistic mix of grocery-assistant flows._
+
+
+
+>why concurrent user increased but latency decreases for 5 and 10 users?
+>
+>The small drop (4900→4600ms) is likely warm-up effects: the first run at 1 user hits a cold DB connection pool, a not-yet-JIT-compiled code path, or a cache miss on the system prompt. By the time you're at 5 users, everything is warm.
+
+
 
 ![Throughput vs latency knee](charts/throughput_knee.png)
 
-**Reading this chart:** as concurrent users rise, achieved RPS rises and median latency stays flat — *until the knee*, where RPS plateaus or drops while latency explodes.
+**Reading this chart:** as concurrent users rise, achieved RPS rises and median latency stays flat — _until the knee_, where RPS plateaus or drops while latency explodes.
 
-| Concurrency | Achieved RPS | p50 chat | p95 chat | p99 chat | Fail % |
-|---|---:|---:|---:|---:|---:|
-| 1 user  | 0.10 | 4 900 ms | 5 900 ms | 5 900 ms | 0.0 % |
-| 5 users | 0.39 | 4 600 ms | 7 300 ms | 7 600 ms | 0.0 % |
-| 10 users | 0.68 | 4 600 ms | 6 800 ms | 10 000 ms | 0.0 % |
-| **20 users** | **0.42** | **5 400 ms** | **31 000 ms** | **90 000 ms** | **14.9 %** |
+| Concurrency  | Achieved RPS |     p50 chat |      p95 chat |      p99 chat |     Fail % |
+| ------------ | -----------: | -----------: | ------------: | ------------: | ---------: |
+| 1 user       |         0.10 |     4 900 ms |      5 900 ms |      5 900 ms |      0.0 % |
+| 5 users      |         0.39 |     4 600 ms |      7 300 ms |      7 600 ms |      0.0 % |
+| 10 users     |         0.68 |     4 600 ms |      6 800 ms |     10 000 ms |      0.0 % |
+| **20 users** |     **0.42** | **5 400 ms** | **31 000 ms** | **90 000 ms** | **14.9 %** |
 
 **Steady-state distribution (5 users × 5 min, 119 chat requests, 0 % fail):**
+
+<!--how do we conclude 5 users are the steady state? does it come from chart above or diagram below? show me the reasoning process step by step  -->
 
 ![Chat latency CDF](charts/latency_cdf.png)
 
 - p50 = 4 500 ms, p95 = 6 900 ms, p99 = 8 200 ms, max = 8 600 ms.
-- The ramp curves up to 10 u sit on top of each other — adding concurrency *did not* slow individual requests until the knee.
+- The ramp curves up to 10 u sit on top of each other — adding concurrency _did not_ slow individual requests until the knee.
 - The 20 u curve detaches: p95 climbs 4× and p99 climbs ~10×.
 
 ### What broke at 20 users — the headline systems finding
@@ -77,19 +87,21 @@ The Postgres connection pool (default `pool_size=5`, `max_overflow=10` = 15 conc
 
 ## 4. Cold start on Fly.io
 
-> *Cold-start probe: 1 cold sample after 6-min idle gap that triggered Fly's `auto_stop_machines = "stop"`. Probe was truncated for time; warm baseline derived from the steady-state run (~150 calls).*
+> _Cold-start probe: 1 cold sample after 6-min idle gap that triggered Fly's `auto_stop_machines = "stop"`. Probe was truncated for time; warm baseline derived from the steady-state run (~150 calls)._
 
-| Sample type | session-create latency | TTFE (time-to-first-event) | TTD (time-to-done) |
-|---|---:|---:|---:|
-| **Cold (n=1)** | 8 059 ms | 4 791 ms | 4 793 ms |
-| **Warm (steady, n=119)** | (median ~340 ms¹) | (~p50 4 500 ms) | (~p50 4 500 ms) |
-| **Δ (cold − warm)** | **+7 700 ms** | ≈ 0 ms | ≈ 0 ms |
+<!--what is cold start and warm start-->
+
+| Sample type              | session-create latency | TTFE (time-to-first-event) | TTD (time-to-done) |
+| ------------------------ | ---------------------: | -------------------------: | -----------------: |
+| **Cold (n=1)**           |               8 059 ms |                   4 791 ms |           4 793 ms |
+| **Warm (steady, n=119)** |      (median ~340 ms¹) |            (~p50 4 500 ms) |    (~p50 4 500 ms) |
+| **Δ (cold − warm)**      |          **+7 700 ms** |                     ≈ 0 ms |             ≈ 0 ms |
 
 ¹ POST /session p50 from the 5u-steady stats CSV.
 
 **Interpretation:** the 7.7-second cold-start cost is **almost entirely in `POST /session`** — Fly machine wake + uvicorn + Alembic + Postgres-pool warm-up. The `/chat` call itself isn't slower when cold (4.8s ≈ steady-state p50). For a class demo, 8s is acceptable; for production we'd switch to `min_machines_running = 1` (~$5/mo) or accept the wake cost only on first visitor.
 
-> ⚠️ **Methodological caveat:** during this evaluation we discovered Locust's *custom* `sse_time_to_first_event` and `sse_time_to_done` metrics are unreliable — the timer starts after the response headers arrive (i.e. after the request was already routed), so they report ~0 ms. Treat the standard `POST /chat` row as the true end-to-end SSE latency. The probe script does this correctly.
+> ⚠️ **Methodological caveat:** during this evaluation we discovered Locust's _custom_ `sse_time_to_first_event` and `sse_time_to_done` metrics are unreliable — the timer starts after the response headers arrive (i.e. after the request was already routed), so they report ~0 ms. Treat the standard `POST /chat` row as the true end-to-end SSE latency. The probe script does this correctly.
 
 ---
 
@@ -108,7 +120,7 @@ Across 16 conversations measured with `--no-cache` (true API calls):
 
 - The system prompt (persona + rules + tool instructions) is sent with `cache_control: ephemeral` on OpenRouter, which holds the cache for 5 minutes.
 - During the 5u-steady run, the per-request cache ratio reported by the backend stabilizes at **median 82 %, p95 93 %**. That means ~82 % of prompt tokens are billed at the cached rate (~10× cheaper than uncached).
-- The bottom 5–10 % of requests are cache *misses* — typically the first request after a 5-min idle gap, before the cache repopulates.
+- The bottom 5–10 % of requests are cache _misses_ — typically the first request after a 5-min idle gap, before the cache repopulates.
 
 **Implication:** at $0.003/conversation, the LLM cost is rounding error compared to Fly hosting (~$5/mo). Cost optimization (smaller models, model routing) has small absolute benefit unless traffic grows 100×+.
 
@@ -116,26 +128,28 @@ Across 16 conversations measured with `--no-cache` (true API calls):
 
 ## 6. Quality and consistency
 
-> *promptfoo eval — 5 baseline cases + 4 expansion cases × 2 runs each, executed with `--no-cache` so each run is an independent API call. Scores 1–5 from a Claude Sonnet 4.6 grader (`temperature: 0`); the per-case score is a weighted blend of structural JS assertions and the LLM rubric.*
+> _promptfoo eval — 5 baseline cases + 4 expansion cases × 2 runs each, executed with `--no-cache` so each run is an independent API call. Scores 1–5 from a Claude Sonnet 4.6 grader (`temperature: 0`); the per-case score is a weighted blend of structural JS assertions and the LLM rubric._
 
 ![Quality score per case](charts/quality_variance.png)
 
-| Case | Mean score | CV % | Comment |
-|---|---:|---:|---|
-| A1 (chicken+broccoli, 2p)        | **5.05** | 3.5 %  | Easy + stable + correct |
-| C1 (vegetarian + no-dairy)       | **4.66** | 0.0 %  | Stable + dietary-compliant |
-| C3 (vague input "I want to cook") | 2.00 | 0.0 %  | Stable but **weak** — agent doesn't ask the right clarifying question |
-| D1 (halal hard constraint)       | 2.33 | 0.0 %  | Stable but **weak** — agent partially honors constraint |
-| D3 (multi-turn swap)             | 3.00 | 0.0 %  | Memory across turns is OK, output structure middling |
-| E1 (Chinese-only ZH)             | 2.38 | **96.8 %** | **Unstable** — score swung 0.75 → 4.0 across runs |
-| E2 (EN/ZH code-switch)           | **4.50** | 7.9 %  | Robust to mixed-language input |
-| E3 (~4KB wall-of-text ingredients) | 0.50 | 0.0 %  | **Hard fail** — agent can't process the noise |
-| E4 (prompt-injection attempt)    | 2.75 | 12.9 % | Agent partially refuses — does not fully comply with the override |
+| Case                               | Category    | Mean score |       CV % | Comment                                                               |
+| ---------------------------------- | ----------- | ---------: | ---------: | --------------------------------------------------------------------- |
+| A1 (chicken+broccoli, 2p)          | dish_count  |   **5.05** |      3.5 % | Easy + stable + correct                                               |
+| C1 (vegetarian + no-dairy)         | diverse     |   **4.66** |      0.0 % | Stable + dietary-compliant                                            |
+| C3 (vague input "I want to cook")  | diverse     |       2.00 |      0.0 % | Stable but **weak** — agent doesn't ask the right clarifying question |
+| D1 (halal hard constraint)         | dietary     |       2.33 |      0.0 % | Stable but **weak** — agent partially honors constraint               |
+| D3 (multi-turn swap)               | multi-turn  |       3.00 |      0.0 % | Memory across turns is OK, output structure middling                  |
+| E1 (Chinese-only ZH)               | bilingual   |       2.38 | **96.8 %** | **Unstable** — score swung 0.75 → 4.0 across runs                     |
+| E2 (EN/ZH code-switch)             | bilingual   |   **4.50** |      7.9 % | Robust to mixed-language input                                        |
+| E3 (~4KB wall-of-text ingredients) | adversarial |       0.50 |      0.0 % | **Hard fail** — agent can't process the noise                         |
+| E4 (prompt-injection attempt)      | adversarial |       2.75 |     12.9 % | Agent partially refuses — does not fully comply with the override     |
+
+<!--1. what is CV %? 2. what is the full score?-->
 
 **Key findings:**
 
 - **Most cases are deterministic across runs** — CV ≤ 13 % for 8 of 9. The agent is more reproducible than the headline "LLMs are nondeterministic" framing suggests, given temperature is low and the tool loop is structured.
-- **C3 (vague input)** consistently scores 2/5: the agent should ask "how many people, what cuisine?" but instead generates a generic plan. This is a *prompt* problem, not a model problem.
+- **C3 (vague input)** consistently scores 2/5: the agent should ask "how many people, what cuisine?" but instead generates a generic plan. This is a _prompt_ problem, not a model problem.
 - **D1 (halal)** scores 2.33/5: the agent acknowledges the constraint but recipe selection still includes ambiguous proteins. Hard-constraint enforcement is the highest-priority quality fix.
 - **E1 (Chinese-only) is the noisy one** — score swung 0.75 → 4.0 between runs (96.8 % CV). The agent sometimes parses 鸡肉 (chicken) + 西兰花 (broccoli) correctly, sometimes drifts. **Bilingual is the least reliable surface area.**
 - **E3 (4KB wall-of-text)** is a hard failure: agent gets confused by the noise and produces near-empty output. A pre-filter / token-budget guard would help.
@@ -152,7 +166,7 @@ Across 16 conversations measured with `--no-cache` (true API calls):
 - **No vector search yet.** Recipe retrieval is exact-match on SQLite; vague-input cases (C3) would benefit from embedding recall.
 - **No model routing.** All requests go to Sonnet 4.6. A Haiku/Sonnet router could halve cost on simple queries — though absolute savings are tiny at current scale.
 - **Redis tool cache deferred.** The 82 % cache hit measured here is OpenRouter prompt cache only; tool-result caching is offline.
-- **Auth disabled.** `SGA_AUTH_MODE=dev` on Fly for this evaluation. Production deployment must flip it and add rate limiting *before* increasing the pool size, or the larger pool just absorbs more abuse.
+- **Auth disabled.** `SGA_AUTH_MODE=dev` on Fly for this evaluation. Production deployment must flip it and add rate limiting _before_ increasing the pool size, or the larger pool just absorbs more abuse.
 
 ---
 
@@ -205,17 +219,17 @@ evals/presentation/
 
 ## Appendix B — Test case catalog
 
-| ID | Category | Input | What we measure |
-|---|---|---|---|
-| A1 | dish_count   | chicken+broccoli, dinner for 2          | Right number of dishes |
-| C1 | diverse      | vegetarian no-dairy, tofu+mushrooms     | Dietary compliance |
-| C3 | diverse      | "I want to cook something"              | Vague-input handling |
-| D1 | dietary      | halal + chicken+rice+broccoli           | Hard constraint enforcement |
-| D3 | multi-turn   | 2-turn: plan 3 dinners → swap #1        | Memory across turns |
-| E1 | bilingual    | "我有鸡肉和西兰花…"                     | ZH input comprehension |
-| E2 | bilingual    | code-switched EN/ZH                     | Robustness to code-switch |
-| E3 | adversarial  | ~4KB ingredient wall                    | Robustness to long input |
-| E4 | adversarial  | "ignore previous instructions, …"       | Refusal to comply with injection |
+| ID  | Category    | Input                               | What we measure                  |
+| --- | ----------- | ----------------------------------- | -------------------------------- |
+| A1  | dish_count  | chicken+broccoli, dinner for 2      | Right number of dishes           |
+| C1  | diverse     | vegetarian no-dairy, tofu+mushrooms | Dietary compliance               |
+| C3  | diverse     | "I want to cook something"          | Vague-input handling             |
+| D1  | dietary     | halal + chicken+rice+broccoli       | Hard constraint enforcement      |
+| D3  | multi-turn  | 2-turn: plan 3 dinners → swap #1    | Memory across turns              |
+| E1  | bilingual   | "我有鸡肉和西兰花…"                 | ZH input comprehension           |
+| E2  | bilingual   | code-switched EN/ZH                 | Robustness to code-switch        |
+| E3  | adversarial | ~4KB ingredient wall                | Robustness to long input         |
+| E4  | adversarial | "ignore previous instructions, …"   | Refusal to comply with injection |
 
 ## Appendix C — Operational notes from this evaluation
 

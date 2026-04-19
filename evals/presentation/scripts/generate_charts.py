@@ -282,30 +282,23 @@ def chart_cost_per_convo() -> None:
         _skip(name, f"unexpected error: {exc}")
 
 
-_PREFERRED_SCORE_KEYS = (
-    "overall_quality",
-    "dietary_compliance",
-    "recipes_swap_quality",
-    "vague_input_handling",
-    "dish_count",
-)
+_CATEGORY_DISPLAY: dict[str, str] = {
+    "dish_count":          "dish_count",
+    "diverse_inputs":      "diverse",
+    "dietary_enforcement": "dietary",
+    "recipes_swap":        "multi-turn",
+    "bilingual":           "bilingual",
+    "adversarial":         "adversarial",
+}
 
-
-def _pick_score(named: dict) -> tuple[str | None, float | None]:
-    if not isinstance(named, dict):
-        return None, None
-    for key in _PREFERRED_SCORE_KEYS:
-        if key in named:
-            try:
-                return key, float(named[key])
-            except (TypeError, ValueError):
-                continue
-    for k, v in named.items():
-        try:
-            return k, float(v)
-        except (TypeError, ValueError):
-            continue
-    return None, None
+_CATEGORY_COLORS: dict[str, str] = {
+    "dish_count":  "#2196F3",
+    "diverse":     "#4CAF50",
+    "dietary":     "#FF9800",
+    "multi-turn":  "#9C27B0",
+    "bilingual":   "#F44336",
+    "adversarial": "#795548",
+}
 
 
 def _case_id(result: dict) -> str:
@@ -332,55 +325,61 @@ def chart_quality_variance() -> None:
         paths = _promptfoo_paths()
         if not paths:
             return _skip(name, "no promptfoo_*.json found")
-        per_case: dict[str, dict[str, list[float]]] = {}
-        chosen_metric: str | None = None
+
+        per_case: dict[str, dict] = {}
         for _, r in _iter_promptfoo_results(paths):
-            named = r.get("namedScores")
-            if not isinstance(named, dict) or not named:
-                grading = r.get("gradingResult") or {}
-                named = grading.get("namedScores") if isinstance(grading, dict) else None
-            metric, score = _pick_score(named or {})
-            if metric is None or score is None:
+            try:
+                score = float(r.get("score"))
+            except (TypeError, ValueError):
+                continue
+            if not math.isfinite(score):
                 continue
             cid = _case_id(r)
-            per_case.setdefault(cid, {}).setdefault(metric, []).append(score)
-            if chosen_metric is None and metric in _PREFERRED_SCORE_KEYS:
-                chosen_metric = metric
+            cat_raw = (r.get("vars") or {}).get("category", "")
+            cat = _CATEGORY_DISPLAY.get(cat_raw, cat_raw)
+            entry = per_case.setdefault(cid, {"scores": [], "category": cat})
+            entry["scores"].append(score)
+
         if not per_case:
-            return _skip(name, "no usable namedScores across promptfoo results")
-        if chosen_metric is None:
-            tally: dict[str, int] = {}
-            for metrics in per_case.values():
-                for m in metrics:
-                    tally[m] = tally.get(m, 0) + 1
-            chosen_metric = max(tally, key=tally.get)
-        labels, means, stds, runs_per_case = [], [], [], []
-        for cid, metrics in per_case.items():
-            scores = metrics.get(chosen_metric)
-            if not scores:
-                continue
-            labels.append(cid)
+            return _skip(name, "no usable scores across promptfoo results")
+
+        labels, means, stds, bar_colors, categories = [], [], [], [], []
+        for cid, entry in per_case.items():
+            scores = entry["scores"]
+            cat = entry["category"]
             s = pd.Series(scores)
+            labels.append(cid)
             means.append(float(s.mean()))
             stds.append(float(s.std(ddof=0)) if len(s) > 1 else 0.0)
-            runs_per_case.append(len(scores))
-        if not labels:
-            return _skip(name, f"no cases have metric '{chosen_metric}'")
-        max_runs = max(runs_per_case)
-        fig, ax = plt.subplots(figsize=FIGSIZE)
+            bar_colors.append(_CATEGORY_COLORS.get(cat, "#74a9cf"))
+            categories.append(cat)
+
+        max_runs = max(len(entry["scores"]) for entry in per_case.values())
+        fig, ax = plt.subplots(figsize=(12, 5))
         xs = list(range(len(labels)))
         if max_runs > 1:
-            ax.bar(xs, means, yerr=stds, capsize=5, color="#74a9cf", edgecolor="white")
+            ax.bar(xs, means, yerr=stds, capsize=5, color=bar_colors, edgecolor="white")
             note = f"{max_runs} runs max"
         else:
-            ax.bar(xs, means, color="#74a9cf", edgecolor="white")
-            note = "single run - no error bars"
+            ax.bar(xs, means, color=bar_colors, edgecolor="white")
+            note = "single run — no error bars"
+
         ax.set_xticks(xs)
-        ax.set_xticklabels([l if len(l) <= 28 else l[:25] + "..." for l in labels],
-                           rotation=30, ha="right", fontsize=9)
+        short_labels = [l.split(":")[0] if ":" in l else l[:6] for l in labels]
+        ax.set_xticklabels(short_labels, rotation=0, ha="center", fontsize=10)
         ax.set_xlabel("Test case")
-        ax.set_ylabel(f"Score ({chosen_metric})")
-        ax.set_title(f"Quality variance per case - {chosen_metric} ({note})")
+        ax.set_ylabel("Quality score (1–5)")
+        ax.set_title(f"Quality score per case — all {len(labels)} cases ({note})")
+        ax.set_ylim(0, 6.5)
+        ax.axhline(5, color="gray", linestyle=":", linewidth=1, alpha=0.5)
+
+        from matplotlib.patches import Patch
+        seen: dict[str, str] = {}
+        for cat, color in zip(categories, bar_colors):
+            seen.setdefault(cat, color)
+        legend_patches = [Patch(color=c, label=cat) for cat, c in seen.items()]
+        ax.legend(handles=legend_patches, loc="upper right", fontsize=8, title="Category")
+        ax.grid(True, alpha=0.3, axis="y")
         _save(fig, name)
     except Exception as exc:  # noqa: BLE001
         _skip(name, f"unexpected error: {exc}")
