@@ -104,6 +104,30 @@ curl -fsS "${ALB_URL}/health"
 open "${ALB_URL}"   # macOS — loads SPA in default browser
 ```
 
+### HTTPS via CloudFront
+
+The ALB listener is HTTP-only. For browser-friendly HTTPS (no "Not secure"
+warning in the showcase), a CloudFront distribution fronts the ALB and
+terminates TLS at the edge using the default `*.cloudfront.net` cert.
+This is controlled by the `enable_cloudfront` variable (default `true`).
+
+```bash
+CF_URL="$(cd infra/aws && terraform output -raw cloudfront_url)"
+echo "${CF_URL}"            # e.g. https://d1a2b3c4d5e6.cloudfront.net
+curl -fsS "${CF_URL}/health"
+open "${CF_URL}"            # browser loads SPA over HTTPS
+```
+
+Notes:
+
+- First apply spends ~5–10 min on the CloudFront deployment; subsequent
+  applies are fast unless the distribution config changes.
+- The distribution uses `redirect-to-https` for viewers, `http-only` to the
+  origin, and the managed `CachingDisabled` + `AllViewer` policies so SSE
+  (`/chat`) and JWT `Authorization` headers pass through unbuffered.
+- To skip CloudFront and demo over plain HTTP only, set
+  `enable_cloudfront = false` in `terraform.tfvars`.
+
 Manual checklist:
 
 - Magic-link signup completes (email delivery or log-captured token).
