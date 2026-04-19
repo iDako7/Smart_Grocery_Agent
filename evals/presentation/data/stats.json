@@ -1,0 +1,193 @@
+{
+  "ramp": [
+    {
+      "users": 1,
+      "rps": 0.10160101935692209,
+      "chat_count": 18,
+      "chat_p50_ms": 4900.0,
+      "chat_p95_ms": 5900.0,
+      "chat_p99_ms": 5900.0,
+      "chat_avg_ms": 4647.777634161886,
+      "fail_pct": 0.0
+    },
+    {
+      "users": 5,
+      "rps": 0.3852516466763534,
+      "chat_count": 68,
+      "chat_p50_ms": 4600.0,
+      "chat_p95_ms": 7300.0,
+      "chat_p99_ms": 7600.0,
+      "chat_avg_ms": 4749.739012896231,
+      "fail_pct": 0.0
+    },
+    {
+      "users": 10,
+      "rps": 0.6768017452541797,
+      "chat_count": 121,
+      "chat_p50_ms": 4600.0,
+      "chat_p95_ms": 6800.0,
+      "chat_p99_ms": 10000.0,
+      "chat_avg_ms": 4692.890765487932,
+      "fail_pct": 0.0
+    },
+    {
+      "users": 20,
+      "rps": 0.4188515239872112,
+      "chat_count": 74,
+      "chat_p50_ms": 5400.0,
+      "chat_p95_ms": 31000.0,
+      "chat_p99_ms": 90000.0,
+      "chat_avg_ms": 12206.355619917991,
+      "fail_pct": 14.864864864864865
+    }
+  ],
+  "steady": {
+    "users": 5,
+    "chat_count": 119,
+    "rps": 0.39902479411437286,
+    "chat_p50_ms": 4500.0,
+    "chat_p95_ms": 6900.0,
+    "chat_p99_ms": 8200.0,
+    "chat_p999_ms": 8600.0,
+    "chat_avg_ms": 4574.232982108399,
+    "chat_max_ms": 8572.532207996119,
+    "cache_ratio_median": 0.82,
+    "cache_ratio_p95": 0.93,
+    "fail_pct": 0.0,
+    "note": "TTFE/TTD locust custom metrics are unreliable (timer starts after response headers, not before request). Treat POST /chat latency as end-to-end SSE latency."
+  },
+  "cold_start": {
+    "n_cold": 1,
+    "n_warm": 0,
+    "cold_session_create_ms": 8059.0,
+    "cold_ttfe_ms": 4791.0,
+    "cold_ttd_ms": 4793.0,
+    "warm_session_create_ms": null,
+    "warm_ttfe_ms": null,
+    "warm_ttd_ms": null,
+    "note": "Probe truncated to 1 cold sample for time. Warm baseline derived from locust steady-state run instead of dedicated warm samples."
+  },
+  "quality": [
+    {
+      "case_id": "A1",
+      "description": "A1: chicken+broccoli dinner for 2",
+      "n_runs": 2,
+      "scores": [
+        5.175,
+        4.925
+      ],
+      "mean": 5.05,
+      "cv_pct": 3.5,
+      "rubric_mean": 3.5
+    },
+    {
+      "case_id": "C1",
+      "description": "C1: vegetarian no-dairy \u2014 tofu+mushrooms dinner for 2",
+      "n_runs": 2,
+      "scores": [
+        4.66,
+        4.66
+      ],
+      "mean": 4.66,
+      "cv_pct": 0.0,
+      "rubric_mean": 3.0
+    },
+    {
+      "case_id": "C3",
+      "description": "C3: vague input \u2014 no ingredients, no party size",
+      "n_runs": 2,
+      "scores": [
+        2.0,
+        2.0
+      ],
+      "mean": 2.0,
+      "cv_pct": 0.0,
+      "rubric_mean": 3.0
+    },
+    {
+      "case_id": "D1",
+      "description": "D1: halal constraint \u2014 chicken+rice+broccoli dinner",
+      "n_runs": 2,
+      "scores": [
+        2.333,
+        2.333
+      ],
+      "mean": 2.333,
+      "cv_pct": 0.0,
+      "rubric_mean": 3.0
+    },
+    {
+      "case_id": "D3",
+      "description": "D3: recipes swap with 2-turn history \u2014 vegetarian swap",
+      "n_runs": 2,
+      "scores": [
+        3.0,
+        3.0
+      ],
+      "mean": 3.0,
+      "cv_pct": 0.0,
+      "rubric_mean": 5.0
+    },
+    {
+      "case_id": "E1",
+      "description": "E1: bilingual ZH input \u2014 chicken+broccoli dinner for 2",
+      "n_runs": 2,
+      "scores": [
+        0.75,
+        4.0
+      ],
+      "mean": 2.375,
+      "cv_pct": 96.8,
+      "rubric_mean": 3.0
+    },
+    {
+      "case_id": "E2",
+      "description": "E2: bilingual code-switch \u2014 chicken+broccoli dinner for 2",
+      "n_runs": 2,
+      "scores": [
+        4.75,
+        4.25
+      ],
+      "mean": 4.5,
+      "cv_pct": 7.9,
+      "rubric_mean": 4.0
+    },
+    {
+      "case_id": "E3",
+      "description": "E3: adversarial wall-of-text (~4KB ingredient spam)",
+      "n_runs": 2,
+      "scores": [
+        0.5,
+        0.5
+      ],
+      "mean": 0.5,
+      "cv_pct": 0.0,
+      "rubric_mean": 1.0
+    },
+    {
+      "case_id": "E4",
+      "description": "E4: adversarial prompt injection \u2014 '100 random recipes' override",
+      "n_runs": 2,
+      "scores": [
+        3.0,
+        2.5
+      ],
+      "mean": 2.75,
+      "cv_pct": 12.9,
+      "rubric_mean": 4.5
+    }
+  ],
+  "cost": {
+    "n_convos": 18,
+    "n_passed": 14,
+    "n_failed": 4,
+    "n_with_cost": 16,
+    "total_usd": 0.054,
+    "mean_per_convo_usd": 0.00337,
+    "median_per_convo_usd": 0.00308,
+    "prompt_tokens_total": 153446,
+    "completion_tokens_total": 5778,
+    "cached_tokens_total": 129024,
+    "cache_hit_pct": 84.1
+  }
+}

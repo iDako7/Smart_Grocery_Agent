@@ -1,0 +1,158 @@
+[23:28:24] polling for Fly recovery...
+[23:32:44] Fly recovered after 10 polls
+[23:32:44] warm-up: sending 3 single requests to confirm health
+[23:32:44]   warmup 1: HTTP 201
+[23:32:46]   warmup 2: HTTP 201
+[23:32:49]   warmup 3: HTTP 201
+[23:32:51] steady 5 users / 5 min
+[2026-04-18 23:32:55,693] Dakos-MacBook-Pro/INFO/locust.runners: All users spawned: {"RESTUser": 1, "SSEUser": 4} (5 total users)
+[2026-04-18 23:37:51,469] Dakos-MacBook-Pro/INFO/locust.main: --run-time limit reached, shutting down
+[2026-04-18 23:37:51,506] Dakos-MacBook-Pro/INFO/locust.main: Shutting down (exit code 0)
+Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+GET      GET /saved/recipes                                                                25     0(0.00%) |    204     125     543    160 |    0.08        0.00
+GET      GET /session/{id}                                                                 45     0(0.00%) |    174     122     656    150 |    0.15        0.00
+POST     POST /saved/recipes                                                                8     0(0.00%) |    165     136     202    150 |    0.03        0.00
+POST     POST /session                                                                      5     0(0.00%) |    384     266     570    360 |    0.02        0.00
+POST     POST /session/{id}/chat                                                          119     0(0.00%) |   4574    1433    8572   4500 |    0.40        0.00
+SSE      sse_prompt_cache_ratio_x1000                                                     119     0(0.00%) |    745       0     939    820 |    0.40        0.00
+SSE      sse_time_to_done                                                                 119     0(0.00%) |      4       0     130      0 |    0.40        0.00
+SSE      sse_time_to_first_event                                                          119     0(0.00%) |      0       0       0      0 |    0.40        0.00
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+         Aggregated                                                                       559     0(0.00%) |   1162       0    8572    150 |    1.87        0.00
+
+Response time percentiles (approximated)
+Type     Name                                                                                  50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+GET      GET /saved/recipes                                                                    160    180    190    200    390    500    540    540    540    540    540     25
+GET      GET /session/{id}                                                                     150    160    180    180    200    260    660    660    660    660    660     45
+POST     POST /saved/recipes                                                                   160    180    200    200    200    200    200    200    200    200    200      8
+POST     POST /session                                                                         360    370    370    570    570    570    570    570    570    570    570      5
+POST     POST /session/{id}/chat                                                              4500   5000   5400   5500   6100   6900   7700   8200   8600   8600   8600    119
+SSE      sse_prompt_cache_ratio_x1000                                                          820    860    880    890    920    930    940    940    940    940    940    119
+SSE      sse_time_to_done                                                                        0      1      1      1     14     16     43     55    130    130    130    119
+SSE      sse_time_to_first_event                                                                 0      0      0      0      0      0      0      0      0      0      0    119
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+         Aggregated                                                                            150    750    890   2700   4600   5400   6100   6900   8600   8600   8600    559
+
+[23:37:51] post-steady cool-down 30s
+[23:38:21] promptfoo phase2 run 1/3
+» View results: promptfoo view
+» Share with your team: https://promptfoo.app
+» Feedback: https://promptfoo.dev/feedback
+
+Total Tokens: 101,911
+  Eval: 56,251 (54,094 prompt, 2,157 completion, 40,448 cached)
+  Grading: 45,660 (42,416 prompt, 3,244 completion)
+
+Results:
+  ✓ 5 passed (100%)
+  0 failed (0%)
+  0 errors (0%)
+Duration: 41s (concurrency: 4)
+
+Writing output to evals/presentation/data/promptfoo_phase2_run1.json
+[23:39:15] promptfoo phase2 run 2/3
+» View results: promptfoo view
+» Share with your team: https://promptfoo.app
+» Feedback: https://promptfoo.dev/feedback
+
+Total Tokens: 101,911
+  Eval: 56,251 (cached)
+  Grading: 45,660 (cached)
+
+Results:
+  ✓ 5 passed (100%)
+  0 failed (0%)
+  0 errors (0%)
+Duration: 4s (concurrency: 4)
+
+Writing output to evals/presentation/data/promptfoo_phase2_run2.json
+[23:39:31] promptfoo phase2 run 3/3
+» View results: promptfoo view
+» Share with your team: https://promptfoo.app
+» Feedback: https://promptfoo.dev/feedback
+
+Total Tokens: 101,911
+  Eval: 56,251 (cached)
+  Grading: 45,660 (cached)
+
+Results:
+  ✓ 5 passed (100%)
+  0 failed (0%)
+  0 errors (0%)
+Duration: 1s (concurrency: 4)
+
+Writing output to evals/presentation/data/promptfoo_phase2_run3.json
+[23:39:44] promptfoo expansion run 1/2
+» View results: promptfoo view
+» Share with your team: https://promptfoo.app
+» Feedback: https://promptfoo.dev/feedback
+
+Total Tokens: 25,548
+  Eval: 15,553 (14,925 prompt, 628 completion, 12,288 cached)
+  Grading: 9,995 (8,799 prompt, 1,196 completion)
+
+Results:
+  ✓ 3 passed (75.00%)
+  ✗ 1 failed (25.00%)
+  0 errors (0%)
+Duration: 21s (concurrency: 4)
+
+Writing output to evals/presentation/data/promptfoo_expansion_run1.json
+[23:40:17] promptfoo expansion run 2/2
+» View results: promptfoo view
+» Share with your team: https://promptfoo.app
+» Feedback: https://promptfoo.dev/feedback
+
+Total Tokens: 25,548
+  Eval: 15,553 (cached)
+  Grading: 9,995 (cached)
+
+Results:
+  ✓ 3 passed (75.00%)
+  ✗ 1 failed (25.00%)
+  0 errors (0%)
+Duration: 4s (concurrency: 4)
+
+Writing output to evals/presentation/data/promptfoo_expansion_run2.json
+[23:40:33] generating charts
+data dir:   /Users/dako/LocalDocument/200-Project/SGA_V2-eval-class/evals/presentation/data
+charts dir: /Users/dako/LocalDocument/200-Project/SGA_V2-eval-class/evals/presentation/charts
+[skip] latency_cdf.png: no locust_steady_*_stats_history.csv found
+[ok]   throughput_knee.png -> evals/presentation/charts/throughput_knee.png
+[skip] cache_hit_over_time.png: no locust_steady_*_stats_history.csv found
+[ok]   cost_per_convo.png -> evals/presentation/charts/cost_per_convo.png
+[ok]   quality_variance.png -> evals/presentation/charts/quality_variance.png
+[23:40:35] ALL DONE — data in evals/presentation/data/, charts in evals/presentation/charts/
+total 3192
+drwxr-xr-x@ 31 dako  staff     992 Apr 18 23:40 .
+drwxr-xr-x@ 11 dako  staff     352 Apr 18 23:37 ..
+-rw-r--r--@  1 dako  staff   31669 Apr 18 22:50 cold_start_probe.log
+-rw-r--r--@  1 dako  staff     503 Apr 18 22:51 cold_start.json
+-rw-r--r--@  1 dako  staff    7541 Apr 18 23:40 finish_phase3.log
+-rw-r--r--@  1 dako  staff      31 Apr 18 23:01 locust_ramp_10u_exceptions.csv
+-rw-r--r--@  1 dako  staff      31 Apr 18 23:01 locust_ramp_10u_failures.csv
+-rw-r--r--@  1 dako  staff   32139 Apr 18 23:01 locust_ramp_10u_stats_history.csv
+-rw-r--r--@  1 dako  staff    1707 Apr 18 23:01 locust_ramp_10u_stats.csv
+-rw-r--r--@  1 dako  staff      31 Apr 18 22:54 locust_ramp_1u_exceptions.csv
+-rw-r--r--@  1 dako  staff      31 Apr 18 22:54 locust_ramp_1u_failures.csv
+-rw-r--r--@  1 dako  staff   28324 Apr 18 22:54 locust_ramp_1u_stats_history.csv
+-rw-r--r--@  1 dako  staff    1171 Apr 18 22:54 locust_ramp_1u_stats.csv
+-rw-r--r--@  1 dako  staff      31 Apr 18 23:04 locust_ramp_20u_exceptions.csv
+-rw-r--r--@  1 dako  staff     209 Apr 18 23:04 locust_ramp_20u_failures.csv
+-rw-r--r--@  1 dako  staff   32724 Apr 18 23:04 locust_ramp_20u_stats_history.csv
+-rw-r--r--@  1 dako  staff    1824 Apr 18 23:04 locust_ramp_20u_stats.csv
+-rw-r--r--@  1 dako  staff      31 Apr 18 22:58 locust_ramp_5u_exceptions.csv
+-rw-r--r--@  1 dako  staff      31 Apr 18 22:58 locust_ramp_5u_failures.csv
+-rw-r--r--@  1 dako  staff   32012 Apr 18 22:57 locust_ramp_5u_stats_history.csv
+-rw-r--r--@  1 dako  staff    1728 Apr 18 22:58 locust_ramp_5u_stats.csv
+-rw-r--r--@  1 dako  staff      31 Apr 18 23:37 locust_steady_exceptions.csv
+-rw-r--r--@  1 dako  staff      31 Apr 18 23:37 locust_steady_failures.csv
+-rw-r--r--@  1 dako  staff   52708 Apr 18 23:37 locust_steady_stats_history.csv
+total 288
+drwxr-xr-x@  5 dako  staff    160 Apr 18 23:40 .
+drwxr-xr-x@ 11 dako  staff    352 Apr 18 23:37 ..
+-rw-r--r--@  1 dako  staff  36442 Apr 18 23:40 cost_per_convo.png
+-rw-r--r--@  1 dako  staff  40259 Apr 18 23:40 quality_variance.png
+-rw-r--r--@  1 dako  staff  66980 Apr 18 23:40 throughput_knee.png
