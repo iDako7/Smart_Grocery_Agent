@@ -1,0 +1,79 @@
+# Test D — lookup-heavy agent workload cases.
+# 8 cases targeting translate_term, analyze_pcsv, get_substitutions, lookup_store_product.
+# DB lookup latency should dominate LLM reasoning; no LLM grader.
+#
+# Each case uses assertions/lookup.js — a simple pass gate that requires the agent
+# to emit a done event. Latency is captured automatically by promptfoo.
+# Tool-call count is recorded in the assertion reason but not gated.
+
+- description: "L1: translate ZH→EN — 芥蓝, 腐乳, 花椒, 豆豉 (4 terms)"
+  vars:
+    input: "翻译：芥蓝、腐乳、花椒、豆豉"
+    screen: "home"
+  assert:
+    - type: javascript
+      value: file://assertions/lookup.js
+      metric: lookup_latency
+
+- description: "L2: analyze_pcsv — 鸡肉, 米饭, 西兰花 (Chinese ingredient names)"
+  vars:
+    input: "分析这些食材:鸡肉、米饭、西兰花"
+    screen: "home"
+  assert:
+    - type: javascript
+      value: file://assertions/lookup.js
+      metric: lookup_latency
+
+- description: "L3: get_substitutions — heavy cream vegan substitute"
+  vars:
+    input: "substitute for heavy cream, vegan"
+    screen: "home"
+  assert:
+    - type: javascript
+      value: file://assertions/lookup.js
+      metric: lookup_latency
+
+- description: "L4: lookup_store_product — tofu at T&T"
+  vars:
+    input: "package sizes for tofu at T&T"
+    screen: "home"
+  assert:
+    - type: javascript
+      value: file://assertions/lookup.js
+      metric: lookup_latency
+
+- description: "L5: translate EN→ZH — napa cabbage, daikon, lotus root (3 terms)"
+  vars:
+    input: "translate: napa cabbage, daikon, lotus root"
+    screen: "home"
+  assert:
+    - type: javascript
+      value: file://assertions/lookup.js
+      metric: lookup_latency
+
+- description: "L6: analyze_pcsv — eggs, bread, butter"
+  vars:
+    input: "analyze: eggs, bread, butter"
+    screen: "home"
+  assert:
+    - type: javascript
+      value: file://assertions/lookup.js
+      metric: lookup_latency
+
+- description: "L7: get_substitutions — fish sauce dietary substitute"
+  vars:
+    input: "substitute for fish sauce, dietary reason"
+    screen: "home"
+  assert:
+    - type: javascript
+      value: file://assertions/lookup.js
+      metric: lookup_latency
+
+- description: "L8: lookup_store_product — soy sauce at costco"
+  vars:
+    input: "package size for soy sauce at costco"
+    screen: "home"
+  assert:
+    - type: javascript
+      value: file://assertions/lookup.js
+      metric: lookup_latency

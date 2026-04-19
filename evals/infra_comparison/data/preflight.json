@@ -1,0 +1,133 @@
+{
+  "_comment": "Preflight data for Fly.io vs AWS infra comparison eval. Captured on 2026-04-19 from live service describe + curl probes. See REPORT.md §2.",
+  "fly": {
+    "url": "https://sga-v2.fly.dev",
+    "primary_region": "sjc",
+    "compute": {
+      "kind": "Fly Machine",
+      "cpu": "shared-cpu-1x",
+      "cpus": 1,
+      "memory_mb": 1024,
+      "cpu_architecture": "amd64"
+    },
+    "autoscale": {
+      "auto_stop_machines": true,
+      "auto_start_machines": true,
+      "min_machines_running": 0,
+      "hard_limit_requests": 400,
+      "soft_limit_requests": 200
+    },
+    "env": {
+      "SGA_AUTH_MODE": "prod",
+      "SERVE_FRONTEND": "true"
+    },
+    "model_resolved": "openai/gpt-5.4-mini",
+    "db": "Fly Postgres (sjc)",
+    "db_pool_config": {
+      "source": "SQLAlchemy default via src/backend/db/engine.py:51 (no override)",
+      "pool_size": 5,
+      "max_overflow": 10,
+      "pool_pre_ping": true
+    }
+  },
+  "aws": {
+    "url": "https://d33hdkvctxckhb.cloudfront.net",
+    "alb_url": "http://sga-v2-demo-alb-1173513409.us-west-2.elb.amazonaws.com",
+    "region": "us-west-2",
+    "edge": {
+      "kind": "CloudFront",
+      "price_class": "PriceClass_100",
+      "cache_policy": "Managed-CachingDisabled (required for SSE)",
+      "origin_request_policy": "Managed-AllViewer",
+      "compression": false,
+      "origin_read_timeout_s": 60
+    },
+    "compute": {
+      "kind": "ECS Fargate",
+      "cpu_units": 512,
+      "memory_mib": 1024,
+      "cpu_architecture": "ARM64",
+      "desired_count": 1,
+      "running_count": 1,
+      "launch_type": "FARGATE",
+      "task_definition_revision": 2,
+      "always_warm": true,
+      "cold_start_applicable": false
+    },
+    "env": {
+      "SGA_MODEL": "openai/gpt-5.4-mini",
+      "SGA_AUTH_MODE": "(unset; code default 'dev')",
+      "APP_ENV": "production",
+      "SERVE_FRONTEND": "true",
+      "PORT": "8000"
+    },
+    "model_resolved": "openai/gpt-5.4-mini",
+    "db": {
+      "kind": "RDS PostgreSQL",
+      "engine_version": "16.13",
+      "instance_class": "db.t4g.micro",
+      "multi_az": false,
+      "backup_retention_days": 0,
+      "publicly_accessible": false,
+      "endpoint": "sga-v2-demo-db.c1ues00usrb3.us-west-2.rds.amazonaws.com",
+      "status": "available"
+    },
+    "db_pool_config": {
+      "source": "SQLAlchemy default via src/backend/db/engine.py:51 (no override)",
+      "pool_size": 5,
+      "max_overflow": 10,
+      "pool_pre_ping": true,
+      "note": "Same defaults as Fly. Expect pool exhaustion at same concurrency ceiling."
+    }
+  },
+  "measurement_client": {
+    "location": "Vancouver, BC (laptop, residential ISP)",
+    "platform": "darwin",
+    "note": "Both Fly (sjc) and AWS (us-west-2) are on the US west coast. AWS (Oregon) is geographically closer to YVR than Fly's sjc region, but this does not fully account for the observed 3.5x TTFB gap."
+  },
+  "baseline_probes": {
+    "description": "n=3 warm samples after cold boot to verify connectivity before full suite",
+    "fly_health_ttfb_s": [0.316, 0.310, 0.300],
+    "aws_health_ttfb_s": [0.089, 0.078, 0.092],
+    "fly_first_cold_health_ttfb_s": 7.998,
+    "aws_cold_start_applicable": false
+  },
+  "endpoints": {
+    "health": "GET /health",
+    "session_create": "POST /session (body: {} or {\"initial_message\": null})",
+    "chat": "POST /session/{session_id}/chat"
+  },
+  "both_platforms_share": {
+    "model": "openai/gpt-5.4-mini via OpenRouter",
+    "code_version": "latest main (PR #147 merged)",
+    "frontend_bundle": "same Docker image; Vite build identical (verified 868 byte root HTML on both)",
+    "db_pool_defaults": "SQLAlchemy pool_size=5, max_overflow=10"
+  },
+  "divergences": {
+    "auth_mode": {
+      "fly": "prod",
+      "aws": "dev",
+      "impact": "/internal/reset-dev-profile fails on Fly in prod mode. Mitigation: set SGA_EVAL_RESET_PROFILE=0 for Test D so latency measurement is unaffected."
+    },
+    "cpu_architecture": {
+      "fly": "amd64",
+      "aws": "ARM64 Graviton",
+      "impact": "Architecture divergence is real and may partly explain compute latency differences. ARM64 Fargate chosen in PR #147 because Tailwind v4 oxide amd64 binary produced broken CSS bundle."
+    },
+    "cold_start": {
+      "fly": "~8s first request after idle (auto_stop_machines=true)",
+      "aws": "none (desired_count=1, always-warm)",
+      "impact": "Test C dropped from bundle; documented as design trade-off in REPORT.md topology section."
+    },
+    "edge_layer": {
+      "fly": "Fly Anycast (TLS terminates at nearest PoP)",
+      "aws": "CloudFront PriceClass_100"
+    }
+  },
+  "scope_changes_from_original_plan": [
+    "Test C (cold start) dropped — AWS desired_count=1 has no cold start; design trade-off documented in topology section instead of being measured.",
+    "Test E (throughput knee) deferred — RDS pool config on AWS is identical to Fly (pool_size=5+10 overflow), so running 20u on AWS risks wedging it the same way it wedged Fly. If run at all, cap at 10u.",
+    "Chat endpoint corrected to POST /session/{session_id}/chat (not POST /chat as originally planned).",
+    "SGA_EVAL_RESET_PROFILE=0 required for Test D on Fly (prod auth mode)."
+  ]
+}
