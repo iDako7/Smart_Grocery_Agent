@@ -19,6 +19,8 @@ coverage/
 # Playwright
 playwright-report/
 test-results/
+.playwright-cli/
+.playwright-mcp/
 
 # Docker
 postgres_data/
