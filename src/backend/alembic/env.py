@@ -10,12 +10,19 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Override sqlalchemy.url from DATABASE_URL env var
-# Replace asyncpg driver with psycopg2 for Alembic (sync migrations)
+# Override sqlalchemy.url from DATABASE_URL env var. Alembic runs sync, so we
+# normalize whatever driver prefix the env provides into `postgresql+psycopg2`.
+# Handles: Fly's `postgres://…?sslmode=…`, local `postgresql+asyncpg://`, bare
+# `postgresql://`. `sslmode=disable` is kept for psycopg2 (understands libpq).
 database_url = os.getenv("DATABASE_URL", "")
 if not database_url:
     raise RuntimeError("DATABASE_URL environment variable is not set")
-database_url = database_url.replace("+asyncpg", "+psycopg2")
+if database_url.startswith("postgres://"):
+    database_url = "postgresql+psycopg2://" + database_url[len("postgres://") :]
+elif "+asyncpg" in database_url:
+    database_url = database_url.replace("+asyncpg", "+psycopg2")
+elif database_url.startswith("postgresql://") and "+psycopg2" not in database_url:
+    database_url = "postgresql+psycopg2://" + database_url[len("postgresql://") :]
 config.set_main_option("sqlalchemy.url", database_url)
 
 from src.backend.db.tables import metadata as app_metadata

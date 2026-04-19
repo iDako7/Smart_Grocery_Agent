@@ -1,10 +1,11 @@
 # Fly.io config for SGA V2 demo deploy (issue #133).
-# Region yvr = Vancouver (closest to target users; see docs/00-specs/product-spec-v2.md).
+# Region sjc = San Jose, California — closest active Fly region to the target
+# Vancouver user base after yvr was retired (2026). See product-spec-v2.md.
 # Single-image deploy: Dockerfile at repo root builds SPA + FastAPI backend and
 # serves both from the same origin via SERVE_FRONTEND=true.
 
 app = "sga-v2"
-primary_region = "yvr"
+primary_region = "sjc"
 
 [build]
   dockerfile = "Dockerfile"
