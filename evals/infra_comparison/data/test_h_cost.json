@@ -1,0 +1,26 @@
+{
+  "run_at": "2026-04-19T22:09:09.065217+00:00",
+  "fly": {
+    "monthly_total_usd": 5.1,
+    "cost_per_1000_requests_usd": 5.1,
+    "source": "Fly.io pricing (shared-cpu-1x 1GB ~$2.07/mo if always-on; Fly Postgres shared CPU ~$3/mo). Auto-stop reduces actual app compute to ~$0.50/mo at idle; we use the always-on figure here to keep the Fly\u2194AWS comparison apples-to-apples (both at 100% availability)."
+  },
+  "aws": {
+    "monthly_total_usd": 54.0882,
+    "cost_per_1000_requests_usd": 54.0882,
+    "breakdown": {
+      "fargate": 17.7732,
+      "rds": 13.82,
+      "alb": 21.96,
+      "cloudfront": 0.085,
+      "ecr": 0.2,
+      "cloudwatch": 0.25
+    },
+    "source": "derived from infra/aws/*.tf + us-west-2 public on-demand pricing, 720 hrs/month"
+  },
+  "comparison": {
+    "aws_premium_multiplier": 10.606,
+    "aws_premium_absolute_usd": 48.9882,
+    "note": "AWS monthly infra is 10.61x the cost of Fly.io ($5.10 Fly vs $54.09 AWS). LLM cost (OpenRouter) is identical on both platforms and excluded from this model."
+  }
+}

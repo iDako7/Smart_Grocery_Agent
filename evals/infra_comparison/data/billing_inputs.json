@@ -1,0 +1,37 @@
+{
+  "_comment": "Cost inputs derived from the actual deployed resource config (ecs.tf, rds.tf, fly.toml). This is a configuration-based estimate — no real billing data has been pulled from AWS Cost Explorer or the Fly dashboard yet. A deployment running 720 hours/month (desired_count=1, always-on) is assumed for AWS. Fly uses auto-stop so actual hours are lower.",
+  "fly": {
+    "monthly_app_cost_usd": 2.10,
+    "monthly_postgres_cost_usd": 3.00,
+    "monthly_total_infra_usd": 5.10,
+    "estimated_monthly_requests": 1000,
+    "source": "Fly.io pricing (shared-cpu-1x 1GB ~$2.07/mo if always-on; Fly Postgres shared CPU ~$3/mo). Auto-stop reduces actual app compute to ~$0.50/mo at idle; we use the always-on figure here to keep the Fly↔AWS comparison apples-to-apples (both at 100% availability)."
+  },
+  "aws": {
+    "billing_source": "derived from infra/aws/*.tf + us-west-2 public on-demand pricing, 720 hrs/month",
+    "fargate": {
+      "vcpu_hours": 360,
+      "gb_hours": 720,
+      "task_hours": 720
+    },
+    "rds": {
+      "instance_hours": 720,
+      "storage_gb_months": 20
+    },
+    "alb": {
+      "lcu_hours": 720
+    },
+    "cloudfront": {
+      "requests": 10000,
+      "gb_transfer_out": 1.0
+    },
+    "ecr": {
+      "storage_gb": 2.0
+    },
+    "cloudwatch": {
+      "logs_gb_ingested": 0.5
+    },
+    "aws_region": "us-west-2",
+    "estimated_monthly_requests": 1000
+  }
+}

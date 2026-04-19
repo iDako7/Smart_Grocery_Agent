@@ -1,0 +1,315 @@
+{
+  "target": "fly",
+  "base_url": "https://sga-v2.fly.dev",
+  "run_started_at": "2026-04-19T22:05:00.181760+00:00",
+  "run_finished_at": "2026-04-19T22:05:24.448825+00:00",
+  "config": {
+    "samples": 20,
+    "warmup": 3
+  },
+  "root": {
+    "url": "https://sga-v2.fly.dev/",
+    "samples": [
+      {
+        "ttfb_ms": 377.1,
+        "total_ms": 377.2,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 348.2,
+        "total_ms": 348.3,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 305.2,
+        "total_ms": 305.3,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 259.9,
+        "total_ms": 260.0,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 306.6,
+        "total_ms": 306.7,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 669.7,
+        "total_ms": 669.8,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 297.8,
+        "total_ms": 297.8,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 349.6,
+        "total_ms": 349.6,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 273.1,
+        "total_ms": 273.1,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 267.3,
+        "total_ms": 267.4,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 293.5,
+        "total_ms": 293.6,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 288.1,
+        "total_ms": 288.2,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 274.6,
+        "total_ms": 274.6,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 629.3,
+        "total_ms": 629.4,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 331.4,
+        "total_ms": 331.5,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 311.9,
+        "total_ms": 312.0,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 303.7,
+        "total_ms": 303.8,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 291.2,
+        "total_ms": 291.3,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 291.4,
+        "total_ms": 291.5,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 260.8,
+        "total_ms": 260.9,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      }
+    ],
+    "ttfb_p50_ms": 300.8,
+    "ttfb_p95_ms": 667.7,
+    "ttfb_p99_ms": 701.6,
+    "total_p50_ms": 300.8,
+    "total_p95_ms": 667.8,
+    "cache_control_header": null,
+    "x_cache_header": null
+  },
+  "js_chunk": {
+    "url": "https://sga-v2.fly.dev/assets/index-DmaMgIlO.js",
+    "samples": [
+      {
+        "ttfb_ms": 300.9,
+        "total_ms": 532.6,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 554.4,
+        "total_ms": 787.2,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 300.7,
+        "total_ms": 572.5,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 301.6,
+        "total_ms": 764.9,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 310.1,
+        "total_ms": 595.5,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 414.6,
+        "total_ms": 872.2,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 323.6,
+        "total_ms": 622.0,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 358.4,
+        "total_ms": 626.3,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 346.3,
+        "total_ms": 636.7,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 299.4,
+        "total_ms": 558.4,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 343.3,
+        "total_ms": 635.7,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 649.9,
+        "total_ms": 937.9,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 309.4,
+        "total_ms": 572.7,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 327.3,
+        "total_ms": 609.9,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 304.2,
+        "total_ms": 564.0,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 316.7,
+        "total_ms": 605.5,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 307.0,
+        "total_ms": 797.2,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 309.7,
+        "total_ms": 581.6,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 331.0,
+        "total_ms": 624.6,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 356.5,
+        "total_ms": 608.5,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      }
+    ],
+    "ttfb_p50_ms": 320.1,
+    "ttfb_p95_ms": 645.1,
+    "ttfb_p99_ms": 725.3,
+    "total_p50_ms": 616.0,
+    "total_p95_ms": 934.6,
+    "cache_control_header": null,
+    "x_cache_header": null,
+    "discovered_from": "/"
+  }
+}

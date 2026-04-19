@@ -1,0 +1,1010 @@
+{
+  "evalId": "eval-gYY-2026-04-19T22:08:43",
+  "results": {
+    "version": 3,
+    "timestamp": "2026-04-19T22:08:43.810Z",
+    "prompts": [
+      {
+        "id": "146b33ced217be53420a9244c0ad8ec843483bbab4f32ac28e803b45b42891ba",
+        "raw": "{{input}}",
+        "label": "{{input}}",
+        "provider": "python:../phase2/provider.py",
+        "metrics": {
+          "score": 8,
+          "testPassCount": 8,
+          "testFailCount": 0,
+          "testErrorCount": 0,
+          "assertPassCount": 8,
+          "assertFailCount": 0,
+          "totalLatencyMs": 101162,
+          "tokenUsage": {
+            "prompt": 55934,
+            "completion": 1192,
+            "cached": 46080,
+            "total": 57126,
+            "numRequests": 8,
+            "completionDetails": {
+              "reasoning": 0,
+              "acceptedPrediction": 0,
+              "rejectedPrediction": 0,
+              "cacheReadInputTokens": 0,
+              "cacheCreationInputTokens": 0
+            },
+            "assertions": {
+              "total": 0,
+              "prompt": 0,
+              "completion": 0,
+              "cached": 0,
+              "numRequests": 0,
+              "completionDetails": {
+                "reasoning": 0,
+                "acceptedPrediction": 0,
+                "rejectedPrediction": 0,
+                "cacheReadInputTokens": 0,
+                "cacheCreationInputTokens": 0
+              }
+            }
+          },
+          "namedScores": {
+            "lookup_latency": 8
+          },
+          "namedScoresCount": {
+            "lookup_latency": 8
+          },
+          "namedScoreWeights": {
+            "lookup_latency": 8
+          },
+          "cost": 0.0162105
+        }
+      }
+    ],
+    "results": [
+      {
+        "cost": 0.0019848,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "lookup_latency": 1
+          },
+          "namedScoreWeights": {
+            "lookup_latency": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "events=6 tool_calls≈4 status=complete",
+              "assertion": {
+                "type": "javascript",
+                "value": "file://assertions/lookup.js",
+                "metric": "lookup_latency"
+              }
+            }
+          ]
+        },
+        "id": "cab048a6-8db5-46b0-b98e-3a15ded50c99",
+        "latencyMs": 4343,
+        "namedScores": {
+          "lookup_latency": 1
+        },
+        "prompt": {
+          "raw": "翻译：芥蓝、腐乳、花椒、豆豉",
+          "label": "{{input}}",
+          "config": {}
+        },
+        "promptId": "146b33ced217be53420a9244c0ad8ec843483bbab4f32ac28e803b45b42891ba",
+        "promptIdx": 0,
+        "provider": {
+          "id": "python:../phase2/provider.py",
+          "label": ""
+        },
+        "response": {
+          "output": "{\"events\": [{\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running translate_term...\"}}, {\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running translate_term...\"}}, {\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running translate_term...\"}}, {\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running translate_term...\"}}, {\"event_type\": \"explanation\", \"data\": {\"event_type\": \"explanation\", \"text\": \"- 芥蓝 → Chinese broccoli\\n- 腐乳 → AI-translated: fermented tofu\\n- 花椒 → Szechuan peppercorns\\n- 豆豉 → AI-translated: fermented black beans\\n\\n如果你要，我也可以顺手帮你把它们翻成更适合在加拿大超市找的英文购物名。\"}}, {\"event_type\": \"done\", \"data\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 7126, \"completion_tokens\": 175, \"total_tokens\": 7301, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.0019848, \"model\": \"openai/gpt-5.4-mini-20260317\"}}}], \"recipe_cards\": [], \"pcsv\": null, \"explanation\": \"- 芥蓝 → Chinese broccoli\\n- 腐乳 → AI-translated: fermented tofu\\n- 花椒 → Szechuan peppercorns\\n- 豆豉 → AI-translated: fermented black beans\\n\\n如果你要，我也可以顺手帮你把它们翻成更适合在加拿大超市找的英文购物名。\", \"done\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 7126, \"completion_tokens\": 175, \"total_tokens\": 7301, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.0019848, \"model\": \"openai/gpt-5.4-mini-20260317\"}}, \"dish_count\": 0, \"status\": \"complete\"}",
+          "tokenUsage": {
+            "total": 7301,
+            "prompt": 7126,
+            "completion": 175,
+            "cached": 6144,
+            "numRequests": 1
+          },
+          "cost": 0.0019848,
+          "latency_ms": 3087,
+          "cache_hit_ratio": 0.8621947796800449,
+          "metadata": {
+            "model": "openai/gpt-5.4-mini-20260317",
+            "cache_write_tokens": 0
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "L1: translate ZH→EN — 芥蓝, 腐乳, 花椒, 豆豉 (4 terms)",
+          "vars": {
+            "input": "翻译：芥蓝、腐乳、花椒、豆豉",
+            "screen": "home"
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions/lookup.js",
+              "metric": "lookup_latency"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 0,
+        "vars": {
+          "input": "翻译：芥蓝、腐乳、花椒、豆豉",
+          "screen": "home"
+        },
+        "metadata": {
+          "model": "openai/gpt-5.4-mini-20260317",
+          "cache_write_tokens": 0,
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.00200655,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "lookup_latency": 1
+          },
+          "namedScoreWeights": {
+            "lookup_latency": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "events=5 tool_calls≈2 status=complete",
+              "assertion": {
+                "type": "javascript",
+                "value": "file://assertions/lookup.js",
+                "metric": "lookup_latency"
+              }
+            }
+          ]
+        },
+        "id": "2a1308c4-094c-41d3-9738-086403082340",
+        "latencyMs": 8369,
+        "namedScores": {
+          "lookup_latency": 1
+        },
+        "prompt": {
+          "raw": "分析这些食材:鸡肉、米饭、西兰花",
+          "label": "{{input}}",
+          "config": {}
+        },
+        "promptId": "146b33ced217be53420a9244c0ad8ec843483bbab4f32ac28e803b45b42891ba",
+        "promptIdx": 0,
+        "provider": {
+          "id": "python:../phase2/provider.py",
+          "label": ""
+        },
+        "response": {
+          "output": "{\"events\": [{\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running analyze_pcsv...\"}}, {\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running emit_clarify_turn...\"}}, {\"event_type\": \"pcsv_update\", \"data\": {\"event_type\": \"pcsv_update\", \"pcsv\": {\"protein\": {\"status\": \"gap\", \"items\": []}, \"carb\": {\"status\": \"gap\", \"items\": []}, \"veggie\": {\"status\": \"gap\", \"items\": []}, \"sauce\": {\"status\": \"gap\", \"items\": []}}}}, {\"event_type\": \"clarify_turn\", \"data\": {\"event_type\": \"clarify_turn\", \"explanation\": \"我建议先按素食方向做一餐，以现有食材为基础补上蛋白、蔬菜和酱汁。\", \"questions\": [{\"id\": \"dietary_check\", \"text\": \"你想按哪种方向来推荐？\", \"selection_mode\": \"single\", \"options\": [{\"label\": \"纯素\", \"is_exclusive\": false}, {\"label\": \"含鸡肉\", \"is_exclusive\": false}, {\"label\": \"都可以\", \"is_exclusive\": false}]}, {\"id\": \"meal_type\", \"text\": \"你更想做什么？\", \"selection_mode\": \"single\", \"options\": [{\"label\": \"炒饭/盖饭\", \"is_exclusive\": false}, {\"label\": \"一锅快手\", \"is_exclusive\": false}, {\"label\": \"中式家常菜\", \"is_exclusive\": false}]}]}}, {\"event_type\": \"done\", \"data\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 6951, \"completion_tokens\": 209, \"total_tokens\": 7160, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.00200655, \"model\": \"openai/gpt-5.4-mini-20260317\"}}}], \"recipe_cards\": [], \"pcsv\": {\"event_type\": \"pcsv_update\", \"pcsv\": {\"protein\": {\"status\": \"gap\", \"items\": []}, \"carb\": {\"status\": \"gap\", \"items\": []}, \"veggie\": {\"status\": \"gap\", \"items\": []}, \"sauce\": {\"status\": \"gap\", \"items\": []}}}, \"explanation\": \"\", \"done\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 6951, \"completion_tokens\": 209, \"total_tokens\": 7160, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.00200655, \"model\": \"openai/gpt-5.4-mini-20260317\"}}, \"dish_count\": 0, \"status\": \"complete\"}",
+          "tokenUsage": {
+            "total": 7160,
+            "prompt": 6951,
+            "completion": 209,
+            "cached": 6144,
+            "numRequests": 1
+          },
+          "cost": 0.00200655,
+          "latency_ms": 3324,
+          "cache_hit_ratio": 0.8839015968925334,
+          "metadata": {
+            "model": "openai/gpt-5.4-mini-20260317",
+            "cache_write_tokens": 0
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "L2: analyze_pcsv — 鸡肉, 米饭, 西兰花 (Chinese ingredient names)",
+          "vars": {
+            "input": "分析这些食材:鸡肉、米饭、西兰花",
+            "screen": "home"
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions/lookup.js",
+              "metric": "lookup_latency"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 1,
+        "vars": {
+          "input": "分析这些食材:鸡肉、米饭、西兰花",
+          "screen": "home"
+        },
+        "metadata": {
+          "model": "openai/gpt-5.4-mini-20260317",
+          "cache_write_tokens": 0,
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.00188655,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "lookup_latency": 1
+          },
+          "namedScoreWeights": {
+            "lookup_latency": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "events=4 tool_calls≈2 status=complete",
+              "assertion": {
+                "type": "javascript",
+                "value": "file://assertions/lookup.js",
+                "metric": "lookup_latency"
+              }
+            }
+          ]
+        },
+        "id": "f17a5a63-67a7-42e2-a2f4-6af15cce95ca",
+        "latencyMs": 12334,
+        "namedScores": {
+          "lookup_latency": 1
+        },
+        "prompt": {
+          "raw": "substitute for heavy cream, vegan",
+          "label": "{{input}}",
+          "config": {}
+        },
+        "promptId": "146b33ced217be53420a9244c0ad8ec843483bbab4f32ac28e803b45b42891ba",
+        "promptIdx": 0,
+        "provider": {
+          "id": "python:../phase2/provider.py",
+          "label": ""
+        },
+        "response": {
+          "output": "{\"events\": [{\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running get_substitutions...\"}}, {\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running update_user_profile...\"}}, {\"event_type\": \"explanation\", \"data\": {\"event_type\": \"explanation\", \"text\": \"For vegan heavy cream substitutes, try one of these:\\n\\n- Canned coconut cream — richest, closest in thickness\\n- Cashew cream — creamy and neutral, good for sauces\\n- Oat cream — milder flavor, works well in savory dishes\\n- Soy cream — good all-purpose option\\n\\nIf you need a 1:1 swap, coconut cream is usually the closest. For soups or pasta sauces, cashew or oat cream often tastes less coconut-y.\\n\\nIf you want, I can also suggest the best substitute based on the recipe you’re making.\"}}, {\"event_type\": \"done\", \"data\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 6941, \"completion_tokens\": 184, \"total_tokens\": 7125, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.00188655, \"model\": \"openai/gpt-5.4-mini-20260317\"}}}], \"recipe_cards\": [], \"pcsv\": null, \"explanation\": \"For vegan heavy cream substitutes, try one of these:\\n\\n- Canned coconut cream — richest, closest in thickness\\n- Cashew cream — creamy and neutral, good for sauces\\n- Oat cream — milder flavor, works well in savory dishes\\n- Soy cream — good all-purpose option\\n\\nIf you need a 1:1 swap, coconut cream is usually the closest. For soups or pasta sauces, cashew or oat cream often tastes less coconut-y.\\n\\nIf you want, I can also suggest the best substitute based on the recipe you’re making.\", \"done\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 6941, \"completion_tokens\": 184, \"total_tokens\": 7125, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.00188655, \"model\": \"openai/gpt-5.4-mini-20260317\"}}, \"dish_count\": 0, \"status\": \"complete\"}",
+          "tokenUsage": {
+            "total": 7125,
+            "prompt": 6941,
+            "completion": 184,
+            "cached": 6144,
+            "numRequests": 1
+          },
+          "cost": 0.00188655,
+          "latency_ms": 3204,
+          "cache_hit_ratio": 0.8851750468232243,
+          "metadata": {
+            "model": "openai/gpt-5.4-mini-20260317",
+            "cache_write_tokens": 0
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "L3: get_substitutions — heavy cream vegan substitute",
+          "vars": {
+            "input": "substitute for heavy cream, vegan",
+            "screen": "home"
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions/lookup.js",
+              "metric": "lookup_latency"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 2,
+        "vars": {
+          "input": "substitute for heavy cream, vegan",
+          "screen": "home"
+        },
+        "metadata": {
+          "model": "openai/gpt-5.4-mini-20260317",
+          "cache_write_tokens": 0,
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.0018955500000000002,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "lookup_latency": 1
+          },
+          "namedScoreWeights": {
+            "lookup_latency": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "events=4 tool_calls≈2 status=complete",
+              "assertion": {
+                "type": "javascript",
+                "value": "file://assertions/lookup.js",
+                "metric": "lookup_latency"
+              }
+            }
+          ]
+        },
+        "id": "b60a6dc2-ef51-41a8-bfd4-5e4606253788",
+        "latencyMs": 15923,
+        "namedScores": {
+          "lookup_latency": 1
+        },
+        "prompt": {
+          "raw": "package sizes for tofu at T&T",
+          "label": "{{input}}",
+          "config": {}
+        },
+        "promptId": "146b33ced217be53420a9244c0ad8ec843483bbab4f32ac28e803b45b42891ba",
+        "promptIdx": 0,
+        "provider": {
+          "id": "python:../phase2/provider.py",
+          "label": ""
+        },
+        "response": {
+          "output": "{\"events\": [{\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running lookup_store_product...\"}}, {\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running lookup_store_product...\"}}, {\"event_type\": \"explanation\", \"data\": {\"event_type\": \"explanation\", \"text\": \"At T&T, tofu package sizes commonly vary by style, but a typical extra-firm tofu block is around 300–400 g.\\n\\nFrom the store database:\\n- Sunrise Soyganic Extra Firm Tofu: 350 g at Costco\\n- Smoked tofu-style options can be smaller, around 225 g\\n\\nIf you want, I can look up a few specific tofu types at T&T next, like:\\n- regular tofu\\n- firm tofu\\n- silken tofu\\n- fried tofu / tofu puffs\"}}, {\"event_type\": \"done\", \"data\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 7025, \"completion_tokens\": 172, \"total_tokens\": 7197, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.0018955500000000002, \"model\": \"openai/gpt-5.4-mini-20260317\"}}}], \"recipe_cards\": [], \"pcsv\": null, \"explanation\": \"At T&T, tofu package sizes commonly vary by style, but a typical extra-firm tofu block is around 300–400 g.\\n\\nFrom the store database:\\n- Sunrise Soyganic Extra Firm Tofu: 350 g at Costco\\n- Smoked tofu-style options can be smaller, around 225 g\\n\\nIf you want, I can look up a few specific tofu types at T&T next, like:\\n- regular tofu\\n- firm tofu\\n- silken tofu\\n- fried tofu / tofu puffs\", \"done\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 7025, \"completion_tokens\": 172, \"total_tokens\": 7197, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.0018955500000000002, \"model\": \"openai/gpt-5.4-mini-20260317\"}}, \"dish_count\": 0, \"status\": \"complete\"}",
+          "tokenUsage": {
+            "total": 7197,
+            "prompt": 7025,
+            "completion": 172,
+            "cached": 6144,
+            "numRequests": 1
+          },
+          "cost": 0.0018955500000000002,
+          "latency_ms": 2924,
+          "cache_hit_ratio": 0.8745907473309609,
+          "metadata": {
+            "model": "openai/gpt-5.4-mini-20260317",
+            "cache_write_tokens": 0
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "L4: lookup_store_product — tofu at T&T",
+          "vars": {
+            "input": "package sizes for tofu at T&T",
+            "screen": "home"
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions/lookup.js",
+              "metric": "lookup_latency"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 3,
+        "vars": {
+          "input": "package sizes for tofu at T&T",
+          "screen": "home"
+        },
+        "metadata": {
+          "model": "openai/gpt-5.4-mini-20260317",
+          "cache_write_tokens": 0,
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.00179955,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "lookup_latency": 1
+          },
+          "namedScoreWeights": {
+            "lookup_latency": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "events=5 tool_calls≈3 status=complete",
+              "assertion": {
+                "type": "javascript",
+                "value": "file://assertions/lookup.js",
+                "metric": "lookup_latency"
+              }
+            }
+          ]
+        },
+        "id": "3fabdcb3-5f54-4543-8960-15e6bbc98ada",
+        "latencyMs": 15652,
+        "namedScores": {
+          "lookup_latency": 1
+        },
+        "prompt": {
+          "raw": "translate: napa cabbage, daikon, lotus root",
+          "label": "{{input}}",
+          "config": {}
+        },
+        "promptId": "146b33ced217be53420a9244c0ad8ec843483bbab4f32ac28e803b45b42891ba",
+        "promptIdx": 0,
+        "provider": {
+          "id": "python:../phase2/provider.py",
+          "label": ""
+        },
+        "response": {
+          "output": "{\"events\": [{\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running translate_term...\"}}, {\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running translate_term...\"}}, {\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running translate_term...\"}}, {\"event_type\": \"explanation\", \"data\": {\"event_type\": \"explanation\", \"text\": \"Here are the Chinese translations:\\n\\n- napa cabbage — 大白菜\\n- daikon — AI-translated: 白萝卜\\n- lotus root — AI-translated: 莲藕\\n\\nIf you want, I can also give the common grocery-store names used in Vancouver.\"}}, {\"event_type\": \"done\", \"data\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 7041, \"completion_tokens\": 148, \"total_tokens\": 7189, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.00179955, \"model\": \"openai/gpt-5.4-mini-20260317\"}}}], \"recipe_cards\": [], \"pcsv\": null, \"explanation\": \"Here are the Chinese translations:\\n\\n- napa cabbage — 大白菜\\n- daikon — AI-translated: 白萝卜\\n- lotus root — AI-translated: 莲藕\\n\\nIf you want, I can also give the common grocery-store names used in Vancouver.\", \"done\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 7041, \"completion_tokens\": 148, \"total_tokens\": 7189, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.00179955, \"model\": \"openai/gpt-5.4-mini-20260317\"}}, \"dish_count\": 0, \"status\": \"complete\"}",
+          "tokenUsage": {
+            "total": 7189,
+            "prompt": 7041,
+            "completion": 148,
+            "cached": 6144,
+            "numRequests": 1
+          },
+          "cost": 0.00179955,
+          "latency_ms": 2832,
+          "cache_hit_ratio": 0.8726033233915637,
+          "metadata": {
+            "model": "openai/gpt-5.4-mini-20260317",
+            "cache_write_tokens": 0
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "L5: translate EN→ZH — napa cabbage, daikon, lotus root (3 terms)",
+          "vars": {
+            "input": "translate: napa cabbage, daikon, lotus root",
+            "screen": "home"
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions/lookup.js",
+              "metric": "lookup_latency"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 4,
+        "vars": {
+          "input": "translate: napa cabbage, daikon, lotus root",
+          "screen": "home"
+        },
+        "metadata": {
+          "model": "openai/gpt-5.4-mini-20260317",
+          "cache_write_tokens": 0,
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.0014245500000000001,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "lookup_latency": 1
+          },
+          "namedScoreWeights": {
+            "lookup_latency": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "events=4 tool_calls≈1 status=complete",
+              "assertion": {
+                "type": "javascript",
+                "value": "file://assertions/lookup.js",
+                "metric": "lookup_latency"
+              }
+            }
+          ]
+        },
+        "id": "7b42bad5-9cb9-4e94-8c40-49472ed929a7",
+        "latencyMs": 15172,
+        "namedScores": {
+          "lookup_latency": 1
+        },
+        "prompt": {
+          "raw": "analyze: eggs, bread, butter",
+          "label": "{{input}}",
+          "config": {}
+        },
+        "promptId": "146b33ced217be53420a9244c0ad8ec843483bbab4f32ac28e803b45b42891ba",
+        "promptIdx": 0,
+        "provider": {
+          "id": "python:../phase2/provider.py",
+          "label": ""
+        },
+        "response": {
+          "output": "{\"events\": [{\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running analyze_pcsv...\"}}, {\"event_type\": \"pcsv_update\", \"data\": {\"event_type\": \"pcsv_update\", \"pcsv\": {\"protein\": {\"status\": \"low\", \"items\": [\"eggs\"]}, \"carb\": {\"status\": \"low\", \"items\": [\"bread\"]}, \"veggie\": {\"status\": \"gap\", \"items\": []}, \"sauce\": {\"status\": \"low\", \"items\": [\"butter\"]}}}}, {\"event_type\": \"explanation\", \"data\": {\"event_type\": \"explanation\", \"text\": \"Your list is protein + carb heavy, with no vegetables, so adding a veggie would make it more balanced.\\n\\nSince you’re marked vegan, eggs and butter wouldn’t fit that restriction. If you want, I can suggest vegan swaps and recipes using bread.\"}}, {\"event_type\": \"done\", \"data\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 6937, \"completion_tokens\": 82, \"total_tokens\": 7019, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.0014245500000000001, \"model\": \"openai/gpt-5.4-mini-20260317\"}}}], \"recipe_cards\": [], \"pcsv\": {\"event_type\": \"pcsv_update\", \"pcsv\": {\"protein\": {\"status\": \"low\", \"items\": [\"eggs\"]}, \"carb\": {\"status\": \"low\", \"items\": [\"bread\"]}, \"veggie\": {\"status\": \"gap\", \"items\": []}, \"sauce\": {\"status\": \"low\", \"items\": [\"butter\"]}}}, \"explanation\": \"Your list is protein + carb heavy, with no vegetables, so adding a veggie would make it more balanced.\\n\\nSince you’re marked vegan, eggs and butter wouldn’t fit that restriction. If you want, I can suggest vegan swaps and recipes using bread.\", \"done\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 6937, \"completion_tokens\": 82, \"total_tokens\": 7019, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.0014245500000000001, \"model\": \"openai/gpt-5.4-mini-20260317\"}}, \"dish_count\": 0, \"status\": \"complete\"}",
+          "tokenUsage": {
+            "total": 7019,
+            "prompt": 6937,
+            "completion": 82,
+            "cached": 6144,
+            "numRequests": 1
+          },
+          "cost": 0.0014245500000000001,
+          "latency_ms": 2925,
+          "cache_hit_ratio": 0.8856854548075537,
+          "metadata": {
+            "model": "openai/gpt-5.4-mini-20260317",
+            "cache_write_tokens": 0
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "L6: analyze_pcsv — eggs, bread, butter",
+          "vars": {
+            "input": "analyze: eggs, bread, butter",
+            "screen": "home"
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions/lookup.js",
+              "metric": "lookup_latency"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 5,
+        "vars": {
+          "input": "analyze: eggs, bread, butter",
+          "screen": "home"
+        },
+        "metadata": {
+          "model": "openai/gpt-5.4-mini-20260317",
+          "cache_write_tokens": 0,
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.00379665,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "lookup_latency": 1
+          },
+          "namedScoreWeights": {
+            "lookup_latency": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "events=4 tool_calls≈2 status=complete",
+              "assertion": {
+                "type": "javascript",
+                "value": "file://assertions/lookup.js",
+                "metric": "lookup_latency"
+              }
+            }
+          ]
+        },
+        "id": "8a2a6f4b-10d5-412d-a567-71210d25f7d0",
+        "latencyMs": 14946,
+        "namedScores": {
+          "lookup_latency": 1
+        },
+        "prompt": {
+          "raw": "substitute for fish sauce, dietary reason",
+          "label": "{{input}}",
+          "config": {}
+        },
+        "promptId": "146b33ced217be53420a9244c0ad8ec843483bbab4f32ac28e803b45b42891ba",
+        "promptIdx": 0,
+        "provider": {
+          "id": "python:../phase2/provider.py",
+          "label": ""
+        },
+        "response": {
+          "output": "{\"events\": [{\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running get_substitutions...\"}}, {\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running translate_term...\"}}, {\"event_type\": \"explanation\", \"data\": {\"event_type\": \"explanation\", \"text\": \"A good dietary substitute for fish sauce is soy sauce + lime juice.\\n\\nWhy it works: it gives salt and acidity, but it won’t have the same funky seafood depth.\\n\\nIf you want closer umami, you can also add a little:\\n- mushroom soy sauce, or\\n- a small amount of miso\\n\\nChinese: fish sauce = 鱼露.\"}}, {\"event_type\": \"done\", \"data\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 6981, \"completion_tokens\": 141, \"total_tokens\": 7122, \"cached_tokens\": 3072, \"cache_write_tokens\": 0, \"cost\": 0.00379665, \"model\": \"openai/gpt-5.4-mini-20260317\"}}}], \"recipe_cards\": [], \"pcsv\": null, \"explanation\": \"A good dietary substitute for fish sauce is soy sauce + lime juice.\\n\\nWhy it works: it gives salt and acidity, but it won’t have the same funky seafood depth.\\n\\nIf you want closer umami, you can also add a little:\\n- mushroom soy sauce, or\\n- a small amount of miso\\n\\nChinese: fish sauce = 鱼露.\", \"done\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 6981, \"completion_tokens\": 141, \"total_tokens\": 7122, \"cached_tokens\": 3072, \"cache_write_tokens\": 0, \"cost\": 0.00379665, \"model\": \"openai/gpt-5.4-mini-20260317\"}}, \"dish_count\": 0, \"status\": \"complete\"}",
+          "tokenUsage": {
+            "total": 7122,
+            "prompt": 6981,
+            "completion": 141,
+            "cached": 3072,
+            "numRequests": 1
+          },
+          "cost": 0.00379665,
+          "latency_ms": 2956,
+          "cache_hit_ratio": 0.44005156854318866,
+          "metadata": {
+            "model": "openai/gpt-5.4-mini-20260317",
+            "cache_write_tokens": 0
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "L7: get_substitutions — fish sauce dietary substitute",
+          "vars": {
+            "input": "substitute for fish sauce, dietary reason",
+            "screen": "home"
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions/lookup.js",
+              "metric": "lookup_latency"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 6,
+        "vars": {
+          "input": "substitute for fish sauce, dietary reason",
+          "screen": "home"
+        },
+        "metadata": {
+          "model": "openai/gpt-5.4-mini-20260317",
+          "cache_write_tokens": 0,
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      },
+      {
+        "cost": 0.0014163000000000001,
+        "gradingResult": {
+          "pass": true,
+          "score": 1,
+          "reason": "All assertions passed",
+          "namedScores": {
+            "lookup_latency": 1
+          },
+          "namedScoreWeights": {
+            "lookup_latency": 1
+          },
+          "tokensUsed": {
+            "total": 0,
+            "prompt": 0,
+            "completion": 0,
+            "cached": 0,
+            "numRequests": 0
+          },
+          "componentResults": [
+            {
+              "pass": true,
+              "score": 1,
+              "reason": "events=3 tool_calls≈1 status=complete",
+              "assertion": {
+                "type": "javascript",
+                "value": "file://assertions/lookup.js",
+                "metric": "lookup_latency"
+              }
+            }
+          ]
+        },
+        "id": "08448e9a-5769-453b-8cdb-d3510c79fa65",
+        "latencyMs": 14423,
+        "namedScores": {
+          "lookup_latency": 1
+        },
+        "prompt": {
+          "raw": "package size for soy sauce at costco",
+          "label": "{{input}}",
+          "config": {}
+        },
+        "promptId": "146b33ced217be53420a9244c0ad8ec843483bbab4f32ac28e803b45b42891ba",
+        "promptIdx": 0,
+        "provider": {
+          "id": "python:../phase2/provider.py",
+          "label": ""
+        },
+        "response": {
+          "output": "{\"events\": [{\"event_type\": \"thinking\", \"data\": {\"event_type\": \"thinking\", \"message\": \"Running lookup_store_product...\"}}, {\"event_type\": \"explanation\", \"data\": {\"event_type\": \"explanation\", \"text\": \"At Costco, I found Rao’s Marinara Sauce, 770 ml in pantry — but that isn’t soy sauce.\\n\\nFor soy sauce specifically, I can help you find a better match or suggest a substitute if you’re shopping Costco vs. community market.\"}}, {\"event_type\": \"done\", \"data\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 6932, \"completion_tokens\": 81, \"total_tokens\": 7013, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.0014163000000000001, \"model\": \"openai/gpt-5.4-mini-20260317\"}}}], \"recipe_cards\": [], \"pcsv\": null, \"explanation\": \"At Costco, I found Rao’s Marinara Sauce, 770 ml in pantry — but that isn’t soy sauce.\\n\\nFor soy sauce specifically, I can help you find a better match or suggest a substitute if you’re shopping Costco vs. community market.\", \"done\": {\"event_type\": \"done\", \"status\": \"complete\", \"reason\": null, \"error_category\": null, \"token_usage\": {\"prompt_tokens\": 6932, \"completion_tokens\": 81, \"total_tokens\": 7013, \"cached_tokens\": 6144, \"cache_write_tokens\": 0, \"cost\": 0.0014163000000000001, \"model\": \"openai/gpt-5.4-mini-20260317\"}}, \"dish_count\": 0, \"status\": \"complete\"}",
+          "tokenUsage": {
+            "total": 7013,
+            "prompt": 6932,
+            "completion": 81,
+            "cached": 6144,
+            "numRequests": 1
+          },
+          "cost": 0.0014163000000000001,
+          "latency_ms": 2363,
+          "cache_hit_ratio": 0.8863242931332949,
+          "metadata": {
+            "model": "openai/gpt-5.4-mini-20260317",
+            "cache_write_tokens": 0
+          },
+          "cached": false
+        },
+        "score": 1,
+        "success": true,
+        "testCase": {
+          "description": "L8: lookup_store_product — soy sauce at costco",
+          "vars": {
+            "input": "package size for soy sauce at costco",
+            "screen": "home"
+          },
+          "assert": [
+            {
+              "type": "javascript",
+              "value": "file://assertions/lookup.js",
+              "metric": "lookup_latency"
+            }
+          ],
+          "options": {},
+          "metadata": {}
+        },
+        "testIdx": 7,
+        "vars": {
+          "input": "package size for soy sauce at costco",
+          "screen": "home"
+        },
+        "metadata": {
+          "model": "openai/gpt-5.4-mini-20260317",
+          "cache_write_tokens": 0,
+          "_promptfooFileMetadata": {}
+        },
+        "failureReason": 0
+      }
+    ],
+    "stats": {
+      "successes": 8,
+      "failures": 0,
+      "errors": 0,
+      "tokenUsage": {
+        "prompt": 55934,
+        "completion": 1192,
+        "cached": 46080,
+        "total": 57126,
+        "numRequests": 8,
+        "completionDetails": {
+          "reasoning": 0,
+          "acceptedPrediction": 0,
+          "rejectedPrediction": 0,
+          "cacheReadInputTokens": 0,
+          "cacheCreationInputTokens": 0
+        },
+        "assertions": {
+          "total": 0,
+          "prompt": 0,
+          "completion": 0,
+          "cached": 0,
+          "numRequests": 0,
+          "completionDetails": {
+            "reasoning": 0,
+            "acceptedPrediction": 0,
+            "rejectedPrediction": 0,
+            "cacheReadInputTokens": 0,
+            "cacheCreationInputTokens": 0
+          }
+        }
+      },
+      "durationMs": 30371,
+      "evaluationDurationMs": 30371
+    }
+  },
+  "config": {
+    "tags": {},
+    "description": "Test D — SGA V2 lookup-heavy workload (Fly.io vs AWS infra comparison). 8 cases targeting translate_term, analyze_pcsv, get_substitutions, lookup_store_product. DB lookup latency should dominate. JS-only assertions — no LLM grader.",
+    "prompts": [
+      "{{input}}"
+    ],
+    "providers": [
+      {
+        "id": "python:../phase2/provider.py"
+      }
+    ],
+    "tests": [
+      {
+        "description": "L1: translate ZH→EN — 芥蓝, 腐乳, 花椒, 豆豉 (4 terms)",
+        "vars": {
+          "input": "翻译：芥蓝、腐乳、花椒、豆豉",
+          "screen": "home"
+        },
+        "assert": [
+          {
+            "type": "javascript",
+            "value": "file://assertions/lookup.js",
+            "metric": "lookup_latency"
+          }
+        ]
+      },
+      {
+        "description": "L2: analyze_pcsv — 鸡肉, 米饭, 西兰花 (Chinese ingredient names)",
+        "vars": {
+          "input": "分析这些食材:鸡肉、米饭、西兰花",
+          "screen": "home"
+        },
+        "assert": [
+          {
+            "type": "javascript",
+            "value": "file://assertions/lookup.js",
+            "metric": "lookup_latency"
+          }
+        ]
+      },
+      {
+        "description": "L3: get_substitutions — heavy cream vegan substitute",
+        "vars": {
+          "input": "substitute for heavy cream, vegan",
+          "screen": "home"
+        },
+        "assert": [
+          {
+            "type": "javascript",
+            "value": "file://assertions/lookup.js",
+            "metric": "lookup_latency"
+          }
+        ]
+      },
+      {
+        "description": "L4: lookup_store_product — tofu at T&T",
+        "vars": {
+          "input": "package sizes for tofu at T&T",
+          "screen": "home"
+        },
+        "assert": [
+          {
+            "type": "javascript",
+            "value": "file://assertions/lookup.js",
+            "metric": "lookup_latency"
+          }
+        ]
+      },
+      {
+        "description": "L5: translate EN→ZH — napa cabbage, daikon, lotus root (3 terms)",
+        "vars": {
+          "input": "translate: napa cabbage, daikon, lotus root",
+          "screen": "home"
+        },
+        "assert": [
+          {
+            "type": "javascript",
+            "value": "file://assertions/lookup.js",
+            "metric": "lookup_latency"
+          }
+        ]
+      },
+      {
+        "description": "L6: analyze_pcsv — eggs, bread, butter",
+        "vars": {
+          "input": "analyze: eggs, bread, butter",
+          "screen": "home"
+        },
+        "assert": [
+          {
+            "type": "javascript",
+            "value": "file://assertions/lookup.js",
+            "metric": "lookup_latency"
+          }
+        ]
+      },
+      {
+        "description": "L7: get_substitutions — fish sauce dietary substitute",
+        "vars": {
+          "input": "substitute for fish sauce, dietary reason",
+          "screen": "home"
+        },
+        "assert": [
+          {
+            "type": "javascript",
+            "value": "file://assertions/lookup.js",
+            "metric": "lookup_latency"
+          }
+        ]
+      },
+      {
+        "description": "L8: lookup_store_product — soy sauce at costco",
+        "vars": {
+          "input": "package size for soy sauce at costco",
+          "screen": "home"
+        },
+        "assert": [
+          {
+            "type": "javascript",
+            "value": "file://assertions/lookup.js",
+            "metric": "lookup_latency"
+          }
+        ]
+      }
+    ],
+    "scenarios": [],
+    "env": {},
+    "outputPath": [
+      "evals/infra_comparison/data/test_d_fly_run2.json"
+    ],
+    "extensions": [],
+    "metadata": {},
+    "evaluateOptions": {}
+  },
+  "shareableUrl": null,
+  "metadata": {
+    "promptfooVersion": "0.121.5",
+    "nodeVersion": "v25.1.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "exportedAt": "2026-04-19T22:09:14.244Z",
+    "evaluationCreatedAt": "2026-04-19T22:08:43.810Z"
+  }
+}

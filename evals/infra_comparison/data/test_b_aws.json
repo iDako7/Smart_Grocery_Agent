@@ -1,0 +1,315 @@
+{
+  "target": "aws",
+  "base_url": "https://d33hdkvctxckhb.cloudfront.net",
+  "run_started_at": "2026-04-19T22:05:24.452701+00:00",
+  "run_finished_at": "2026-04-19T22:05:31.452342+00:00",
+  "config": {
+    "samples": 20,
+    "warmup": 3
+  },
+  "root": {
+    "url": "https://d33hdkvctxckhb.cloudfront.net/",
+    "samples": [
+      {
+        "ttfb_ms": 129.7,
+        "total_ms": 129.7,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 155.0,
+        "total_ms": 155.0,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 134.2,
+        "total_ms": 134.2,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 94.9,
+        "total_ms": 94.9,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 98.6,
+        "total_ms": 98.6,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 97.9,
+        "total_ms": 97.9,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 84.3,
+        "total_ms": 84.3,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 83.0,
+        "total_ms": 83.0,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 90.1,
+        "total_ms": 90.1,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 95.5,
+        "total_ms": 95.5,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 93.9,
+        "total_ms": 93.9,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 96.6,
+        "total_ms": 96.6,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 100.8,
+        "total_ms": 100.8,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 87.4,
+        "total_ms": 87.4,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 102.0,
+        "total_ms": 102.0,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 95.3,
+        "total_ms": 95.3,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 91.6,
+        "total_ms": 91.6,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 94.9,
+        "total_ms": 94.9,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 91.8,
+        "total_ms": 91.8,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      },
+      {
+        "ttfb_ms": 96.9,
+        "total_ms": 97.0,
+        "status": 200,
+        "bytes": 868,
+        "error": null
+      }
+    ],
+    "ttfb_p50_ms": 95.4,
+    "ttfb_p95_ms": 154.0,
+    "ttfb_p99_ms": 171.4,
+    "total_p50_ms": 95.4,
+    "total_p95_ms": 154.0,
+    "cache_control_header": null,
+    "x_cache_header": "Miss from cloudfront"
+  },
+  "js_chunk": {
+    "url": "https://d33hdkvctxckhb.cloudfront.net/assets/index-DyKFZQb8.js",
+    "samples": [
+      {
+        "ttfb_ms": 111.9,
+        "total_ms": 185.0,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 101.9,
+        "total_ms": 175.5,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 90.9,
+        "total_ms": 160.8,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 87.3,
+        "total_ms": 171.1,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 76.5,
+        "total_ms": 133.7,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 102.4,
+        "total_ms": 217.2,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 114.7,
+        "total_ms": 200.6,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 108.3,
+        "total_ms": 176.2,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 112.8,
+        "total_ms": 184.8,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 86.8,
+        "total_ms": 183.7,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 93.2,
+        "total_ms": 179.7,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 115.3,
+        "total_ms": 188.8,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 122.9,
+        "total_ms": 196.9,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 126.5,
+        "total_ms": 214.1,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 94.1,
+        "total_ms": 163.5,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 86.4,
+        "total_ms": 153.7,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 84.2,
+        "total_ms": 161.7,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 106.3,
+        "total_ms": 177.6,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 119.2,
+        "total_ms": 194.6,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      },
+      {
+        "ttfb_ms": 79.1,
+        "total_ms": 168.3,
+        "status": 200,
+        "bytes": 518938,
+        "error": null
+      }
+    ],
+    "ttfb_p50_ms": 102.2,
+    "ttfb_p95_ms": 126.3,
+    "ttfb_p99_ms": 129.3,
+    "total_p50_ms": 178.7,
+    "total_p95_ms": 217.0,
+    "cache_control_header": null,
+    "x_cache_header": "Miss from cloudfront",
+    "discovered_from": "/"
+  }
+}
