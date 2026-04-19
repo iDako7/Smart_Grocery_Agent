@@ -49,3 +49,8 @@ output "resource_prefix" {
   description = "Prefix applied to all resource names."
   value       = local.prefix
 }
+
+output "cloudfront_url" {
+  description = "Public HTTPS URL (CloudFront). Empty when enable_cloudfront = false."
+  value       = var.enable_cloudfront ? "https://${aws_cloudfront_distribution.this[0].domain_name}" : ""
+}
