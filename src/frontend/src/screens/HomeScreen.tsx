@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import { QuickStartChip } from "@/components/quick-start-chip";
 import { Sidebar, type SidebarItem, type SidebarItemType } from "@/components/sidebar";
@@ -14,6 +14,7 @@ export function HomeScreen() {
   const navigateToScreen = session?.navigateToScreen;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
   const [mealPlans, setMealPlans] = useState<SidebarItem[]>([]);
   const [savedRecipes, setSavedRecipes] = useState<SidebarItem[]>([]);
   const [groceryLists, setGroceryLists] = useState<SidebarItem[]>([]);
@@ -57,9 +58,8 @@ export function HomeScreen() {
   }
 
   function handleQuickStart(label: string) {
-    navigateToScreen?.("clarify");
-    sendMessage(label, "clarify");
-    navigate("/clarify");
+    setInputValue(label);
+    inputRef.current?.focus();
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -116,6 +116,7 @@ export function HomeScreen() {
             Tell me what you have, or what you're cooking this week.
           </p>
           <input
+            ref={inputRef}
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
@@ -123,6 +124,16 @@ export function HomeScreen() {
             placeholder="BBQ for 8, or I have leftover chicken..."
             className="w-full mt-3.5 px-3.5 py-3 border-[1.5px] border-cream-deep rounded-md bg-tofu font-sans text-[14px] text-ink outline-none placeholder:text-ink-3 focus:border-ink-3 min-h-[44px]"
           />
+          <div className="mt-3 flex justify-end">
+            <button
+              type="button"
+              onClick={() => handleSend(inputValue)}
+              disabled={!inputValue.trim()}
+              className="px-6 py-[11px] bg-shoyu text-cream border-none rounded-full font-sans text-[13px] font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next →
+            </button>
+          </div>
         </div>
       </div>
 

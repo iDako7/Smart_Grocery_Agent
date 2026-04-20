@@ -102,6 +102,13 @@ export function ClarifyScreen() {
   // Show PCV content only when we have real data from the SSE stream
   const showPcv = hasRealData;
 
+  // "Looks good" CTA is disabled until every clarify question has ≥1 selection.
+  // Zero-question turns (confirmation-only flow) stay enabled.
+  const clarifyQuestions = screenData?.clarifyTurn?.questions ?? [];
+  const canSubmit =
+    clarifyQuestions.length === 0 ||
+    clarifyQuestions.every((q) => (selections[q.id]?.length ?? 0) > 0);
+
   // ---------------------------------------------------------------------------
   // Actions
   // ---------------------------------------------------------------------------
@@ -281,13 +288,14 @@ export function ClarifyScreen() {
         )}
       </div>
 
-      {/* Looks good CTA — shown when clarifyTurn is populated and state is complete */}
+      {/* Looks good CTA — shown when clarifyTurn is populated and state is complete. */}
       {screenData?.clarifyTurn && screenState === "complete" && (
         <div className="px-5 py-3 flex justify-end">
           <button
             type="button"
             onClick={handleLooksGood}
-            className="px-6 py-[11px] bg-shoyu text-cream border-none rounded-full font-sans text-[13px] font-semibold cursor-pointer"
+            disabled={!canSubmit}
+            className="px-6 py-[11px] bg-shoyu text-cream border-none rounded-full font-sans text-[13px] font-semibold cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Looks good, show recipes →
           </button>
