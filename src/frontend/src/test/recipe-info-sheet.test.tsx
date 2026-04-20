@@ -255,6 +255,53 @@ describe("RecipeInfoSheet — T5: not_found state", () => {
 // T6: cache hit on second open — getRecipeDetail called exactly once
 // ---------------------------------------------------------------------------
 
+describe("RecipeInfoSheet — T7: pantry staples hidden", () => {
+  it("hides pantry staples (salt, oil, etc.) from the ingredient list", async () => {
+    const detailWithStaples: RecipeDetail = {
+      ...mockDetail,
+      ingredients: [
+        { name: "shrimp", amount: "300g", pcsv: ["protein"] },
+        { name: "salt", amount: "1 tsp", pcsv: ["sauce"] },
+        { name: "bok choy", amount: "200g", pcsv: ["veggie"] },
+        { name: "olive oil", amount: "2 tbsp", pcsv: ["sauce"] },
+        { name: "vinegar", amount: "1 tsp", pcsv: ["sauce"] },
+      ],
+    };
+    vi.mocked(getRecipeDetail).mockResolvedValue(detailWithStaples);
+
+    renderSheet();
+
+    // Real ingredients visible
+    await waitFor(() => {
+      expect(screen.getByText("shrimp")).toBeInTheDocument();
+    });
+    expect(screen.getByText("bok choy")).toBeInTheDocument();
+
+    // Pantry staples hidden
+    expect(screen.queryByText("salt")).toBeNull();
+    expect(screen.queryByText("olive oil")).toBeNull();
+    expect(screen.queryByText("vinegar")).toBeNull();
+  });
+
+  it("renders the full list when every ingredient is a staple (fallback)", async () => {
+    const stapleOnly: RecipeDetail = {
+      ...mockDetail,
+      ingredients: [
+        { name: "salt", amount: "1 tsp", pcsv: ["sauce"] },
+        { name: "pepper", amount: "pinch", pcsv: ["sauce"] },
+      ],
+    };
+    vi.mocked(getRecipeDetail).mockResolvedValue(stapleOnly);
+
+    renderSheet();
+
+    await waitFor(() => {
+      expect(screen.getByText("salt")).toBeInTheDocument();
+    });
+    expect(screen.getByText("pepper")).toBeInTheDocument();
+  });
+});
+
 describe("RecipeInfoSheet — T6: in-memory cache hit", () => {
   it("does not re-fetch when reopened with same recipeId", async () => {
     vi.mocked(getRecipeDetail).mockResolvedValue(mockDetail);
