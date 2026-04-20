@@ -13,6 +13,7 @@ import { ErrorBanner } from "@/components/error-banner";
 import { getRecipeDetail, RecipeNotFoundError } from "@/services/api-client";
 import type { RecipeDetail } from "@/types/tools";
 import { recipeCache } from "@/components/recipe-cache";
+import { filterPantryStaples } from "@/lib/pantry-staples";
 
 // ---------------------------------------------------------------------------
 // Internal state machine
@@ -264,7 +265,7 @@ export function RecipeInfoSheet({
                 Ingredients
               </h3>
               <ul className="space-y-2">
-                {detail.ingredients.map((ing) => (
+                {filterPantryStaples(detail.ingredients).map((ing) => (
                   <li
                     key={ing.name}
                     className="flex items-center justify-between gap-2"
