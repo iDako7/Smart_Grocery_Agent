@@ -43,7 +43,7 @@ function homeRoutes() {
 // ---------------------------------------------------------------------------
 
 describe("HomeScreen — Quick Start chip pre-fills input without navigating", () => {
-  it("clicking a chip loads its label into the input and does not leave the home screen", async () => {
+  it("clicking a chip loads a richer prompt into the input and does not leave the home screen", async () => {
     const user = userEvent.setup();
     const mock = createMockChatService();
 
@@ -56,7 +56,11 @@ describe("HomeScreen — Quick Start chip pre-fills input without navigating", (
     await user.click(screen.getByRole("button", { name: "Weekend BBQ" }));
 
     const input = screen.getByPlaceholderText(PLACEHOLDER) as HTMLInputElement;
-    expect(input.value).toBe("Weekend BBQ");
+    // Chip button still shows the short label, but the prompt pre-fill is
+    // intentionally longer so the agent has enough context to return recipes
+    // (issue #154).
+    expect(input.value.length).toBeGreaterThan("Weekend BBQ".length);
+    expect(input.value).toContain("BBQ");
 
     // Still on home — no navigation fired, no chat service call yet.
     expect(screen.getByTestId("screen-home")).toBeInTheDocument();
@@ -97,7 +101,7 @@ describe("HomeScreen — Next button gates on non-empty input", () => {
     expect(screen.getByRole("button", { name: /^next/i })).toBeEnabled();
   });
 
-  it("clicking Next with a non-empty input navigates to /clarify and sends the message", async () => {
+  it("clicking Next with a non-empty input navigates to /clarify and sends the richer prompt", async () => {
     const user = userEvent.setup();
     const mock = createMockChatService();
 
@@ -113,11 +117,12 @@ describe("HomeScreen — Next button gates on non-empty input", () => {
     expect(screen.getByTestId("screen-clarify")).toBeInTheDocument();
     expect(mock.serviceFn).toHaveBeenCalledOnce();
     const [message, targetScreen] = mock.serviceFn.mock.calls[0];
-    expect(message).toBe("Weekend BBQ");
+    expect(message.length).toBeGreaterThan("Weekend BBQ".length);
+    expect(message).toContain("BBQ");
     expect(targetScreen).toBe("clarify");
   });
 
-  it("sends the edited text when the user modifies the pre-filled chip label", async () => {
+  it("sends the edited text when the user modifies the pre-filled chip prompt", async () => {
     const user = userEvent.setup();
     const mock = createMockChatService();
 
@@ -129,12 +134,14 @@ describe("HomeScreen — Next button gates on non-empty input", () => {
 
     await user.click(screen.getByRole("button", { name: "Weekend BBQ" }));
     const input = screen.getByPlaceholderText(PLACEHOLDER);
-    await user.type(input, " for 8 people");
+    await user.type(input, " Keep it nut-free.");
 
     await user.click(screen.getByRole("button", { name: /^next/i }));
 
     expect(mock.serviceFn).toHaveBeenCalledOnce();
-    expect(mock.serviceFn.mock.calls[0][0]).toBe("Weekend BBQ for 8 people");
+    const sent = mock.serviceFn.mock.calls[0][0];
+    expect(sent).toContain("BBQ");
+    expect(sent).toContain("Keep it nut-free.");
   });
 });
 
