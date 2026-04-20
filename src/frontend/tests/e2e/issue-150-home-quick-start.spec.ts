@@ -27,7 +27,10 @@ test.describe("Issue #150 — Home Quick Start pre-fill + Next gate", () => {
     await page.getByRole("button", { name: "Weekend BBQ" }).click();
 
     const heroInput = page.locator(`input[placeholder*="${INPUT_PLACEHOLDER_FRAGMENT}"]`);
-    await expect(heroInput).toHaveValue("Weekend BBQ");
+    // Chip button still reads "Weekend BBQ", but the pre-filled prompt is a
+    // richer seed (issue #154) so the agent has enough context to return recipes.
+    await expect(heroInput).not.toHaveValue("Weekend BBQ");
+    await expect(heroInput).toHaveValue(/BBQ/);
 
     // Still on home screen — no auto-navigation.
     await expect(page.locator('[data-testid="screen-home"]')).toBeVisible();
@@ -45,10 +48,10 @@ test.describe("Issue #150 — Home Quick Start pre-fill + Next gate", () => {
     await page.getByRole("button", { name: "Weeknight meals" }).click();
 
     const heroInput = page.locator(`input[placeholder*="${INPUT_PLACEHOLDER_FRAGMENT}"]`);
-    await expect(heroInput).toHaveValue("Weeknight meals");
+    await expect(heroInput).toHaveValue(/weeknight/i);
 
-    await heroInput.pressSequentially(" for the family", { delay: 15 });
-    await expect(heroInput).toHaveValue("Weeknight meals for the family");
+    await heroInput.pressSequentially(" Keep it nut-free.", { delay: 15 });
+    await expect(heroInput).toHaveValue(/Keep it nut-free\.$/);
 
     await page.getByRole("button", { name: /^next/i }).click();
 

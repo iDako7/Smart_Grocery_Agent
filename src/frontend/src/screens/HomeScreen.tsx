@@ -5,7 +5,23 @@ import { Sidebar, type SidebarItem, type SidebarItemType } from "@/components/si
 import { useSessionOptional } from "@/context/session-context";
 import { listSavedMealPlans, listSavedRecipes, listSavedGroceryLists } from "@/services/api-client";
 
-const QUICK_STARTS = ["Weekend BBQ", "Weeknight meals", "Use my leftovers"];
+const QUICK_STARTS = [
+  {
+    label: "Weekend BBQ",
+    prompt:
+      "I'm planning a weekend BBQ for 4–6 people. Suggest a mix of protein, sides, and something vegetarian-friendly.",
+  },
+  {
+    label: "Weeknight meals",
+    prompt:
+      "Help me plan 3 quick weeknight dinners — each under 30 minutes, balanced protein + carb + veggie.",
+  },
+  {
+    label: "Use my leftovers",
+    prompt:
+      "I have leftover cooked chicken and rice. What can I make without another big grocery trip?",
+  },
+];
 
 export function HomeScreen() {
   const navigate = useNavigate();
@@ -57,8 +73,8 @@ export function HomeScreen() {
     navigate("/clarify");
   }
 
-  function handleQuickStart(label: string) {
-    setInputValue(label);
+  function handleQuickStart(prompt: string) {
+    setInputValue(prompt);
     inputRef.current?.focus();
   }
 
@@ -142,8 +158,12 @@ export function HomeScreen() {
         Quick start
       </div>
       <div className="flex flex-wrap gap-2 px-3.5 pb-4">
-        {QUICK_STARTS.map((label) => (
-          <QuickStartChip key={label} label={label} onClick={() => handleQuickStart(label)} />
+        {QUICK_STARTS.map((chip) => (
+          <QuickStartChip
+            key={chip.label}
+            label={chip.label}
+            onClick={() => handleQuickStart(chip.prompt)}
+          />
         ))}
       </div>
 
